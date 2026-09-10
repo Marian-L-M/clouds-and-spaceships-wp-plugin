@@ -1,0 +1,252 @@
+import {
+    SelectControl,
+    __experimentalNumberControl as NumberControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+    Flex,
+    Button,
+    Popover,
+} from '@wordpress/components';
+import { fullscreen as fullscreenIcon, close } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
+
+import CanvasNodeList from '../CanvasNodeList';
+import StoryCanvas from '../../canvas/StoryCanvas';
+import ColorField from '../../../../shared/admin/ColorField';
+
+import type {
+	StorySettings, StoryNode, StoryEdge, StoryPath,
+	MapRenderData, MapObjectRef, MapAreaRef,
+	LineStyle, CanvasMode,
+} from '../../../types';
+import { useState, useEffect } from '@wordpress/element';
+
+
+interface Props {
+	isNew:           boolean;
+	settings:        StorySettings;
+	nodes:           StoryNode[];
+	edges:           StoryEdge[];
+	paths:           StoryPath[];
+	mapData:         MapRenderData | null;
+	mapObjects:      MapObjectRef[];
+	mapAreas:        MapAreaRef[];
+	canvasMode:      CanvasMode;
+	selectedNodeId:  number | null;
+	edgeStartNodeId: number | null;
+
+	onSettingsChange:   ( s: StorySettings ) => void;
+	onCanvasModeChange: ( mode: CanvasMode ) => void;
+	onNodeClick:        ( nodeId: number ) => void;
+	onCanvasClick:      ( x: number, y: number ) => void;
+	onEdgeClick:        ( edgeId: number ) => void;
+	onNodeDragEnd:      ( nodeId: number, x: number, y: number ) => void;
+	onSelectNode:       ( nodeId: number ) => void;
+	onEditNode:         ( nodeId: number ) => void;
+	onDeleteNode:       ( nodeId: number ) => void;
+	onSetStartNode:     ( nodeId: number ) => void;
+	onEdgeReorder:      ( edgeId: number, sortOrder: number ) => void;
+	onEdgeDelete:       ( edgeId: number ) => void;
+	onStartEdgeFrom:    ( fromNodeId: number ) => void;
+	onEditEdge:         ( edgeId: number ) => void;
+	onSequenceSwap:     ( edge: StoryEdge ) => void;
+}
+
+
+export default function StoryCanvasPanel( {
+	isNew, settings, nodes, edges, paths,
+	mapData, mapObjects, mapAreas,
+	canvasMode, selectedNodeId, edgeStartNodeId,
+	onSettingsChange, onCanvasModeChange,
+	onNodeClick, onCanvasClick, onEdgeClick, onNodeDragEnd,
+	onSelectNode, onEditNode, onDeleteNode, onSetStartNode,
+	onEdgeReorder, onEdgeDelete, onStartEdgeFrom, onEditEdge,
+	onSequenceSwap,
+}: Props ) {
+    function set< K extends keyof StorySettings >( key: K, value: StorySettings[ K ] ) {
+		onSettingsChange( { ...settings, [ key ]: value } );
+	}
+    // Help information
+	const [ isVisibleHelpInformation, setIsVisibleHelpInformation ] =
+		useState( false );
+    const toggleVisibleHelpInformation = () => {
+		setIsVisibleHelpInformation( ( state: boolean ) => ! state );
+	};
+
+	// Fullscreen (lightbox) mode: lock body scroll, Esc exits.
+	const [ isFullscreen, setIsFullscreen ] = useState( false );
+	useEffect( () => {
+		if ( ! isFullscreen ) return;
+		function onKeyDown( e: KeyboardEvent ) {
+			if ( e.key === 'Escape' ) setIsFullscreen( false );
+		}
+		document.addEventListener( 'keydown', onKeyDown );
+		document.body.classList.add( 'cns-story-canvas-fullscreen-open' );
+		return () => {
+			document.removeEventListener( 'keydown', onKeyDown );
+			document.body.classList.remove( 'cns-story-canvas-fullscreen-open' );
+		};
+	}, [ isFullscreen ] );
+
+    return(
+        <div className="cns-story-canvas-view">
+            <div className="cns-story-canvas-toolbar">
+                <div className="cns-story-canvas-toolbar__row">
+                    { ! isNew && (
+                        <ToggleGroupControl
+                            __next40pxDefaultSize
+                            label={ __( 'Canvas mode', 'clouds-and-spaceships' ) }
+                            hideLabelFromVision
+                            value={ canvasMode }
+                            isAdaptiveWidth
+                            onChange={ ( value ) => onCanvasModeChange( ( value ?? 'select' ) as CanvasMode )}
+                        >
+                            <ToggleGroupControlOption
+                                value="select"
+                                label={ __( 'Select', 'clouds-and-spaceships' ) }
+                            />
+                            <ToggleGroupControlOption
+                                value="add"
+                                label={ __( 'Add', 'clouds-and-spaceships' ) }
+                            />
+                            <ToggleGroupControlOption
+                                value="connect"
+                                label={ __( 'Connect', 'clouds-and-spaceships' ) }
+                            />
+                        </ToggleGroupControl>
+                    ) }
+                    <Button 
+                        variant="tertiary" 
+                        onClick={ toggleVisibleHelpInformation }
+                        >
+                        Help Information
+                        { isVisibleHelpInformation && (
+                            <Popover
+                                headerTitle="Help Information"
+                                expandOnMobile
+                            >
+                                <ol
+                                    style={ {
+                                        width: 320,
+                                        maxWidth: '100%',
+                                    } }
+                                >
+                                    <li>
+                                        <h4>Connect Mode</h4>
+                                        <ul>
+                                            <li>  { __('Click a node to start a path.','clouds-and-spaceships') }</li>
+                                            <li>  { __('When path is active, click next node or press Enter/Esc to finish.','clouds-and-spaceships') }</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h4>Select Mode</h4>
+                                        <ul>
+                                            <li>  { __('Click canvas to move node','clouds-and-spaceships') }</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h4>Add Mode</h4>
+                                        <ul>
+                                            <li>  { __('Click canvas to place a new node','clouds-and-spaceships') }</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </Popover>
+                        ) }
+                    </Button>
+
+                </div>
+
+                <div className="cns-story-canvas-toolbar__row cns-story-canvas-toolbar__line-style">
+                    <span className="cns-story-canvas-toolbar__label">
+                        { __( 'Lines:', 'clouds-and-spaceships' ) }
+                    </span>
+                    <ColorField
+                        label={ __( 'Color & opacity', 'clouds-and-spaceships' ) }
+                        value={ settings.lineColor }
+                        onChange={ ( v ) => set( 'lineColor', v ) }
+                    />
+                    <NumberControl
+                        size="small"
+                        label={ __( 'Width (px)', 'clouds-and-spaceships' ) }
+                        min={ 0.5 } max={ 20 } step={ 0.5 }
+                        value={ settings.lineWidth }
+                        onChange={ ( v ) => set( 'lineWidth', parseFloat( v ?? '' ) || settings.lineWidth )}
+                        style={ { width: 70 } }
+                    />
+                    <SelectControl
+                        size="small"
+                        label={ __( 'Style', 'clouds-and-spaceships' ) }
+                        value={ settings.lineStyle }
+                        options={ [
+                            { value: 'solid',  label: __( 'Solid', 'clouds-and-spaceships' ) },
+                            { value: 'dashed', label: __( 'Dashed', 'clouds-and-spaceships' ) },
+                            { value: 'dotted', label: __( 'Dotted', 'clouds-and-spaceships' ) },
+                        ] }
+                        onChange={ ( v ) => set( 'lineStyle', v as LineStyle ) }
+                    />
+                </div>
+            </div>
+
+            <div className="cns-story-canvas-layout">
+                <div className="cns-story-canvas-main">
+                    <div className={ 'cns-story-canvas-wrap' + ( isFullscreen ? ' is-fullscreen' : '' ) }>
+                        <Button
+                            className="cns-story-canvas-fs"
+                            variant="secondary"
+                            icon={ isFullscreen ? close : fullscreenIcon }
+                            label={
+                                isFullscreen
+                                    ? __( 'Exit fullscreen', 'clouds-and-spaceships' )
+                                    : __( 'View fullscreen', 'clouds-and-spaceships' )
+                            }
+                            onClick={ () => setIsFullscreen( ( f ) => ! f ) }
+                        />
+                        <StoryCanvas
+                          	mapData={ mapData }
+							mapObjects={ mapObjects }
+							mapAreas={ mapAreas }
+							nodes={ nodes }
+							edges={ edges }
+							paths={ paths }
+							selectedNodeId={ selectedNodeId }
+							edgeStartNodeId={ edgeStartNodeId }
+							isEdgeMode={ canvasMode === 'connect' }
+							lineColor={ settings.lineColor }
+							lineWidth={ settings.lineWidth }
+							lineStyle={ settings.lineStyle }
+							markerColor={ settings.markerColor }
+							markerSize={ settings.markerSize }
+							markerType={ settings.markerType }
+							markerIconUrl={ settings.markerIconUrl }
+							markerIconOffsetX={ settings.markerIconOffsetX }
+							markerIconOffsetY={ settings.markerIconOffsetY }
+							onNodeClick={ onNodeClick }
+							onCanvasClick={ onCanvasClick }
+							onEdgeClick={ onEdgeClick }
+							onNodeDragEnd={ onNodeDragEnd }
+                        />
+                    </div>
+                </div>
+
+                <div className="cns-story-window-panel">
+                    <CanvasNodeList
+                        nodes={ nodes }
+						edges={ edges }
+						startNodeId={ settings.startNodeId }
+						selectedNodeId={ selectedNodeId }
+						onSelect={ onSelectNode }
+						onEdit={ onEditNode }
+						onDelete={ onDeleteNode }
+						onSetStartNode={ onSetStartNode }
+						onEdgeReorder={ onEdgeReorder }
+						onEdgeDelete={ onEdgeDelete }
+						onStartEdgeFrom={ onStartEdgeFrom }
+						onEditEdge={ onEditEdge }
+						onSequenceSwap={ onSequenceSwap }
+                    />
+                </div>
+            </div>
+        </div>
+    )
+}

@@ -1,0 +1,769 @@
+import { useState, useEffect } from '@wordpress/element';
+import { useDispatch } from '@wordpress/data';
+import { store as noticesStore } from '@wordpress/notices';
+import { __ } from '@wordpress/i18n';
+
+import EditorHeader from '../../../shared/admin/EditorHeader';
+import TabBar from './TabBar';
+import { apiFetch } from '../utils';
+import EdgeStyleModal from './forms/EdgeStyleModal';
+import NodeModal from './forms/NodeModal';
+import LinksPanel from './panels/LinksPanel';
+import NodesPanel from './panels/NodesPanel';
+import PathsPanel from './panels/PathsPanel';
+import SettingsPanel from './panels/SettingsPanel';
+import StoryCanvasPanel from './panels/StoryCanvasPanel';
+import Notices from '../../../shared/admin/Notices';
+
+import type {
+	StorySettings, StoryNode, StoryEdge, StoryLink, StoryPath,
+	MapRenderData, MapObjectRef, MapAreaRef,
+	PostStatus, StoryTab, NodeFormData, EdgeFormData, PathFormData, CanvasMode,
+} from '../../types';
+
+interface NodeModalState {
+	open:  boolean;
+	nodeId: number | null; // null = new node
+	x:     number;
+	y:     number;
+}
+
+function buildInitialSettings(): StorySettings {
+	const d = window.cnsStoryEditor || ( {} as typeof window.cnsStoryEditor );
+	return {
+		title:           d.title    ?? '',
+		status:          d.status   ?? 'draft',
+		mapId:           null,
+		mapTitle:        '',
+		lineColor:       '#ffffff',
+		lineWidth:       3,
+		lineStyle:       'solid',
+		startNodeId:     null,
+		viewUrl:         d.viewUrl  ?? '',
+		thumbnailId:     null,
+		thumbnailUrl:    '',
+		description:     '',
+		markerColor:       '#00aaff',
+		markerSize:        5,
+		markerType:        'ring',
+		markerIconId:      null,
+		markerIconUrl:     '',
+		markerIconOffsetX: 0,
+		markerIconOffsetY: -30,
+	};
+}
+
+
+
+export default function StoryEditorApp() {
+	const d       = window.cnsStoryEditor || ( {} as typeof window.cnsStoryEditor );
+	const storyId = d.storyId  || 0;
+	const isNew   = d.isNew    || false;
+
+	const [ settings,        setSettings        ] = useState< StorySettings >( buildInitialSettings );
+	const [ nodes,           setNodes           ] = useState< StoryNode[] >( [] );
+	const [ edges,           setEdges           ] = useState< StoryEdge[] >( [] );
+	const [ paths,           setPaths           ] = useState< StoryPath[] >( [] );
+	const [ links,           setLinks           ] = useState< StoryLink[] >( [] );
+	const [ mapData,         setMapData         ] = useState< MapRenderData | null >( null );
+	const [ mapObjects,      setMapObjects      ] = useState< MapObjectRef[] >( [] );
+	const [ mapAreas,        setMapAreas        ] = useState< MapAreaRef[] >( [] );
+	const [ activeTab,       setActiveTab       ] = useState< StoryTab >( 'settings' );
+	const [ selectedNodeId,  setSelectedNodeId  ] = useState< number | null >( null );
+	const [ canvasMode,      setCanvasMode      ] = useState< CanvasMode >( 'select' );
+	const [ edgeStartNodeId, setEdgeStartNodeId ] = useState< number | null >( null );
+	const [ isSaving,        setIsSaving        ] = useState( false );
+	const [ nodeModal,       setNodeModal       ] = useState< NodeModalState >( { open: false, nodeId: null, x: 0.5, y: 0.5 } );
+	const [ edgeModal,       setEdgeModal       ] = useState< { open: boolean; edgeId: number | null } >( { open: false, edgeId: null } );
+	const [ loading,         setLoading         ] = useState( ! isNew );
+	const { createSuccessNotice, createErrorNotice } = useDispatch( noticesStore );
+
+	// ── Initial data load ─────────────────────────────────────────────────────
+
+	useEffect( () => {
+		if ( isNew ) return;
+		( async () => {
+			try {
+				const data = await apiFetch< {
+					story:   StorySettings & { id: number };
+					mapData: MapRenderData | null;
+					nodes:   StoryNode[];
+					edges:   StoryEdge[];
+					paths:   StoryPath[];
+				} >( 'GET', `/stories/${ storyId }/data` );
+				setSettings( data.story );
+				setNodes( data.nodes );
+				setEdges( data.edges );
+				setPaths( data.paths ?? [] );
+				if ( data.mapData ) {
+					setMapData( data.mapData );
+					setMapObjects( data.mapData.objects );
+					setMapAreas( data.mapData.areas );
+				}
+			} catch {
+				/* load failures leave the editor empty, as before */
+			}
+			try {
+				setLinks( await apiFetch< StoryLink[] >( 'GET', `/stories/${ storyId }/links` ) );
+			} catch {
+				/* ignore */
+			}
+			setLoading( false );
+		} )();
+	}, [] );
+
+	// ── Save story settings ───────────────────────────────────────────────────
+
+	async function handleSave() {
+		setIsSaving( true );
+		try {
+			const data = await apiFetch< {
+				created?: boolean;
+				editUrl?: string;
+				viewUrl?: string;
+			} >( 'POST', '/stories', {
+				story_id:           storyId,
+				title:              settings.title,
+				description:        settings.description,
+				status:             settings.status,
+				map_id:             settings.mapId ?? 0,
+				line_color:         settings.lineColor,
+				line_width:         settings.lineWidth,
+				line_style:         settings.lineStyle,
+				start_node_id:      settings.startNodeId ?? 0,
+				thumbnail_id:       settings.thumbnailId ?? 0,
+				marker_color:          settings.markerColor,
+				marker_size:           settings.markerSize,
+				marker_type:           settings.markerType,
+				marker_icon_id:        settings.markerIconId ?? 0,
+				marker_icon_offset_x:  settings.markerIconOffsetX,
+				marker_icon_offset_y:  settings.markerIconOffsetY,
+			} );
+			if ( data.created && data.editUrl ) {
+				window.location.href = data.editUrl;
+			} else {
+				if ( data.viewUrl !== undefined ) {
+					setSettings( ( p ) => ( { ...p, viewUrl: data.viewUrl! } ) );
+				}
+				createSuccessNotice( __( 'Story saved.', 'clouds-and-spaceships' ), {
+					type: 'snackbar',
+				} );
+			}
+		} catch ( err ) {
+			createErrorNotice(
+				( err as Error ).message || __( 'Save failed.', 'clouds-and-spaceships' ),
+				{ type: 'snackbar' }
+			);
+		} finally {
+			setIsSaving( false );
+		}
+	}
+
+	// ── Map data reload when mapId changes ────────────────────────────────────
+
+	async function handleMapChange( mapId: number | null, mapTitle: string ) {
+		setSettings( ( p ) => ( { ...p, mapId, mapTitle } ) );
+		if ( ! mapId ) {
+			setMapData( null ); setMapObjects( [] ); setMapAreas( [] );
+			return;
+		}
+		// Reload full story data to get map render data.
+		if ( ! isNew && storyId ) {
+			try {
+				const data = await apiFetch< { mapData: MapRenderData | null } >(
+					'GET',
+					`/stories/${ storyId }/data`
+				);
+				if ( data.mapData ) {
+					setMapData( data.mapData );
+					setMapObjects( data.mapData.objects );
+					setMapAreas( data.mapData.areas );
+				}
+			} catch {
+				/* ignore — canvas keeps the previous base map */
+			}
+		}
+	}
+
+	// ── Node operations ───────────────────────────────────────────────────────
+
+	async function handleNodeCreate( formData: NodeFormData, x: number, y: number ) {
+		try {
+			const node = await apiFetch< StoryNode >( 'POST', `/stories/${ storyId }/nodes`, {
+			x, y,
+			path_id:              formData.pathId ?? 0,
+			substory_id:          formData.substoryId ?? 0,
+			title_override:       formData.titleOverride   || null,
+			excerpt_override:     formData.excerptOverride || null,
+			icon_type:            formData.iconType,
+			icon_id:              formData.iconId ?? 0,
+			icon_color:           formData.iconColor,
+			icon_size:            formData.iconSize,
+			icon_border_color:    formData.iconBorderColor,
+			icon_border_width:    formData.iconBorderWidth,
+			icon_bg_color:        formData.iconBgColor,
+			icon_bg_shape:        formData.iconBgShape,
+			marker_type:          formData.markerType,
+			marker_icon_id:       formData.markerIconId ?? 0,
+			marker_color:         formData.markerColor,
+			marker_size:          formData.markerSize,
+			marker_icon_offset_x: formData.markerIconOffsetX,
+			marker_icon_offset_y: formData.markerIconOffsetY,
+			} );
+			setNodes( ( p ) => [ ...p, node ] );
+			return node;
+		} catch {
+			/* create failures are silent, as before */
+		}
+	}
+
+	async function handleNodeUpdate( nodeId: number, formData: NodeFormData ) {
+		try {
+			const updated = await apiFetch< StoryNode >( 'PATCH', `/nodes/${ nodeId }`, {
+			x:                    formData.x,
+			y:                    formData.y,
+			path_id:              formData.pathId ?? 0,
+			substory_id:          formData.substoryId ?? 0,
+			title_override:       formData.titleOverride   || null,
+			excerpt_override:     formData.excerptOverride || null,
+			icon_type:            formData.iconType,
+			icon_id:              formData.iconId ?? 0,
+			icon_color:           formData.iconColor,
+			icon_size:            formData.iconSize,
+			icon_border_color:    formData.iconBorderColor,
+			icon_border_width:    formData.iconBorderWidth,
+			icon_bg_color:        formData.iconBgColor,
+			icon_bg_shape:        formData.iconBgShape,
+			marker_type:          formData.markerType,
+			marker_icon_id:       formData.markerIconId ?? 0,
+			marker_color:         formData.markerColor,
+			marker_size:          formData.markerSize,
+			marker_icon_offset_x: formData.markerIconOffsetX,
+			marker_icon_offset_y: formData.markerIconOffsetY,
+			} );
+			setNodes( ( p ) => p.map( ( n ) => ( n.id === nodeId ? updated : n ) ) );
+		} catch {
+			/* update failures are silent, as before */
+		}
+	}
+
+	async function handleNodeDelete( nodeId: number ) {
+		try {
+			await apiFetch( 'DELETE', `/nodes/${ nodeId }` );
+			setNodes( ( p ) => p.filter( ( n ) => n.id !== nodeId ) );
+			setEdges( ( p ) => p.filter( ( e ) => e.fromNodeId !== nodeId && e.toNodeId !== nodeId ) );
+			if ( selectedNodeId === nodeId )  setSelectedNodeId( null );
+		} catch {
+			/* delete failures are silent, as before */
+		}
+	}
+
+	async function handleNodeDragEnd( nodeId: number, x: number, y: number ) {
+		try {
+			const updated = await apiFetch< StoryNode >( 'PATCH', `/nodes/${ nodeId }`, { x, y } );
+			setNodes( ( p ) => p.map( ( n ) => ( n.id === nodeId ? updated : n ) ) );
+		} catch {
+			/* position patches fail silently, as before */
+		}
+	}
+
+	// ── Edge operations ───────────────────────────────────────────────────────
+
+	async function handleEdgeCreate( fromId: number, toId: number ) {
+		try {
+			const edge = await apiFetch< StoryEdge >( 'POST', '/edges', {
+				story_id:    storyId,
+				from_node_id: fromId,
+				to_node_id:  toId,
+			} );
+			setEdges( ( p ) => {
+				// Replace if a duplicate edge is returned.
+				const filtered = p.filter( ( e ) => e.id !== edge.id );
+				return [ ...filtered, edge ];
+			} );
+		} catch {
+			/* create failures are silent, as before */
+		}
+	}
+
+	async function handleEdgeDelete( edgeId: number ) {
+		try {
+			await apiFetch( 'DELETE', `/edges/${ edgeId }` );
+			setEdges( ( p ) => p.filter( ( e ) => e.id !== edgeId ) );
+		} catch {
+			/* delete failures are silent, as before */
+		}
+	}
+
+	async function handleEdgeUpdate( edgeId: number, formData: EdgeFormData ) {
+		try {
+			const updated = await apiFetch< StoryEdge >( 'PATCH', `/edges/${ edgeId }`, {
+				line_color:   formData.lineColor,
+				line_width:   formData.lineWidth,
+				line_style:   formData.lineStyle,
+			} );
+			setEdges( ( p ) => p.map( ( e ) => ( e.id === edgeId ? updated : e ) ) );
+		} catch {
+			/* update failures are silent, as before */
+		}
+	}
+
+	// ── Path operations ───────────────────────────────────────────────────────
+
+	async function handlePathCreate( data: PathFormData ) {
+		try {
+			const path = await apiFetch< StoryPath >( 'POST', `/stories/${ storyId }/paths`, {
+				label:               data.label,
+				marker_color:        data.markerColor,
+				marker_size:         data.markerSize,
+				marker_type:         data.markerType,
+				marker_icon_id:      data.markerIconId ?? 0,
+				marker_icon_offset_x: data.markerIconOffsetX,
+				marker_icon_offset_y: data.markerIconOffsetY,
+			} );
+			setPaths( ( p ) => [ ...p, path ] );
+		} catch {
+			/* create failures are silent, as before */
+		}
+	}
+
+	async function handlePathUpdate( pathId: number, data: PathFormData ) {
+		try {
+			const updated = await apiFetch< StoryPath >( 'PATCH', `/paths/${ pathId }`, {
+				label:               data.label,
+				marker_color:        data.markerColor,
+				marker_size:         data.markerSize,
+				marker_type:         data.markerType,
+				marker_icon_id:      data.markerIconId ?? 0,
+				marker_icon_offset_x: data.markerIconOffsetX,
+				marker_icon_offset_y: data.markerIconOffsetY,
+			} );
+			setPaths( ( p ) => p.map( ( path ) => ( path.id === pathId ? updated : path ) ) );
+		} catch {
+			/* update failures are silent, as before */
+		}
+	}
+
+	async function handlePathDelete( pathId: number ) {
+		try {
+			await apiFetch( 'DELETE', `/paths/${ pathId }` );
+			setPaths( ( p ) => p.filter( ( path ) => path.id !== pathId ) );
+			// Clear pathId on nodes that belonged to this path.
+			setNodes( ( ns ) => ns.map( ( n ) => n.pathId === pathId ? { ...n, pathId: null } : n ) );
+		} catch {
+			/* delete failures are silent, as before */
+		}
+	}
+
+	// ── Path node manager (Paths tab modal) ───────────────────────────────────
+
+	/** Minimal node create for the path modal: substory at canvas centre, already in the path. */
+	async function handleQuickNodeCreate( substoryId: number, pathId: number ): Promise< StoryNode | undefined > {
+		try {
+			const node = await apiFetch< StoryNode >( 'POST', `/stories/${ storyId }/nodes`, {
+				x: 0.5, y: 0.5,
+				path_id:     pathId,
+				substory_id: substoryId,
+			} );
+			setNodes( ( p ) => [ ...p, node ] );
+			return node;
+		} catch {
+			return undefined;
+		}
+	}
+
+	/**
+	 * Applies the modal's result: path membership, then a linear connection
+	 * chain in list order. Connections between the affected nodes that aren't
+	 * part of the new chain are removed; connections to outside nodes stay.
+	 */
+	async function handlePathNodesApply( pathId: number, orderedIds: number[], removedIds: number[] ) {
+		try {
+			for ( const id of removedIds ) {
+				const updated = await apiFetch< StoryNode >( 'PATCH', `/nodes/${ id }`, { path_id: 0 } );
+				setNodes( ( p ) => p.map( ( n ) => ( n.id === id ? updated : n ) ) );
+			}
+			for ( const id of orderedIds ) {
+				const node = nodes.find( ( n ) => n.id === id );
+				if ( node && node.pathId !== pathId ) {
+					const updated = await apiFetch< StoryNode >( 'PATCH', `/nodes/${ id }`, { path_id: pathId } );
+					setNodes( ( p ) => p.map( ( n ) => ( n.id === id ? updated : n ) ) );
+				}
+			}
+
+			const affected = new Set( [ ...orderedIds, ...removedIds ] );
+			const desired  = new Set< string >();
+			for ( let i = 0; i < orderedIds.length - 1; i++ ) {
+				desired.add( `${ orderedIds[ i ] }-${ orderedIds[ i + 1 ] }` );
+			}
+
+			for ( const edge of edges ) {
+				const key = `${ edge.fromNodeId }-${ edge.toNodeId }`;
+				if ( affected.has( edge.fromNodeId ) && affected.has( edge.toNodeId ) && ! desired.has( key ) ) {
+					await apiFetch( 'DELETE', `/edges/${ edge.id }` );
+					setEdges( ( p ) => p.filter( ( e ) => e.id !== edge.id ) );
+				}
+			}
+
+			const existing = new Set( edges.map( ( e ) => `${ e.fromNodeId }-${ e.toNodeId }` ) );
+			for ( const key of desired ) {
+				if ( existing.has( key ) ) continue;
+				const [ from, to ] = key.split( '-' ).map( Number );
+				const edge = await apiFetch< StoryEdge >( 'POST', '/edges', {
+					story_id:     storyId,
+					from_node_id: from,
+					to_node_id:   to,
+				} );
+				setEdges( ( p ) => {
+					const filtered = p.filter( ( e ) => e.id !== edge.id );
+					return [ ...filtered, edge ];
+				} );
+			}
+
+			createSuccessNotice( __( 'Path nodes updated.', 'clouds-and-spaceships' ), { type: 'snackbar' } );
+		} catch ( err ) {
+			createErrorNotice(
+				( err as Error ).message || __( 'Updating path nodes failed.', 'clouds-and-spaceships' ),
+				{ type: 'snackbar' }
+			);
+		}
+	}
+
+	// ── Link operations ───────────────────────────────────────────────────────
+
+	async function handleLinkAdd( linkType: string, linkId: number ) {
+		try {
+			const storyLink = await apiFetch< StoryLink >(
+				'POST',
+				`/stories/${ storyId }/links`,
+				{ link_type: linkType, link_id: linkId }
+			);
+			setLinks( ( p ) => {
+				const filtered = p.filter( ( l ) => l.id !== storyLink.id );
+				return [ ...filtered, storyLink ];
+			} );
+		} catch {
+			/* create failures are silent, as before */
+		}
+	}
+
+	async function handleLinkDelete( linkId: number ) {
+		try {
+			await apiFetch( 'DELETE', `/links/${ linkId }` );
+			setLinks( ( p ) => p.filter( ( l ) => l.id !== linkId ) );
+		} catch {
+			/* delete failures are silent, as before */
+		}
+	}
+
+	// ── Edge reorder ─────────────────────────────────────────────────────────
+
+	async function handleEdgeReorder( edgeId: number, sortOrder: number ) {
+		try {
+			const updated = await apiFetch< StoryEdge >( 'PATCH', `/edges/${ edgeId }`, { sort_order: sortOrder } );
+			setEdges( ( p ) => p.map( ( e ) => ( e.id === edgeId ? updated : e ) ) );
+		} catch {
+			/* reorder failures are silent, as before */
+		}
+	}
+
+	// ── Node sequence swap ───────────────────────────────────────────────────
+
+	/**
+	 * Swaps the two nodes joined by `pivot` in the story sequence: the pivot
+	 * edge reverses, and every other connection touching either node trades
+	 * that endpoint for the other node. Node positions on the canvas stay put —
+	 * only the connections are rewired. If the earlier node was the start node,
+	 * the start flag moves to the node taking its place.
+	 */
+	async function handleSequenceSwap( pivot: StoryEdge ) {
+		const n = pivot.fromNodeId;
+		const m = pivot.toNodeId;
+
+		// Reverse the pivot first so the earlier node has no outgoing edge left
+		// when its replacement inherits the successor connections.
+		const changes: { id: number; from: number; to: number }[] = [
+			{ id: pivot.id, from: m, to: n },
+		];
+		for ( const e of edges ) {
+			if ( e.id === pivot.id ) continue;
+			const from = e.fromNodeId === n ? m : e.fromNodeId === m ? n : e.fromNodeId;
+			const to   = e.toNodeId   === n ? m : e.toNodeId   === m ? n : e.toNodeId;
+			if ( from !== e.fromNodeId || to !== e.toNodeId ) {
+				changes.push( { id: e.id, from, to } );
+			}
+		}
+
+		try {
+			for ( const c of changes ) {
+				const updated = await apiFetch< StoryEdge >( 'PATCH', `/edges/${ c.id }`, {
+					from_node_id: c.from,
+					to_node_id:   c.to,
+				} );
+				setEdges( ( p ) => p.map( ( e ) => ( e.id === c.id ? updated : e ) ) );
+			}
+			if ( settings.startNodeId === n ) {
+				setSettings( ( p ) => ( { ...p, startNodeId: m } ) );
+			}
+		} catch ( err ) {
+			createErrorNotice(
+				( err as Error ).message || __( 'Reordering failed.', 'clouds-and-spaceships' ),
+				{ type: 'snackbar' }
+			);
+			// A partial rewire leaves the local graph stale — resync from the server.
+			try {
+				const data = await apiFetch< { edges: StoryEdge[] } >( 'GET', `/stories/${ storyId }/data` );
+				setEdges( data.edges );
+			} catch {
+				/* keep local state if the resync fails too */
+			}
+		}
+	}
+
+	// ── Canvas mode key handler ───────────────────────────────────────────────
+
+	useEffect( () => {
+		if ( canvasMode !== 'connect' ) return;
+		function onKey( e: KeyboardEvent ) {
+			if ( e.key === 'Escape' || e.key === 'Enter' ) {
+				setCanvasMode( 'select' );
+				setEdgeStartNodeId( null );
+			}
+		}
+		document.addEventListener( 'keydown', onKey );
+		return () => document.removeEventListener( 'keydown', onKey );
+	}, [ canvasMode ] );
+
+	// ── Canvas interaction ────────────────────────────────────────────────────
+
+	function exitConnectMode() {
+		setCanvasMode( 'select' );
+		setEdgeStartNodeId( null );
+	}
+
+	function handleNodeClick( nodeId: number ) {
+		if ( canvasMode === 'connect' ) {
+			if ( edgeStartNodeId === null || edgeStartNodeId === nodeId ) {
+				exitConnectMode();
+			} else {
+				handleEdgeCreate( edgeStartNodeId, nodeId );
+				setEdgeStartNodeId( nodeId );
+				setSelectedNodeId( nodeId );
+			}
+		} else {
+			setSelectedNodeId( nodeId );
+		}
+	}
+
+	function handleCanvasClick( x: number, y: number ) {
+		if ( canvasMode === 'connect' ) {
+			exitConnectMode();
+			return;
+		}
+		if ( isNew ) {
+			createErrorNotice(
+				__( 'Save the story first before adding nodes.', 'clouds-and-spaceships' ),
+				{ type: 'snackbar' }
+			);
+			return;
+		}
+		if ( canvasMode === 'select' && selectedNodeId !== null ) {
+			handleNodeDragEnd( selectedNodeId, x, y );
+			setSelectedNodeId( null );
+			return;
+		}
+		if ( canvasMode === 'add' ) {
+			setNodeModal( { open: true, nodeId: null, x, y } );
+		}
+	}
+
+	function handleEdgeClick( edgeId: number ) {
+		setEdgeModal( { open: true, edgeId } );
+	}
+
+	function handleStartEdgeFrom( fromNodeId: number ) {
+		setSelectedNodeId( fromNodeId );
+		setEdgeStartNodeId( fromNodeId );
+		setCanvasMode( 'connect' );
+	}
+
+	function handleCanvasModeChange( mode: CanvasMode ) {
+		setEdgeStartNodeId( mode === 'connect' ? selectedNodeId : null );
+		setCanvasMode( mode );
+	}
+
+	// ── Modal save ────────────────────────────────────────────────────────────
+
+	async function handleModalSave( formData: NodeFormData ) {
+		if ( nodeModal.nodeId === null ) {
+			await handleNodeCreate( formData, formData.x, formData.y );
+		} else {
+			await handleNodeUpdate( nodeModal.nodeId, formData );
+		}
+		setNodeModal( { open: false, nodeId: null, x: 0, y: 0 } );
+		setSelectedNodeId( null );
+	}
+
+	// ── Tab change ────────────────────────────────────────────────────────────
+
+	function handleTabChange( tab: StoryTab ) {
+		if ( tab !== 'canvas' ) {
+			exitConnectMode();
+			setSelectedNodeId( null );
+		}
+		setActiveTab( tab );
+	}
+
+	// ── Render ────────────────────────────────────────────────────────────────
+
+	const pageTitle = isNew ? 'New Story' : `Edit: ${ settings.title || '(no title)' }`;
+	const selectedNode = nodes.find( ( n ) => n.id === selectedNodeId ) ?? null;
+
+	if ( loading ) {
+		return <div className="cns-story-editor"><div className="cns-loading">Loading…</div></div>;
+	}
+
+	return (
+		<div className="cns-story-editor cns-map-editor">
+			<EditorHeader
+				pageTitle={ pageTitle }
+				overviewUrl={ d.overviewUrl || '#' }
+				viewUrl={ ! isNew ? settings.viewUrl : '' }
+				status={ settings.status }
+				isSaving={ isSaving }
+				onStatusChange={ ( s: PostStatus ) => setSettings( ( p ) => ( { ...p, status: s } ) ) }
+				onSave={ handleSave }
+				backLabel={ __( 'All Stories', 'clouds-and-spaceships' ) }
+				viewLabel={ __( 'View Story', 'clouds-and-spaceships' ) }
+				saveLabel={ __( 'Save Story', 'clouds-and-spaceships' ) }
+			/>
+
+			<div className="cns-map-editor__main">
+				<div className="cns-map-editor__body">
+					<TabBar activeTab={ activeTab } onChange={ handleTabChange } />
+
+					<div className="cns-map-editor__content">
+						{ activeTab === 'settings' && (
+							<SettingsPanel
+								settings={ settings }
+								onChange={ setSettings }
+								onMapChange={ handleMapChange }
+							/>
+						) }
+
+						{ activeTab === 'canvas' && (
+							<StoryCanvasPanel
+								isNew={ isNew }
+								settings={ settings }
+								nodes={ nodes }
+								edges={ edges }
+								paths={ paths }
+								mapData={ mapData }
+								mapObjects={ mapObjects }
+								mapAreas={ mapAreas }
+								canvasMode={ canvasMode }
+								selectedNodeId={ selectedNodeId }
+								edgeStartNodeId={ edgeStartNodeId }
+								onSettingsChange={ setSettings }
+								onCanvasModeChange={ handleCanvasModeChange }
+								onNodeClick={ handleNodeClick }
+								onCanvasClick={ handleCanvasClick }
+								onEdgeClick={ handleEdgeClick }
+								onNodeDragEnd={ handleNodeDragEnd }
+								onSelectNode={ setSelectedNodeId }
+								onEditNode={ ( id ) => {
+									setSelectedNodeId( id );
+									setNodeModal( { open: true, nodeId: id, x: 0, y: 0 } );
+								} }
+								onDeleteNode={ handleNodeDelete }
+								onSetStartNode={ ( id ) => setSettings( ( p ) => ( { ...p, startNodeId: id } ) ) }
+								onEdgeReorder={ handleEdgeReorder }
+								onEdgeDelete={ handleEdgeDelete }
+								onStartEdgeFrom={ handleStartEdgeFrom }
+								onEditEdge={ ( edgeId ) => setEdgeModal( { open: true, edgeId } ) }
+								onSequenceSwap={ handleSequenceSwap }
+							/>
+						) }
+
+
+						{ activeTab === 'nodes' && (
+							<NodesPanel
+								nodes={ nodes }
+								edges={ edges }
+								paths={ paths }
+								startNodeId={ settings.startNodeId }
+								onEditNode={ ( id ) => {
+									setSelectedNodeId( id );
+									setNodeModal( { open: true, nodeId: id, x: 0, y: 0 } );
+								} }
+								onDeleteNode={ handleNodeDelete }
+								onSetStartNode={ ( id ) => setSettings( ( p ) => ( { ...p, startNodeId: id } ) ) }
+								onEdgeReorder={ handleEdgeReorder }
+								onEdgeDelete={ handleEdgeDelete }
+								onEditEdge={ ( id ) => setEdgeModal( { open: true, edgeId: id } ) }
+							/>
+						) }
+
+						{ activeTab === 'paths' && (
+							<PathsPanel
+								paths={ paths }
+								nodes={ nodes }
+								edges={ edges }
+								onCreatePath={ handlePathCreate }
+								onUpdatePath={ handlePathUpdate }
+								onDeletePath={ handlePathDelete }
+								onQuickNodeCreate={ handleQuickNodeCreate }
+								onPathNodesApply={ handlePathNodesApply }
+							/>
+						) }
+
+						{ activeTab === 'links' && ! isNew && (
+							<LinksPanel
+								storyId={ storyId }
+								links={ links }
+								onLinkAdd={ handleLinkAdd }
+								onLinkDelete={ handleLinkDelete }
+							/>
+						) }
+
+						{ activeTab === 'links' && isNew && (
+							<div className="cns-panel-notice">Save the story first to manage links.</div>
+						) }
+					</div>
+				</div>
+			</div>
+
+			{ nodeModal.open && (
+				<NodeModal
+					nodeId={ nodeModal.nodeId }
+					existingNode={ selectedNode }
+					initialX={ nodeModal.x }
+					initialY={ nodeModal.y }
+					paths={ paths }
+					onSave={ handleModalSave }
+					onClose={ () => {
+						setNodeModal( { open: false, nodeId: null, x: 0, y: 0 } );
+						setSelectedNodeId( null );
+					} }
+				/>
+			) }
+
+			{ edgeModal.open && ( () => {
+				const edge = edges.find( e => e.id === edgeModal.edgeId );
+				return edge ? (
+					<EdgeStyleModal
+						edge={ edge }
+						storyColor={ settings.lineColor }
+						storyWidth={ settings.lineWidth }
+						storyStyle={ settings.lineStyle }
+						onSave={ handleEdgeUpdate }
+						onDelete={ handleEdgeDelete }
+						onClose={ () => setEdgeModal( { open: false, edgeId: null } ) }
+					/>
+				) : null;
+			} )() }
+
+			<Notices />
+		</div>
+	);
+}

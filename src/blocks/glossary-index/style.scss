@@ -1,0 +1,29 @@
+.cns-glossary-index {
+	&__section {
+		margin-bottom: 2rem;
+	}
+
+	&__title {
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.25rem;
+		border-bottom: 1px solid currentColor;
+	}
+
+	&__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 0.25rem 1.5rem;
+	}
+
+	&__item a {
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+}

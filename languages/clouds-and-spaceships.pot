@@ -1,0 +1,1601 @@
+# Copyright (C) 2026 Marian Maschke
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Clouds and Spaceships 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/clouds-and-spaceships\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-09T23:56:55+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: clouds-and-spaceships\n"
+
+#. Plugin Name of the plugin
+#: clouds-and-spaceships.php
+msgid "Clouds and Spaceships"
+msgstr ""
+
+#. Description of the plugin
+#: clouds-and-spaceships.php
+msgid "The Clouds and Spaceships platform: wiki articles and glossary, interactive canvas maps, and branching stories."
+msgstr ""
+
+#. Author of the plugin
+#: clouds-and-spaceships.php
+msgid "Marian Maschke"
+msgstr ""
+
+#. Author URI of the plugin
+#: clouds-and-spaceships.php
+msgid "https://namatamago.dev/"
+msgstr ""
+
+#: includes/archive.php:38
+msgid "Newest first"
+msgstr ""
+
+#: includes/archive.php:39
+msgid "Oldest first"
+msgstr ""
+
+#: includes/archive.php:40
+msgid "Title (A–Z)"
+msgstr ""
+
+#: includes/map/admin/api.php:11
+msgid "You do not have permission to manage maps."
+msgstr ""
+
+#: includes/map/admin/api.php:312
+#: includes/map/admin/api.php:1404
+#: includes/map/admin/api.php:1594
+#: includes/map/admin/views/editor.php:57
+#: includes/map/admin/views/overview.php:95
+#: includes/map/admin/views/overview.php:104
+#: includes/story/admin/api.php:508
+#: includes/story/admin/api.php:940
+#: includes/story/admin/api.php:970
+#: includes/story/admin/views/overview.php:153
+#: includes/story/admin/views/substories-overview.php:102
+#: src/blocks/map/edit.js:17
+#: src/blocks/map/edit.js:99
+#: src/blocks/story/edit.js:14
+#: src/blocks/story/edit.js:92
+msgid "(no title)"
+msgstr ""
+
+#: includes/map/admin/api.php:324
+#: includes/map/admin/api.php:670
+#: includes/map/admin/api.php:686
+#: includes/map/admin/api.php:890
+#: includes/map/admin/api.php:906
+#: includes/map/admin/api.php:1169
+#: includes/map/admin/api.php:1185
+#: includes/map/admin/api.php:1424
+#: includes/map/admin/api.php:1441
+#: includes/map/admin/api.php:1578
+#: includes/story/admin/api.php:309
+msgid "Map not found."
+msgstr ""
+
+#: includes/map/admin/api.php:411
+msgid "Attachment not found."
+msgstr ""
+
+#: includes/map/admin/api.php:414
+msgid "Only SVG files can be added to the icon library."
+msgstr ""
+
+#: includes/map/admin/api.php:429
+msgid "Icon not found."
+msgstr ""
+
+#: includes/map/admin/api.php:563
+msgid "Linked post not found."
+msgstr ""
+
+#: includes/map/admin/api.php:714
+msgid "Failed to save object."
+msgstr ""
+
+#: includes/map/admin/api.php:734
+#: includes/map/admin/api.php:782
+#: includes/map/admin/api.php:1615
+msgid "Object not found."
+msgstr ""
+
+#: includes/map/admin/api.php:762
+msgid "Failed to update object."
+msgstr ""
+
+#: includes/map/admin/api.php:936
+msgid "Failed to save area."
+msgstr ""
+
+#: includes/map/admin/api.php:956
+#: includes/map/admin/api.php:1007
+#: includes/map/admin/api.php:1059
+msgid "Area not found."
+msgstr ""
+
+#: includes/map/admin/api.php:987
+msgid "Failed to update area."
+msgstr ""
+
+#: includes/map/admin/api.php:1016
+msgid "Nodes must be a JSON array."
+msgstr ""
+
+#: includes/map/admin/api.php:1027
+msgid "Provide nodes and/or shape_type."
+msgstr ""
+
+#: includes/map/admin/api.php:1039
+msgid "Failed to update area nodes."
+msgstr ""
+
+#: includes/map/admin/api.php:1205
+msgid "Failed to save label."
+msgstr ""
+
+#: includes/map/admin/api.php:1225
+#: includes/map/admin/api.php:1264
+#: includes/map/admin/api.php:1280
+msgid "Label not found."
+msgstr ""
+
+#: includes/map/admin/api.php:1244
+msgid "Failed to update label."
+msgstr ""
+
+#: includes/map/admin/api.php:1291
+msgid "Provide x/y and/or offset_x/offset_y."
+msgstr ""
+
+#: includes/map/admin/api.php:1444
+msgid "Child map not found."
+msgstr ""
+
+#: includes/map/admin/api.php:1447
+msgid "A map cannot link to itself."
+msgstr ""
+
+#: includes/map/admin/api.php:1494
+msgid "Failed to save hierarchy region."
+msgstr ""
+
+#: includes/map/admin/api.php:1513
+#: includes/map/admin/api.php:1566
+msgid "Hierarchy region not found."
+msgstr ""
+
+#: includes/map/admin/icons.php:51
+msgid "Could not read SVG file."
+msgstr ""
+
+#: includes/map/admin/icons.php:57
+msgid "SVG sanitization failed — ensure the file is valid XML."
+msgstr ""
+
+#: includes/map/admin/menu.php:12
+#: includes/map/admin/views/overview.php:40
+#: includes/map/post-type.php:13
+msgid "Maps"
+msgstr ""
+
+#: includes/map/admin/menu.php:13
+msgid "CNS Map Suite"
+msgstr ""
+
+#: includes/map/admin/menu.php:19
+msgid "Icons"
+msgstr ""
+
+#: includes/map/admin/menu.php:20
+msgid "Icon Library"
+msgstr ""
+
+#: includes/map/admin/menu.php:34
+#: includes/map/admin/menu.php:35
+msgid "Map Editor"
+msgstr ""
+
+#: includes/map/admin/views/icons.php:8
+msgid "SVG icons added here are available as object icons across all maps. Only SVG files are accepted and are sanitized on upload to remove executable content."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:27
+msgid "Map deleted."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:33
+#: includes/story/admin/views/overview.php:48
+msgid "Settings saved."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:42
+msgid "+ New Map"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:49
+#: includes/story/admin/views/overview.php:84
+#: includes/story/admin/views/substories-overview.php:46
+msgid "Items per page:"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:65
+#: includes/story/admin/views/overview.php:99
+#: includes/story/admin/views/substories-overview.php:61
+#: src/blocks/infobox-row/edit.js:121
+msgid "Title"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:66
+msgid "Mode"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:67
+#: includes/story/admin/views/overview.php:102
+#: includes/story/admin/views/substories-overview.php:62
+msgid "Status"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:68
+#: includes/story/admin/views/overview.php:103
+#: includes/story/admin/views/substories-overview.php:63
+msgid "Date"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:69
+#: includes/story/admin/views/overview.php:104
+#: includes/story/admin/views/substories-overview.php:64
+msgid "Actions"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:108
+msgid "Featured"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:113
+msgid "MasterMap"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:113
+#: includes/map/post-type.php:14
+#: includes/story/admin/views/overview.php:100
+#: src/blocks/map/edit.js:65
+msgid "Map"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:117
+#: includes/story/admin/views/overview.php:160
+#: includes/story/admin/views/substories-overview.php:84
+msgid "Published"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:117
+#: includes/story/admin/views/overview.php:160
+#: includes/story/admin/views/substories-overview.php:85
+#: src/blocks/map/edit.js:10
+#: src/blocks/story/edit.js:9
+msgid "Draft"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:117
+#: includes/story/admin/views/overview.php:160
+#: includes/story/admin/views/substories-overview.php:86
+#: src/blocks/map/edit.js:11
+#: src/blocks/story/edit.js:10
+msgid "Private"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:122
+#: includes/story/admin/views/overview.php:174
+#: includes/story/admin/views/substories-overview.php:114
+msgid "Edit"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:125
+#: includes/story/admin/views/overview.php:178
+#: includes/story/admin/views/substories-overview.php:119
+msgid "View"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:131
+msgid "Permanently delete this map?"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:132
+msgid "Delete"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:156
+#: includes/story/admin/views/overview.php:210
+msgid "Plugin Settings"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:164
+msgid "Map archive"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:168
+#: includes/story/admin/views/overview.php:221
+msgid "View archive ↗"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:175
+msgid "Enable the public map archive"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:178
+msgid "Publishes a listing of all maps at the slug below, and lets maps appear in search and nav menus. Off by default."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:184
+#: includes/story/admin/views/overview.php:237
+#: includes/wiki/views/tab-wiki.php:146
+msgid "URL slug"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:197
+msgid "Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single map URL — existing links will break."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:203
+msgid "Maps per page"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:215
+msgid "Overrides the global Reading Settings value for the map archive only."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:221
+#: includes/story/admin/views/overview.php:274
+#: includes/wiki/views/tab-wiki.php:183
+msgid "Default sort order"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:234
+#: includes/story/admin/views/overview.php:287
+msgid "Admin menu visibility"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:238
+msgid "Show Maps in the WordPress admin sidebar"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:241
+msgid "Adds the standard WordPress list screen for maps to the sidebar. The CNS editor pages here stay the primary management UI."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:246
+#: includes/story/admin/views/overview.php:304
+msgid "Uninstall behaviour"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:255
+msgid "Delete all map posts and their data when this plugin is uninstalled"
+msgstr ""
+
+#: includes/map/admin/views/overview.php:258
+msgid "When unchecked (default), maps are kept after uninstall. Custom DB tables are always removed."
+msgstr ""
+
+#: includes/map/admin/views/overview.php:264
+#: includes/story/admin/views/overview.php:316
+msgid "Save Settings"
+msgstr ""
+
+#: includes/map/post-type.php:15
+#: includes/map/post-type.php:16
+msgid "Add New Map"
+msgstr ""
+
+#: includes/map/post-type.php:17
+msgid "Edit Map"
+msgstr ""
+
+#: includes/map/post-type.php:18
+msgid "New Map"
+msgstr ""
+
+#: includes/map/post-type.php:19
+msgid "View Map"
+msgstr ""
+
+#: includes/map/post-type.php:20
+msgid "Search Maps"
+msgstr ""
+
+#: includes/map/post-type.php:21
+msgid "No maps found"
+msgstr ""
+
+#: includes/map/post-type.php:22
+msgid "No maps found in trash"
+msgstr ""
+
+#: includes/settings-page.php:94
+#: includes/settings-page.php:107
+#: includes/settings-page.php:133
+msgid "Clouds And Spaceships"
+msgstr ""
+
+#: includes/settings-page.php:95
+msgid "CNS"
+msgstr ""
+
+#: includes/settings-page.php:128
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/settings-page.php:135
+msgid "CNS settings sections"
+msgstr ""
+
+#: includes/settings-page.php:152
+msgid "No content available for this tab."
+msgstr ""
+
+#: includes/story/admin/api.php:329
+#: includes/story/admin/api.php:385
+#: includes/story/admin/api.php:529
+#: includes/story/admin/api.php:983
+#: includes/story/admin/api.php:1023
+#: includes/story/admin/api.php:1092
+#: includes/story/admin/api.php:1109
+msgid "Story not found."
+msgstr ""
+
+#: includes/story/admin/api.php:591
+msgid "Could not create node."
+msgstr ""
+
+#: includes/story/admin/api.php:613
+#: includes/story/admin/api.php:731
+msgid "Node not found."
+msgstr ""
+
+#: includes/story/admin/api.php:747
+msgid "Could not delete node."
+msgstr ""
+
+#: includes/story/admin/api.php:764
+msgid "story_id, from_node_id, and to_node_id are required."
+msgstr ""
+
+#: includes/story/admin/api.php:768
+#: includes/story/admin/api.php:836
+msgid "A node cannot connect to itself."
+msgstr ""
+
+#: includes/story/admin/api.php:779
+#: includes/story/admin/api.php:847
+msgid "Both nodes must belong to this story."
+msgstr ""
+
+#: includes/story/admin/api.php:824
+#: includes/story/admin/api.php:909
+msgid "Edge not found."
+msgstr ""
+
+#: includes/story/admin/api.php:857
+msgid "A connection between these nodes already exists."
+msgstr ""
+
+#: includes/story/admin/api.php:1014
+msgid "link_type must be map_object, map_area, or hierarchy."
+msgstr ""
+
+#: includes/story/admin/api.php:1018
+msgid "link_id is required."
+msgstr ""
+
+#: includes/story/admin/api.php:1033
+#: includes/story/admin/api.php:1048
+msgid "Could not create link."
+msgstr ""
+
+#: includes/story/admin/api.php:1077
+msgid "Link not found."
+msgstr ""
+
+#: includes/story/admin/api.php:1139
+msgid "Could not create path."
+msgstr ""
+
+#: includes/story/admin/api.php:1157
+#: includes/story/admin/api.php:1210
+msgid "Path not found."
+msgstr ""
+
+#: includes/story/admin/api.php:1219
+msgid "Could not delete path."
+msgstr ""
+
+#: includes/story/admin/menu.php:12
+#: includes/story/admin/views/overview.php:53
+#: includes/story/post-types.php:15
+msgid "Stories"
+msgstr ""
+
+#: includes/story/admin/menu.php:13
+msgid "CNS Story Suite"
+msgstr ""
+
+#: includes/story/admin/menu.php:19
+#: includes/story/admin/menu.php:20
+#: includes/story/admin/views/substories-overview.php:34
+#: includes/story/post-types.php:45
+msgid "Substories"
+msgstr ""
+
+#: includes/story/admin/menu.php:34
+#: includes/story/admin/menu.php:35
+msgid "Story Editor"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:30
+msgid "Story moved to trash."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:36
+msgid "Story restored from trash. Restored stories are set to Draft."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:42
+msgid "Story permanently deleted."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:55
+msgid "+ New Story"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:64
+msgid "All"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:71
+#: includes/story/admin/views/overview.php:160
+#: includes/story/admin/views/overview.php:186
+#: includes/story/admin/views/substories-overview.php:127
+msgid "Trash"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:101
+msgid "Nodes"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:110
+msgid "No stories found."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:166
+msgid "Restore"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:171
+msgid "Permanently delete this story and all its nodes, paths and edges? This cannot be undone."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:172
+msgid "Delete Permanently"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:185
+msgid "Move this story to trash?"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:217
+msgid "Story archive"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:228
+msgid "Enable the public story archive"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:231
+msgid "Publishes a listing of all stories at the slug below. Off by default. Substories have no archive of their own."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:250
+msgid "Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single story URL — existing links will break."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:256
+msgid "Stories per page"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:268
+msgid "Overrides the global Reading Settings value for the story archive only."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:291
+msgid "Show Stories in the WordPress admin sidebar"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:296
+msgid "Show Substories in the WordPress admin sidebar"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:299
+msgid "Adds the standard WordPress list screens for stories and substories to the sidebar. The CNS editor pages here stay the primary management UI."
+msgstr ""
+
+#: includes/story/admin/views/overview.php:308
+msgid "Delete all story and substory posts when this plugin is uninstalled"
+msgstr ""
+
+#: includes/story/admin/views/overview.php:311
+msgid "When unchecked (default), posts are kept after uninstall. Custom DB tables are always removed."
+msgstr ""
+
+#: includes/story/admin/views/substories-overview.php:29
+msgid "Substory moved to trash."
+msgstr ""
+
+#: includes/story/admin/views/substories-overview.php:36
+msgid "+ New Substory"
+msgstr ""
+
+#: includes/story/admin/views/substories-overview.php:39
+msgid "Full overview"
+msgstr ""
+
+#: includes/story/admin/views/substories-overview.php:71
+msgid "No substories yet."
+msgstr ""
+
+#: includes/story/admin/views/substories-overview.php:73
+msgid "Create your first substory"
+msgstr ""
+
+#: includes/story/admin/views/substories-overview.php:126
+msgid "Move this substory to trash?"
+msgstr ""
+
+#: includes/story/post-types.php:16
+#: src/blocks/story/edit.js:57
+msgid "Story"
+msgstr ""
+
+#: includes/story/post-types.php:17
+#: includes/story/post-types.php:18
+msgid "Add New Story"
+msgstr ""
+
+#: includes/story/post-types.php:19
+msgid "Edit Story"
+msgstr ""
+
+#: includes/story/post-types.php:20
+msgid "New Story"
+msgstr ""
+
+#: includes/story/post-types.php:21
+msgid "View Story"
+msgstr ""
+
+#: includes/story/post-types.php:22
+msgid "Search Stories"
+msgstr ""
+
+#: includes/story/post-types.php:23
+msgid "No stories found"
+msgstr ""
+
+#: includes/story/post-types.php:24
+msgid "No stories found in trash"
+msgstr ""
+
+#: includes/story/post-types.php:46
+msgid "Substory"
+msgstr ""
+
+#: includes/story/post-types.php:47
+#: includes/story/post-types.php:48
+msgid "Add New Substory"
+msgstr ""
+
+#: includes/story/post-types.php:49
+msgid "Edit Substory"
+msgstr ""
+
+#: includes/story/post-types.php:50
+msgid "New Substory"
+msgstr ""
+
+#: includes/story/post-types.php:51
+msgid "View Substory"
+msgstr ""
+
+#: includes/story/post-types.php:52
+msgid "Search Substories"
+msgstr ""
+
+#: includes/story/post-types.php:53
+msgid "No substories found"
+msgstr ""
+
+#: includes/story/post-types.php:54
+msgid "No substories found in trash"
+msgstr ""
+
+#: includes/wiki/glossary.php:29
+msgctxt "taxonomy general name"
+msgid "Glossary Categories"
+msgstr ""
+
+#: includes/wiki/glossary.php:30
+msgctxt "taxonomy singular name"
+msgid "Glossary Category"
+msgstr ""
+
+#: includes/wiki/glossary.php:31
+msgid "Search glossary categories"
+msgstr ""
+
+#: includes/wiki/glossary.php:32
+msgid "All glossary categories"
+msgstr ""
+
+#: includes/wiki/glossary.php:33
+msgid "Edit glossary category"
+msgstr ""
+
+#: includes/wiki/glossary.php:34
+msgid "Update glossary category"
+msgstr ""
+
+#: includes/wiki/glossary.php:35
+msgid "Add new glossary category"
+msgstr ""
+
+#: includes/wiki/glossary.php:36
+msgid "New glossary category name"
+msgstr ""
+
+#: includes/wiki/glossary.php:37
+msgid "Categories"
+msgstr ""
+
+#: includes/wiki/glossary.php:48
+msgctxt "Post type general name"
+msgid "Glossary"
+msgstr ""
+
+#: includes/wiki/glossary.php:49
+msgctxt "Post type singular name"
+msgid "Glossary Entry"
+msgstr ""
+
+#: includes/wiki/glossary.php:50
+msgctxt "Admin Menu text"
+msgid "Glossary"
+msgstr ""
+
+#: includes/wiki/glossary.php:51
+msgctxt "Add New on Toolbar"
+msgid "Glossary Entry"
+msgstr ""
+
+#: includes/wiki/glossary.php:52
+#: includes/wiki/post-type.php:96
+msgid "Add New"
+msgstr ""
+
+#: includes/wiki/glossary.php:53
+msgid "Add new glossary entry"
+msgstr ""
+
+#: includes/wiki/glossary.php:54
+msgid "New glossary entry"
+msgstr ""
+
+#: includes/wiki/glossary.php:55
+msgid "Edit glossary entry"
+msgstr ""
+
+#: includes/wiki/glossary.php:56
+msgid "View glossary entry"
+msgstr ""
+
+#: includes/wiki/glossary.php:57
+msgid "All entries"
+msgstr ""
+
+#: includes/wiki/glossary.php:58
+msgid "Search glossary entries"
+msgstr ""
+
+#: includes/wiki/glossary.php:59
+msgid "No glossary entries found."
+msgstr ""
+
+#: includes/wiki/glossary.php:60
+msgid "No glossary entries found in Trash."
+msgstr ""
+
+#: includes/wiki/glossary.php:61
+msgctxt "The post type archive label used in nav menus."
+msgid "Glossary"
+msgstr ""
+
+#: includes/wiki/glossary.php:107
+msgid "Glossary Archive"
+msgstr ""
+
+#: includes/wiki/glossary.php:108
+msgid "Template for the glossary archive page"
+msgstr ""
+
+#: includes/wiki/post-type.php:50
+msgid "Write your wiki article…"
+msgstr ""
+
+#: includes/wiki/post-type.php:92
+msgctxt "Post type general name"
+msgid "Wikis"
+msgstr ""
+
+#: includes/wiki/post-type.php:93
+msgctxt "Post type singular name"
+msgid "Wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:94
+msgctxt "Admin Menu text"
+msgid "Wikis"
+msgstr ""
+
+#: includes/wiki/post-type.php:95
+msgctxt "Add New on Toolbar"
+msgid "Wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:97
+msgid "Add New wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:98
+msgid "New wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:99
+msgid "Edit wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:100
+msgid "View wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:101
+msgid "All wikis"
+msgstr ""
+
+#: includes/wiki/post-type.php:102
+msgid "Search wikis"
+msgstr ""
+
+#: includes/wiki/post-type.php:103
+msgid "Parent wikis:"
+msgstr ""
+
+#: includes/wiki/post-type.php:104
+msgid "No wikis found."
+msgstr ""
+
+#: includes/wiki/post-type.php:105
+msgid "No wikis found in Trash."
+msgstr ""
+
+#: includes/wiki/post-type.php:106
+msgctxt "Overrides the \"Featured Image\" phrase for this post type."
+msgid "Wiki Cover Image"
+msgstr ""
+
+#: includes/wiki/post-type.php:107
+msgctxt "Overrides the \"Set featured image\" phrase for this post type."
+msgid "Set cover image"
+msgstr ""
+
+#: includes/wiki/post-type.php:108
+msgctxt "Overrides the \"Remove featured image\" phrase for this post type."
+msgid "Remove cover image"
+msgstr ""
+
+#: includes/wiki/post-type.php:109
+msgctxt "Overrides the \"Use as featured image\" phrase for this post type."
+msgid "Use as cover image"
+msgstr ""
+
+#: includes/wiki/post-type.php:110
+msgctxt "The post type archive label used in nav menus."
+msgid "Wiki archives"
+msgstr ""
+
+#: includes/wiki/post-type.php:111
+msgctxt "Overrides the \"Insert into post\" phrase (media)."
+msgid "Insert into wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:112
+msgctxt "Overrides the \"Uploaded to this post\" phrase (media)."
+msgid "Uploaded to this wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:113
+msgctxt "Screen reader text for the filter links."
+msgid "Filter wikis list"
+msgstr ""
+
+#: includes/wiki/post-type.php:114
+msgctxt "Screen reader text for the pagination."
+msgid "Wikis list navigation"
+msgstr ""
+
+#: includes/wiki/post-type.php:115
+msgctxt "Screen reader text for the items list."
+msgid "Wikis list"
+msgstr ""
+
+#: includes/wiki/post-type.php:211
+msgid "Single Wiki"
+msgstr ""
+
+#: includes/wiki/post-type.php:212
+msgid "Template for single wiki posts"
+msgstr ""
+
+#: includes/wiki/post-type.php:220
+msgid "Wiki Archive"
+msgstr ""
+
+#: includes/wiki/settings.php:199
+#: src/blocks/wiki-contents/edit.js:64
+msgid "Wiki"
+msgstr ""
+
+#: includes/wiki/settings.php:200
+msgid "CNS Wiki Suite"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:35
+msgid "Newest first (date ↓)"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:36
+msgid "Oldest first (date ↑)"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:37
+msgid "Alphabetical (A → Z)"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:63
+msgid "Overview"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:67
+msgid "Published wikis"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:71
+msgid "Drafts"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:75
+msgid "Categories in use"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:79
+msgid "Tags in use"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:91
+msgid "Template"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:94
+msgid "Wiki template"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:104
+msgid "Use the wiki page template for wiki posts and the wiki archive"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:107
+msgid "When disabled, wikis are rendered with your theme’s default single and archive templates instead, like regular posts."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:113
+msgid "Infobox column width"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:125
+msgid "rem"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:127
+msgid "Maximum width of the infobox column on a wiki article; the article text takes the remaining space. Leave empty to use the width your theme defines (--wp--custom--layout--col-wiki), falling back to 34rem. Below 782px the columns stack and the limit does not apply."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:136
+msgid "Archive"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:140
+msgid "View wiki archive ↗"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:159
+msgid "Lowercase letters, numbers, and hyphens only. Changes the archive URL and all wiki post URLs — existing links will break."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:165
+msgid "Wikis per page"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:177
+msgid "Overrides the global Reading Settings value for the wiki archive only."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:197
+msgid "Placeholder thumbnail"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:219
+msgid "Select placeholder thumbnail"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:220
+#: includes/wiki/views/tab-wiki.php:222
+msgid "Select image"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:221
+#: includes/wiki/views/tab-wiki.php:222
+msgid "Change image"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:231
+msgid "Remove"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:233
+msgid "Shown in wiki cards and the wiki archive when a wiki has no cover image. Leave empty to show no image."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:241
+msgid "Wiki Grid Defaults"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:243
+msgid "Fallback column and gap values used by any wiki-contents block that does not have explicit per-block settings."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:247
+#: src/blocks/wiki-contents/edit.js:38
+msgid "Columns"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:251
+#: src/blocks/wiki-contents/edit.js:157
+msgid "Desktop"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:256
+#: src/blocks/wiki-contents/edit.js:156
+msgid "Tablet"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:261
+#: src/blocks/wiki-contents/edit.js:155
+msgid "Mobile"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:269
+msgid "Gap (px)"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:273
+msgid "Column"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:278
+msgid "Row"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:289
+msgid "Infobox Colours"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:291
+msgid "Default colours for infobox blocks using theme preset values. Per-block colour overrides take precedence. Leave empty to keep the theme defaults."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:296
+msgid "Background"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:305
+#: includes/wiki/views/tab-wiki.php:322
+#: includes/wiki/views/tab-wiki.php:339
+#: includes/wiki/views/tab-wiki.php:407
+msgid "Clear (use theme default)"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:308
+msgid "Maps to --wp--preset--color--element-bg on the infobox wrapper."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:313
+msgid "Title bar"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:325
+msgid "Maps to --wp--preset--color--element-contrast. Used for the infobox title background."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:330
+msgid "Border"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:342
+msgid "Overrides the hardcoded #dedede border on the infobox wrapper."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:351
+msgid "Glossary"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:355
+msgid "View glossary ↗"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:359
+msgid "A glossary of terms with its own archive page. Once enabled, mark text as a glossary term from the editor toolbar to get a tooltip definition and a link to the entry."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:363
+msgid "Enable glossary"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:373
+msgid "Enable the glossary post type, archive, and editor toolbar button"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:379
+msgid "Archive URL slug"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:392
+msgid "Lowercase letters, numbers, and hyphens only. Changes the glossary archive URL and all entry URLs — existing links will break."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:398
+msgid "Entry text colour"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:410
+msgid "Colour of inline glossary terms in content. Leave empty to inherit the surrounding text colour."
+msgstr ""
+
+#: src/blocks/glossary-index/render.php:36
+msgid "No glossary entries yet."
+msgstr ""
+
+#: src/blocks/glossary-index/render.php:68
+msgid "Other"
+msgstr ""
+
+#: src/blocks/glossary-index/render.php:105
+msgid "0–9 & symbols"
+msgstr ""
+
+#. translators: %s: map title
+#: src/blocks/map/render.php:127
+#, php-format
+msgid "Map: %s — JavaScript is required to view this interactive map."
+msgstr ""
+
+#: src/blocks/wiki-card/render.php:114
+#: src/blocks/wiki-card/edit.js:197
+msgid "Read more"
+msgstr ""
+
+#: src/blocks/glossary-index/edit.js:20
+msgid "Glossary Index"
+msgstr ""
+
+#: src/blocks/glossary-index/edit.js:22
+msgid "Group entries by"
+msgstr ""
+
+#: src/blocks/glossary-index/edit.js:33
+msgid "A–Z"
+msgstr ""
+
+#: src/blocks/glossary-index/edit.js:37
+msgid "Category"
+msgstr ""
+
+#: src/blocks/glossary-index/edit.js:41
+msgid "Show notice when empty"
+msgstr ""
+
+#: src/blocks/infobox-group/edit.js:33
+#: src/blocks/wiki-contents/edit.js:132
+msgid "Display Mode"
+msgstr ""
+
+#: src/blocks/infobox-group/edit.js:58
+#: src/blocks/infobox/edit.js:67
+msgid "Color Settings"
+msgstr ""
+
+#: src/blocks/infobox-group/edit.js:65
+#: src/blocks/infobox/edit.js:73
+#: src/blocks/wiki-card/edit.js:274
+msgid "Background color"
+msgstr ""
+
+#: src/blocks/infobox-group/edit.js:71
+#: src/blocks/infobox/edit.js:78
+#: src/blocks/wiki-card/edit.js:280
+msgid "Text color"
+msgstr ""
+
+#: src/blocks/infobox-group/edit.js:77
+#: src/blocks/infobox/edit.js:83
+msgid "Contrast color"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:96
+msgid "Infobox Row Settings"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:114
+msgid "Edit Item"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:115
+msgid "Add Item"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:128
+msgid "Description"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:134
+msgid "Order"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:135
+msgid "Lower numbers appear first in the list."
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:151
+msgid "Search post or add url"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:158
+msgid "Search pages or paste URL…"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:164
+msgid "Link text"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:169
+msgid "Defaults to URL if empty"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:172
+msgid "Open in new tab"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:182
+msgid "Save"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:185
+msgid "Cancel"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:194
+msgid "Add info item below"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:202
+msgid "(empty term)"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:217
+msgid "Edit item"
+msgstr ""
+
+#: src/blocks/infobox-row/edit.js:224
+msgid "Remove item"
+msgstr ""
+
+#: src/blocks/infobox/edit.js:43
+msgid "Mobile display"
+msgstr ""
+
+#: src/blocks/map/edit.js:61
+msgid "Map Settings"
+msgstr ""
+
+#: src/blocks/map/edit.js:66
+msgid "Search maps…"
+msgstr ""
+
+#: src/blocks/map/edit.js:76
+#: src/blocks/story/edit.js:68
+msgid "Searching…"
+msgstr ""
+
+#: src/blocks/map/edit.js:77
+msgid "Type to search maps by title."
+msgstr ""
+
+#: src/blocks/map/edit.js:87
+msgid "CNS Map"
+msgstr ""
+
+#: src/blocks/map/edit.js:88
+msgid "Pick a map in the block settings panel."
+msgstr ""
+
+#: src/blocks/map/edit.js:100
+msgid "Map #"
+msgstr ""
+
+#: src/blocks/map/edit.js:102
+msgid "Rendered on the frontend."
+msgstr ""
+
+#: src/blocks/story/edit.js:53
+msgid "Story Settings"
+msgstr ""
+
+#: src/blocks/story/edit.js:58
+msgid "Search stories…"
+msgstr ""
+
+#: src/blocks/story/edit.js:69
+msgid "Type to search stories by title."
+msgstr ""
+
+#: src/blocks/story/edit.js:81
+msgid "CNS Story"
+msgstr ""
+
+#: src/blocks/story/edit.js:82
+msgid "Pick a story in the block settings panel to embed it."
+msgstr ""
+
+#: src/blocks/story/edit.js:89
+msgid "Story:"
+msgstr ""
+
+#: src/blocks/story/edit.js:95
+msgid "The interactive canvas renders on the frontend."
+msgstr ""
+
+#: src/blocks/story/edit.js:103
+msgid "Story not found"
+msgstr ""
+
+#: src/blocks/story/edit.js:104
+msgid "No story found with the given ID."
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:69
+msgid "Select a post"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:74
+msgid "Post type"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:84
+msgid "Search…"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:91
+msgid "No posts found."
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:228
+msgid "Card Settings"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:230
+msgid "Show thumbnail"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:236
+msgid "Show title"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:242
+msgid "Show categories"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:248
+msgid "Show excerpt"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:254
+msgid "Show tags"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:260
+msgid "Show read more link"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:267
+msgid "Color"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:285
+msgid "Post"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:291
+msgid "Change post"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:309
+msgid "Wiki Card"
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:310
+msgid "Select a post to display as a card."
+msgstr ""
+
+#: src/blocks/wiki-card/edit.js:313
+msgid "Select post"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:136
+msgid "Manual selection"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:137
+msgid "Newest wikis (auto)"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:143
+msgid "Grid Settings"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:145
+msgid "Number of posts"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:170
+msgid "Column gap (px)"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:179
+msgid "Row gap (px)"
+msgstr ""
+
+#: src/formats/glossary/index.js:109
+msgid "Glossary entry"
+msgstr ""
+
+#: src/formats/glossary/index.js:118
+msgid "Search by title. The tooltip shows the entry’s definition."
+msgstr ""
+
+#: src/formats/glossary/index.js:140
+msgid "Remove glossary term"
+msgstr ""
+
+#: src/formats/glossary/index.js:157
+#: src/formats/glossary/index.js:175
+msgid "Glossary term"
+msgstr ""
+
+#: src/blocks/glossary-index/block.json
+msgctxt "block title"
+msgid "Glossary Index"
+msgstr ""
+
+#: src/blocks/glossary-index/block.json
+msgctxt "block description"
+msgid "Lists all glossary entries grouped alphabetically or by category, with links to each definition."
+msgstr ""
+
+#: src/blocks/infobox-group/block.json
+msgctxt "block title"
+msgid "Infobox Group"
+msgstr ""
+
+#: src/blocks/infobox-group/block.json
+msgctxt "block description"
+msgid "Group block to be used inside of a CNS infobox"
+msgstr ""
+
+#: src/blocks/infobox-row/block.json
+msgctxt "block title"
+msgid "Infobox Row"
+msgstr ""
+
+#: src/blocks/infobox-row/block.json
+msgctxt "block description"
+msgid "Infobox style table row"
+msgstr ""
+
+#: src/blocks/infobox/block.json
+msgctxt "block title"
+msgid "Infobox"
+msgstr ""
+
+#: src/blocks/infobox/block.json
+msgctxt "block description"
+msgid "An infobox style block preset."
+msgstr ""
+
+#: src/blocks/map/block.json
+msgctxt "block title"
+msgid "CNS Map"
+msgstr ""
+
+#: src/blocks/map/block.json
+msgctxt "block description"
+msgid "Embed an interactive canvas map created in the Maps admin."
+msgstr ""
+
+#: src/blocks/story/block.json
+msgctxt "block title"
+msgid "CNS Story"
+msgstr ""
+
+#: src/blocks/story/block.json
+msgctxt "block description"
+msgid "Embed a branching interactive story canvas with a story window."
+msgstr ""
+
+#: src/blocks/story/block.json
+msgctxt "block keyword"
+msgid "story"
+msgstr ""
+
+#: src/blocks/story/block.json
+msgctxt "block keyword"
+msgid "canvas"
+msgstr ""
+
+#: src/blocks/story/block.json
+msgctxt "block keyword"
+msgid "interactive"
+msgstr ""
+
+#: src/blocks/wiki-card/block.json
+msgctxt "block title"
+msgid "Wiki Card"
+msgstr ""
+
+#: src/blocks/wiki-card/block.json
+msgctxt "block description"
+msgid "Display a post as a card with thumbnail, title, excerpt and link. Designed for wiki post types."
+msgstr ""
+
+#: src/blocks/wiki-contents/block.json
+msgctxt "block title"
+msgid "Wiki Contents"
+msgstr ""
+
+#: src/blocks/wiki-contents/block.json
+msgctxt "block description"
+msgid "A responsive grid of wiki cards. Populate manually or auto-fill with the newest wikis."
+msgstr ""

@@ -1,0 +1,67 @@
+/**
+ * CNS Wiki Suite — wiki layout fallbacks.
+ *
+ * The wiki template and the wiki post-content template lay their columns out
+ * with `cns-col*` classes that only the Clouds and Spaceships theme styles.
+ * On any other theme those classes are inert, so core's columns rule
+ * (`flex-basis: 0; flex-grow: 1`) splits the row into equal shares — an
+ * infobox as wide as the article, and an empty left column claiming a third
+ * of the page because the `sidebar` template part it holds does not exist.
+ *
+ * These rules give the plugin's own columns sensible proportions everywhere.
+ * Width comes from a fallback chain so a theme still has the last word:
+ *
+ *   --cns-wiki-infobox-width   CNS → Wiki → Layout setting (when set)
+ *   --wp--custom--layout--col-wiki   theme.json (Clouds and Spaceships: 34rem)
+ *   34rem                      plugin default
+ *
+ * Everything is scoped to the desktop side of core's stacking breakpoint;
+ * below it core forces `flex-basis: 100% !important` and the columns stack,
+ * where a width cap would only get in the way.
+ */
+
+.cns-col__wiki {
+	--cns-wiki-infobox-col: var(
+		--cns-wiki-infobox-width,
+		var(--wp--custom--layout--col-wiki, 34rem)
+	);
+}
+
+.cns-col__sidebar {
+	--cns-wiki-sidebar-col: var(--wp--custom--layout--col-side, 24rem);
+}
+
+@media (min-width: 782px) {
+	/* Low specificity, so a theme rule on .cns-col__wiki still overrides it. */
+	.cns-col__wiki {
+		max-width: var(--cns-wiki-infobox-col);
+	}
+
+	.cns-col__sidebar {
+		max-width: var(--cns-wiki-sidebar-col);
+	}
+
+	/*
+	 * Specificity (0,4,0) — one notch above core's
+	 * `.wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column`,
+	 * which is the rule that would otherwise force an equal share regardless
+	 * of source order. Without this the infobox is `min(50%, max-width)` and
+	 * still splits the row evenly at mid viewport widths.
+	 */
+	.wp-block-columns > .wp-block-column.cns-col.cns-col__wiki {
+		flex: 0 1 var(--cns-wiki-infobox-col);
+	}
+
+	/* The article column takes whatever the infobox leaves. */
+	.wp-block-columns > .wp-block-column.cns-col.cns-col__center,
+	.wp-block-columns > .wp-block-column.cns-col.cns-col__center-area {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	/* Collapses to nothing when the `sidebar` template part is missing. */
+	.wp-block-columns > .wp-block-column.cns-col.cns-col__sidebar {
+		flex: 0 0 auto;
+		width: fit-content;
+	}
+}

@@ -1,0 +1,49 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cns-wiki-suite/infobox",
+	"version": "0.1.0",
+	"title": "Infobox",
+	"category": "widgets",
+	"icon": "welcome-widgets-menus",
+	"description": "An infobox style block preset.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"interactivity": true
+	},
+	"attributes": {
+		"align": { "type": "string", "default": "full" },
+		"bg_color": {
+			"type": "string",
+			"default": "var(--wp--preset--color--element-bg)"
+		},
+		"contrast_color": {
+			"type": "string",
+			"default": "var(--wp--preset--color--element-contrast)"
+		},
+		"infobox_title": { "type": "string" },
+		"is_infobox_open": { "type": "boolean", "default": true },
+		"display_mode": {
+			"type": "string",
+			"default": "collapse__groups-mobile"
+		},
+		"text_color": {
+			"type": "string",
+			"default": "var(--wp--preset--color--text)"
+		}
+	},
+	"allowedBlocks": [
+		"cns-wiki-suite/infobox-group",
+		"cns-wiki-suite/infobox-row",
+		"core/paragraph",
+		"core/heading",
+		"core/list",
+		"core/image"
+	],
+	"textdomain": "clouds-and-spaceships",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScriptModule": "file:./view.js"
+}

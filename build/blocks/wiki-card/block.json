@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "cns-wiki-suite/wiki-card",
+  "version": "0.1.0",
+  "title": "Wiki Card",
+  "category": "widgets",
+  "icon": "index-card",
+  "description": "Display a post as a card with thumbnail, title, excerpt and link. Designed for wiki post types.",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "postId": {
+      "type": "number",
+      "default": 0
+    },
+    "postType": {
+      "type": "string",
+      "default": "wiki"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#f0f0f0"
+    },
+    "textColor": {
+      "type": "string",
+      "default": ""
+    },
+    "showThumbnail": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "showCategories": {
+      "type": "boolean",
+      "default": false
+    },
+    "showExcerpt": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTags": {
+      "type": "boolean",
+      "default": false
+    },
+    "showLink": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "textdomain": "clouds-and-spaceships",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

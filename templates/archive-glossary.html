@@ -1,0 +1,26 @@
+<!-- wp:group {"tagName":"main","anchor":"cns-layout-wrapper"} -->
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+<main id="cns-layout-wrapper" class="wp-block-group">
+	<!-- wp:columns -->
+	<div class="wp-block-columns cns-col__wrapper">
+		<!-- wp:column {"className":"cns-col cns-col__side cns-col__left"} -->
+		<div
+			class="wp-block-column cns-col cns-col__side cns-col__left cns-sidebar"
+		>
+			<!-- wp:template-part {"slug":"sidebar"} /-->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"className":"cns-col cns-col__center"} -->
+		<div class="wp-block-column cns-col cns-col__center">
+			<!-- wp:query-title {"type":"archive"} /-->
+			<!-- wp:cns-wiki-suite/glossary-index /-->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"className":"cns-col cns-col__side cns-col__right"} -->
+		<div class="wp-block-column cns-col cns-col__side cns-col__right"></div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</main>
+<!-- /wp:group -->
+<!-- wp:template-part {"slug":"footer"} /-->

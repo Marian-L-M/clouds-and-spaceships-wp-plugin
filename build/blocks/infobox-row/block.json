@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "cns-wiki-suite/infobox-row",
+  "ancestor": [
+    "cns-wiki-suite/infobox"
+  ],
+  "version": "0.1.0",
+  "title": "Infobox Row",
+  "category": "widgets",
+  "icon": "slides",
+  "description": "Infobox style table row",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "mode": {
+      "type": "string",
+      "default": "datalist"
+    },
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "textdomain": "clouds-and-spaceships",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

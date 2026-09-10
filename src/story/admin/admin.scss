@@ -1,0 +1,852 @@
+@use "../../shared/scss/admin";
+
+// Clouds and Spaceships — story editor styles.
+// Follows the map editor's layout conventions so both editors share the same look.
+$space-05: 0.5rem;
+$space-10: 1rem;
+
+$bp-spc: 1200px;
+
+// ── Shared form grid (mirrors cns-map-suite's .cns-grid) ──────────────────────
+
+.cns-grid {
+	width: 100%;
+	display: grid;
+	gap: $space-10;
+	// Layout variants: __12 = 1 column → 2 at $bp-spc, __24 = 2 → 4.
+	&__12 {
+		grid-template-columns: 1fr;
+	}
+	&__24 {
+		grid-template-columns: 1fr 1fr;
+	}
+	// Elements
+	&__row,
+	&__group {
+		display: flex;
+		gap: $space-05;
+		width: 100%;
+	}
+	&__row {
+		grid-column: 1 / -1;
+		flex-wrap: wrap;
+	}
+	&__span-1 {
+		grid-column: span 1;
+	}
+	&__span-2 {
+		grid-column: span 2;
+	}
+	&__span-3 {
+		grid-column: span 3;
+	}
+	&__span-4 {
+		grid-column: span 4;
+	}
+	// Full-width cell that is safe in any column count (unlike span-N,
+	// which can create implicit columns on narrow grids).
+	&__span-full {
+		grid-column: 1 / -1;
+	}
+	&__group {
+		flex-direction: column;
+	}
+	// WP components fill their grid cell.
+	&__group > .components-base-control,
+	&__group > .components-card {
+		width: 100%;
+	}
+	@media screen and (min-width: $bp-spc) {
+		&__12 {
+			grid-template-columns: 1fr 1fr;
+		}
+		&__24 {
+			grid-template-columns: 1fr 1fr 1fr 1fr;
+		}
+	}
+}
+
+// Action-button rows inside tables / list items.
+
+
+// Snackbar notices (wp/notices store) — pinned bottom-left like the editor.
+
+
+// Compact swatch-button color control (ColorField).
+
+
+// ── Overview ──────────────────────────────────────────────────────────────────
+
+.cns-stories-overview {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+}
+
+.cns-maps-overview__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+
+	h1 {
+		padding: 0;
+		margin: 0;
+	}
+}
+
+.cns-maps-overview__page-count {
+	align-self: flex-end;
+
+	form {
+		select,
+		input {
+			width: fit-content;
+		}
+	}
+}
+
+$thumb-size: 3em;
+
+.cns-maps-table {
+	.col-thumb {
+		padding: 0;
+		width: $thumb-size;
+
+		img,
+		.cns-thumb-placeholder {
+			display: block;
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1 / 1;
+			border-radius: 3px;
+		}
+
+		img {
+			object-fit: cover;
+		}
+
+		.cns-thumb-placeholder {
+			background: #e0e0e0;
+		}
+	}
+}
+
+
+// ── Badges ────────────────────────────────────────────────────────────────────
+
+.cns-badge {
+	display: inline-block;
+	padding: 1px 7px;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.6;
+	vertical-align: middle;
+
+	&--draft    { background: #f0f0f1; color: #646970; }
+	&--publish  { background: #dff0d8; color: #3a7d44; }
+	&--private  { background: #fef3cd; color: #856404; }
+}
+
+// ── Editor layout ─────────────────────────────────────────────────────────────
+
+.cns-map-editor {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.cns-map-editor__main {
+	display: flex;
+	gap: 0;
+	width: 100%;
+	align-items: stretch;
+
+	.cns-map-editor__body {
+		flex: 1;
+		min-width: 0;
+	}
+}
+
+// ── Map editor header ─────────────────────────────────────────────────────────
+
+.cns-map-editor {
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 2rem 2rem 12px;
+		border-bottom: 1px solid #e0e0e0;
+
+		h1 {
+			margin: 0;
+			flex: 1;
+		}
+	}
+
+	&__header-actions {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	&__tabs {
+		display: flex;
+		gap: 0;
+		border-bottom: 1px solid #e0e0e0;
+		margin: 0;
+		padding: 0 2rem;
+		background: #fff;
+	}
+
+	&__content {
+		background: #fff;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	&__body {
+		// intentionally empty — width managed by flex parent
+	}
+}
+
+
+// (Save feedback now uses snackbar notices from the wp/notices store.)
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+
+
+// ── Tab panels ────────────────────────────────────────────────────────────────
+
+.cns-tab-panel {
+	display: none;
+	padding: 24px;
+
+	&--active {
+		display: block;
+	}
+}
+
+// ── Settings / form ───────────────────────────────────────────────────────────
+
+.cns-settings-layout {
+	display: grid;
+	grid-template-columns: minmax(380px, 1fr) minmax(260px, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+
+.cns-row-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+
+	label {
+		font-weight: normal;
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+}
+
+// ── Placeholder panels ────────────────────────────────────────────────────────
+
+.cns-placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 60px 24px;
+	text-align: center;
+	color: #646970;
+
+	h3 {
+		font-size: 16px;
+		color: #1d2327;
+		margin: 0 0 8px;
+	}
+
+	p {
+		max-width: 440px;
+		margin: 0 0 8px;
+	}
+}
+
+.cns-panel-notice {
+	padding: 24px;
+	color: #646970;
+	font-style: italic;
+}
+
+// ── Danger Zone ───────────────────────────────────────────────────────────────
+
+.cns-danger-zone {
+	margin-top: 40px;
+	padding: 20px 24px;
+	border: 1px solid #e0e0e0;
+	border-top: 3px solid #b32d2e;
+	background: #fff;
+
+	h2 {
+		font-size: 14px;
+		font-weight: 600;
+		margin: 0 0 16px;
+		color: #b32d2e;
+	}
+}
+
+// ── Modal sections ────────────────────────────────────────────────────────────
+// The modal chrome itself comes from @wordpress/components' <Modal>; only the
+// section layout inside modal bodies is custom.
+
+.cns-modal-section {
+	padding: 20px;
+	border-bottom: 1px solid #f0f0f1;
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	h3 {
+		font-size: 13px;
+		font-weight: 600;
+		margin: 0 0 14px;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: #646970;
+	}
+}
+
+// (Radio toggles, icon grids, and post-search dropdowns now come from
+// @wordpress/components — RadioControl / ComboboxControl.)
+
+// ── Nodes table (NodesPanel) ──────────────────────────────────────────────────
+
+.cns-nodes-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+	margin-top: 8px;
+
+	th,
+	td {
+		padding: 6px 8px;
+		text-align: left;
+		border-bottom: 1px solid #f0f0f1;
+		vertical-align: middle;
+	}
+
+	th {
+		font-weight: 600;
+		color: #646970;
+		background: #f6f7f7;
+	}
+
+	input[type='number'].small-text {
+		width: 72px;
+	}
+}
+
+.cns-node-icon-swatch {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	vertical-align: middle;
+
+	&--square {
+		border-radius: 2px;
+	}
+}
+
+// ── Story panel wrapper ───────────────────────────────────────────────────────
+
+.cns-panel {
+	padding: 24px;
+}
+
+.cns-settings-panel {
+	h2 {
+		margin-top: 0;
+	}
+}
+
+// ── Canvas view (canvas tab) ──────────────────────────────────────────────────
+
+.cns-story-canvas-view {
+	display: flex;
+	flex-direction: column;
+}
+
+.cns-story-canvas-layout {
+	display: grid;
+	grid-template-columns: 3fr minmax(220px, 1fr);
+	align-items: start;
+	min-height: calc(100vh - 180px);
+}
+
+.cns-story-canvas-main {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	border-right: 1px solid #e0e0e0;
+}
+
+.cns-story-canvas-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 16px;
+	border-bottom: 1px solid #f0f0f1;
+	background: #f6f7f7;
+	flex-wrap: wrap;
+}
+
+.cns-story-canvas-wrap {
+	position: relative; // anchors the fullscreen toggle
+	display: flex;
+	justify-content: center;
+	padding: 16px;
+
+	canvas {
+		border: 1px solid #e0e0e0;
+		border-radius: 3px;
+		max-width: 100%;
+		height: auto;
+		display: block;
+		cursor: crosshair;
+	}
+
+	.cns-story-canvas-fs {
+		position: absolute;
+		top: 26px;
+		right: 26px;
+		z-index: 10;
+		background: #fff;
+	}
+
+	// ── Fullscreen (lightbox) mode — mirrors cns-map-suite's Preview canvas ──
+	&.is-fullscreen {
+		position: fixed;
+		inset: 0;
+		z-index: 99990;
+		margin: 0;
+		padding: 24px;
+		background: rgba(0, 0, 0, 0.92);
+		overflow: auto;
+
+		canvas {
+			margin: auto; // centers when smaller than the viewport
+			width: auto;
+			max-width: calc(100vw - 48px);
+			max-height: calc(100vh - 48px);
+		}
+
+		.cns-story-canvas-fs {
+			position: fixed;
+			top: 34px;
+			right: 34px;
+		}
+	}
+}
+
+body.cns-story-canvas-fullscreen-open {
+	overflow: hidden;
+}
+
+// ── Story window — side panel (admin) ─────────────────────────────────────────
+
+.cns-story-window-panel {
+	background: #fff;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	position: sticky;
+	top: 32px;
+	max-height: calc(100vh - 80px);
+	overflow-y: auto;
+}
+
+.cns-story-window {
+	flex: 1;
+}
+
+// In the side panel, the window stacks vertically instead of using a 3-col grid.
+.cns-story-window-panel .cns-story-window__inner {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	min-height: unset;
+}
+
+.cns-story-window-panel .cns-story-window__nav {
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 10px 14px;
+	border-bottom: 1px solid #f0f0f1;
+	gap: 6px;
+	justify-content: flex-start !important;
+	align-items: center !important;
+}
+
+.cns-story-window-panel .cns-story-window__nav--prev {
+	background: #f6f7f7;
+
+	&::before {
+		content: '←';
+		font-size: 11px;
+		color: #646970;
+		margin-right: 4px;
+	}
+}
+
+.cns-story-window-panel .cns-story-window__nav--next {
+	border-bottom: none;
+	border-top: 1px solid #f0f0f1;
+
+	&::before {
+		content: '→';
+		font-size: 11px;
+		color: #646970;
+		margin-right: 4px;
+	}
+}
+
+.cns-story-window-panel .cns-story-window__content-area {
+	padding: 14px;
+	flex: 1;
+	display: flex;
+	align-items: flex-start;
+}
+
+.cns-story-window-panel .cns-story-window__card {
+	flex-direction: column;
+	gap: 10px;
+}
+
+.cns-story-window-panel .cns-story-window__thumb {
+	width: 100%;
+	height: auto;
+	max-height: 140px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.cns-story-window-panel .cns-story-window__nav-btn {
+	font-size: 12px;
+	padding: 4px 8px;
+	max-width: none;
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+}
+
+.cns-story-window-panel .cns-story-window__end-label {
+	font-size: 11px;
+	opacity: 0.6;
+}
+
+.cns-story-window-panel .cns-story-window__empty {
+	font-size: 12px;
+	color: #646970;
+	padding: 12px 0;
+}
+
+// ── Shared story-window styles (front + admin) ────────────────────────────────
+
+.cns-story-window {
+	background: var(--wp--preset--color--background, #fff);
+	border-top: 2px solid var(--wp--preset--color--primary, #2271b1);
+}
+
+.cns-story-window__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr);
+	gap: 12px;
+	padding: 16px;
+	min-height: 120px;
+}
+
+.cns-story-window__nav {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	justify-content: center;
+}
+
+.cns-story-window__nav--prev { align-items: flex-start; }
+.cns-story-window__nav--next { align-items: flex-end; }
+
+.cns-story-window__nav-btn {
+	background: none;
+	border: 1px solid currentColor;
+	padding: 6px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.875rem;
+	max-width: 160px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	&:hover { background: rgba(0, 0, 0, 0.05); }
+}
+
+.cns-story-window__end-label {
+	font-size: 0.75rem;
+	opacity: 0.5;
+}
+
+.cns-story-window__content-area {
+	display: flex;
+	align-items: center;
+}
+
+.cns-story-window__card {
+	display: flex;
+	gap: 12px;
+	width: 100%;
+}
+
+.cns-story-window__thumb {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border-radius: 4px;
+	flex-shrink: 0;
+}
+
+.cns-story-window__card-body {
+	flex: 1;
+	min-width: 0;
+}
+
+.cns-story-window__node-title {
+	margin: 0 0 4px;
+	font-size: 1rem;
+}
+
+.cns-story-window__excerpt {
+	margin: 0 0 8px;
+	font-size: 0.875rem;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.cns-story-window__read-more {
+	font-size: 0.875rem;
+}
+
+.cns-story-window__empty {
+	color: #888;
+	font-size: 0.875rem;
+	text-align: center;
+	width: 100%;
+}
+
+.cns-story-window__admin-actions {
+	display: flex;
+	gap: 6px;
+	margin-top: 8px;
+	flex-wrap: wrap;
+}
+
+// ── Loading ───────────────────────────────────────────────────────────────────
+
+.cns-loading {
+	padding: 40px 24px;
+	color: #646970;
+	text-align: center;
+}
+
+// ── Utility ───────────────────────────────────────────────────────────────────
+
+
+// ── Canvas toolbar rows ───────────────────────────────────────────────────────
+
+.cns-story-canvas-toolbar {
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0;
+	padding: 0;
+
+	&__row {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 8px 14px;
+		flex-wrap: wrap;
+
+		& + & {
+			border-top: 1px solid #e5e5e5;
+		}
+	}
+
+	&__label {
+		font-size: 12px;
+		color: #646970;
+		font-weight: 600;
+	}
+
+	// Compact inline WP controls: label sits beside the input.
+	&__line-style {
+		align-items: flex-end;
+
+		.components-base-control {
+			margin-bottom: 0;
+		}
+
+		.cns-color-field .cns-color-field__toggle.components-button {
+			height: 32px;
+			width: auto;
+		}
+	}
+}
+
+// ── Canvas node list (right panel) ────────────────────────────────────────────
+
+.cns-canvas-node-list {
+	overflow-y: auto;
+	height: 100%;
+
+	&--empty {
+		padding: 16px;
+
+		.description {
+			font-size: 13px;
+		}
+	}
+
+	&__header {
+		padding: 10px 12px 6px;
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: #646970;
+		border-bottom: 1px solid #e5e5e5;
+		position: sticky;
+		top: 0;
+		background: #fff;
+		z-index: 1;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 5px 8px;
+		border-bottom: 1px solid #f5f5f5;
+		min-height: 34px;
+
+		&.is-selected {
+			background: #f0f7ff;
+		}
+
+		&:hover:not(.is-selected) {
+			background: #fafafa;
+		}
+	}
+
+	&__connector {
+		font-size: 11px;
+		color: #c0c0c0;
+		flex-shrink: 0;
+		margin-right: -2px;
+	}
+
+	&__step {
+		font-size: 11px;
+		font-variant-numeric: tabular-nums;
+		color: #aaa;
+		min-width: 28px;
+		text-align: right;
+		flex-shrink: 0;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	&.is-orphan &__step {
+		color: #ccc;
+		font-style: italic;
+	}
+
+	&__title {
+		flex: 1;
+		text-align: left;
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 12px;
+		color: #1d2327;
+		padding: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		min-width: 0;
+
+		&:hover {
+			color: #2271b1;
+			text-decoration: underline;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		gap: 2px;
+		flex-shrink: 0;
+	}
+}
+
+// ── Node swatch dot ───────────────────────────────────────────────────────────
+
+.cns-node-swatch {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	flex-shrink: 0;
+}
+
+// (Icon action buttons now use @wordpress/components' <Button size="small" icon>.)
+// ── Path node manager modal (Paths tab) ───────────────────────────────────────
+
+.cns-path-nodes-list {
+	margin-bottom: 16px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	max-height: 320px;
+	overflow-y: auto;
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 10px;
+		border-bottom: 1px solid #f0f0f1;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	&__index {
+		min-width: 22px;
+		text-align: right;
+		color: #757575;
+		font-variant-numeric: tabular-nums;
+	}
+
+	&__title {
+		flex: 1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}

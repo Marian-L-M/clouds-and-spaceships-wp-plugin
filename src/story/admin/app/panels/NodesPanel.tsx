@@ -1,0 +1,206 @@
+import { Button } from '@wordpress/components';
+import { arrowDown, arrowUp, brush, closeSmall, pencil, starEmpty, trash } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
+import type { StoryNode, StoryEdge, StoryPath } from '../../../types';
+
+interface Props {
+	nodes:          StoryNode[];
+	edges:          StoryEdge[];
+	paths:          StoryPath[];
+	startNodeId:    number | null;
+	onEditNode:     ( nodeId: number ) => void;
+	onDeleteNode:   ( nodeId: number ) => void;
+	onSetStartNode: ( nodeId: number ) => void;
+	onEdgeReorder:  ( edgeId: number, sortOrder: number ) => void;
+	onEdgeDelete:   ( edgeId: number ) => void;
+	onEditEdge:     ( edgeId: number ) => void;
+}
+
+function getDisplayTitle( node: StoryNode ): string {
+	return node.titleOverride || node.substoryTitle || `Node #${ node.id }`;
+}
+
+export default function NodesPanel( {
+	nodes, edges, paths, startNodeId,
+	onEditNode, onDeleteNode, onSetStartNode,
+	onEdgeReorder, onEdgeDelete, onEditEdge,
+}: Props ) {
+	const pathMap = new Map( paths.map( ( p ) => [ p.id, p ] ) );
+	if ( ! nodes.length ) {
+		return (
+			<div className="cns-panel">
+				<p>No nodes yet. Switch to the Canvas tab and click to add your first node.</p>
+			</div>
+		);
+	}
+
+	// Moves an outgoing edge one slot up/down among its siblings and rewrites
+	// every sibling's sort order to its list index, so ties (fresh edges all
+	// default to 0) become an explicit, visible order.
+	function moveEdge( outEdges: StoryEdge[], index: number, dir: -1 | 1 ) {
+		const target = index + dir;
+		if ( target < 0 || target >= outEdges.length ) return;
+		const reordered = [ ...outEdges ];
+		[ reordered[ index ], reordered[ target ] ] = [ reordered[ target ], reordered[ index ] ];
+		reordered.forEach( ( edge, i ) => {
+			if ( edge.sortOrder !== i ) onEdgeReorder( edge.id, i );
+		} );
+	}
+
+	return (
+		<div className="cns-panel cns-nodes-panel">
+			<h2>Story Nodes</h2>
+			<p className="description">
+				Click "Set Start" to mark the first node visitors will see.
+				Connections are managed via the Canvas tab. The order of a node's
+				outgoing connections decides branch numbering (1.1, 1.2, …) and
+				which branch "Next" follows first on the frontend.
+			</p>
+
+			<table className="wp-list-table widefat fixed striped">
+				<thead>
+					<tr>
+						<th style={ { width: 32 } }></th>
+						<th>Node</th>
+						<th>Substory</th>
+						<th>Outgoing connections</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{ nodes.map( ( node ) => {
+						const outEdges = edges
+							.filter( ( e ) => e.fromNodeId === node.id )
+							.sort( ( a, b ) => a.sortOrder - b.sortOrder || a.id - b.id );
+
+						return (
+							<tr key={ node.id }>
+								<td>
+									<span
+										className="cns-node-swatch"
+										style={ {
+											background:   node.iconType === 'thumbnail' || node.iconType === 'icon' ? 'transparent' : node.iconColor,
+											width: 18, height: 18,
+											display: 'inline-block',
+											borderRadius: node.iconType === 'square' || node.iconType === 'diamond' ? 2 : '50%',
+											transform:    node.iconType === 'diamond' ? 'rotate(45deg)' : undefined,
+											border: '1px solid rgba(0,0,0,0.3)',
+										} }
+									/>
+								</td>
+								<td>
+									<strong>{ getDisplayTitle( node ) }</strong>
+									{ node.id === startNodeId && (
+										<span className="cns-badge cns-badge--featured" style={ { marginLeft: 6 } }>
+											Start
+										</span>
+									) }
+									{ node.pathId && pathMap.has( node.pathId ) && (
+										<span className="cns-badge" style={ {
+											marginLeft: 6,
+											background: pathMap.get( node.pathId )!.markerColor,
+											color: '#fff',
+											fontSize: 10,
+											padding: '1px 5px',
+											borderRadius: 10,
+										} }>
+											{ pathMap.get( node.pathId )!.label || `Path #${ node.pathId }` }
+										</span>
+									) }
+								</td>
+								<td>
+									{ node.substoryId ? (
+										node.substoryEditUrl ? (
+											<a href={ node.substoryEditUrl } target="_blank" rel="noopener">
+												{ node.substoryTitle || `Substory #${ node.substoryId }` } ↗
+											</a>
+										) : (
+											<span>{ node.substoryTitle || `Substory #${ node.substoryId }` }</span>
+										)
+									) : (
+										<span className="description">—</span>
+									) }
+								</td>
+								<td>
+									{ outEdges.length === 0 && <span className="description">None</span> }
+									{ outEdges.map( ( edge, index ) => {
+										const toNode = nodes.find( ( n ) => n.id === edge.toNodeId );
+										return (
+											<div key={ edge.id } className="cns-edge-row">
+												{ outEdges.length > 1 && (
+													<>
+														<Button
+															size="small"
+															icon={ arrowUp }
+															label={ __( 'Move branch up', 'clouds-and-spaceships' ) }
+															disabled={ index === 0 }
+															onClick={ () => moveEdge( outEdges, index, -1 ) }
+														/>
+														<Button
+															size="small"
+															icon={ arrowDown }
+															label={ __( 'Move branch down', 'clouds-and-spaceships' ) }
+															disabled={ index === outEdges.length - 1 }
+															onClick={ () => moveEdge( outEdges, index, 1 ) }
+														/>
+													</>
+												) }
+												<span>→ { toNode ? getDisplayTitle( toNode ) : `#${ edge.toNodeId }` }</span>
+												<Button
+													size="small"
+													icon={ brush }
+													label={ __( 'Style this connection', 'clouds-and-spaceships' ) }
+													onClick={ () => onEditEdge( edge.id ) }
+												/>
+												<Button
+													size="small"
+													icon={ closeSmall }
+													isDestructive
+													label={ __( 'Delete connection', 'clouds-and-spaceships' ) }
+													onClick={ () => {
+														if ( window.confirm( 'Delete this connection?' ) ) onEdgeDelete( edge.id );
+													} }
+												/>
+											</div>
+										);
+									} ) }
+								</td>
+								<td className="cns-maps-actions">
+									<div className="cns-actions-row">
+										{ node.id !== startNodeId && (
+											<Button
+												size="small"
+												icon={ starEmpty }
+												label={ __( 'Set as start node', 'clouds-and-spaceships' ) }
+												onClick={ () => onSetStartNode( node.id ) }
+											>
+												{ __( 'Set Start', 'clouds-and-spaceships' ) }
+											</Button>
+										) }
+										<Button
+											size="small"
+											icon={ pencil }
+											label={ __( 'Edit', 'clouds-and-spaceships' ) }
+											onClick={ () => onEditNode( node.id ) }
+										/>
+										<Button
+											size="small"
+											icon={ trash }
+											isDestructive
+											label={ __( 'Delete', 'clouds-and-spaceships' ) }
+											onClick={ () => {
+												if ( window.confirm( 'Delete this node and all its connections?' ) ) {
+													onDeleteNode( node.id );
+												}
+											} }
+										/>
+									</div>
+								</td>
+							</tr>
+						);
+					} ) }
+				</tbody>
+			</table>
+		</div>
+	);
+}

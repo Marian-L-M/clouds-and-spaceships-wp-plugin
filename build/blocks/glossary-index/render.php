@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * Server render for the Glossary Index block.
+ *
+ * Groups all published glossary entries either alphabetically (one section
+ * per letter, shared "#" section for numbers/symbols) or by glossary
+ * category (entries without a category land in an "Other" section).
+ *
+ * @var array    $attributes Block attributes.
+ * @var string   $content    Block default content (unused).
+ * @var WP_Block $block      Block instance.
+ *
+ * @package CNS Wiki Suite
+ */
+
+defined('ABSPATH') || exit;
+
+if (! function_exists('cns_wiki_glossary_enabled') || ! cns_wiki_glossary_enabled()) {
+    return;
+}
+
+$group_by = ($attributes['groupBy'] ?? 'alphabetical') === 'category' ? 'category' : 'alphabetical';
+
+$entries = get_posts([
+    'post_type'      => 'glossary',
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'orderby'        => 'title',
+    'order'          => 'ASC',
+]);
+
+if (empty($entries)) {
+    if (! empty($attributes['showEmptyNotice'])) {
+        echo '<div ' . get_block_wrapper_attributes(['class' => 'cns-glossary-index']) . '><p>'
+            . esc_html__('No glossary entries yet.', 'clouds-and-spaceships')
+            . '</p></div>';
+    }
+    return;
+}
+
+/**
+ * Builds [ section label => WP_Post[] ] in output order.
+ */
+$sections = [];
+
+if ('category' === $group_by) {
+    $terms = get_terms([
+        'taxonomy'   => 'glossary_category',
+        'hide_empty' => true,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+    ]);
+    $terms = is_wp_error($terms) ? [] : $terms;
+
+    $assigned = [];
+    foreach ($terms as $term) {
+        foreach ($entries as $entry) {
+            if (has_term($term->term_id, 'glossary_category', $entry)) {
+                $sections[$term->name][] = $entry;
+                $assigned[$entry->ID]    = true;
+            }
+        }
+    }
+
+    $uncategorized = array_filter($entries, static fn($entry) => ! isset($assigned[$entry->ID]));
+    if ($uncategorized) {
+        $sections[__('Other', 'clouds-and-spaceships')] = array_values($uncategorized);
+    }
+} else {
+    foreach ($entries as $entry) {
+        $first  = mb_substr(remove_accents(trim($entry->post_title)), 0, 1);
+        $letter = strtoupper($first);
+        if (! preg_match('/[A-Z]/', $letter)) {
+            $letter = '#';
+        }
+        $sections[$letter][] = $entry;
+    }
+    ksort($sections, SORT_STRING);
+
+    // Numbers/symbols share one section, placed after Z.
+    if (isset($sections['#'])) {
+        $symbols = $sections['#'];
+        unset($sections['#']);
+        $sections['#'] = $symbols;
+    }
+}
+
+$html = '';
+foreach ($sections as $label => $section_entries) {
+    $section_id = 'glossary-' . sanitize_title('#' === $label ? 'symbols' : $label);
+
+    $items = '';
+    foreach ($section_entries as $entry) {
+        $items .= sprintf(
+            '<li class="cns-glossary-index__item"><a href="%s">%s</a></li>',
+            esc_url(get_permalink($entry)),
+            esc_html(get_the_title($entry))
+        );
+    }
+
+    $html .= sprintf(
+        '<section class="cns-glossary-index__section" id="%s"><h2 class="cns-glossary-index__title">%s</h2><ul class="cns-glossary-index__list">%s</ul></section>',
+        esc_attr($section_id),
+        esc_html('#' === $label ? __('0–9 & symbols', 'clouds-and-spaceships') : $label),
+        $items
+    );
+}
+
+echo '<div ' . get_block_wrapper_attributes(['class' => 'cns-glossary-index cns-glossary-index--' . $group_by]) . '>' . $html . '</div>';

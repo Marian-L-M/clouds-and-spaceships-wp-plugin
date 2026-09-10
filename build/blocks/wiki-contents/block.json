@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "cns-wiki-suite/wiki-contents",
+  "version": "0.1.0",
+  "title": "Wiki Contents",
+  "category": "widgets",
+  "icon": "grid-view",
+  "description": "A responsive grid of wiki cards. Populate manually or auto-fill with the newest wikis.",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "allowedBlocks": [
+    "cns-wiki-suite/wiki-card"
+  ],
+  "attributes": {
+    "mode": {
+      "type": "string",
+      "default": "manual"
+    },
+    "columnsMobile": {
+      "type": "number"
+    },
+    "columnsTablet": {
+      "type": "number"
+    },
+    "columnsDesktop": {
+      "type": "number"
+    },
+    "numberOfPosts": {
+      "type": "number",
+      "default": 3
+    },
+    "columnGap": {
+      "type": "number"
+    },
+    "rowGap": {
+      "type": "number"
+    }
+  },
+  "textdomain": "clouds-and-spaceships",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

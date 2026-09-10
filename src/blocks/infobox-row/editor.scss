@@ -1,0 +1,48 @@
+@charset "UTF-8";
+.wp-block-cns-theme-infobox-row {
+	.infobox-row__empty {
+		color: #757575;
+		font-style: italic;
+	}
+}
+
+.infobox-row {
+	&__item {
+		position: relative;
+	}
+	&__add-btn {
+		align-self: center;
+	}
+	&__item-actions {
+		display: flex;
+		gap: 0.4rem;
+		button {
+			&.is-small {
+				padding: 0;
+			}
+		}
+	}
+}
+.infobox-row__modal {
+	min-width: 480px;
+
+	.infobox-row__url-field {
+		margin-bottom: 16px;
+
+		.components-base-control__label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 500;
+		}
+
+		.block-editor-url-input {
+			margin-top: 4px;
+		}
+	}
+
+	.infobox-row__modal-actions {
+		display: flex;
+		gap: 8px;
+		margin-top: 16px;
+	}
+}

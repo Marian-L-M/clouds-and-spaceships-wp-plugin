@@ -1,0 +1,76 @@
+/**
+ * Inline glossary term styling + CSS-only hover tooltip.
+ * Loaded on frontend and editor canvas when the glossary is enabled.
+ * --cns-glossary-color is set from the CNS → Wiki settings tab.
+ */
+.cns-glossary-term {
+	position: relative;
+	color: var(--cns-glossary-color, inherit);
+	text-decoration: underline dotted;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+	cursor: help;
+}
+
+/* Entry deleted/unpublished: rendered without href, keep it looking inert. */
+.cns-glossary-term--missing {
+	cursor: text;
+	text-decoration: none;
+	color: inherit;
+}
+
+.cns-glossary-term[data-cns-tooltip]::after {
+	content: attr(data-cns-tooltip);
+	position: absolute;
+	bottom: calc(100% + 8px);
+	left: 50%;
+	transform: translateX(-50%) translateY(4px);
+	width: max-content;
+	max-width: min(320px, 80vw);
+	padding: 8px 12px;
+	border-radius: 4px;
+	background: #1e1e1e;
+	color: #fff;
+	font-size: 0.8125rem;
+	font-weight: 400;
+	line-height: 1.5;
+	text-align: left;
+	white-space: normal;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+	pointer-events: none;
+	z-index: 100;
+}
+
+/* Caret */
+.cns-glossary-term[data-cns-tooltip]::before {
+	content: "";
+	position: absolute;
+	bottom: calc(100% + 2px);
+	left: 50%;
+	transform: translateX(-50%) translateY(4px);
+	border: 6px solid transparent;
+	border-top-color: #1e1e1e;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+	pointer-events: none;
+	z-index: 100;
+}
+
+.cns-glossary-term[data-cns-tooltip]:hover::after,
+.cns-glossary-term[data-cns-tooltip]:focus-visible::after,
+.cns-glossary-term[data-cns-tooltip]:hover::before,
+.cns-glossary-term[data-cns-tooltip]:focus-visible::before {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-50%) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cns-glossary-term[data-cns-tooltip]::after,
+	.cns-glossary-term[data-cns-tooltip]::before {
+		transition: none;
+	}
+}

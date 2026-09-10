@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "cns-wiki-suite/glossary-index",
+  "version": "0.1.0",
+  "title": "Glossary Index",
+  "category": "widgets",
+  "icon": "book-alt",
+  "description": "Lists all glossary entries grouped alphabetically or by category, with links to each definition.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "groupBy": {
+      "type": "string",
+      "default": "alphabetical",
+      "enum": [
+        "alphabetical",
+        "category"
+      ]
+    },
+    "showEmptyNotice": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "textdomain": "clouds-and-spaceships",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

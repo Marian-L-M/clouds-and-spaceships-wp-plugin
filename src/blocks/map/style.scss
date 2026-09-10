@@ -1,0 +1,352 @@
+// CNS Map Suite — Global styles
+$background-color: #fff;
+$border-color: #e0e0e0;
+$space-05: 0.5rem;
+$space-10: 1rem;
+$space-15: 1.5rem;
+$space-20: 2rem;
+
+$bp-sm: 576px;
+$bp-tab: 768px;
+$bp-md: 992px;
+$bp-spc: 1200px;
+$bp-lpc: 1400px;
+
+.wp-block-cns-map-suite-map {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+
+	position: relative;
+	width: 100%;
+
+	.cns-map-canvas-wrap {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+
+		// Zoomed in: the canvas is wider than the wrap, pan by scrolling.
+		&.is-zoomed {
+			overflow: auto;
+			max-height: 85vh;
+		}
+	}
+
+	canvas {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+}
+
+// ── Zoom controls (top right of the map, outside the scroll area) ─────────────
+
+.cns-map-zoom {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 4px;
+
+	&__btn {
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		border: 1px solid rgba(0, 0, 0, 0.25);
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.9);
+		color: #1e1e1e;
+		font-size: 18px;
+		line-height: 1;
+		cursor: pointer;
+
+		&:hover:not(:disabled) {
+			background: #fff;
+		}
+
+		&:disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
+	}
+
+	&__value {
+		font-size: 11px;
+		line-height: normal;
+		text-align: center;
+		color: #1e1e1e;
+		background: rgba(255, 255, 255, 0.85);
+		border-radius: 3px;
+		padding: 2px 0;
+	}
+}
+
+// ── Fullscreen (lightbox) mode ────────────────────────────────────────────────
+// Toggled by the ⛶ button; the whole block becomes a fixed dark overlay.
+// The zoom controls keep working — the scroll viewport just fills the screen.
+
+.wp-block-cns-map-suite-map {
+	&.is-fullscreen {
+		position: fixed;
+		inset: 0;
+		z-index: 99990; // below the infobox drawer (99999) so it opens on top
+		width: auto;
+		max-width: none;
+		margin: 0;
+		padding: 24px;
+		background: rgba(0, 0, 0, 0.92);
+
+		.cns-map-zoom {
+			top: 34px;
+			right: 34px;
+		}
+
+		.cns-map-contents-wrap {
+			display: none;
+		}
+		.cns-map-canvas-wrap {
+			display: flex;
+			width: 100%;
+			height: 100%;
+			max-height: none;
+			overflow: auto;
+
+			canvas {
+				margin: auto; // centers when smaller, stays scrollable when zoomed
+			}
+
+			// At 100% the map fits the screen like a lightbox image; zoomed state
+			// keeps the width-driven scaling (max-height would distort it there).
+			&:not(.is-zoomed) canvas {
+				width: auto;
+				max-width: calc(100vw - 48px);
+				max-height: calc(100vh - 48px);
+			}
+		}
+	}
+}
+
+body.cns-map-fullscreen-open {
+	overflow: hidden;
+}
+
+// ── Infobox side drawer ───────────────────────────────────────────────────────
+// Appended to document.body. Visibility is controlled via .is-open class —
+// NOT the hidden attribute — so display rules never fight the UA stylesheet.
+
+.cns-map-drawer {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+
+	&.is-open {
+		display: block;
+	}
+
+	// Transparent click-catcher left of the panel.
+	&__backdrop {
+		position: absolute;
+		inset: 0;
+		cursor: pointer;
+	}
+
+	// Panel anchored to the right edge, full height.
+	&__panel {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: min(440px, 100vw);
+		display: flex;
+		flex-direction: column;
+		background: #fff;
+		box-shadow: -4px 0 32px rgba(0, 0, 0, 0.18);
+	}
+
+	// Non-scrolling header — close button always reachable.
+	&__header {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid #e5e5e5;
+	}
+
+	&__close {
+		background: none;
+		border: none;
+		font-size: 1.75rem;
+		line-height: 1;
+		cursor: pointer;
+		color: #555;
+		padding: 0.2rem 0.5rem;
+		border: 1px solid currentColor;
+
+		&:hover {
+			color: #000;
+		}
+	}
+
+	// Scrollable content area.
+	&__body {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+
+		flex: 1;
+		overflow-y: auto;
+		padding: 1.5rem;
+	}
+
+	&__image {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 4px;
+		margin-bottom: 1.25rem;
+	}
+
+	&__title {
+		font-size: 1.25rem;
+		font-weight: 700;
+		line-height: 1.3;
+	}
+
+	&__content {
+		font-size: 1rem;
+		line-height: 1.7;
+		color: #333;
+
+		> * + * {
+			margin-top: 1em;
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			margin-top: 1.5em;
+			margin-bottom: 0.5em;
+			font-weight: 600;
+			line-height: 1.3;
+		}
+
+		p {
+			margin: 0 0 1em;
+		}
+
+		ul,
+		ol {
+			padding-left: 1.5em;
+			margin-bottom: 1em;
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 3px;
+		}
+
+		a {
+			color: currentColor;
+		}
+
+		figure {
+			margin: 0 0 1em;
+		}
+		figcaption {
+			font-size: 0.875em;
+			color: #666;
+			margin-top: 0.4em;
+		}
+	}
+
+	&__excerpt {
+		margin: 0 0 1.25rem;
+		font-size: 1rem;
+		line-height: 1.7;
+		color: #333;
+	}
+
+	&__infobox {
+		margin: 0 0 1.25rem 0 0;
+	}
+
+	&__link {
+		display: inline-block;
+		padding-right: 1rem;
+		align-self: flex-end;
+		font-size: 1.2em;
+		font-weight: 600;
+		color: inherit;
+	}
+}
+
+// ── Hierarchy tooltip ─────────────────────────────────────────────────────────
+
+.cns-map-hierarchy-tip {
+	position: absolute;
+	z-index: 99995; // above the fullscreen overlay (99990)
+	// Fixed width: the card should not resize itself around the title, so the
+	// thumbnail and the text below it keep one consistent column.
+	width: 240px;
+	box-sizing: border-box;
+	// Per-region overrides arrive as custom properties set by view.js; the
+	// values here are the fallback when a region sets no colors of its own.
+	--cns-tip-bg: #{rgba(0, 0, 0, 0.82)};
+	--cns-tip-border: #{rgba(255, 255, 255, 0.15)};
+	--cns-tip-text: #fff;
+	background: var(--cns-tip-bg);
+	border: 1px solid var(--cns-tip-border);
+	color: var(--cns-tip-text);
+	border-radius: 6px;
+	padding: 10px 12px;
+	pointer-events: none;
+	font-size: 0.85rem;
+	line-height: 1.4;
+	opacity: 0;
+	transition: opacity 0.12s ease;
+
+	&.is-visible {
+		opacity: 1;
+	}
+
+	&__thumb {
+		display: block;
+		width: 100%;
+		aspect-ratio: 3 / 2;
+		object-fit: cover;
+		border-radius: 4px;
+		margin-bottom: 8px;
+	}
+
+	&__title {
+		display: block;
+		font-size: 0.9rem;
+		font-weight: 600;
+		margin-bottom: 4px;
+	}
+
+	&__excerpt {
+		margin: 0;
+		font-size: 0.8rem;
+		opacity: 0.85;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+}
+
+// ── Map description (post_content, shown beneath the canvas) ──────────────────
+
+.cns-map-description {
+	margin-top: 1.25em;
+}

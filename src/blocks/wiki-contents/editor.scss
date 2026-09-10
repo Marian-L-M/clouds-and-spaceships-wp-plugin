@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+.wiki-contents {
+	width: 100%;
+
+	// Mirror the frontend grid in the editor so manual cards
+	// lay out correctly while editing.
+	.wiki-contents__grid {
+		display: grid;
+		grid-template-columns: repeat( var( --wiki-columns-desktop, 3 ), 1fr );
+		column-gap: var( --wiki-column-gap, 1rem );
+		row-gap: var( --wiki-row-gap, 1rem );
+	}
+
+	// Newest-mode preview: placeholder cells, not interactive.
+	&__grid--preview {
+		pointer-events: none;
+	}
+
+	&__placeholder-cell {
+		background-color: #f0f0f0;
+		border: 2px dashed #ccc;
+		border-radius: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 200px;
+		padding: 1rem;
+	}
+
+	&__placeholder-label {
+		color: #757575;
+		font-size: 0.875rem;
+		text-align: center;
+	}
+}

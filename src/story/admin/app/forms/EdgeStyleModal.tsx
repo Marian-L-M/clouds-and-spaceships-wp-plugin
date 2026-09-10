@@ -1,0 +1,165 @@
+import { useState } from '@wordpress/element';
+import {
+	Button,
+	Flex,
+	Modal,
+	SelectControl,
+	__experimentalNumberControl as NumberControl,
+} from '@wordpress/components';
+import { trash, undo } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
+import ColorField from '../../../../shared/admin/ColorField';
+import type { StoryEdge, EdgeFormData, LineStyle } from '../../../types';
+
+interface Props {
+	edge:         StoryEdge;
+	storyColor:   string;
+	storyWidth:   number;
+	storyStyle:   LineStyle;
+	onSave:       ( edgeId: number, data: EdgeFormData ) => void;
+	onDelete:     ( edgeId: number ) => void;
+	onClose:      () => void;
+}
+
+/** Small "back to story default" reset next to an overridden field. */
+function ResetOverride( { visible, onReset }: { visible: boolean; onReset: () => void } ) {
+	if ( ! visible ) return null;
+	return (
+		<Button
+			size="small"
+			icon={ undo }
+			label={ __( 'Use story default', 'clouds-and-spaceships' ) }
+			onClick={ onReset }
+		/>
+	);
+}
+
+export default function EdgeStyleModal( { edge, storyColor, storyWidth, storyStyle, onSave, onDelete, onClose }: Props ) {
+	const [ form, setForm ] = useState< EdgeFormData >( {
+		lineColor: edge.lineColor,
+		lineWidth: edge.lineWidth,
+		lineStyle: edge.lineStyle,
+	} );
+
+	// The colour carries its own alpha, so a line's colour and its opacity are
+	// a single override now rather than two independent ones.
+	const effectiveColor = form.lineColor ?? storyColor;
+	const effectiveWidth = form.lineWidth ?? storyWidth;
+	const effectiveStyle = form.lineStyle ?? storyStyle;
+	const hasOverride = form.lineColor !== null || form.lineWidth !== null || form.lineStyle !== null;
+
+	const defaultHint = ( isDefault: boolean ) =>
+		isDefault ? __( '(story default)', 'clouds-and-spaceships' ) : undefined;
+
+	return (
+		<Modal
+			title={ __( 'Path Style', 'clouds-and-spaceships' ) }
+			onRequestClose={ onClose }
+			size="medium"
+		>
+			<p className="description">
+				{ __(
+					'Override this connection’s line style, or use the story’s global settings.',
+					'clouds-and-spaceships'
+				) }
+			</p>
+			<div className="cns-grid cns-grid__12">
+				<div className="cns-grid__group">
+					<Flex gap={ 1 } align="flex-end">
+						<div style={ { flex: 1 } }>
+							<ColorField
+								label={ `${ __( 'Color & opacity', 'clouds-and-spaceships' ) } ${ defaultHint( form.lineColor === null ) ?? '' }` }
+								value={ effectiveColor }
+								onChange={ ( v ) => setForm( ( p ) => ( { ...p, lineColor: v } ) ) }
+							/>
+						</div>
+						<ResetOverride
+							visible={ form.lineColor !== null }
+							onReset={ () => setForm( ( p ) => ( { ...p, lineColor: null } ) ) }
+						/>
+					</Flex>
+				</div>
+				<div className="cns-grid__group">
+					<Flex gap={ 1 } align="flex-end">
+						<div style={ { flex: 1 } }>
+							<NumberControl
+								__next40pxDefaultSize
+								label={ `${ __( 'Width (px)', 'clouds-and-spaceships' ) } ${ defaultHint( form.lineWidth === null ) ?? '' }` }
+								min={ 0.5 } max={ 20 } step={ 0.5 }
+								value={ effectiveWidth }
+								onChange={ ( v ) =>
+									setForm( ( p ) => ( { ...p, lineWidth: parseFloat( v ?? '' ) || storyWidth } ) )
+								}
+							/>
+						</div>
+						<ResetOverride
+							visible={ form.lineWidth !== null }
+							onReset={ () => setForm( ( p ) => ( { ...p, lineWidth: null } ) ) }
+						/>
+					</Flex>
+				</div>
+				<div className="cns-grid__group">
+					<Flex gap={ 1 } align="flex-end">
+						<div style={ { flex: 1 } }>
+							<SelectControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ `${ __( 'Style', 'clouds-and-spaceships' ) } ${ defaultHint( form.lineStyle === null ) ?? '' }` }
+								value={ effectiveStyle }
+								options={ [
+									{ value: 'solid',  label: __( 'Solid', 'clouds-and-spaceships' ) },
+									{ value: 'dashed', label: __( 'Dashed', 'clouds-and-spaceships' ) },
+									{ value: 'dotted', label: __( 'Dotted', 'clouds-and-spaceships' ) },
+								] }
+								onChange={ ( v ) => setForm( ( p ) => ( { ...p, lineStyle: v as LineStyle } ) ) }
+							/>
+						</div>
+						<ResetOverride
+							visible={ form.lineStyle !== null }
+							onReset={ () => setForm( ( p ) => ( { ...p, lineStyle: null } ) ) }
+						/>
+					</Flex>
+				</div>
+			</div>
+			{ hasOverride && (
+				<Button
+					variant="secondary"
+					icon={ undo }
+					style={ { marginTop: 12 } }
+					onClick={ () => setForm( { lineColor: null, lineWidth: null, lineStyle: null } ) }
+				>
+					{ __( 'Reset all to story defaults', 'clouds-and-spaceships' ) }
+				</Button>
+			) }
+
+			<Flex justify="flex-start" gap={ 2 } style={ { marginTop: 16 } }>
+				<Button
+					variant="secondary"
+					isDestructive
+					icon={ trash }
+					style={ { marginRight: 'auto' } }
+					onClick={ () => {
+						if ( window.confirm( __( 'Delete this connection?', 'clouds-and-spaceships' ) ) ) {
+							onDelete( edge.id );
+							onClose();
+						}
+					} }
+				>
+					{ __( 'Delete connection', 'clouds-and-spaceships' ) }
+				</Button>
+				<Button variant="tertiary" onClick={ onClose }>
+					{ __( 'Cancel', 'clouds-and-spaceships' ) }
+				</Button>
+				<Button
+					variant="primary"
+					onClick={ () => {
+						onSave( edge.id, form );
+						onClose();
+					} }
+				>
+					{ __( 'Save', 'clouds-and-spaceships' ) }
+				</Button>
+			</Flex>
+		</Modal>
+	);
+}

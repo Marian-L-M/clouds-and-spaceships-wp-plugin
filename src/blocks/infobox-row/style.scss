@@ -1,0 +1,49 @@
+@charset "UTF-8";
+@use "../../shared/scss" as *;
+// .wp-block-cns-theme-infobox-row
+.wp-block-cns-wiki-suite-infobox-row {
+	@include fx($direction: column, $gap: 2rem);
+	width: 100%;
+	min-height: 1.8em;
+	padding: 0.2em 0.1em;
+}
+.wp-block-cns-theme-infobox-row dl {
+	@include fx($direction: column);
+	flex-wrap: wrap;
+	row-gap: 0.4em;
+	margin-block: 0;
+}
+
+.infobox-row {
+	&__list {
+		@include fx($direction: column, $gap: 0.4rem);
+		width: 100%;
+	}
+	&__item {
+		@include fx($direction: row, $gap: 0.2em 1em);
+		font-size: 1.2rem;
+		width: 100%;
+		dt {
+			font-weight: 700;
+			width: 40%;
+		}
+		dd {
+			@include fx($direction: row, $justify: space-between, $align: end);
+			display: flex;
+			align-items: flex-start;
+			gap: 8px;
+			flex-wrap: wrap;
+			margin: 0;
+			width: 60%;
+		}
+	}
+}
+
+.wp-block-cns-theme-infobox-row dt {
+	width: 40%;
+	font-weight: 700;
+}
+.wp-block-cns-theme-infobox-row dd {
+	margin: 0;
+	width: 60%;
+}

@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.infobox {
+  h2 {
+    min-height: unset;
+  }
+  &__title {
+    padding: 0.4rem;
+  }
+}
+
