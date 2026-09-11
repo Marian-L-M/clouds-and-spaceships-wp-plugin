@@ -1,6 +1,22 @@
 @charset "UTF-8";
 @use "../../shared/scss" as *;
 
+// Block wrapper defaults. Kept in CSS rather than as attribute defaults so
+// existing infoboxes keep serializing exactly the markup they already have —
+// an attribute default would change every save() output and invalidate them.
+//
+// Three levels, narrowest wins:
+//   1. the block's own Max width control  → inline style, beats everything
+//   2. CNS → Wiki → Layout → Infobox max width → --cns-wiki-infobox-width
+//   3. 360px                              → when neither is set
+//
+// width: 100% matters for the alignment support: `alignleft`/`alignright` are
+// floats, and a floated element shrink-wraps its content without it.
+.wp-block-cns-wiki-suite-infobox {
+	width: 100%;
+	max-width: var(--cns-wiki-infobox-width, 360px);
+}
+
 .infobox,
 .infobox .block-editor-inner-blocks,
 .infobox .block-editor-block-list__layout,
@@ -15,6 +31,10 @@
 	border: 1px solid #dedede;
 	padding: 2rem 1em;
 	margin-bottom: 2rem;
+	box-sizing: border-box;
+	& > * {
+		box-sizing: border-box;
+	}
 	&__inner {
 		width: 100%;
 		.size-full {

@@ -1,8 +1,14 @@
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
 
 export default function save({ attributes }) {
-  const { bg_color, text_color, contrast_color, infobox_title, display_mode } =
-    attributes;
+  const {
+    bg_color,
+    text_color,
+    contrast_color,
+    infobox_title,
+    display_mode,
+    maxWidth,
+  } = attributes;
 
   const is_infobox_open = () => {
     switch (display_mode) {
@@ -15,10 +21,11 @@ export default function save({ attributes }) {
 
   return (
     <div
-      {...useBlockProps.save()}
+      {...useBlockProps.save({
+        style: { backgroundColor: bg_color, color: text_color, maxWidth },
+      })}
       data-wp-interactive="cns-wiki-suite/infobox"
       data-wp-context={JSON.stringify({ isActive: is_infobox_open() })}
-      style={{ backgroundColor: bg_color, color: text_color }}
     >
       <div
         className={`infobox ${display_mode}`}

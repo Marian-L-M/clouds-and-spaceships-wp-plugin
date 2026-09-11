@@ -67,8 +67,10 @@ function cns_wiki_register_glossary_post_type(): void
         'public'             => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
-        'show_in_menu'       => true,
         'query_var'          => true,
+        // Sidebar entry is opt-out on the Glossary tab. Defaults to true, which
+        // is how the glossary behaved before the setting existed.
+        'show_in_menu'       => (bool) cns_get_wiki_setting('glossary_show_menu', true),
         'rewrite'            => ['slug' => cns_get_wiki_setting('glossary_slug', 'glossary'), 'with_front' => false],
         'capability_type'    => 'post',
         'has_archive'        => true,

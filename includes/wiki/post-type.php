@@ -86,8 +86,24 @@ function cns_wiki_post_content_template(): array
     ];
 }
 
+/**
+ * Whether the wiki post type is registered at all (CNS → Wiki tab).
+ *
+ * On by default. Turning it off unregisters the post type, its templates and
+ * its archive — existing wiki posts stay in the database untouched and come
+ * back as soon as it is switched on again.
+ */
+function cns_wiki_enabled(): bool
+{
+    return (bool) cns_get_wiki_setting( 'wiki_enabled', true );
+}
+
 function cns_wiki_register_post_type()
 {
+    if ( ! cns_wiki_enabled() ) {
+        return;
+    }
+
     $labels = [
         'name'                  => _x('Wikis', 'Post type general name', 'clouds-and-spaceships'),
         'singular_name'         => _x('Wiki', 'Post type singular name', 'clouds-and-spaceships'),
@@ -120,7 +136,10 @@ function cns_wiki_register_post_type()
         'public'             => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
-        'show_in_menu'       => true,
+        // Sidebar entry is opt-out on the Wiki tab, matching the glossary, maps
+        // and stories toggles. Defaults to true, which is how the wiki behaved
+        // before the setting existed.
+        'show_in_menu'       => (bool) cns_get_wiki_setting( 'wiki_show_menu', true ),
         'query_var'          => true,
         // 'hierarchical' => true so a child wiki's permalink carries its ancestor
         // path (/wiki/parent/child/) rather than sitting flat under the archive.
@@ -186,18 +205,13 @@ add_filter( 'post_thumbnail_id', 'cns_wiki_placeholder_thumbnail_id', 10, 2 );
 
 
 /**
- * Whether the plugin's wiki page templates are in use (CNS → Wiki tab).
- * When off, wiki posts and the wiki archive fall back to whatever the active
- * theme would use for any other post type.
+ * The wiki page templates are always in use for wikis; they are what makes a
+ * wiki a wiki. They register alongside the post type, so switching the post
+ * type off takes them with it.
  */
-function cns_wiki_use_wiki_template(): bool
-{
-    return (bool) cns_get_wiki_setting( 'use_wiki_template', true );
-}
-
 function cns_wiki_register_block_templates()
 {
-    if ( ! cns_wiki_use_wiki_template() ) {
+    if ( ! cns_wiki_enabled() ) {
         return;
     }
 
@@ -224,24 +238,6 @@ function cns_wiki_register_block_templates()
     }
 }
 add_action('init', 'cns_wiki_register_block_templates');
-
-
-/**
- * With the wiki template disabled, drop the wiki-specific slugs from the
- * template hierarchy so WordPress resolves the theme's default single/archive
- * templates instead. This also bypasses user-customised copies of the plugin
- * templates saved through the Site Editor (wp_template posts), which would
- * otherwise still match the single-wiki / archive-wiki slugs.
- */
-function cns_wiki_filter_template_hierarchy( array $templates ): array
-{
-    if ( cns_wiki_use_wiki_template() ) {
-        return $templates;
-    }
-    return array_values( array_diff( $templates, [ 'single-wiki.php', 'archive-wiki.php' ] ) );
-}
-add_filter( 'single_template_hierarchy',  'cns_wiki_filter_template_hierarchy' );
-add_filter( 'archive_template_hierarchy', 'cns_wiki_filter_template_hierarchy' );
 
 
 /**
@@ -278,8 +274,41 @@ function cns_wiki_enqueue_layout_styles(): void
     if ( is_numeric( $width ) ) {
         wp_add_inline_style(
             'cns-wiki-layout',
-            ':root{--cns-wiki-infobox-width:' . (float) $width . 'rem;}'
+            ':root{--cns-wiki-infobox-width:' . (int) $width . 'px;}'
         );
     }
+
+    // Outer content width (CNS → Wiki → Template). Read by the constrained
+    // layout on the templates' <main> group and by the #cns-layout-wrapper
+    // fallback in wiki-layout.css. Unset leaves both at full width.
+    $content_width = cns_get_wiki_setting( 'content_width', '' );
+    if ( is_numeric( $content_width ) ) {
+        wp_add_inline_style(
+            'cns-wiki-layout',
+            ':root{--cns-wiki-content-width:' . (int) $content_width . 'px;}'
+        );
+    }
+
+    cns_wiki_add_editor_canvas_width();
+}
+
+/**
+ * Apply content width to the post editor canvas.
+ */
+function cns_wiki_add_editor_canvas_width(): void
+{
+    if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+        return;
+    }
+
+    $screen = get_current_screen();
+    if ( ! $screen || 'wiki' !== $screen->post_type || ! $screen->is_block_editor() ) {
+        return;
+    }
+
+    wp_add_inline_style(
+        'cns-wiki-layout',
+        '.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > *{max-width:var(--cns-wiki-content-width, none);margin-inline:auto;}'
+    );
 }
 add_action( 'enqueue_block_assets', 'cns_wiki_enqueue_layout_styles' );

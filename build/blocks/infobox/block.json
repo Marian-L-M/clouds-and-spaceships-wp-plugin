@@ -10,12 +10,16 @@
   "example": {},
   "supports": {
     "html": false,
-    "interactivity": true
+    "interactivity": true,
+    "align": [
+      "left",
+      "center",
+      "right"
+    ]
   },
   "attributes": {
-    "align": {
-      "type": "string",
-      "default": "full"
+    "maxWidth": {
+      "type": "string"
     },
     "bg_color": {
       "type": "string",

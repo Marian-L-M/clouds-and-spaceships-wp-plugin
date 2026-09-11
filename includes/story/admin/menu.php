@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 add_filter('cns_admin_tabs', function (array $tabs): array {
 	$tabs['stories'] = [
 		'menu_title' => __('Stories', 'clouds-and-spaceships'),
-		'title'      => __('CNS Story Suite', 'clouds-and-spaceships'),
+		'title'      => __('Stories', 'clouds-and-spaceships'),
 		'capability' => 'manage_stories',
 		'callback'   => 'cns_story_suite_render_overview',
 		'priority'   => 40,

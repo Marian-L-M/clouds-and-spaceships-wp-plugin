@@ -40,6 +40,9 @@ require_once CNS_DIR . 'includes/capabilities.php';
 require_once CNS_DIR . 'includes/archive.php';
 require_once CNS_DIR . 'includes/cache.php';
 
+// Info tab
+require_once CNS_DIR . 'includes/info/settings.php';
+
 // Wiki suite
 
 require_once CNS_DIR . 'includes/wiki/settings.php';

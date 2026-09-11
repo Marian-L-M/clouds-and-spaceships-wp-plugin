@@ -12,19 +12,38 @@
  * Width comes from a fallback chain so a theme still has the last word:
  *
  *   --cns-wiki-infobox-width   CNS → Wiki → Layout setting (when set)
- *   --wp--custom--layout--col-wiki   theme.json (Clouds and Spaceships: 34rem)
- *   34rem                      plugin default
+ *   360px                      plugin default
+ *
+ * That variable is read by the infobox block itself (src/blocks/infobox/
+ * style.scss), not by the column around it; the column here just wraps it.
  *
  * Everything is scoped to the desktop side of core's stacking breakpoint;
  * below it core forces `flex-basis: 100% !important` and the columns stack,
  * where a width cap would only get in the way.
  */
 
-.cns-col__wiki {
-	--cns-wiki-infobox-col: var(
-		--cns-wiki-infobox-width,
-		var(--wp--custom--layout--col-wiki, 34rem)
-	);
+/*
+ * Content width (CNS → Wiki → Template).
+ *
+ * Both wiki templates declare
+ * `contentSize: var(--cns-wiki-content-width, 100%)` on their <main> group, so
+ * core's constrained-layout rule already caps the columns row — and gives the
+ * wrapper the theme's global padding, which a layout-less group does not get.
+ *
+ * This repeats the cap by id because a template customised in the Site Editor
+ * is stored as a wp_template post and renders instead of the plugin's file,
+ * layout attribute and all. The id is on the wrapper in both templates, so the
+ * setting keeps working either way. Unset means `none` — full width, which is
+ * how the templates behaved before the setting existed.
+ */
+#cns-layout-wrapper {
+	width: 92%;
+	max-width: 1600px;
+	margin: auto;
+}
+#cns-layout-wrapper > * {
+	max-width: var(--cns-wiki-content-width, none);
+	margin-inline: auto;
 }
 
 .cns-col__sidebar {
@@ -32,24 +51,27 @@
 }
 
 @media (min-width: 782px) {
-	/* Low specificity, so a theme rule on .cns-col__wiki still overrides it. */
-	.cns-col__wiki {
-		max-width: var(--cns-wiki-infobox-col);
-	}
-
 	.cns-col__sidebar {
 		max-width: var(--cns-wiki-sidebar-col);
 	}
 
 	/*
+	 * The infobox column carries no width of its own — it shrink-wraps whatever
+	 * the infobox block inside it is. The block's max-width is the single
+	 * control: CNS → Wiki → Layout sets the default, and the block's own Max
+	 * width overrides it per infobox. Sizing the column here too would cap that
+	 * override, so an infobox widened past the column would be clipped with no
+	 * indication why. Intrinsic sizing honours the child's max-width, so
+	 * `fit-content` tracks whichever of the two applies.
+	 *
 	 * Specificity (0,4,0) — one notch above core's
 	 * `.wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column`,
-	 * which is the rule that would otherwise force an equal share regardless
-	 * of source order. Without this the infobox is `min(50%, max-width)` and
-	 * still splits the row evenly at mid viewport widths.
+	 * which would otherwise force an equal share regardless of source order.
 	 */
 	.wp-block-columns > .wp-block-column.cns-col.cns-col__wiki {
-		flex: 0 1 var(--cns-wiki-infobox-col);
+		flex: 0 0 auto;
+		width: fit-content;
+		max-width: 100%;
 	}
 
 	/* The article column takes whatever the infobox leaves. */

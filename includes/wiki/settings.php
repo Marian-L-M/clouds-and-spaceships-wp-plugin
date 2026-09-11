@@ -31,18 +31,46 @@ function cns_wiki_register_settings(): void {
     );
 }
 
+/**
+ * Both the Wiki and the Glossary tab post to this one option, so a save must
+ * never drop the keys the other tab owns. Each form declares which section it
+ * is with a hidden _section field; only that section's keys are rebuilt and
+ * merged over what is already stored.
+ */
 function cns_sanitize_wiki_settings( $input ): array {
-    $input  = is_array( $input ) ? $input : [];
+    $input   = is_array( $input ) ? $input : [];
+    $section = sanitize_key( $input['_section'] ?? 'wiki' );
+    $stored  = (array) get_option( 'cns_wiki_settings', [] );
+
+    $output = 'glossary' === $section
+        ? cns_sanitize_wiki_glossary_section( $input )
+        : cns_sanitize_wiki_section( $input );
+
+    return array_merge( $stored, $output );
+}
+
+/** Keys owned by the Wiki tab. */
+function cns_sanitize_wiki_section( array $input ): array {
     $output = [];
 
-    // Templates
-    $output['use_wiki_template'] = ! empty( $input['use_wiki_template'] );
+    // Post type. Defaults to on, so an install that has never saved this form
+    // keeps its wikis; only an explicit unticked save turns it off.
+    $output['wiki_enabled']   = ! empty( $input['wiki_enabled'] );
+    $output['wiki_show_menu'] = ! empty( $input['wiki_show_menu'] );
 
-    // Layout — infobox column width in rem. Empty means "inherit from the
+    // Layout — infobox column width in px. Empty means "inherit from the
     // theme", so the CSS falls through to --wp--custom--layout--col-wiki.
+    // 200-1280px is the old 12-80rem range; stored as whole pixels.
     $width = trim( (string) ( $input['infobox_width'] ?? '' ) );
     $output['infobox_width'] = is_numeric( $width )
-        ? (string) min( 80, max( 12, round( (float) $width, 1 ) ) )
+        ? (string) (int) min( 1280, max( 200, round( (float) $width ) ) )
+        : '';
+
+    // Layout — outer content width in px. Empty means the wiki templates stay
+    // full width, which is how they rendered before this setting existed.
+    $content_width = trim( (string) ( $input['content_width'] ?? '' ) );
+    $output['content_width'] = is_numeric( $content_width )
+        ? (string) (int) min( 3200, max( 640, round( (float) $content_width ) ) )
         : '';
 
     // Archive
@@ -70,7 +98,13 @@ function cns_sanitize_wiki_settings( $input ): array {
     $output['infobox_contrast_color'] = sanitize_hex_color( $input['infobox_contrast_color'] ?? '' ) ?? '';
     $output['infobox_border_color']   = sanitize_hex_color( $input['infobox_border_color']   ?? '' ) ?? '';
 
-    // Glossary
+    return $output;
+}
+
+/** Keys owned by the Glossary tab. */
+function cns_sanitize_wiki_glossary_section( array $input ): array {
+    $output = [];
+
     $output['glossary_enabled'] = ! empty( $input['glossary_enabled'] );
 
     $raw_glossary_slug        = preg_replace( '/[^a-z0-9\-]/', '', strtolower( $input['glossary_slug'] ?? 'glossary' ) );
@@ -78,7 +112,49 @@ function cns_sanitize_wiki_settings( $input ): array {
 
     $output['glossary_text_color'] = sanitize_hex_color( $input['glossary_text_color'] ?? '' ) ?? '';
 
+    $output['glossary_show_menu'] = ! empty( $input['glossary_show_menu'] );
+
     return $output;
+}
+
+// ── Layout units migration ───────────────────────────────────────────────────
+//
+// The two layout widths were stored as unitless rem and are now unitless px, so
+// a value saved before the change would be read as 34px rather than 34rem.
+// Converts once at 16px to the rem, the browser default the old values assumed.
+
+const CNS_WIKI_LAYOUT_UNITS_VERSION = 1;
+
+add_action( 'admin_init', 'cns_wiki_migrate_layout_units' );
+
+function cns_wiki_migrate_layout_units(): void {
+    if ( (int) get_option( 'cns_wiki_layout_units_version' ) === CNS_WIKI_LAYOUT_UNITS_VERSION ) {
+        return;
+    }
+
+    $settings = (array) get_option( 'cns_wiki_settings', [] );
+    $changed  = false;
+
+    foreach ( [ 'infobox_width', 'content_width' ] as $key ) {
+        $value = $settings[ $key ] ?? '';
+        if ( '' !== trim( (string) $value ) && is_numeric( $value ) ) {
+            $settings[ $key ] = (string) (int) round( (float) $value * 16 );
+            $changed          = true;
+        }
+    }
+
+    if ( $changed ) {
+        // Write past the Settings API. update_option() runs the registered
+        // sanitize_option_cns_wiki_settings callback, which rebuilds a whole
+        // section from its input — and every checkbox absent from that array
+        // would be read as unticked, silently switching the wiki off on any
+        // install whose stored option predates those keys.
+        remove_filter( 'sanitize_option_cns_wiki_settings', 'cns_sanitize_wiki_settings' );
+        update_option( 'cns_wiki_settings', $settings );
+        add_filter( 'sanitize_option_cns_wiki_settings', 'cns_sanitize_wiki_settings' );
+    }
+
+    update_option( 'cns_wiki_layout_units_version', CNS_WIKI_LAYOUT_UNITS_VERSION, false );
 }
 
 // ── Flush rewrites when a slug changes ───────────────────────────────────────
@@ -91,6 +167,7 @@ add_action( 'update_option_cns_wiki_settings', 'cns_wiki_maybe_schedule_rewrite_
 
 function cns_wiki_maybe_schedule_rewrite_flush( $old_value, $new_value ): void {
     $watched = [
+        [ 'wiki_enabled',     true ],
         [ 'archive_slug',     'wiki' ],
         [ 'glossary_slug',    'glossary' ],
         [ 'glossary_enabled', false ],
@@ -192,19 +269,59 @@ function cns_wiki_expose_grid_defaults(): void {
     );
 }
 
+// ── Editor defaults: infobox width ────────────────────────────────────────────
+//
+// The block's Max width control leaves its value empty until someone sets one,
+// and the effective default then comes from CSS — the Layout setting's
+// --cns-wiki-infobox-width, or 360px. The editor cannot read that off a
+// stylesheet, so hand it the resolved number to show as the field's
+// placeholder; otherwise the control advertises 360px on a site set to
+// something else.
+
+const CNS_WIKI_INFOBOX_WIDTH_DEFAULT = 360;
+
+/** The effective default infobox max width in px, setting or built-in. */
+function cns_wiki_infobox_default_width(): int {
+    $width = cns_get_wiki_setting( 'infobox_width', '' );
+    return is_numeric( $width ) ? (int) $width : CNS_WIKI_INFOBOX_WIDTH_DEFAULT;
+}
+
+add_action( 'enqueue_block_editor_assets', 'cns_wiki_expose_infobox_defaults' );
+
+function cns_wiki_expose_infobox_defaults(): void {
+    wp_add_inline_script(
+        'cns-wiki-suite-infobox-editor-script',
+        'window.cnsWikiInfoboxDefaults = ' . wp_json_encode(
+            [ 'maxWidth' => cns_wiki_infobox_default_width() ]
+        ) . ';',
+        'before'
+    );
+}
+
 // ── Admin tab registration ────────────────────────────────────────────────────
 
 add_filter( 'cns_admin_tabs', function ( array $tabs ): array {
     $tabs['wiki'] = [
         'menu_title' => __( 'Wiki', 'clouds-and-spaceships' ),
-        'title'      => __( 'CNS Wiki Suite', 'clouds-and-spaceships' ),
+        'title'      => __( 'Wiki', 'clouds-and-spaceships' ),
         'capability' => 'manage_options',
         'callback'   => 'cns_wiki_admin_render_tab',
         'priority'   => 20,
+    ];
+    $tabs['glossary'] = [
+        'menu_title' => __( 'Glossary', 'clouds-and-spaceships' ),
+        'title'      => __( 'Glossary', 'clouds-and-spaceships' ),
+        'capability' => 'manage_options',
+        'callback'   => 'cns_wiki_admin_render_glossary_tab',
+        'priority'   => 21,
     ];
     return $tabs;
 } );
 
 function cns_wiki_admin_render_tab(): void {
     include CNS_DIR . 'includes/wiki/views/tab-wiki.php';
+}
+
+function cns_wiki_admin_render_glossary_tab(): void {
+    include CNS_DIR . 'includes/wiki/views/tab-glossary.php';
 }

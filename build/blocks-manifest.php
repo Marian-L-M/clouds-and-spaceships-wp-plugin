@@ -58,12 +58,16 @@ return array(
 		),
 		'supports' => array(
 			'html' => false,
-			'interactivity' => true
+			'interactivity' => true,
+			'align' => array(
+				'left',
+				'center',
+				'right'
+			)
 		),
 		'attributes' => array(
-			'align' => array(
-				'type' => 'string',
-				'default' => 'full'
+			'maxWidth' => array(
+				'type' => 'string'
 			),
 			'bg_color' => array(
 				'type' => 'string',

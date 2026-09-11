@@ -10,14 +10,14 @@ defined('ABSPATH') || exit;
 add_filter('cns_admin_tabs', function (array $tabs): array {
 	$tabs['maps'] = [
 		'menu_title' => __('Maps', 'clouds-and-spaceships'),
-		'title'      => __('CNS Map Suite', 'clouds-and-spaceships'),
+		'title'      => __('Maps', 'clouds-and-spaceships'),
 		'capability' => 'manage_maps',
 		'callback'   => 'cns_map_suite_render_overview',
 		'priority'   => 30,
 	];
 	$tabs['icons'] = [
 		'menu_title' => __('Icons', 'clouds-and-spaceships'),
-		'title'      => __('Icon Library', 'clouds-and-spaceships'),
+		'title'      => __('Icons', 'clouds-and-spaceships'),
 		'capability' => 'manage_maps',
 		'callback'   => 'cns_map_suite_render_icons',
 		'priority'   => 31,

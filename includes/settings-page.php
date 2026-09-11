@@ -162,7 +162,9 @@ function cns_admin_render_page(): void {
 //
 // The media picker is used by tabs from several providers (theme login images,
 // wiki placeholder thumbnail), so it lives in the framework and loads on every
-// CNS settings page.
+// CNS settings page. So does the stylesheet that gives every tab the same
+// chrome — the map and story editors ship their own bundles, but those only
+// load on their own pages.
 
 add_action( 'admin_enqueue_scripts', 'cns_admin_enqueue_shared_assets' );
 
@@ -170,8 +172,39 @@ function cns_admin_enqueue_shared_assets( string $hook ): void {
     if ( ! str_contains( $hook, 'cns-settings' ) ) {
         return;
     }
+    wp_enqueue_style(
+        'cns-admin-settings',
+        CNS_URL . 'assets/css/admin-settings.css',
+        [],
+        CNS_VERSION
+    );
     wp_enqueue_media();
     wp_add_inline_script( 'jquery', cns_admin_media_picker_js() );
+    wp_add_inline_script( 'jquery', cns_admin_color_clear_js() );
+}
+
+/**
+ * "Clear (use theme default)" checkboxes next to a colour input.
+ *
+ * Colour inputs cannot hold an empty value, so clearing one means disabling it
+ * so the browser leaves it out of the submitted form — the sanitizer then
+ * stores an empty string and the theme default applies. Markup:
+ *
+ *   <input type="checkbox" class="cns-color-clear" data-color="the-input-id">
+ */
+function cns_admin_color_clear_js(): string {
+    return <<<'JS'
+(function ($) {
+    $(function () {
+        $('.cns-color-clear').on('change', function () {
+            var input = $('#' + $(this).data('color'));
+            if (! input.length) return;
+            input.prop('disabled', this.checked);
+            if (this.checked) input.val('');
+        });
+    });
+})(jQuery);
+JS;
 }
 
 function cns_admin_media_picker_js(): string {
