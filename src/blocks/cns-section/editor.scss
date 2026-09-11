@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+.wp-block-cns-theme-cns-section {
+	border: 2px dashed rgba(78, 22, 168, 0.35);
+	padding: 1rem;
+	border-radius: 3px;
+
+	.cns-section__tab-btn {
+		cursor: pointer;
+
+		&.is-active {
+			background: #fff;
+			color: #4e16a8;
+			border-color: #4e16a8;
+		}
+	}
+}
