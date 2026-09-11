@@ -15,8 +15,6 @@ $infobox_width     = cns_get_wiki_setting( 'infobox_width', '' );
 $content_width     = cns_get_wiki_setting( 'content_width', '' );
 
 $archive_slug  = cns_get_wiki_setting( 'archive_slug',  'wiki' );
-$per_page      = (int) cns_get_wiki_setting( 'archive_per_page', 12 );
-$archive_order = cns_get_wiki_setting( 'archive_order', 'date_desc' );
 $archive_url   = $wiki_enabled ? get_post_type_archive_link( 'wiki' ) : false;
 
 $grid_desktop  = (int) cns_get_wiki_setting( 'grid_columns_desktop', 3 );
@@ -31,12 +29,6 @@ $infobox_border   = cns_get_wiki_setting( 'infobox_border_color',   '' );
 
 $placeholder_id  = absint( cns_get_wiki_setting( 'placeholder_thumb_id', 0 ) );
 $placeholder_url = $placeholder_id ? wp_get_attachment_image_url( $placeholder_id, 'medium' ) : '';
-
-$order_options = [
-    'date_desc' => __( 'Newest first (date ↓)', 'clouds-and-spaceships' ),
-    'date_asc'  => __( 'Oldest first (date ↑)', 'clouds-and-spaceships' ),
-    'title_asc' => __( 'Alphabetical (A → Z)',  'clouds-and-spaceships' ),
-];
 
 // ── Stats ─────────────────────────────────────────────────────────────────────
 // Only meaningful while the post type is registered.
@@ -89,7 +81,7 @@ if ( $wiki_enabled ) {
 	</div>
 
 	<p class="cns-settings-page__intro">
-		<?php esc_html_e( 'A hierarchical wiki post type with infobox blocks and a card and contents grid. Terms and their definitions live on the Glossary tab.', 'clouds-and-spaceships' ); ?>
+		<?php esc_html_e( 'A hierarchical custom post type to create wiki like post with default info boxes.', 'clouds-and-spaceships' ); ?>
 	</p>
 
 	<?php if ( $wiki_enabled ) : ?>
@@ -135,10 +127,10 @@ if ( $wiki_enabled ) {
 								value="1"
 								<?php checked( $wiki_enabled ); ?>
 							/>
-							<?php esc_html_e( 'Enable the wiki post type, archive, and page templates', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Enable wiki post type, archive, and page templates', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'Wiki articles always use the wiki page template, on the front end and in the editor. Disabling this leaves existing wikis in the database untouched; they simply stop being registered.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'On by default. Deactivate to use your own template. Disabling will not change existing wiki posts in database.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -152,10 +144,10 @@ if ( $wiki_enabled ) {
 								value="1"
 								<?php checked( $wiki_show_menu ); ?>
 							/>
-							<?php esc_html_e( 'Show Wikis in the WordPress admin sidebar', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Show Wiki admin sidebar', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'Adds the standard WordPress list screen for wikis to the sidebar. This tab stays the primary place to configure the wiki.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Enables standard wordpress sidebar menu for wiki post type.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -166,12 +158,12 @@ if ( $wiki_enabled ) {
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Layout', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Default widths for the wiki layout. Both are starting points — the infobox width can be overridden on any individual block.', 'clouds-and-spaceships' ); ?>
+				<?php esc_html_e( 'Default widths for the wiki layout.', 'clouds-and-spaceships' ); ?>
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row">
-						<label for="cns_wiki_infobox_width"><?php esc_html_e( 'Infobox max width', 'clouds-and-spaceships' ); ?></label>
+						<label for="cns_wiki_infobox_width"><?php esc_html_e( 'Infobox default width', 'clouds-and-spaceships' ); ?></label>
 					</th>
 					<td>
 						<input
@@ -185,7 +177,7 @@ if ( $wiki_enabled ) {
 						/>
 						<span><?php esc_html_e( 'px', 'clouds-and-spaceships' ); ?></span>
 						<p class="description">
-							<?php esc_html_e( 'Default maximum width for every infobox block. An infobox fills the space it is given up to this width, and the article text takes the rest. Individual infoboxes can override it with the Max width control in the block’s Dimensions panel. Leave empty for 360px. Below 782px the columns stack and the limit does not apply.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Default maximum width for infobox. Post content will takes the remaining content width. Infobox max-width can be overridden on any individual block.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -200,12 +192,13 @@ if ( $wiki_enabled ) {
 							name="cns_wiki_settings[content_width]"
 							value="<?php echo esc_attr( $content_width ); ?>"
 							min="640" max="3200" step="1"
+							default="1200"
 							class="small-text"
 							placeholder="<?php esc_attr_e( 'full', 'clouds-and-spaceships' ); ?>"
 						/>
 						<span><?php esc_html_e( 'px', 'clouds-and-spaceships' ); ?></span>
 						<p class="description">
-							<?php esc_html_e( 'Maximum width of the whole wiki layout — article and infobox together — on both single wikis and the wiki archive. Leave empty to span the full window. A wiki needs far more room than an ordinary post: the infobox column alone is 544px, so a value near your theme’s wide size (1340px on Twenty Twenty-Five) is a sensible starting point.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Maximum width for wiki post layout — including infobox.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -241,38 +234,6 @@ if ( $wiki_enabled ) {
 						<p class="description">
 							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single wiki URL — existing links will break.', 'clouds-and-spaceships' ); ?>
 						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_wiki_per_page"><?php esc_html_e( 'Wikis per page', 'clouds-and-spaceships' ); ?></label>
-					</th>
-					<td>
-						<input
-							type="number"
-							id="cns_wiki_per_page"
-							name="cns_wiki_settings[archive_per_page]"
-							value="<?php echo esc_attr( $per_page ); ?>"
-							min="1" step="1"
-							class="small-text"
-						/>
-						<p class="description">
-							<?php esc_html_e( 'Overrides the global Reading Settings value for the wiki archive only.', 'clouds-and-spaceships' ); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_wiki_order"><?php esc_html_e( 'Default sort order', 'clouds-and-spaceships' ); ?></label>
-					</th>
-					<td>
-						<select id="cns_wiki_order" name="cns_wiki_settings[archive_order]">
-							<?php foreach ( $order_options as $value => $label ) : ?>
-								<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $archive_order, $value ); ?>>
-									<?php echo esc_html( $label ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
 					</td>
 				</tr>
 				<tr>
@@ -320,9 +281,9 @@ if ( $wiki_enabled ) {
 			</table>
 		</div>
 
-		<?php /* ── Grid defaults ─────────────────────────────────────────── */ ?>
+		<?php /* ── Wiki Contents Grid block defaults ─────────────────────────────────────────── */ ?>
 		<div class="cns-settings-card">
-			<h2><?php esc_html_e( 'Grid defaults', 'clouds-and-spaceships' ); ?></h2>
+			<h2><?php esc_html_e( 'Wiki Content Grid defaults', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
 				<?php esc_html_e( 'Fallback column and gap values used by any wiki-contents block that does not have explicit per-block settings.', 'clouds-and-spaceships' ); ?>
 			</p>

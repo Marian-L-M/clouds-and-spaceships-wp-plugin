@@ -8,6 +8,9 @@
 }
 
 .infobox-group {
+	* {
+		box-sizing: border-box;
+	}
 	&__outer,
 	&__inner {
 		@include fx($direction: column, $gap: 1rem);
@@ -16,6 +19,7 @@
 	&__inner,
 	&__title {
 		width: 100%;
+		box-sizing: border-box;
 	}
 	&__inner {
 		padding: 0 1rem;
@@ -33,7 +37,6 @@
 		}
 		h3,
 		h3 button {
-			font-size: 1.8rem;
 			font-weight: 700;
 			line-height: 120%;
 			text-align: center;

@@ -75,12 +75,7 @@ function cns_sanitize_wiki_section( array $input ): array {
 
     // Archive
     $raw_slug             = preg_replace( '/[^a-z0-9\-]/', '', strtolower( $input['archive_slug'] ?? 'wiki' ) );
-    $output['archive_slug']     = $raw_slug ?: 'wiki';
-    $output['archive_per_page'] = max( 1, (int) ( $input['archive_per_page'] ?? 12 ) );
-
-    $valid_orders            = [ 'date_desc', 'date_asc', 'title_asc' ];
-    $order                   = sanitize_key( $input['archive_order'] ?? 'date_desc' );
-    $output['archive_order'] = in_array( $order, $valid_orders, true ) ? $order : 'date_desc';
+    $output['archive_slug'] = $raw_slug ?: 'wiki';
 
     // Placeholder thumbnail (attachment ID, 0 = none)
     $placeholder_id = absint( $input['placeholder_thumb_id'] ?? 0 );

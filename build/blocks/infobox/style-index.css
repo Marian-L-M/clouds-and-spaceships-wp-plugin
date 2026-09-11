@@ -21,6 +21,20 @@
   padding: 2rem 1em;
   margin-bottom: 2rem;
   box-sizing: border-box;
+  font-size: 1rem;
+}
+.infobox h2 {
+  font-size: 1.25em;
+}
+.infobox h3 {
+  font-size: 1.125em;
+}
+.infobox dt,
+.infobox dd {
+  font-size: 1rem;
+}
+.infobox button {
+  font-size: 1em;
 }
 .infobox > * {
   box-sizing: border-box;
@@ -56,7 +70,6 @@
 }
 .infobox h2,
 .infobox h2 button {
-  font-size: 2rem;
   font-weight: bold;
   line-height: 120%;
   text-align: center;

@@ -11,7 +11,7 @@
  * existing setting has to be migrated:
  *
  *   maps / cns_story   one option per field, prefixed cns_{suite}_suite_
- *   wiki               keys inside the cns_wiki_settings option array
+ *   wiki               archive_slug inside the cns_wiki_settings option array
  *
  * The map and story archives ship disabled. Enabling one publishes a listing
  * at /{slug}/ that did not exist before, so it is an explicit choice rather
@@ -56,7 +56,10 @@ function cns_archive_sanitize_order(string $order): string {
 /**
  * Accessors for one archive, keyed by post type. Built once per request.
  *
- * @return array{enabled:callable,slug:callable,per_page:callable,order:callable}|null
+ * `per_page` and `order` are optional — an archive the plugin does not render
+ * itself omits them and its query is left alone.
+ *
+ * @return array{enabled:callable,slug:callable,per_page?:callable,order?:callable}|null
  */
 function cns_archive_config(string $post_type): ?array {
 	static $config = null;
@@ -83,15 +86,16 @@ function cns_archive_config(string $post_type): ?array {
 
 		// The wiki archive has no on/off switch — the CPT has always shipped
 		// with has_archive => true.
+		//
+		// It also has no per-page or sort-order setting: the plugin registers no
+		// wiki archive template, so the listing is the theme's, and its query is
+		// left to WordPress (Reading Settings) and the theme. Only the slug is
+		// owned here, because it is the same slug the single permalinks use.
 		$config['wiki'] = [
 			'enabled'  => static fn(): bool   => true,
 			'slug'     => static fn(): string => cns_archive_sanitize_slug(
 				(string) cns_get_wiki_setting('archive_slug', 'wiki'),
 				'wiki'
-			),
-			'per_page' => static fn(): int    => max(1, (int) cns_get_wiki_setting('archive_per_page', CNS_ARCHIVE_DEFAULT_PER_PAGE)),
-			'order'    => static fn(): string => cns_archive_sanitize_order(
-				(string) cns_get_wiki_setting('archive_order', CNS_ARCHIVE_DEFAULT_ORDER)
 			),
 		];
 	}
@@ -117,12 +121,12 @@ function cns_archive_slug(string $post_type): string {
 
 function cns_archive_per_page(string $post_type): int {
 	$config = cns_archive_config($post_type);
-	return $config ? (int) ($config['per_page'])() : CNS_ARCHIVE_DEFAULT_PER_PAGE;
+	return isset($config['per_page']) ? (int) ($config['per_page'])() : CNS_ARCHIVE_DEFAULT_PER_PAGE;
 }
 
 function cns_archive_order(string $post_type): string {
 	$config = cns_archive_config($post_type);
-	return $config ? (string) ($config['order'])() : CNS_ARCHIVE_DEFAULT_ORDER;
+	return isset($config['order']) ? (string) ($config['order'])() : CNS_ARCHIVE_DEFAULT_ORDER;
 }
 
 // ── Archive query ─────────────────────────────────────────────────────────────
@@ -137,6 +141,14 @@ function cns_archive_query(WP_Query $query): void {
 	foreach (cns_archive_post_types() as $post_type) {
 		if (! $query->is_post_type_archive($post_type)) {
 			continue;
+		}
+
+		$config = cns_archive_config($post_type);
+
+		// No per-page / order settings means the plugin does not render this
+		// archive; leave the main query exactly as WordPress built it.
+		if (! isset($config['per_page'], $config['order'])) {
+			return;
 		}
 
 		$query->set('posts_per_page', cns_archive_per_page($post_type));

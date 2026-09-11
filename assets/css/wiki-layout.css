@@ -25,23 +25,27 @@
 /*
  * Content width (CNS → Wiki → Template).
  *
- * Both wiki templates declare
- * `contentSize: var(--cns-wiki-content-width, 100%)` on their <main> group, so
+ * single-wiki.html declares
+ * `contentSize: var(--cns-wiki-content-width, 100%)` on its <main> group, so
  * core's constrained-layout rule already caps the columns row — and gives the
  * wrapper the theme's global padding, which a layout-less group does not get.
  *
  * This repeats the cap by id because a template customised in the Site Editor
  * is stored as a wp_template post and renders instead of the plugin's file,
- * layout attribute and all. The id is on the wrapper in both templates, so the
- * setting keeps working either way. Unset means `none` — full width, which is
- * how the templates behaved before the setting existed.
+ * layout attribute and all, so the setting keeps working either way. Unset
+ * means `none` — full width, which is how the template behaved before the
+ * setting existed.
+ *
+ * Scoped to single wikis on purpose. The archive templates share the
+ * #cns-layout-wrapper id, and the archives are meant to lay out on the theme's
+ * own content width — their <main> carries a plain constrained layout with no
+ * contentSize of its own, so it inherits --wp--style--global--content-size.
  */
 #cns-layout-wrapper {
 	width: 92%;
-	max-width: 1600px;
 	margin: auto;
 }
-#cns-layout-wrapper > * {
+body.single-wiki #cns-layout-wrapper > * {
 	max-width: var(--cns-wiki-content-width, none);
 	margin-inline: auto;
 }

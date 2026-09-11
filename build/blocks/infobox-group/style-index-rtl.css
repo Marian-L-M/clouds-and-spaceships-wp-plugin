@@ -12,6 +12,9 @@
   border: 1px solid var(--wp--preset--color--element-border);
 }
 
+.infobox-group * {
+  box-sizing: border-box;
+}
 .infobox-group__outer, .infobox-group__inner {
   display: flex;
   flex-direction: column;
@@ -22,6 +25,7 @@
 }
 .infobox-group__outer, .infobox-group__inner, .infobox-group__title {
   width: 100%;
+  box-sizing: border-box;
 }
 .infobox-group__inner {
   padding: 0 1rem;
@@ -38,7 +42,6 @@
 }
 .infobox-group__outer h3,
 .infobox-group__outer h3 button {
-  font-size: 1.8rem;
   font-weight: 700;
   line-height: 120%;
   text-align: center;

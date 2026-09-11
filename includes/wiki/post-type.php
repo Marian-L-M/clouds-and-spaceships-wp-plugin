@@ -205,9 +205,9 @@ add_filter( 'post_thumbnail_id', 'cns_wiki_placeholder_thumbnail_id', 10, 2 );
 
 
 /**
- * The wiki page templates are always in use for wikis; they are what makes a
- * wiki a wiki. They register alongside the post type, so switching the post
- * type off takes them with it.
+ * The wiki single template is always in use for wikis; it is what makes a wiki
+ * a wiki. It registers alongside the post type, so switching the post type off
+ * takes it with it. The archive is deliberately not registered — see below.
  */
 function cns_wiki_register_block_templates()
 {
@@ -215,10 +215,7 @@ function cns_wiki_register_block_templates()
         return;
     }
 
-    $templates_dir = CNS_DIR . 'templates/';
-
-    $single  = $templates_dir . 'single-wiki.html';
-    $archive = $templates_dir . 'archive-wiki.html';
+    $single = CNS_DIR . 'templates/single-wiki.html';
 
     if ( file_exists( $single ) ) {
         register_block_template('clouds-and-spaceships//single-wiki', [
@@ -229,13 +226,11 @@ function cns_wiki_register_block_templates()
         ]);
     }
 
-    if ( file_exists( $archive ) ) {
-        register_block_template('clouds-and-spaceships//archive-wiki', [
-            'title'       => __('Wiki Archive', 'clouds-and-spaceships'),
-            'post_types'  => ['wiki'],
-            'content'     => file_get_contents( $archive ),
-        ]);
-    }
+    // No archive template. The single template has to be the plugin's, because
+    // the article/infobox columns only make sense with the post-content
+    // scaffold the post type ships. A listing has no such requirement, so the
+    // wiki archive is left to the theme and to whatever the site builds for it
+    // in the Site Editor, rather than being overridden here.
 }
 add_action('init', 'cns_wiki_register_block_templates');
 

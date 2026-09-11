@@ -94,26 +94,6 @@ add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_
     return 'glossary' === $post_type ? false : $use_block_editor;
 }, 10, 2);
 
-// ── Archive block template ────────────────────────────────────────────────────
-
-function cns_wiki_register_glossary_template(): void
-{
-    if (! cns_wiki_glossary_enabled()) {
-        return;
-    }
-
-    $template = CNS_DIR . 'templates/archive-glossary.html';
-
-    if (file_exists($template)) {
-        register_block_template('clouds-and-spaceships//archive-glossary', [
-            'title'       => __('Glossary Archive', 'clouds-and-spaceships'),
-            'description' => __('Template for the glossary archive page', 'clouds-and-spaceships'),
-            'post_types'  => ['glossary'],
-            'content'     => file_get_contents($template),
-        ]);
-    }
-}
-add_action('init', 'cns_wiki_register_glossary_template');
 
 // ── Tooltip / link rendering ──────────────────────────────────────────────────
 
