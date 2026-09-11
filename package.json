@@ -5,8 +5,8 @@
 	"author": "Marian Maschke",
 	"license": "GPL-2.0-or-later",
 	"scripts": {
-		"build": "wp-scripts build --blocks-manifest",
-		"start": "wp-scripts start --blocks-manifest",
+		"build": "wp-scripts build --blocks-manifest --experimental-modules",
+		"start": "wp-scripts start --blocks-manifest --experimental-modules",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",

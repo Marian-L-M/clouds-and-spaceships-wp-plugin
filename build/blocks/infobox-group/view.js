@@ -1,0 +1,1 @@
+import{getContext as t,store as i}from"@wordpress/interactivity";i("cns-wiki-suite/infobox-group",{actions:{toggle(){const i=t();i.isActive=!i.isActive}}});

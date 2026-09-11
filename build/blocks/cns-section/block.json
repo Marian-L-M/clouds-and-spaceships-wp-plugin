@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "cns-theme/cns-section",
+  "version": "1.0.0",
+  "title": "CNS Section",
+  "category": "layout",
+  "icon": "layout",
+  "description": "A content section with dynamic tab navigation.",
+  "example": {
+    "innerBlocks": [
+      {
+        "name": "cns-theme/cns-tab",
+        "attributes": {
+          "label": "Overview"
+        },
+        "innerBlocks": [
+          {
+            "name": "core/paragraph",
+            "attributes": {
+              "content": "A short summary of the subject, shown on the first tab."
+            }
+          }
+        ]
+      },
+      {
+        "name": "cns-theme/cns-tab",
+        "attributes": {
+          "label": "History"
+        },
+        "innerBlocks": [
+          {
+            "name": "core/paragraph",
+            "attributes": {
+              "content": "How the subject came to be, and what happened since."
+            }
+          }
+        ]
+      },
+      {
+        "name": "cns-theme/cns-tab",
+        "attributes": {
+          "label": "Trivia"
+        },
+        "innerBlocks": [
+          {
+            "name": "core/paragraph",
+            "attributes": {
+              "content": "Assorted details that did not fit anywhere else."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "supports": {
+    "html": false,
+    "interactivity": true,
+    "anchor": true
+  },
+  "textdomain": "cns-theme",
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php",
+  "viewScriptModule": "file:./view.js"
+}

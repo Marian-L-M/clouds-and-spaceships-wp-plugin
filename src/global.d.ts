@@ -14,3 +14,6 @@ interface CnsToast {
 interface Window {
 	cnsToast?: CnsToast;
 }
+
+// @wordpress/block-editor ships no type declarations.
+declare module '@wordpress/block-editor';

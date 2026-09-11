@@ -29,11 +29,7 @@ function cns_wiki_post_content_template(): array
         ? [
             [
                 'cns-theme/cns-section',
-                [
-                    'title'         => '',
-                    'titleLevel'    => 'h1',
-                    'showUnderline' => true,
-                ],
+                [],
                 [
                     ['cns-theme/cns-tab', ['label' => 'Option 1'], [
                         ['core/paragraph', ['placeholder' => 'Option 1 content goes here...']],

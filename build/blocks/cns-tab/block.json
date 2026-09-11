@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "cns-theme/cns-tab",
+  "version": "1.0.0",
+  "title": "CNS Tab",
+  "category": "layout",
+  "icon": "table-col-before",
+  "description": "A single tab panel inside a CNS Section block.",
+  "parent": [
+    "cns-theme/cns-section"
+  ],
+  "example": {
+    "attributes": {
+      "label": "Overview"
+    },
+    "innerBlocks": [
+      {
+        "name": "core/paragraph",
+        "attributes": {
+          "content": "The content shown while this tab is the selected one."
+        }
+      }
+    ]
+  },
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "label": {
+      "type": "string",
+      "default": "Tab"
+    }
+  },
+  "textdomain": "cns-theme",
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php"
+}

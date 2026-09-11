@@ -1,0 +1,16 @@
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/cns-section/editor.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+.wp-block-cns-theme-cns-section {
+  border: 2px dashed rgba(78, 22, 168, 0.35);
+  padding: 1rem;
+  border-radius: 3px;
+}
+.wp-block-cns-theme-cns-section .cns-section__tab-btn {
+  cursor: pointer;
+}
+.wp-block-cns-theme-cns-section .cns-section__tab-btn.is-active {
+  background: #fff;
+  color: #4e16a8;
+  border-color: #4e16a8;
+}
