@@ -15,12 +15,9 @@
 	"attributes": {
 		"group_title": { "type": "string" },
 		"is_group_open": { "type": "boolean", "default": true },
-		"bg_color": { "type": "string", "default": "#f2f2f2" },
-		"text_color": { "type": "string", "default": "#000000" },
-		"contrast_color": {
-			"type": "string",
-			"default": "var(--wp--preset--color--element-contrast)"
-		},
+		"bg_color": { "type": "string" },
+		"text_color": { "type": "string" },
+		"contrast_color": { "type": "string" },
 		"display_mode": {
 			"type": "string",
 			"default": "inherit"

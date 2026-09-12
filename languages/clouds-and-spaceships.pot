@@ -9,19 +9,20 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-09T23:56:55+00:00\n"
+"POT-Creation-Date: 2026-09-12T04:01:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: clouds-and-spaceships\n"
 
 #. Plugin Name of the plugin
 #: clouds-and-spaceships.php
+#: includes/info/views/tab-info.php:36
 msgid "Clouds and Spaceships"
 msgstr ""
 
 #. Description of the plugin
 #: clouds-and-spaceships.php
-msgid "The Clouds and Spaceships platform: wiki articles and glossary, interactive canvas maps, and branching stories."
+msgid "Clouds and Spaceships is a suite for Worldbuilders and Mapmakers: Connect your map to your post using interactive canvas maps, wiki articles, glossaries, and story paths."
 msgstr ""
 
 #. Author of the plugin
@@ -44,6 +45,178 @@ msgstr ""
 
 #: includes/archive.php:40
 msgid "Title (A–Z)"
+msgstr ""
+
+#: includes/info/settings.php:31
+msgid "Map hierarchies: linking a MasterMap to its regions"
+msgstr ""
+
+#: includes/info/settings.php:32
+msgid "How parent and child maps fit together, and when a MasterMap is the right shape for a world."
+msgstr ""
+
+#: includes/info/settings.php:35
+msgid "Branching stories laid over a map"
+msgstr ""
+
+#: includes/info/settings.php:36
+msgid "Nodes, paths and directed edges — building a route your readers can walk through."
+msgstr ""
+
+#: includes/info/settings.php:39
+msgid "Writing a wiki that stays navigable"
+msgstr ""
+
+#: includes/info/settings.php:40
+msgid "Infoboxes, contents blocks and card grids, and how they read on small screens."
+msgstr ""
+
+#: includes/info/settings.php:43
+msgid "Glossary terms without breaking your prose"
+msgstr ""
+
+#: includes/info/settings.php:44
+msgid "Inline definitions that stay current when an entry is renamed or unpublished."
+msgstr ""
+
+#: includes/info/settings.php:47
+msgid "Bezier areas are here"
+msgstr ""
+
+#: includes/info/settings.php:48
+msgid "Curved region borders for coastlines and anything else a polygon made look wrong."
+msgstr ""
+
+#: includes/info/settings.php:51
+msgid "Icon libraries, shared across every map"
+msgstr ""
+
+#: includes/info/settings.php:52
+msgid "Uploading SVGs once and reusing them as object icons anywhere in the suite."
+msgstr ""
+
+#: includes/info/settings.php:55
+msgid "Substories: the content behind a node"
+msgstr ""
+
+#: includes/info/settings.php:56
+msgid "Keeping story structure and story text apart, and why that makes rewrites cheap."
+msgstr ""
+
+#: includes/info/settings.php:59
+msgid "Archive settings, suite by suite"
+msgstr ""
+
+#: includes/info/settings.php:60
+msgid "Slugs, sort order and per-page counts for wikis, maps and stories."
+msgstr ""
+
+#: includes/info/settings.php:63
+msgid "Three plugins became one"
+msgstr ""
+
+#: includes/info/settings.php:64
+msgid "What changed when the wiki, map and story suites merged, and what deliberately did not."
+msgstr ""
+
+#: includes/info/settings.php:67
+msgid "Worldbuilding notes: starting from the map"
+msgstr ""
+
+#: includes/info/settings.php:68
+msgid "A workflow that begins with geography and lets the articles follow."
+msgstr ""
+
+#: includes/info/settings.php:85
+#: includes/info/settings.php:86
+msgid "Info"
+msgstr ""
+
+#: includes/info/views/tab-info.php:11
+msgid "Wikis"
+msgstr ""
+
+#: includes/info/views/tab-info.php:15
+#: includes/map/admin/menu.php:12
+#: includes/map/admin/menu.php:13
+#: includes/map/admin/views/overview.php:40
+#: includes/map/post-type.php:13
+msgid "Maps"
+msgstr ""
+
+#: includes/info/views/tab-info.php:19
+#: includes/story/admin/menu.php:12
+#: includes/story/admin/menu.php:13
+#: includes/story/admin/views/overview.php:53
+#: includes/story/post-types.php:15
+msgid "Stories"
+msgstr ""
+
+#: includes/info/views/tab-info.php:26
+msgid "Glossary entries"
+msgstr ""
+
+#: includes/info/views/tab-info.php:39
+msgid "Visit cloudsandspaceships.com ↗"
+msgstr ""
+
+#: includes/info/views/tab-info.php:45
+msgid "A suite for worldbuilders and mapmakers: wiki articles and a glossary, interactive canvas maps, and branching stories laid over them. Each toolset has its own tab above."
+msgstr ""
+
+#: includes/info/views/tab-info.php:58
+msgid "About"
+msgstr ""
+
+#: includes/info/views/tab-info.php:60
+msgid "Version, requirements and licence for this installation."
+msgstr ""
+
+#: includes/info/views/tab-info.php:64
+msgid "Version"
+msgstr ""
+
+#: includes/info/views/tab-info.php:68
+msgid "Database schema"
+msgstr ""
+
+#: includes/info/views/tab-info.php:72
+#: includes/wiki/settings.php:325
+#: includes/wiki/settings.php:326
+#: includes/wiki/views/tab-glossary.php:36
+#: includes/wiki/views/tab-glossary.php:80
+#: includes/wiki/views/tab-glossary.php:86
+msgid "Glossary"
+msgstr ""
+
+#: includes/info/views/tab-info.php:75
+msgid "Enabled"
+msgstr ""
+
+#: includes/info/views/tab-info.php:76
+msgid "Disabled"
+msgstr ""
+
+#: includes/info/views/tab-info.php:78
+msgid "Turn the glossary on and off on the Glossary tab."
+msgstr ""
+
+#: includes/info/views/tab-info.php:83
+msgid "Licence"
+msgstr ""
+
+#: includes/info/views/tab-info.php:90
+msgid "News"
+msgstr ""
+
+#. translators: %s: number of posts shown.
+#: includes/info/views/tab-info.php:95
+#, php-format
+msgid "The %s newest posts from the project site."
+msgstr ""
+
+#: includes/info/views/tab-info.php:103
+msgid "Placeholder — these entries are not pulled from cloudsandspaceships.com yet."
 msgstr ""
 
 #: includes/map/admin/api.php:11
@@ -181,22 +354,9 @@ msgstr ""
 msgid "SVG sanitization failed — ensure the file is valid XML."
 msgstr ""
 
-#: includes/map/admin/menu.php:12
-#: includes/map/admin/views/overview.php:40
-#: includes/map/post-type.php:13
-msgid "Maps"
-msgstr ""
-
-#: includes/map/admin/menu.php:13
-msgid "CNS Map Suite"
-msgstr ""
-
 #: includes/map/admin/menu.php:19
-msgid "Icons"
-msgstr ""
-
 #: includes/map/admin/menu.php:20
-msgid "Icon Library"
+msgid "Icons"
 msgstr ""
 
 #: includes/map/admin/menu.php:34
@@ -205,6 +365,10 @@ msgid "Map Editor"
 msgstr ""
 
 #: includes/map/admin/views/icons.php:8
+msgid "Icon Library"
+msgstr ""
+
+#: includes/map/admin/views/icons.php:12
 msgid "SVG icons added here are available as object icons across all maps. Only SVG files are accepted and are sanitized on upload to remove executable content."
 msgstr ""
 
@@ -324,6 +488,9 @@ msgstr ""
 
 #: includes/map/admin/views/overview.php:168
 #: includes/story/admin/views/overview.php:221
+#: includes/wiki/views/tab-glossary.php:41
+#: includes/wiki/views/tab-wiki.php:72
+#: includes/wiki/views/tab-wiki.php:219
 msgid "View archive ↗"
 msgstr ""
 
@@ -337,7 +504,8 @@ msgstr ""
 
 #: includes/map/admin/views/overview.php:184
 #: includes/story/admin/views/overview.php:237
-#: includes/wiki/views/tab-wiki.php:146
+#: includes/wiki/views/tab-glossary.php:105
+#: includes/wiki/views/tab-wiki.php:216
 msgid "URL slug"
 msgstr ""
 
@@ -355,12 +523,13 @@ msgstr ""
 
 #: includes/map/admin/views/overview.php:221
 #: includes/story/admin/views/overview.php:274
-#: includes/wiki/views/tab-wiki.php:183
 msgid "Default sort order"
 msgstr ""
 
 #: includes/map/admin/views/overview.php:234
 #: includes/story/admin/views/overview.php:287
+#: includes/wiki/views/tab-glossary.php:145
+#: includes/wiki/views/tab-wiki.php:140
 msgid "Admin menu visibility"
 msgstr ""
 
@@ -387,6 +556,8 @@ msgstr ""
 
 #: includes/map/admin/views/overview.php:264
 #: includes/story/admin/views/overview.php:316
+#: includes/wiki/views/tab-glossary.php:164
+#: includes/wiki/views/tab-wiki.php:428
 msgid "Save Settings"
 msgstr ""
 
@@ -515,16 +686,6 @@ msgstr ""
 
 #: includes/story/admin/api.php:1219
 msgid "Could not delete path."
-msgstr ""
-
-#: includes/story/admin/menu.php:12
-#: includes/story/admin/views/overview.php:53
-#: includes/story/post-types.php:15
-msgid "Stories"
-msgstr ""
-
-#: includes/story/admin/menu.php:13
-msgid "CNS Story Suite"
 msgstr ""
 
 #: includes/story/admin/menu.php:19
@@ -784,7 +945,7 @@ msgid "Glossary Entry"
 msgstr ""
 
 #: includes/wiki/glossary.php:52
-#: includes/wiki/post-type.php:96
+#: includes/wiki/post-type.php:108
 msgid "Add New"
 msgstr ""
 
@@ -805,6 +966,7 @@ msgid "View glossary entry"
 msgstr ""
 
 #: includes/wiki/glossary.php:57
+#: includes/wiki/views/tab-glossary.php:45
 msgid "All entries"
 msgstr ""
 
@@ -825,364 +987,385 @@ msgctxt "The post type archive label used in nav menus."
 msgid "Glossary"
 msgstr ""
 
-#: includes/wiki/glossary.php:107
-msgid "Glossary Archive"
-msgstr ""
-
-#: includes/wiki/glossary.php:108
-msgid "Template for the glossary archive page"
-msgstr ""
-
-#: includes/wiki/post-type.php:50
+#: includes/wiki/post-type.php:46
 msgid "Write your wiki article…"
 msgstr ""
 
-#: includes/wiki/post-type.php:92
+#: includes/wiki/post-type.php:104
 msgctxt "Post type general name"
 msgid "Wikis"
 msgstr ""
 
-#: includes/wiki/post-type.php:93
+#: includes/wiki/post-type.php:105
 msgctxt "Post type singular name"
 msgid "Wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:94
+#: includes/wiki/post-type.php:106
 msgctxt "Admin Menu text"
 msgid "Wikis"
 msgstr ""
 
-#: includes/wiki/post-type.php:95
+#: includes/wiki/post-type.php:107
 msgctxt "Add New on Toolbar"
 msgid "Wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:97
+#: includes/wiki/post-type.php:109
 msgid "Add New wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:98
+#: includes/wiki/post-type.php:110
 msgid "New wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:99
+#: includes/wiki/post-type.php:111
 msgid "Edit wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:100
+#: includes/wiki/post-type.php:112
 msgid "View wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:101
+#: includes/wiki/post-type.php:113
+#: includes/wiki/views/tab-wiki.php:76
 msgid "All wikis"
 msgstr ""
 
-#: includes/wiki/post-type.php:102
+#: includes/wiki/post-type.php:114
 msgid "Search wikis"
 msgstr ""
 
-#: includes/wiki/post-type.php:103
+#: includes/wiki/post-type.php:115
 msgid "Parent wikis:"
 msgstr ""
 
-#: includes/wiki/post-type.php:104
+#: includes/wiki/post-type.php:116
 msgid "No wikis found."
 msgstr ""
 
-#: includes/wiki/post-type.php:105
+#: includes/wiki/post-type.php:117
 msgid "No wikis found in Trash."
 msgstr ""
 
-#: includes/wiki/post-type.php:106
+#: includes/wiki/post-type.php:118
 msgctxt "Overrides the \"Featured Image\" phrase for this post type."
 msgid "Wiki Cover Image"
 msgstr ""
 
-#: includes/wiki/post-type.php:107
+#: includes/wiki/post-type.php:119
 msgctxt "Overrides the \"Set featured image\" phrase for this post type."
 msgid "Set cover image"
 msgstr ""
 
-#: includes/wiki/post-type.php:108
+#: includes/wiki/post-type.php:120
 msgctxt "Overrides the \"Remove featured image\" phrase for this post type."
 msgid "Remove cover image"
 msgstr ""
 
-#: includes/wiki/post-type.php:109
+#: includes/wiki/post-type.php:121
 msgctxt "Overrides the \"Use as featured image\" phrase for this post type."
 msgid "Use as cover image"
 msgstr ""
 
-#: includes/wiki/post-type.php:110
+#: includes/wiki/post-type.php:122
 msgctxt "The post type archive label used in nav menus."
 msgid "Wiki archives"
 msgstr ""
 
-#: includes/wiki/post-type.php:111
+#: includes/wiki/post-type.php:123
 msgctxt "Overrides the \"Insert into post\" phrase (media)."
 msgid "Insert into wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:112
+#: includes/wiki/post-type.php:124
 msgctxt "Overrides the \"Uploaded to this post\" phrase (media)."
 msgid "Uploaded to this wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:113
+#: includes/wiki/post-type.php:125
 msgctxt "Screen reader text for the filter links."
 msgid "Filter wikis list"
 msgstr ""
 
-#: includes/wiki/post-type.php:114
+#: includes/wiki/post-type.php:126
 msgctxt "Screen reader text for the pagination."
 msgid "Wikis list navigation"
 msgstr ""
 
-#: includes/wiki/post-type.php:115
+#: includes/wiki/post-type.php:127
 msgctxt "Screen reader text for the items list."
 msgid "Wikis list"
 msgstr ""
 
-#: includes/wiki/post-type.php:211
+#: includes/wiki/post-type.php:218
 msgid "Single Wiki"
 msgstr ""
 
-#: includes/wiki/post-type.php:212
+#: includes/wiki/post-type.php:219
 msgid "Template for single wiki posts"
 msgstr ""
 
-#: includes/wiki/post-type.php:220
-msgid "Wiki Archive"
-msgstr ""
-
-#: includes/wiki/settings.php:199
+#: includes/wiki/settings.php:318
+#: includes/wiki/settings.php:319
+#: includes/wiki/views/tab-wiki.php:67
+#: includes/wiki/views/tab-wiki.php:116
+#: includes/wiki/views/tab-wiki.php:122
 #: src/blocks/wiki-contents/edit.js:64
 msgid "Wiki"
 msgstr ""
 
-#: includes/wiki/settings.php:200
-msgid "CNS Wiki Suite"
+#: includes/wiki/views/tab-glossary.php:48
+msgid "+ New Entry"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:35
-msgid "Newest first (date ↓)"
+#: includes/wiki/views/tab-glossary.php:55
+msgid "A glossary of terms with its own archive page. Once enabled, mark text as a glossary term from the editor toolbar to get a tooltip definition and a link to the entry."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:36
-msgid "Oldest first (date ↑)"
+#: includes/wiki/views/tab-glossary.php:62
+msgid "Published entries"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:37
-msgid "Alphabetical (A → Z)"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:63
-msgid "Overview"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:67
-msgid "Published wikis"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:71
+#: includes/wiki/views/tab-glossary.php:66
+#: includes/wiki/views/tab-wiki.php:97
 msgid "Drafts"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:75
+#: includes/wiki/views/tab-glossary.php:70
+#: includes/wiki/views/tab-wiki.php:101
 msgid "Categories in use"
 msgstr ""
 
+#: includes/wiki/views/tab-glossary.php:82
+msgid "Registers the glossary post type, its archive, and the editor toolbar button. Off by default."
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:96
+msgid "Enable the glossary post type, archive, and editor toolbar button"
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:99
+msgid "Disabling it leaves existing entries in the database untouched; they simply stop being registered."
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:118
+msgid "Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single entry URL — existing links will break."
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:124
+msgid "Entry text colour"
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:136
+#: includes/wiki/views/tab-wiki.php:351
+#: includes/wiki/views/tab-wiki.php:368
+#: includes/wiki/views/tab-wiki.php:385
+#: includes/wiki/views/tab-wiki.php:402
+#: includes/wiki/views/tab-wiki.php:419
+msgid "Clear (use theme default)"
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:140
+msgid "Colour of inline glossary terms in content. Leave empty to inherit the surrounding text colour."
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:154
+msgid "Show Glossary in the WordPress admin sidebar"
+msgstr ""
+
+#: includes/wiki/views/tab-glossary.php:157
+msgid "Adds the standard WordPress list screen for glossary entries to the sidebar. This tab stays the primary place to configure the glossary."
+msgstr ""
+
 #: includes/wiki/views/tab-wiki.php:79
+msgid "+ New Wiki"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:86
+msgid "A hierarchical custom post type to create wiki like post with default info boxes."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:93
+msgid "Published wikis"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:105
 msgid "Tags in use"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:91
-msgid "Template"
+#: includes/wiki/views/tab-wiki.php:118
+msgid "Registers the wiki post type, its archive, and the wiki page templates. On by default."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:94
-msgid "Wiki template"
+#: includes/wiki/views/tab-wiki.php:132
+msgid "Enable wiki post type, archive, and page templates"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:104
-msgid "Use the wiki page template for wiki posts and the wiki archive"
+#: includes/wiki/views/tab-wiki.php:135
+msgid "On by default. Deactivate to use your own template. Disabling will not change existing wiki posts in database."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:107
-msgid "When disabled, wikis are rendered with your theme’s default single and archive templates instead, like regular posts."
+#: includes/wiki/views/tab-wiki.php:149
+msgid "Show Wiki admin sidebar"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:113
-msgid "Infobox column width"
+#: includes/wiki/views/tab-wiki.php:152
+msgid "Enables standard wordpress sidebar menu for wiki post type."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:125
-msgid "rem"
+#: includes/wiki/views/tab-wiki.php:161
+msgid "Layout"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:127
-msgid "Maximum width of the infobox column on a wiki article; the article text takes the remaining space. Leave empty to use the width your theme defines (--wp--custom--layout--col-wiki), falling back to 34rem. Below 782px the columns stack and the limit does not apply."
+#: includes/wiki/views/tab-wiki.php:163
+msgid "Default widths for the wiki layout."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:136
+#: includes/wiki/views/tab-wiki.php:168
+msgid "Infobox default width"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:180
+#: includes/wiki/views/tab-wiki.php:201
+msgid "px"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:182
+msgid "Default maximum width for infobox. Post content will takes the remaining content width. Infobox max-width can be overridden on any individual block."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:188
+msgid "Content width"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:199
+msgid "full"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:203
+msgid "Maximum width for wiki post layout — including infobox."
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:212
 msgid "Archive"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:140
-msgid "View wiki archive ↗"
+#: includes/wiki/views/tab-wiki.php:234
+msgid "Lowercase letters, numbers, and hyphens only. Changes the wiki archive URL and every single wiki URL."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:159
-msgid "Lowercase letters, numbers, and hyphens only. Changes the archive URL and all wiki post URLs — existing links will break."
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:165
-msgid "Wikis per page"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:177
-msgid "Overrides the global Reading Settings value for the wiki archive only."
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:197
+#: includes/wiki/views/tab-wiki.php:240
 msgid "Placeholder thumbnail"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:219
+#: includes/wiki/views/tab-wiki.php:262
 msgid "Select placeholder thumbnail"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:220
-#: includes/wiki/views/tab-wiki.php:222
+#: includes/wiki/views/tab-wiki.php:263
+#: includes/wiki/views/tab-wiki.php:265
 msgid "Select image"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:221
-#: includes/wiki/views/tab-wiki.php:222
+#: includes/wiki/views/tab-wiki.php:264
+#: includes/wiki/views/tab-wiki.php:265
 msgid "Change image"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:231
+#: includes/wiki/views/tab-wiki.php:274
 msgid "Remove"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:233
-msgid "Shown in wiki cards and the wiki archive when a wiki has no cover image. Leave empty to show no image."
+#: includes/wiki/views/tab-wiki.php:276
+msgid "Placeholder for wiki card images. Leave empty to show no image as placeholder."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:241
-msgid "Wiki Grid Defaults"
+#: includes/wiki/views/tab-wiki.php:285
+msgid "Wiki Content Grid defaults"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:243
-msgid "Fallback column and gap values used by any wiki-contents block that does not have explicit per-block settings."
+#: includes/wiki/views/tab-wiki.php:287
+msgid "Default settings for wiki contents block."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:247
-#: src/blocks/wiki-contents/edit.js:38
-msgid "Columns"
+#: includes/wiki/views/tab-wiki.php:291
+msgid "Grid Columns"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:251
+#: includes/wiki/views/tab-wiki.php:295
 #: src/blocks/wiki-contents/edit.js:157
 msgid "Desktop"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:256
+#: includes/wiki/views/tab-wiki.php:300
 #: src/blocks/wiki-contents/edit.js:156
 msgid "Tablet"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:261
+#: includes/wiki/views/tab-wiki.php:305
 #: src/blocks/wiki-contents/edit.js:155
 msgid "Mobile"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:269
+#: includes/wiki/views/tab-wiki.php:313
 msgid "Gap (px)"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:273
+#: includes/wiki/views/tab-wiki.php:317
 msgid "Column"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:278
+#: includes/wiki/views/tab-wiki.php:322
 msgid "Row"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:289
-msgid "Infobox Colours"
+#: includes/wiki/views/tab-wiki.php:334
+msgid "Infobox colours"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:291
-msgid "Default colours for infobox blocks using theme preset values. Per-block colour overrides take precedence. Leave empty to keep the theme defaults."
+#: includes/wiki/views/tab-wiki.php:336
+msgid "Default colour settings for infobox blocks. All colors can be overwritten on individual infobox level."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:296
-msgid "Background"
+#: includes/wiki/views/tab-wiki.php:341
+msgid "Infobox Background"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:305
-#: includes/wiki/views/tab-wiki.php:322
-#: includes/wiki/views/tab-wiki.php:339
-#: includes/wiki/views/tab-wiki.php:407
-msgid "Clear (use theme default)"
+#: includes/wiki/views/tab-wiki.php:353
+msgid "Background color for the infobox wrapper. Defaults to #ffffff."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:308
-msgid "Maps to --wp--preset--color--element-bg on the infobox wrapper."
+#: includes/wiki/views/tab-wiki.php:358
+msgid "Infobox Text"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:313
-msgid "Title bar"
+#: includes/wiki/views/tab-wiki.php:370
+msgid "Text color for infoboxes, groups and their title bars. Defaults to the theme text color."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:325
-msgid "Maps to --wp--preset--color--element-contrast. Used for the infobox title background."
+#: includes/wiki/views/tab-wiki.php:375
+msgid "Title background"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:330
-msgid "Border"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:342
-msgid "Overrides the hardcoded #dedede border on the infobox wrapper."
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:351
-msgid "Glossary"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:355
-msgid "View glossary ↗"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:359
-msgid "A glossary of terms with its own archive page. Once enabled, mark text as a glossary term from the editor toolbar to get a tooltip definition and a link to the entry."
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:363
-msgid "Enable glossary"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:373
-msgid "Enable the glossary post type, archive, and editor toolbar button"
-msgstr ""
-
-#: includes/wiki/views/tab-wiki.php:379
-msgid "Archive URL slug"
+#: includes/wiki/views/tab-wiki.php:387
+msgid "Background color for the infobox title bars. Defaults to #e0e0e0."
 msgstr ""
 
 #: includes/wiki/views/tab-wiki.php:392
-msgid "Lowercase letters, numbers, and hyphens only. Changes the glossary archive URL and all entry URLs — existing links will break."
+msgid "Title text"
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:398
-msgid "Entry text colour"
+#: includes/wiki/views/tab-wiki.php:404
+msgid "Text color for the infobox and group title bars. Defaults to the infobox text color."
 msgstr ""
 
-#: includes/wiki/views/tab-wiki.php:410
-msgid "Colour of inline glossary terms in content. Leave empty to inherit the surrounding text colour."
+#: includes/wiki/views/tab-wiki.php:409
+msgid "Background Accent"
+msgstr ""
+
+#: includes/wiki/views/tab-wiki.php:421
+msgid "Infobox inner group background color. Defaults to #f2f2f2."
 msgstr ""
 
 #: src/blocks/glossary-index/render.php:36
@@ -1234,24 +1417,24 @@ msgid "Display Mode"
 msgstr ""
 
 #: src/blocks/infobox-group/edit.js:58
-#: src/blocks/infobox/edit.js:67
+#: src/blocks/infobox/edit.js:130
 msgid "Color Settings"
 msgstr ""
 
 #: src/blocks/infobox-group/edit.js:65
-#: src/blocks/infobox/edit.js:73
+#: src/blocks/infobox/edit.js:137
 #: src/blocks/wiki-card/edit.js:274
 msgid "Background color"
 msgstr ""
 
 #: src/blocks/infobox-group/edit.js:71
-#: src/blocks/infobox/edit.js:78
+#: src/blocks/infobox/edit.js:146
 #: src/blocks/wiki-card/edit.js:280
 msgid "Text color"
 msgstr ""
 
 #: src/blocks/infobox-group/edit.js:77
-#: src/blocks/infobox/edit.js:83
+#: src/blocks/infobox/edit.js:152
 msgid "Contrast color"
 msgstr ""
 
@@ -1323,7 +1506,16 @@ msgstr ""
 msgid "Remove item"
 msgstr ""
 
-#: src/blocks/infobox/edit.js:43
+#: src/blocks/infobox/edit.js:63
+#: src/blocks/infobox/edit.js:72
+msgid "Max width"
+msgstr ""
+
+#: src/blocks/infobox/edit.js:81
+msgid "Set individual maximum width of the infobox container. Change default max width in CNS settings tab."
+msgstr ""
+
+#: src/blocks/infobox/edit.js:95
 msgid "Mobile display"
 msgstr ""
 
@@ -1462,6 +1654,10 @@ msgstr ""
 
 #: src/blocks/wiki-card/edit.js:313
 msgid "Select post"
+msgstr ""
+
+#: src/blocks/wiki-contents/edit.js:38
+msgid "Columns"
 msgstr ""
 
 #: src/blocks/wiki-contents/edit.js:136

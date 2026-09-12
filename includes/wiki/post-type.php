@@ -236,9 +236,10 @@ add_action('init', 'cns_wiki_register_block_templates');
  *
  * The `cns-col*` classes used by the wiki template and the wiki post-content
  * template are only styled by the Clouds and Spaceships theme; everywhere else
- * core's columns rule splits the row into equal shares. This stylesheet gives
- * the infobox column a max-width (and the article column the remainder) on any
- * theme, deferring to `--wp--custom--layout--col-wiki` when the theme sets it.
+ * core's columns rule splits the row into equal shares. This stylesheet lets the
+ * infobox column shrink-wrap and gives the article column the remainder on any
+ * theme. The infobox's own width comes from `--cns-wiki-infobox-width`, emitted
+ * below from the Layout setting and read by the infobox block's stylesheet.
  *
  * enqueue_block_assets fires on both the frontend and in the editor, so the
  * post editor previews the same proportions the visitor gets.

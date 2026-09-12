@@ -177,12 +177,10 @@ return array(
 				'type' => 'string'
 			),
 			'bg_color' => array(
-				'type' => 'string',
-				'default' => 'var(--wp--preset--color--element-bg)'
+				'type' => 'string'
 			),
 			'contrast_color' => array(
-				'type' => 'string',
-				'default' => 'var(--wp--preset--color--element-contrast)'
+				'type' => 'string'
 			),
 			'infobox_title' => array(
 				'type' => 'string'
@@ -196,8 +194,7 @@ return array(
 				'default' => 'collapse__groups-mobile'
 			),
 			'text_color' => array(
-				'type' => 'string',
-				'default' => 'var(--wp--preset--color--text)'
+				'type' => 'string'
 			)
 		),
 		'allowedBlocks' => array(
@@ -241,16 +238,13 @@ return array(
 				'default' => true
 			),
 			'bg_color' => array(
-				'type' => 'string',
-				'default' => '#f2f2f2'
+				'type' => 'string'
 			),
 			'text_color' => array(
-				'type' => 'string',
-				'default' => '#000000'
+				'type' => 'string'
 			),
 			'contrast_color' => array(
-				'type' => 'string',
-				'default' => 'var(--wp--preset--color--element-contrast)'
+				'type' => 'string'
 			),
 			'display_mode' => array(
 				'type' => 'string',

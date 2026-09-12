@@ -25,7 +25,9 @@ $grid_row_gap  = (int) cns_get_wiki_setting( 'grid_row_gap',    16 );
 
 $infobox_bg       = cns_get_wiki_setting( 'infobox_bg_color',       '' );
 $infobox_contrast = cns_get_wiki_setting( 'infobox_contrast_color', '' );
-$infobox_border   = cns_get_wiki_setting( 'infobox_border_color',   '' );
+$infobox_accent   = cns_get_wiki_setting( 'infobox_accent_color',   '' );
+$infobox_text     = cns_get_wiki_setting( 'infobox_text_color',     '' );
+$infobox_title    = cns_get_wiki_setting( 'infobox_title_color',    '' );
 
 $placeholder_id  = absint( cns_get_wiki_setting( 'placeholder_thumb_id', 0 ) );
 $placeholder_url = $placeholder_id ? wp_get_attachment_image_url( $placeholder_id, 'medium' ) : '';
@@ -208,9 +210,6 @@ if ( $wiki_enabled ) {
 		<?php /* ── Archive ──────────────────────────────────────────────── */ ?>
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Archive', 'clouds-and-spaceships' ); ?></h2>
-			<p class="description">
-				<?php esc_html_e( 'The public listing of all wikis. Unlike the map and story archives, the wiki archive is always published.', 'clouds-and-spaceships' ); ?>
-			</p>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row">
@@ -232,7 +231,7 @@ if ( $wiki_enabled ) {
 							placeholder="wiki"
 						/>
 						<p class="description">
-							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single wiki URL — existing links will break.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the wiki archive URL and every single wiki URL.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -274,7 +273,7 @@ if ( $wiki_enabled ) {
 							style="display:<?php echo $placeholder_id ? 'inline-block' : 'none'; ?>;"
 						><?php esc_html_e( 'Remove', 'clouds-and-spaceships' ); ?></button>
 						<p class="description">
-							<?php esc_html_e( 'Shown in wiki cards and the wiki archive when a wiki has no cover image. Leave empty to show no image.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Placeholder for wiki card images. Leave empty to show no image as placeholder.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -285,11 +284,11 @@ if ( $wiki_enabled ) {
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Wiki Content Grid defaults', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Fallback column and gap values used by any wiki-contents block that does not have explicit per-block settings.', 'clouds-and-spaceships' ); ?>
+				<?php esc_html_e( 'Default settings for wiki contents block.', 'clouds-and-spaceships' ); ?>
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Columns', 'clouds-and-spaceships' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Grid Columns', 'clouds-and-spaceships' ); ?></th>
 					<td>
 						<fieldset>
 							<label style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;">
@@ -334,60 +333,96 @@ if ( $wiki_enabled ) {
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Infobox colours', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Default colours for infobox blocks using theme preset values. Per-block colour overrides take precedence. Leave empty to keep the theme defaults.', 'clouds-and-spaceships' ); ?>
+				<?php esc_html_e( 'Default colour settings for infobox blocks. All colors can be overwritten on individual infobox level.', 'clouds-and-spaceships' ); ?>
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row">
-						<label for="cns_infobox_bg"><?php esc_html_e( 'Background', 'clouds-and-spaceships' ); ?></label>
+						<label for="cns_infobox_bg"><?php esc_html_e( 'Infobox Background', 'clouds-and-spaceships' ); ?></label>
 					</th>
 					<td>
 						<input type="color" id="cns_infobox_bg"
 							name="cns_wiki_settings[infobox_bg_color]"
-							value="<?php echo esc_attr( $infobox_bg ?: '#ffffff' ); ?>" />
-						<?php if ( $infobox_bg ) : ?>
-							<label style="margin-left:8px;">
-								<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_bg" />
-								<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
-							</label>
-						<?php endif; ?>
-						<p class="description"><?php esc_html_e( 'Maps to --wp--preset--color--element-bg on the infobox wrapper.', 'clouds-and-spaceships' ); ?></p>
+							value="<?php echo esc_attr( $infobox_bg ?: '#ffffff' ); ?>"
+							<?php disabled( '', $infobox_bg ); ?> />
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_bg"
+								<?php checked( '', $infobox_bg ); ?> />
+							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'Background color for the infobox wrapper. Defaults to #ffffff.', 'clouds-and-spaceships' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="cns_infobox_contrast"><?php esc_html_e( 'Title bar', 'clouds-and-spaceships' ); ?></label>
+						<label for="cns_infobox_text"><?php esc_html_e( 'Infobox Text', 'clouds-and-spaceships' ); ?></label>
+					</th>
+					<td>
+						<input type="color" id="cns_infobox_text"
+							name="cns_wiki_settings[infobox_text_color]"
+							value="<?php echo esc_attr( $infobox_text ?: '#000000' ); ?>"
+							<?php disabled( '', $infobox_text ); ?> />
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_text"
+								<?php checked( '', $infobox_text ); ?> />
+							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'Text color for infoboxes, groups and their title bars. Defaults to the theme text color.', 'clouds-and-spaceships' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="cns_infobox_title"><?php esc_html_e( 'Title text', 'clouds-and-spaceships' ); ?></label>
+					</th>
+					<td>
+						<input type="color" id="cns_infobox_title"
+							name="cns_wiki_settings[infobox_title_color]"
+							value="<?php echo esc_attr( $infobox_title ?: '#000000' ); ?>"
+							<?php disabled( '', $infobox_title ); ?> />
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_title"
+								<?php checked( '', $infobox_title ); ?> />
+							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'Text color for the infobox and group title bars. Defaults to the infobox text color.', 'clouds-and-spaceships' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="cns_infobox_contrast"><?php esc_html_e( 'Title background', 'clouds-and-spaceships' ); ?></label>
 					</th>
 					<td>
 						<input type="color" id="cns_infobox_contrast"
 							name="cns_wiki_settings[infobox_contrast_color]"
-							value="<?php echo esc_attr( $infobox_contrast ?: '#e0e0e0' ); ?>" />
-						<?php if ( $infobox_contrast ) : ?>
-							<label style="margin-left:8px;">
-								<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_contrast" />
-								<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
-							</label>
-						<?php endif; ?>
-						<p class="description"><?php esc_html_e( 'Maps to --wp--preset--color--element-contrast. Used for the infobox title background.', 'clouds-and-spaceships' ); ?></p>
+							value="<?php echo esc_attr( $infobox_contrast ?: '#e0e0e0' ); ?>"
+							<?php disabled( '', $infobox_contrast ); ?> />
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_contrast"
+								<?php checked( '', $infobox_contrast ); ?> />
+							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'Background color for the infobox title bars. Defaults to #e0e0e0.', 'clouds-and-spaceships' ); ?></p>
 					</td>
 				</tr>
+
 				<tr>
 					<th scope="row">
-						<label for="cns_infobox_border"><?php esc_html_e( 'Border', 'clouds-and-spaceships' ); ?></label>
+						<label for="cns_infobox_accent"><?php esc_html_e( 'Background Accent', 'clouds-and-spaceships' ); ?></label>
 					</th>
 					<td>
-						<input type="color" id="cns_infobox_border"
-							name="cns_wiki_settings[infobox_border_color]"
-							value="<?php echo esc_attr( $infobox_border ?: '#dedede' ); ?>" />
-						<?php if ( $infobox_border ) : ?>
-							<label style="margin-left:8px;">
-								<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_border" />
-								<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
-							</label>
-						<?php endif; ?>
-						<p class="description"><?php esc_html_e( 'Overrides the hardcoded #dedede border on the infobox wrapper.', 'clouds-and-spaceships' ); ?></p>
+						<input type="color" id="cns_infobox_accent"
+							name="cns_wiki_settings[infobox_accent_color]"
+							value="<?php echo esc_attr( $infobox_accent ?: '#f2f2f2' ); ?>"
+							<?php disabled( '', $infobox_accent ); ?> />
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_accent"
+								<?php checked( '', $infobox_accent ); ?> />
+							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'Infobox inner group background color. Defaults to #f2f2f2.', 'clouds-and-spaceships' ); ?></p>
 					</td>
 				</tr>
+		
 			</table>
 		</div>
 

@@ -1,10 +1,23 @@
 @charset "UTF-8";
 @use "../../shared/scss" as *;
 
-.wp-block-cns-theme-infobox-group {
+// Block wrapper defaults, in CSS rather than as attribute defaults: changing a
+// default here is a stylesheet edit, where changing an attribute default would
+// alter every save() output and invalidate saved markup. A colour set on the
+// block itself is written as an inline style and still wins.
+//
+// NOTE: this selector used to read `.wp-block-cns-theme-infobox-group`, a name
+// left behind by the rename to `cns-wiki-suite/`, so none of it had been
+// applying. The declarations below it are unchanged from that dead rule.
+.wp-block-cns-wiki-suite-infobox-group {
 	@include fx($direction: column, $gap: 1rem);
 	width: 100%;
 	border: 1px solid var(--wp--preset--color--element-border);
+	background-color: var(--cns-wiki-infobox-accent, #f2f2f2);
+	color: var(
+		--cns-wiki-infobox-text,
+		var(--wp--preset--color--text, #000000)
+	);
 }
 
 .infobox-group {
@@ -28,6 +41,25 @@
 		text-align: center;
 		padding: 0.2rem 1rem;
 		font-weight: bold;
+		background-color: var(
+			--cns-wiki-infobox-title-bg,
+			var(--wp--preset--color--element-contrast)
+		);
+		// Falls through to the infobox text colour, which is what the title
+		// bars inherited before they had a setting of their own.
+		color: var(
+			--cns-wiki-infobox-title-text,
+			var(
+				--cns-wiki-infobox-text,
+				var(--wp--preset--color--text, #000000)
+			)
+		);
+		button,
+		input,
+		h2,
+		h3 {
+			color: inherit;
+		}
 	}
 	&__outer {
 		h3 {

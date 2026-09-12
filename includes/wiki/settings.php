@@ -58,8 +58,9 @@ function cns_sanitize_wiki_section( array $input ): array {
     $output['wiki_enabled']   = ! empty( $input['wiki_enabled'] );
     $output['wiki_show_menu'] = ! empty( $input['wiki_show_menu'] );
 
-    // Layout — infobox column width in px. Empty means "inherit from the
-    // theme", so the CSS falls through to --wp--custom--layout--col-wiki.
+    // Layout — infobox column width in px. Empty means no
+    // --cns-wiki-infobox-width is emitted, so the infobox block's stylesheet
+    // falls back to its built-in 360px.
     // 200-1280px is the old 12-80rem range; stored as whole pixels.
     $width = trim( (string) ( $input['infobox_width'] ?? '' ) );
     $output['infobox_width'] = is_numeric( $width )
@@ -91,7 +92,9 @@ function cns_sanitize_wiki_section( array $input ): array {
     // Infobox colours
     $output['infobox_bg_color']       = sanitize_hex_color( $input['infobox_bg_color']       ?? '' ) ?? '';
     $output['infobox_contrast_color'] = sanitize_hex_color( $input['infobox_contrast_color'] ?? '' ) ?? '';
-    $output['infobox_border_color']   = sanitize_hex_color( $input['infobox_border_color']   ?? '' ) ?? '';
+    $output['infobox_accent_color']   = sanitize_hex_color( $input['infobox_accent_color']   ?? '' ) ?? '';
+    $output['infobox_text_color']     = sanitize_hex_color( $input['infobox_text_color']     ?? '' ) ?? '';
+    $output['infobox_title_color']    = sanitize_hex_color( $input['infobox_title_color']    ?? '' ) ?? '';
 
     return $output;
 }
@@ -179,6 +182,17 @@ function cns_wiki_maybe_schedule_rewrite_flush( $old_value, $new_value ): void {
 add_action( 'add_option_cns_wiki_settings', 'cns_schedule_rewrite_flush' );
 
 // ── Infobox colour overrides ──────────────────────────────────────────────────
+//
+// These are deliberately plugin-private custom properties rather than the
+// theme's `--wp--preset--color--*` presets. The rule is scoped to the infobox
+// wrapper either way, so it never escapes the block — but redefining a shared
+// palette slug would still repaint any *nested* block that picked that same
+// colour from the editor's palette, since core resolves `.has-<slug>-color`
+// through the very same property. A private name can only be read by the
+// infobox blocks' own attribute defaults, which is the whole point.
+//
+// Those defaults each fall back to the preset they used to name, so an unset
+// setting still follows the theme exactly as before.
 
 // enqueue_block_assets fires on both the frontend and in the editor.
 add_action( 'enqueue_block_assets', 'cns_wiki_enqueue_infobox_styles' );
@@ -186,16 +200,20 @@ add_action( 'enqueue_block_assets', 'cns_wiki_enqueue_infobox_styles' );
 function cns_wiki_enqueue_infobox_styles(): void {
     $bg       = (string) cns_get_wiki_setting( 'infobox_bg_color',       '' );
     $contrast = (string) cns_get_wiki_setting( 'infobox_contrast_color', '' );
-    $border   = (string) cns_get_wiki_setting( 'infobox_border_color',   '' );
+    $accent   = (string) cns_get_wiki_setting( 'infobox_accent_color',   '' );
+    $text     = (string) cns_get_wiki_setting( 'infobox_text_color',     '' );
+    $title    = (string) cns_get_wiki_setting( 'infobox_title_color',    '' );
 
-    if ( ! $bg && ! $contrast && ! $border ) {
+    if ( ! $bg && ! $contrast && ! $accent && ! $text && ! $title ) {
         return;
     }
 
     $rules = '';
-    if ( $bg )       $rules .= '--wp--preset--color--element-bg:' . sanitize_hex_color( $bg ) . ';';
-    if ( $contrast ) $rules .= '--wp--preset--color--element-contrast:' . sanitize_hex_color( $contrast ) . ';';
-    if ( $border )   $rules .= 'border-color:' . sanitize_hex_color( $border ) . ';';
+    if ( $bg )       $rules .= '--cns-wiki-infobox-bg:' . sanitize_hex_color( $bg ) . ';';
+    if ( $contrast ) $rules .= '--cns-wiki-infobox-title-bg:' . sanitize_hex_color( $contrast ) . ';';
+    if ( $accent )   $rules .= '--cns-wiki-infobox-accent:' . sanitize_hex_color( $accent ) . ';';
+    if ( $text )     $rules .= '--cns-wiki-infobox-text:' . sanitize_hex_color( $text ) . ';';
+    if ( $title )    $rules .= '--cns-wiki-infobox-title-text:' . sanitize_hex_color( $title ) . ';';
 
     $css = '.wp-block-cns-wiki-suite-infobox{' . $rules . '}';
 

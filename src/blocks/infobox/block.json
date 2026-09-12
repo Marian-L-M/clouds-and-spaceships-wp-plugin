@@ -15,24 +15,15 @@
 	},
 	"attributes": {
 		"maxWidth": { "type": "string" },
-		"bg_color": {
-			"type": "string",
-			"default": "var(--wp--preset--color--element-bg)"
-		},
-		"contrast_color": {
-			"type": "string",
-			"default": "var(--wp--preset--color--element-contrast)"
-		},
+		"bg_color": { "type": "string" },
+		"contrast_color": { "type": "string" },
 		"infobox_title": { "type": "string" },
 		"is_infobox_open": { "type": "boolean", "default": true },
 		"display_mode": {
 			"type": "string",
 			"default": "collapse__groups-mobile"
 		},
-		"text_color": {
-			"type": "string",
-			"default": "var(--wp--preset--color--text)"
-		}
+		"text_color": { "type": "string" }
 	},
 	"allowedBlocks": [
 		"cns-wiki-suite/infobox-group",

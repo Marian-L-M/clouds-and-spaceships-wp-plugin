@@ -5,6 +5,8 @@
   width: 100%;
   max-width: var(--cns-wiki-infobox-width, 360px);
   order: 1;
+  background-color: var(--cns-wiki-infobox-bg, var(--wp--preset--color--element-bg));
+  color: var(--cns-wiki-infobox-text, var(--wp--preset--color--text));
 }
 
 .infobox,
@@ -45,6 +47,14 @@
 }
 .infobox__inner .size-full {
   width: 100%;
+}
+.infobox__title {
+  background-color: var(--cns-wiki-infobox-title-bg, var(--wp--preset--color--element-contrast));
+  color: var(--cns-wiki-infobox-title-text, var(--cns-wiki-infobox-text, var(--wp--preset--color--text)));
+}
+.infobox__title input,
+.infobox__title button {
+  color: inherit;
 }
 .infobox__content {
   position: relative;
