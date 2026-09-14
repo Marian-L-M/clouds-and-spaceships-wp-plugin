@@ -1,0 +1,1 @@
+{"version":3,"file":"blocks/infobox-group/index.css","mappings":";;;AAGE;EACE;AAFJ;AAIE;EACE;AAFJ,C","sources":["webpack://clouds-and-spaceships/./src/blocks/infobox-group/editor.scss"],"sourcesContent":["@charset \"UTF-8\";\n\n.infobox {\n  h2 {\n    min-height: unset;\n  }\n  &__title {\n    padding: 0.4rem;\n  }\n}\n"],"names":[],"sourceRoot":""}

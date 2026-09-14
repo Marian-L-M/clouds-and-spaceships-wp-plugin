@@ -6,6 +6,9 @@
   font-size: 1rem;
 }
 
+.cns-section {
+  max-width: 100% !important;
+}
 .cns-section__tabs {
   display: flex;
   flex-wrap: wrap;

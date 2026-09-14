@@ -1,1 +1,32 @@
-.wiki-contents{width:100%}.wiki-contents .wiki-contents__grid{column-gap:var(--wiki-column-gap,1rem);display:grid;grid-template-columns:repeat(var(--wiki-columns-desktop,3),1fr);row-gap:var(--wiki-row-gap,1rem)}.wiki-contents__grid--preview{pointer-events:none}.wiki-contents__placeholder-cell{align-items:center;background-color:#f0f0f0;border:2px dashed #ccc;border-radius:6px;display:flex;justify-content:center;min-height:200px;padding:1rem}.wiki-contents__placeholder-label{color:#757575;font-size:.875rem;text-align:center}
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/wiki-contents/editor.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+.wiki-contents {
+  width: 100%;
+}
+.wiki-contents .wiki-contents__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--wiki-columns-desktop, 3), 1fr);
+  column-gap: var(--wiki-column-gap, 1rem);
+  row-gap: var(--wiki-row-gap, 1rem);
+}
+.wiki-contents__grid--preview {
+  pointer-events: none;
+}
+.wiki-contents__placeholder-cell {
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 1rem;
+}
+.wiki-contents__placeholder-label {
+  color: #757575;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/*# sourceMappingURL=index.css.map*/
