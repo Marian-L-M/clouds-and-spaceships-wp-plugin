@@ -149,7 +149,7 @@ if ( $wiki_enabled ) {
 							<?php esc_html_e( 'Show Wiki admin sidebar', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'Enables standard wordpress sidebar menu for wiki post type.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Adds Wiki to the Wordpress Admin Sidebar.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>

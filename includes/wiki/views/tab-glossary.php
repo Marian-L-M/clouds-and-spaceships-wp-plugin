@@ -42,24 +42,24 @@ if ( $glossary_enabled ) {
 					</a>
 				<?php endif; ?>
 				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=glossary' ) ); ?>" class="button">
-					<?php esc_html_e( 'All entries', 'clouds-and-spaceships' ); ?>
+					<?php esc_html_e( 'All terms', 'clouds-and-spaceships' ); ?>
 				</a>
 				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=glossary' ) ); ?>" class="button button-primary">
-					<?php esc_html_e( '+ New Entry', 'clouds-and-spaceships' ); ?>
+					<?php esc_html_e( '+ New Term', 'clouds-and-spaceships' ); ?>
 				</a>
 			</div>
 		<?php endif; ?>
 	</div>
 
 	<p class="cns-settings-page__intro">
-		<?php esc_html_e( 'A glossary of terms with its own archive page. Once enabled, mark text as a glossary term from the editor toolbar to get a tooltip definition and a link to the entry.', 'clouds-and-spaceships' ); ?>
+		<?php esc_html_e( 'Glossary for terms. Glossary terms allows for maringk text as a glossary term to display a tooltip with definition on hover.', 'clouds-and-spaceships' ); ?>
 	</p>
 
 	<?php if ( $glossary_enabled ) : ?>
 		<ul class="cns-settings-stats">
 			<li>
 				<span class="cns-settings-stats__value"><?php echo esc_html( $published ); ?></span>
-				<span class="cns-settings-stats__label"><?php esc_html_e( 'Published entries', 'clouds-and-spaceships' ); ?></span>
+				<span class="cns-settings-stats__label"><?php esc_html_e( 'Published terms', 'clouds-and-spaceships' ); ?></span>
 			</li>
 			<li>
 				<span class="cns-settings-stats__value"><?php echo esc_html( $draft ); ?></span>
@@ -77,10 +77,7 @@ if ( $glossary_enabled ) {
 		<input type="hidden" name="cns_wiki_settings[_section]" value="glossary" />
 
 		<div class="cns-settings-card">
-			<h2><?php esc_html_e( 'Glossary', 'clouds-and-spaceships' ); ?></h2>
-			<p class="description">
-				<?php esc_html_e( 'Registers the glossary post type, its archive, and the editor toolbar button. Off by default.', 'clouds-and-spaceships' ); ?>
-			</p>
+			<h2><?php esc_html_e( 'Glossary Terms', 'clouds-and-spaceships' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Glossary', 'clouds-and-spaceships' ); ?></th>
@@ -96,13 +93,18 @@ if ( $glossary_enabled ) {
 							<?php esc_html_e( 'Enable the glossary post type, archive, and editor toolbar button', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'Disabling it leaves existing entries in the database untouched; they simply stop being registered.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Disabling glossary terms will not delete existing terms in database.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
 						<label for="cns_glossary_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
+						<?php if ( $glossary_url ) : ?>
+							<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="cns-settings-link">
+								<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
+							</a>
+						<?php endif; ?>
 					</th>
 					<td>
 						<input
@@ -115,13 +117,13 @@ if ( $glossary_enabled ) {
 							placeholder="glossary"
 						/>
 						<p class="description">
-							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single entry URL — existing links will break.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single term URL — existing links will break.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="cns_glossary_color"><?php esc_html_e( 'Entry text colour', 'clouds-and-spaceships' ); ?></label>
+						<label for="cns_glossary_color"><?php esc_html_e( 'Glossary Term text colour', 'clouds-and-spaceships' ); ?></label>
 					</th>
 					<td>
 						<input
@@ -137,7 +139,7 @@ if ( $glossary_enabled ) {
 							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'Colour of inline glossary terms in content. Leave empty to inherit the surrounding text colour.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Color of inline glossary terms in content. Leave empty to inherit the current text color.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -154,7 +156,7 @@ if ( $glossary_enabled ) {
 							<?php esc_html_e( 'Show Glossary in the WordPress admin sidebar', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'Adds the standard WordPress list screen for glossary entries to the sidebar. This tab stays the primary place to configure the glossary.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Adds Glossary to the Wordpress Admin Sidebar.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
