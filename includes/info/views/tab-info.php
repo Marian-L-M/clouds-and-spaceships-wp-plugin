@@ -42,7 +42,7 @@ $news = cns_info_get_news();
 	</div>
 
 	<p class="cns-settings-page__intro">
-		<?php esc_html_e('A suite for worldbuilders and mapmakers: wiki articles and a glossary, interactive canvas maps, and branching stories laid over them. Each toolset has its own tab above.', 'clouds-and-spaceships'); ?>
+		<?php esc_html_e('Clouds and Spaceships (CNS) is a suite for Worldbuilders and Mapmakers: Connect your map to your post using interactive canvas maps, wiki articles, glossaries, and story paths.', 'clouds-and-spaceships'); ?>
 	</p>
 
 	<ul class="cns-settings-stats">
@@ -55,7 +55,7 @@ $news = cns_info_get_news();
 	</ul>
 
 	<div class="cns-settings-card">
-		<h2><?php esc_html_e('About', 'clouds-and-spaceships'); ?></h2>
+		<h2><?php esc_html_e('Information', 'clouds-and-spaceships'); ?></h2>
 		<p class="description">
 			<?php esc_html_e('Version, requirements and licence for this installation.', 'clouds-and-spaceships'); ?>
 		</p>
@@ -87,36 +87,41 @@ $news = cns_info_get_news();
 	</div>
 
 	<div class="cns-settings-card">
-		<h2><?php esc_html_e('News', 'clouds-and-spaceships'); ?></h2>
-		<p class="description">
-			<?php
-			printf(
-				/* translators: %s: number of posts shown. */
-				esc_html__('The %s newest posts from the project site.', 'clouds-and-spaceships'),
-				esc_html(number_format_i18n(CNS_INFO_NEWS_COUNT))
-			);
-			?>
-		</p>
+		<h2><?php esc_html_e('News from Clouds and Spaceships', 'clouds-and-spaceships') ?></h2>
 
-		<div class="cns-settings-placeholder">
-			<p class="cns-settings-placeholder__note">
-				<?php esc_html_e('Placeholder — these entries are not pulled from cloudsandspaceships.com yet.', 'clouds-and-spaceships'); ?>
+		<?php if ($news['error'] !== '') : ?>
+			<p class="cns-news-list__notice">
+				<?php
+				printf(
+					/* translators: %s: reason the request failed. */
+					esc_html__('Error loading posts %s', 'clouds-and-spaceships'),
+					esc_html($news['error'])
+				);
+				?>
 			</p>
-
+		<?php elseif (empty($news['items'])) : ?>
+			<p class="cns-news-list__notice">
+				<?php esc_html_e('Currently no news.', 'clouds-and-spaceships'); ?>
+			</p>
+		<?php else : ?>
 			<ul class="cns-news-list">
-				<?php foreach ($news as $item) : ?>
+				<?php foreach ($news['items'] as $item) : ?>
 					<li>
 						<a class="cns-news-list__title" href="<?php echo esc_url($item['url']); ?>" target="_blank" rel="noopener">
 							<?php echo esc_html($item['title']); ?>
 						</a>
-						<span class="cns-news-list__meta">
-							<?php echo esc_html(date_i18n(get_option('date_format'), strtotime($item['date']))); ?>
-						</span>
-						<p class="cns-news-list__excerpt"><?php echo esc_html($item['excerpt']); ?></p>
+						<?php if ($item['date'] !== '') : ?>
+							<span class="cns-news-list__meta">
+								<?php echo esc_html(date_i18n(get_option('date_format'), strtotime($item['date']))); ?>
+							</span>
+						<?php endif; ?>
+						<?php if ($item['excerpt'] !== '') : ?>
+							<p class="cns-news-list__excerpt"><?php echo esc_html($item['excerpt']); ?></p>
+						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>
-		</div>
+		<?php endif; ?>
 	</div>
 
 </div>

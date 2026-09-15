@@ -1,19 +1,31 @@
 import { useEffect, useRef } from '@wordpress/element';
+import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import type { TinyMceEditor } from '../../../types';
 
 const EDITOR_ID = 'cns-map-description';
 
 interface Props {
 	value: string;
 	onChange: ( html: string ) => void;
+	/** Stock post editor URL; the hand-off button is hidden when empty. */
+	wpEditUrl: string;
+	isSaving: boolean;
+	/**
+	 * Saves the map and leaves for the WordPress editor. The latest TinyMCE
+	 * content is passed along because the parent's state may still be a
+	 * keystroke behind when the button is clicked.
+	 */
+	onEditInWordPress: ( description: string ) => void;
 }
 
-interface TinyMceEditor {
-	on( events: string, handler: () => void ): void;
-	getContent(): string;
-}
-
-export default function DescriptionPanel( { value, onChange }: Props ) {
+export default function DescriptionPanel( {
+	value,
+	onChange,
+	wpEditUrl,
+	isSaving,
+	onEditInWordPress,
+}: Props ) {
 	const onChangeRef = useRef( onChange );
 	onChangeRef.current = onChange;
 
@@ -51,6 +63,18 @@ export default function DescriptionPanel( { value, onChange }: Props ) {
 		};
 	}, [] );
 
+	/** Current editor content, from whichever mode is active. */
+	function readDescription(): string {
+		const editor = window.tinymce?.get( EDITOR_ID );
+		if ( editor && ! editor.isHidden() ) {
+			return editor.getContent();
+		}
+		const textarea = document.getElementById(
+			EDITOR_ID
+		) as HTMLTextAreaElement | null;
+		return textarea?.value ?? value;
+	}
+
 	return (
 		<div
 			className="cns-tab-panel cns-tab-panel--active"
@@ -58,12 +82,29 @@ export default function DescriptionPanel( { value, onChange }: Props ) {
 			role="tabpanel"
 		>
 			<div className="cns-desc-editor">
-				<p className="description">
-					{ __(
-						'Description of the current map.\n Displayed underneath map element.',
-						'clouds-and-spaceships'
+				<div className="cns-desc-editor__header">
+					<p className="description">
+						{ __(
+							'Description of the current map.\n Displayed underneath map element.',
+							'clouds-and-spaceships'
+						) }
+					</p>
+					{ wpEditUrl && (
+						<Button
+							variant="secondary"
+							isBusy={ isSaving }
+							disabled={ isSaving }
+							onClick={ () =>
+								onEditInWordPress( readDescription() )
+							}
+						>
+							{ __(
+								'Edit in WordPress editor',
+								'clouds-and-spaceships'
+							) }
+						</Button>
 					) }
-				</p>
+				</div>
 				<textarea id={ EDITOR_ID } rows={ 14 } defaultValue={ value } />
 			</div>
 		</div>

@@ -313,6 +313,10 @@ return array(
 				'default' => 0
 			)
 		),
+		'usesContext' => array(
+			'postId',
+			'postType'
+		),
 		'textdomain' => 'clouds-and-spaceships',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./editor-index.css',
@@ -339,6 +343,10 @@ return array(
 				'type' => 'integer',
 				'default' => 0
 			)
+		),
+		'usesContext' => array(
+			'postId',
+			'postType'
 		),
 		'supports' => array(
 			'html' => false,

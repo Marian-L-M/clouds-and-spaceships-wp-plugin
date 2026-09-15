@@ -8,7 +8,6 @@ $is_new    = (! $map || $map->post_type !== 'maps');
 $is_master = $map_id ? (bool) get_post_meta($map_id, '_cns_map_is_master', true) : false;
 
 $meta = $map_id ? [
-    'featured'     => (bool) get_post_meta($map_id, '_cns_map_featured', true),
     'width'        => (int) (get_post_meta($map_id, '_cns_map_width', true) ?: 1000),
     'aspect_ratio' => (float) (get_post_meta($map_id, '_cns_map_aspect_ratio', true) ?: 1.0),
     'time'         => (int) get_post_meta($map_id, '_cns_map_time', true),
@@ -20,7 +19,7 @@ $meta = $map_id ? [
     'bg_color'     => get_post_meta($map_id, '_cns_map_bg_color', true) ?: '#1a1a2e',
     'bg_image_id'  => (int) get_post_meta($map_id, '_cns_map_bg_image_id', true),
 ] : [
-    'featured' => false, 'width' => 1000, 'aspect_ratio' => 1.0,
+    'width' => 1000, 'aspect_ratio' => 1.0,
     'time' => 0, 'image_id' => 0, 'image_x' => 0.0, 'image_y' => 0.0, 'image_width' => 1.0,
     'bg_type' => 'color', 'bg_color' => '#1a1a2e', 'bg_image_id' => 0,
 ];
@@ -35,6 +34,12 @@ $overview_url = add_query_arg(
 );
 $view_url = (! $is_new && $map && in_array($map->post_status, ['publish', 'private'], true))
     ? get_permalink($map->ID)
+    : '';
+
+// Hand-off to the stock post editor from the Description tab. Empty for unsaved
+// maps and for users who may not edit the post, so the button can stay hidden.
+$wp_edit_url = (! $is_new && $map && current_user_can('edit_post', $map->ID))
+    ? (get_edit_post_link($map->ID, 'raw') ?: '')
     : '';
 
 // Parent maps — maps that include this map as a hierarchy child region.
@@ -56,7 +61,7 @@ if ($map_id && ! $is_new) {
             'map_id'    => $parent->ID,
             'title'     => $parent->post_title ?: __('(no title)', 'clouds-and-spaceships'),
             'thumbnail' => $image_id ? (wp_get_attachment_image_url($image_id, 'thumbnail') ?: '') : '',
-            'url'       => add_query_arg(['page' => CNS_MAP_PAGE_EDITOR, 'map_id' => $parent->ID], admin_url('admin.php')),
+            'url'       => cns_map_suite_editor_url($parent->ID),
         ];
     }
 }
@@ -78,7 +83,6 @@ window.cnsMapEditor = {
     imageY:      <?php echo (float) $meta['image_y']; ?>,
     imageWidth:  <?php echo (float) $meta['image_width']; ?>,
     isMaster:    <?php echo $is_master ? 'true' : 'false'; ?>,
-    featured:    <?php echo $meta['featured'] ? 'true' : 'false'; ?>,
     bgType:      <?php echo wp_json_encode($meta['bg_type']); ?>,
     bgColor:     <?php echo wp_json_encode($meta['bg_color']); ?>,
     bgImageId:    <?php echo (int) $meta['bg_image_id']; ?>,
@@ -87,6 +91,7 @@ window.cnsMapEditor = {
     thumbnailUrl: <?php echo wp_json_encode($thumbnail_url); ?>,
     overviewUrl:  <?php echo wp_json_encode($overview_url); ?>,
     viewUrl:     <?php echo wp_json_encode($view_url); ?>,
+    wpEditUrl:   <?php echo wp_json_encode($wp_edit_url); ?>,
     parentMaps:  <?php echo wp_json_encode($parent_maps); ?>,
 };
 </script>

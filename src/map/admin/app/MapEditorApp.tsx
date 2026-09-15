@@ -53,7 +53,6 @@ function buildInitialSettings(): MapSettings {
 		imageY: d.imageY ?? 0,
 		imageW: d.imageWidth ?? 1.0,
 		isMaster: d.isMaster ?? false,
-		featured: d.featured ?? false,
 		bgType: d.bgType ?? 'color',
 		bgColor: d.bgColor ?? '#1a1a2e',
 		bgImageId: d.bgImageId ?? 0,
@@ -68,6 +67,7 @@ export default function MapEditorApp() {
 	const mapId = d.mapId || 0;
 	const isNew = d.isNew || false;
 	const overviewUrl = d.overviewUrl || '#';
+	const wpEditUrl = d.wpEditUrl || '';
 	const initialParentMaps: ParentMapRef[] = d.parentMaps || [];
 
 	const [ settings, setSettings ] =
@@ -135,26 +135,34 @@ export default function MapEditorApp() {
 
 	// ── Map settings save ─────────────────────────────────────────────────────
 
-	async function handleSave() {
+	/**
+	 * Persists the map settings. `override` lets a panel hand in state it holds
+	 * more recently than React does (the Description tab reads TinyMCE back on
+	 * click). Resolves true when the map is saved and the page is staying put —
+	 * false on failure, and after creating a map, where we are already
+	 * navigating to the new map's editor.
+	 */
+	async function handleSave( override?: MapSettings ): Promise< boolean > {
+		const next = override ?? settings;
+		if ( override ) setSettings( override );
 		setIsSaving( true );
 		const payload = {
 			map_id: mapId,
-			title: settings.title,
-			description: settings.description,
-			status: settings.status,
-			width: settings.width,
-			aspect_ratio: settings.aspectRatio,
-			time: settings.time,
-			image_id: settings.imageId,
-			image_x: settings.imageX,
-			image_y: settings.imageY,
-			image_width: settings.imageW,
-			is_master: settings.isMaster,
-			featured: settings.featured,
-			bg_type: settings.bgType,
-			bg_color: settings.bgColor,
-			bg_image_id: settings.bgImageId,
-			thumbnail_id: settings.thumbnailId ?? 0,
+			title: next.title,
+			description: next.description,
+			status: next.status,
+			width: next.width,
+			aspect_ratio: next.aspectRatio,
+			time: next.time,
+			image_id: next.imageId,
+			image_x: next.imageX,
+			image_y: next.imageY,
+			image_width: next.imageW,
+			is_master: next.isMaster,
+			bg_type: next.bgType,
+			bg_color: next.bgColor,
+			bg_image_id: next.bgImageId,
+			thumbnail_id: next.thumbnailId ?? 0,
 		};
 		try {
 			const data = await apiFetch< {
@@ -162,25 +170,40 @@ export default function MapEditorApp() {
 				edit_url?: string;
 				view_url?: string;
 			} >( 'POST', '/maps', payload );
-			savedSettingsRef.current = JSON.stringify( settings );
+			savedSettingsRef.current = JSON.stringify( next );
 			if ( data.created && data.edit_url ) {
 				window.location.href = data.edit_url;
-			} else {
-				if ( data.view_url !== undefined ) {
-					setViewUrl( data.view_url );
-				}
-				createSuccessNotice( __( 'Map saved.', 'clouds-and-spaceships' ), {
-					type: 'snackbar',
-				} );
+				return false;
 			}
+			if ( data.view_url !== undefined ) {
+				setViewUrl( data.view_url );
+			}
+			createSuccessNotice( __( 'Map saved.', 'clouds-and-spaceships' ), {
+				type: 'snackbar',
+			} );
+			return true;
 		} catch ( err ) {
 			createErrorNotice(
 				( err as Error ).message ||
 					__( 'Save failed.', 'clouds-and-spaceships' ),
 				{ type: 'snackbar' }
 			);
+			return false;
 		} finally {
 			setIsSaving( false );
+		}
+	}
+
+	/**
+	 * Description tab hand-off: save first so the WordPress editor opens on the
+	 * current content rather than silently discarding it, then leave. A failed
+	 * save keeps the user here with the error notice.
+	 */
+	async function handleEditInWordPress( description: string ) {
+		if ( ! wpEditUrl ) return;
+		// handleSave marks the settings clean, so no unsaved-changes prompt fires.
+		if ( await handleSave( { ...settings, description } ) ) {
+			window.location.href = wpEditUrl;
 		}
 	}
 
@@ -589,6 +612,9 @@ export default function MapEditorApp() {
 										description: html,
 									} ) )
 								}
+								wpEditUrl={ wpEditUrl }
+								isSaving={ isSaving }
+								onEditInWordPress={ handleEditInWordPress }
 							/>
 						) }
 						{ activeTab === 'objects' && ! settings.isMaster && (

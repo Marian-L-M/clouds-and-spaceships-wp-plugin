@@ -6,7 +6,11 @@
 	"title": "CNS Story",
 	"category": "embed",
 	"description": "Embed a branching interactive story canvas with a story window.",
-	"keywords": ["story", "canvas", "interactive"],
+	"keywords": [
+		"story",
+		"canvas",
+		"interactive"
+	],
 	"textdomain": "clouds-and-spaceships",
 	"attributes": {
 		"storyId": {
@@ -14,9 +18,16 @@
 			"default": 0
 		}
 	},
+	"usesContext": [
+		"postId",
+		"postType"
+	],
 	"supports": {
 		"html": false,
-		"align": ["wide", "full"]
+		"align": [
+			"wide",
+			"full"
+		]
 	},
 	"render": "file:./render.php",
 	"viewScript": "file:./view.js",

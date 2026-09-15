@@ -357,6 +357,8 @@ $thumb-size: 3em;
 	line-height: 1.6;
 	vertical-align: middle;
 
+	// Kept for the story editor's "Start" node badge, its only consumer since
+	// the maps' featured flag was removed.
 	&--featured {
 		background: #fef3cd;
 		color: #856404;
@@ -920,8 +922,16 @@ body.cns-canvas-fullscreen-open {
 .cns-desc-editor {
 	max-width: 900px;
 
-	> .description {
+	&__header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 16px;
 		margin-bottom: 12px;
+
+		.description {
+			margin: 0;
+		}
 	}
 
 	textarea {

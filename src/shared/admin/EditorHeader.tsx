@@ -73,7 +73,7 @@ export default function EditorHeader( {
 					variant="primary"
 					isBusy={ isSaving }
 					disabled={ isSaving }
-					onClick={ onSave }
+					onClick={ () => onSave() }
 				>
 					{ saveLabel }
 				</Button>

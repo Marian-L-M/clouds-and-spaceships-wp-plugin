@@ -32,7 +32,9 @@ function cns_map_suite_register_post_type(): void {
 		'exclude_from_search' => ! $archive_enabled,
 		'has_archive'         => $archive_enabled,
 		'rewrite'             => ['slug' => cns_archive_slug('maps')],
-		'supports'            => ['title', 'editor', 'thumbnail', 'custom-fields', 'excerpt'],
+		// 'author' is what lets core/post-author render the byline on the
+		// single-map template; without it the block deliberately outputs nothing.
+		'supports'            => ['title', 'editor', 'author', 'thumbnail', 'custom-fields', 'excerpt'],
 		'capability_type'     => 'post',
 	]);
 }
@@ -40,7 +42,6 @@ add_action('init', 'cns_map_suite_register_post_type');
 
 function cns_map_suite_register_post_meta(): void {
 	$fields = [
-		'_cns_map_featured'     => 'boolean',
 		'_cns_map_width'        => 'integer',
 		'_cns_map_aspect_ratio' => 'number',
 		'_cns_map_time'         => 'integer',
@@ -76,22 +77,10 @@ add_filter('use_block_editor_for_post_type', 'cns_map_suite_disable_gutenberg', 
 
 
 // ── Standalone map page ───────────────────────────────────────────────────────
-// On /maps/slug/ the CPT has no native content (Gutenberg disabled).
-// Render the map block so the page shows the interactive canvas.
-function cns_map_suite_inject_map_content(string $content): string {
-	static $rendering = false;
-	if ($rendering || ! is_singular('maps') || ! in_the_loop() || ! is_main_query()) {
-		return $content;
-	}
-	$rendering = true;
-	$result    = render_block([
-		'blockName' => 'cns-map-suite/map',
-		'attrs'     => ['mapId' => get_the_ID()],
-	]);
-	$rendering = false;
-	return $result;
-}
-add_filter('the_content', 'cns_map_suite_inject_map_content', 5);
+// /maps/slug/ renders through the single-maps block template, which places the
+// canvas, author, modified date and description itself — see
+// includes/map-template.php. post_content holds only the description, so it is
+// left alone here rather than being swapped for a rendered block.
 
 // Enqueue block assets early (styles in <head>) for single map pages.
 // render_block() handles the viewScript, but style must be queued before wp_head().
@@ -108,6 +97,19 @@ function cns_map_suite_enqueue_map_page_assets(): void {
 	}
 }
 add_action('wp_enqueue_scripts', 'cns_map_suite_enqueue_map_page_assets');
+
+/**
+ * URL of the CNS map editor — for a specific map, or the "new map" screen when
+ * no ID is given. Built here rather than at each call site so the admin list
+ * screen, the settings overview and the editor itself all agree on it.
+ */
+function cns_map_suite_editor_url(int $map_id = 0): string {
+	$args = ['page' => CNS_MAP_PAGE_EDITOR];
+	if ($map_id > 0) {
+		$args['map_id'] = $map_id;
+	}
+	return add_query_arg($args, admin_url('admin.php'));
+}
 
 function cns_map_suite_get_all_maps(int $take = -1, int $skip = 0): array {
 	return get_posts([

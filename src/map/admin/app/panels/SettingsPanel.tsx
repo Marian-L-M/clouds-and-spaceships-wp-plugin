@@ -99,21 +99,6 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 									</div>
 								</Tooltip>
 							</Flex>
-							<Flex gap={ 1 } align="center" justify="start">
-								<ToggleControl
-									label={ __( 'Featured', 'clouds-and-spaceships' ) }
-									checked={ settings.featured }
-									onChange={ ( v ) => set( 'featured', v ) }
-								/>
-								<Tooltip
-									text="Display in featured section"
-									placement="top-end"
-								>
-									<div>
-										<Icon icon={ info } size={ 16 } />
-									</div>
-								</Tooltip>
-							</Flex>
 						</div>
 
 						{ /* Aspect Ratio */ }

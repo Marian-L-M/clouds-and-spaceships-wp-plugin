@@ -10,7 +10,7 @@ $total_pages = (int) ceil($total_maps / $per_page);
 $maps        = cns_map_suite_get_all_maps($per_page, ($paged - 1) * $per_page);
 
 $return_page         = sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS);
-$editor_url          = add_query_arg(['page' => CNS_MAP_PAGE_EDITOR], admin_url('admin.php'));
+$editor_url          = cns_map_suite_editor_url();
 $delete_on_uninstall = (bool) get_option('cns_map_suite_delete_on_uninstall', false);
 $show_maps_menu      = (bool) get_option('cns_map_suite_show_maps_menu', false);
 $archive_enabled     = cns_archive_enabled('maps');
@@ -72,14 +72,10 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 		<tbody>
 			<?php foreach ($maps as $map) :
 				$is_master   = (bool) get_post_meta($map->ID, '_cns_map_is_master', true);
-				$is_featured = (bool) get_post_meta($map->ID, '_cns_map_featured', true);
 				$thumb_id    = (int) get_post_meta($map->ID, '_cns_map_image_id', true);
 				$thumb_url   = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'thumbnail') : '';
 
-				$edit_url   = esc_url(add_query_arg(
-					['page' => CNS_MAP_PAGE_EDITOR, 'map_id' => $map->ID],
-					admin_url('admin.php')
-				));
+				$edit_url   = esc_url(cns_map_suite_editor_url($map->ID));
 				$delete_url = esc_url(wp_nonce_url(
 					add_query_arg(
 						['page' => $return_page, 'action' => 'delete', 'map_id' => $map->ID],
@@ -104,9 +100,6 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 								<?php echo esc_html($map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
 							</a>
 						</strong>
-						<?php if ($is_featured) : ?>
-							<span class="cns-badge cns-badge--featured"><?php esc_html_e('Featured', 'clouds-and-spaceships'); ?></span>
-						<?php endif; ?>
 					</td>
 					<td>
 						<span class="cns-badge <?php echo $is_master ? 'cns-badge--master' : 'cns-badge--map'; ?>">

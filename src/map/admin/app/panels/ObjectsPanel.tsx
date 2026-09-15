@@ -115,7 +115,9 @@ export default function ObjectsPanel( {
 		},
 		remove: () => {
 			if ( ! selectedObject ) return false;
-			if ( confirm( __( 'Delete this object?', 'clouds-and-spaceships' ) ) )
+			if (
+				confirm( __( 'Delete this object?', 'clouds-and-spaceships' ) )
+			)
 				void onDelete( selectedObject.id );
 			return true;
 		},
@@ -140,7 +142,8 @@ export default function ObjectsPanel( {
 	}
 
 	async function handleDelete( id: number ) {
-		if ( ! confirm( __( 'Delete this object?', 'clouds-and-spaceships' ) ) ) return;
+		if ( ! confirm( __( 'Delete this object?', 'clouds-and-spaceships' ) ) )
+			return;
 		await onDelete( id );
 	}
 
@@ -173,6 +176,16 @@ export default function ObjectsPanel( {
 										headerTitle="Help Information"
 										expandOnMobile
 									>
+										<p
+											style={ {
+												padding: '0 1em',
+												width: 320,
+												maxWidth: '100%',
+											} }
+										>
+											Objects are clickable icons on the
+											map that are linked to an infobox.
+										</p>
 										<ol
 											style={ {
 												width: 320,

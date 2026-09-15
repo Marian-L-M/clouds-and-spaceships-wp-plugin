@@ -30,6 +30,13 @@ export interface WpClassicEditor {
 	remove( id: string ): void;
 }
 
+/** The subset of a TinyMCE instance the Description tab reads back. */
+export interface TinyMceEditor {
+	on( events: string, handler: () => void ): void;
+	getContent(): string;
+	isHidden(): boolean;
+}
+
 declare global {
 	interface Window {
 		cnsMapEditor: CnsMapEditorGlobal;
@@ -39,6 +46,7 @@ declare global {
 			editor?: WpClassicEditor;
 			oldEditor?: WpClassicEditor;
 		};
+		tinymce?: { get( id: string ): TinyMceEditor | null };
 	}
 }
 
@@ -66,7 +74,6 @@ export interface CnsMapEditorGlobal {
 	imageY: number;
 	imageWidth: number;
 	isMaster: boolean;
-	featured: boolean;
 	bgType: BgType;
 	bgColor: string;
 	bgImageId: number;
@@ -75,6 +82,8 @@ export interface CnsMapEditorGlobal {
 	thumbnailUrl: string;
 	overviewUrl: string;
 	viewUrl: string;
+	/** Stock post editor for this map; empty when unsaved or not permitted. */
+	wpEditUrl: string;
 	parentMaps: ParentMapRef[];
 }
 
@@ -313,7 +322,6 @@ export interface MapSettings {
 	imageY: number;
 	imageW: number;
 	isMaster: boolean;
-	featured: boolean;
 	bgType: BgType;
 	bgColor: string;
 	bgImageId: number;

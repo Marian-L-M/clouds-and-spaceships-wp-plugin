@@ -1,8 +1,23 @@
 <?php
 
+/**
+ * Server-side render for the cns-map-suite/map block.
+ *
+ * @var array    $attributes Block attributes.
+ * @var string   $content    Block content (unused; dynamic block).
+ * @var WP_Block $block      Block instance.
+ */
+
 defined('ABSPATH') || exit;
 
 $map_id = (int) ($attributes['mapId'] ?? 0);
+
+// No ID means the block is standing in for "whichever map is being viewed" —
+// how the single-maps template uses it. Core seeds postId/postType from the
+// global post, so this only resolves on a map's own page.
+if (! $map_id && ($block->context['postType'] ?? '') === 'maps') {
+	$map_id = (int) ($block->context['postId'] ?? 0);
+}
 
 if (! $map_id) {
 	return;
@@ -91,12 +106,10 @@ if ($has_infoboxes) {
 	}
 }
 
-// Map description (post_content, maintained via the editor's Description tab).
-// Rendered only here, beneath the block — contexts that use the map as a base
-// (story blocks, master-map regions) read map data through the shared API and
-// never see it.
-$description = trim($map->post_content);
-
+// The block renders the map itself and nothing else. Everything around it —
+// title, author, last-updated date, the description held in post_content — is
+// the single-map template's job (includes/map-template.php), so a map embedded
+// in another post brings only its canvas along.
 $wrapper_attrs = get_block_wrapper_attributes([
 	'class'       => 'cns-map',
 	'data-map-id' => (string) $map_id,
@@ -110,14 +123,6 @@ $wrapper_attrs = get_block_wrapper_attributes([
 			height="<?php echo esc_attr($height); ?>"
 			aria-label="<?php echo esc_attr($map->post_title); ?>"
 		></canvas>
-	</div>
-	<div class="cns-map-contents-wrap">
-		<article>
-			<?php the_modified_date("Y.m.d")?>
-		<?php if ('' !== $description) : ?>
-			<div class="cns-map-description"><?php echo wp_kses_post(wpautop($description)); ?></div>
-		<?php endif; ?>
-		</article>
 	</div>
 	<script type="application/json" data-cns-map><?php echo wp_json_encode($map_data, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
 	<noscript>

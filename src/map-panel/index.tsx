@@ -1,20 +1,32 @@
 import { createRoot, useState, useEffect } from '@wordpress/element';
 
 interface StoryRef {
-	id:        number;
-	title:     string;
-	status:    string;
+	id: number;
+	title: string;
+	status: string;
 	nodeCount: number;
-	editUrl:   string;
+	editUrl: string;
 }
 
-function StoriesPanel( { mapId, overviewUrl }: { mapId: number; overviewUrl: string } ) {
+function StoriesPanel( {
+	mapId,
+	overviewUrl,
+}: {
+	mapId: number;
+	overviewUrl: string;
+} ) {
 	const [ stories, setStories ] = useState< StoryRef[] >( [] );
 	const [ loading, setLoading ] = useState( true );
 
-	const g = ( window as unknown as {
-		cnsStorySuite: { restUrl: string; nonce: string; editorUrl: string }
-	} ).cnsStorySuite;
+	const g = (
+		window as unknown as {
+			cnsStorySuite: {
+				restUrl: string;
+				nonce: string;
+				editorUrl: string;
+			};
+		}
+	 ).cnsStorySuite;
 
 	useEffect( () => {
 		( async () => {
@@ -26,23 +38,37 @@ function StoriesPanel( { mapId, overviewUrl }: { mapId: number; overviewUrl: str
 		} )();
 	}, [ mapId ] );
 
-	const newStoryUrl = g.editorUrl + ( g.editorUrl.includes( '?' ) ? '&' : '?' ) + 'preset_map=' + mapId;
+	const newStoryUrl =
+		g.editorUrl +
+		( g.editorUrl.includes( '?' ) ? '&' : '?' ) +
+		'preset_map=' +
+		mapId;
 
 	return (
 		<div className="cns-panel" style={ { padding: '16px' } }>
-			<div style={ { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 } }>
+			<div
+				style={ {
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					marginBottom: 12,
+				} }
+			>
 				<h2 style={ { margin: 0 } }>Stories on this map</h2>
 				<div>
-					<a href={ newStoryUrl } className="button button-primary">+ New Story</a>
-					{ ' ' }
-					<a href={ overviewUrl } className="button">All Stories ↗</a>
+					<a href={ newStoryUrl } className="button button-primary">
+						+ New Story
+					</a>{ ' ' }
+					<a href={ overviewUrl } className="button">
+						All Stories ↗
+					</a>
 				</div>
 			</div>
 
 			{ loading && <p>Loading…</p> }
 
 			{ ! loading && stories.length === 0 && (
-				<p className="description">No stories overlay this map yet.</p>
+				<p className="description">No stories on this map yet.</p>
 			) }
 
 			{ ! loading && stories.length > 0 && (
@@ -58,11 +84,18 @@ function StoriesPanel( { mapId, overviewUrl }: { mapId: number; overviewUrl: str
 					<tbody>
 						{ stories.map( ( s ) => (
 							<tr key={ s.id }>
-								<td><strong>{ s.title || '(no title)' }</strong></td>
+								<td>
+									<strong>{ s.title || '(no title)' }</strong>
+								</td>
 								<td>{ s.status }</td>
 								<td>{ s.nodeCount }</td>
 								<td>
-									<a href={ s.editUrl } className="button button-small">Edit Story</a>
+									<a
+										href={ s.editUrl }
+										className="button button-small"
+									>
+										Edit Story
+									</a>
 								</td>
 							</tr>
 						) ) }
@@ -78,11 +111,12 @@ function init() {
 	const container = document.getElementById( 'cns-map-stories-panel' );
 	if ( ! container ) return;
 
-	const mapId      = parseInt( container.dataset.mapId      || '0', 10 );
+	const mapId = parseInt( container.dataset.mapId || '0', 10 );
 	const overviewUrl = container.dataset.overviewUrl || '#';
 
 	if ( ! mapId ) {
-		container.innerHTML = '<div class="cns-panel" style="padding:16px"><p class="description">Save the map first to manage stories.</p></div>';
+		container.innerHTML =
+			'<div class="cns-panel" style="padding:16px"><p class="description">Save the map first to manage stories.</p></div>';
 		return;
 	}
 

@@ -34,7 +34,9 @@ function cns_story_suite_register_post_types(): void {
 		'exclude_from_search' => false,
 		'has_archive'         => cns_archive_enabled('cns_story'),
 		'rewrite'             => ['slug' => cns_archive_slug('cns_story')],
-		'supports'            => ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields'],
+		// 'author' lets core/post-author render the byline on the single-story
+		// template; without it the block deliberately outputs nothing.
+		'supports'            => ['title', 'editor', 'author', 'excerpt', 'thumbnail', 'custom-fields'],
 		'taxonomies'          => ['post_tag', 'category'],
 		'capability_type'     => 'post',
 	]);
@@ -108,22 +110,9 @@ function cns_story_suite_disable_gutenberg(bool $use_editor, string $post_type):
 }
 add_filter('use_block_editor_for_post_type', 'cns_story_suite_disable_gutenberg', 10, 2);
 
-// ── Inject story block on single story pages ──────────────────────────────────
-
-function cns_story_suite_inject_story_content(string $content): string {
-	static $rendering = false;
-	if ($rendering || ! is_singular('cns_story') || ! in_the_loop() || ! is_main_query()) {
-		return $content;
-	}
-	$rendering = true;
-	$result    = render_block([
-		'blockName' => 'cns-story-suite/story',
-		'attrs'     => ['storyId' => get_the_ID()],
-	]);
-	$rendering = false;
-	return $result;
-}
-add_filter('the_content', 'cns_story_suite_inject_story_content', 5);
+// ── Standalone story page ─────────────────────────────────────────────────────
+// Single stories render through the single-cns_story block template, which
+// shares one layout file with maps — see includes/map-template.php.
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

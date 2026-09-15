@@ -253,6 +253,18 @@ export default function AreasPanel( {
 										headerTitle="Help Information"
 										expandOnMobile
 									>
+										<p
+											style={ {
+												padding: '0 1em',
+												width: 320,
+												maxWidth: '100%',
+											} }
+										>
+											Areas are clickable sections on the
+											canvas that are linked to an
+											infobox. Adjust the area size by
+											adding and moving nodes.
+										</p>
 										<ol
 											style={ {
 												width: 320,

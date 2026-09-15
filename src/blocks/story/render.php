@@ -10,6 +10,14 @@
 defined('ABSPATH') || exit;
 
 $story_id = (int) ($attributes['storyId'] ?? 0);
+
+// No ID means "whichever story is being viewed" — how the single-cns_story
+// template uses it. Core seeds postId/postType from the global post, so this
+// only resolves on a story's own page.
+if (! $story_id && ($block->context['postType'] ?? '') === 'cns_story') {
+	$story_id = (int) ($block->context['postId'] ?? 0);
+}
+
 if (! $story_id) {
 	return '';
 }

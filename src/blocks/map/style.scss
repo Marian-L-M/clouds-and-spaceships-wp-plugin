@@ -104,9 +104,6 @@ $bp-lpc: 1400px;
 			right: 34px;
 		}
 
-		.cns-map-contents-wrap {
-			display: none;
-		}
 		.cns-map-canvas-wrap {
 			display: flex;
 			width: 100%;
@@ -343,10 +340,4 @@ body.cns-map-fullscreen-open {
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
-}
-
-// ── Map description (post_content, shown beneath the canvas) ──────────────────
-
-.cns-map-description {
-	margin-top: 1.25em;
 }

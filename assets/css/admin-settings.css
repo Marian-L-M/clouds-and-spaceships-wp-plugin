@@ -157,18 +157,11 @@
 	color: #50575e;
 }
 
-/* ── Placeholder state ────────────────────────────────────────────────────── */
 /*
- * Marks content that is not wired to a real source yet.
+ * Shown instead of the list when the project site is unreachable or has
+ * nothing published yet.
  */
-
-.cns-settings-placeholder {
-	border-left: 3px solid #dba617;
-	padding-left: 12px;
-}
-
-.cns-settings-placeholder__note {
-	margin: 0 0 12px;
-	font-size: 12px;
+.cns-news-list__notice {
+	margin: 0;
 	color: #646970;
 }

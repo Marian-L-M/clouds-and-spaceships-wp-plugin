@@ -129,13 +129,13 @@ if ( $glossary_enabled ) {
 							id="cns_glossary_color"
 							name="cns_wiki_settings[glossary_text_color]"
 							value="<?php echo esc_attr( $glossary_color ?: '#ffffff' ); ?>"
+							<?php disabled( '', $glossary_color ); ?>
 						/>
-						<?php if ( $glossary_color ) : ?>
-							<label style="margin-left:8px;">
-								<input type="checkbox" class="cns-color-clear" data-color="cns_glossary_color" />
-								<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
-							</label>
-						<?php endif; ?>
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_glossary_color"
+								<?php checked( '', $glossary_color ); ?> />
+							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+						</label>
 						<p class="description">
 							<?php esc_html_e( 'Colour of inline glossary terms in content. Leave empty to inherit the surrounding text colour.', 'clouds-and-spaceships' ); ?>
 						</p>

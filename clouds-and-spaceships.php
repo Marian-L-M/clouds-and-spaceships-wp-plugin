@@ -39,6 +39,7 @@ require_once CNS_DIR . 'includes/settings-page.php';
 require_once CNS_DIR . 'includes/capabilities.php';
 require_once CNS_DIR . 'includes/archive.php';
 require_once CNS_DIR . 'includes/cache.php';
+require_once CNS_DIR . 'includes/map-template.php';
 
 // Info tab
 require_once CNS_DIR . 'includes/info/settings.php';
@@ -56,6 +57,7 @@ require_once CNS_DIR . 'includes/map/map-data.php';
 require_once CNS_DIR . 'includes/map/admin/menu.php';
 require_once CNS_DIR . 'includes/map/admin/api.php';
 require_once CNS_DIR . 'includes/map/admin/icons.php';
+require_once CNS_DIR . 'includes/map/admin/post-screen.php';
 
 // Story suite
 require_once CNS_DIR . 'includes/story/post-types.php';

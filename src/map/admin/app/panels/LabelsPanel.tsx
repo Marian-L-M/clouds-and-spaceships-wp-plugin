@@ -116,7 +116,9 @@ export default function LabelsPanel( {
 		},
 		remove: () => {
 			if ( ! selectedLabel ) return false;
-			if ( confirm( __( 'Delete this label?', 'clouds-and-spaceships' ) ) )
+			if (
+				confirm( __( 'Delete this label?', 'clouds-and-spaceships' ) )
+			)
 				void onDelete( selectedLabel.id );
 			return true;
 		},
@@ -135,7 +137,8 @@ export default function LabelsPanel( {
 	}
 
 	async function handleDelete( id: number ) {
-		if ( ! confirm( __( 'Delete this label?', 'clouds-and-spaceships' ) ) ) return;
+		if ( ! confirm( __( 'Delete this label?', 'clouds-and-spaceships' ) ) )
+			return;
 		await onDelete( id );
 	}
 
@@ -168,6 +171,17 @@ export default function LabelsPanel( {
 										headerTitle="Help Information"
 										expandOnMobile
 									>
+										<p
+											style={ {
+												padding: '0 1em',
+												width: 320,
+												maxWidth: '100%',
+											} }
+										>
+											Create a clickable label linked to
+											an infobox. The label can be
+											extended with an indicator line.
+										</p>
 										<ol
 											style={ {
 												width: 320,

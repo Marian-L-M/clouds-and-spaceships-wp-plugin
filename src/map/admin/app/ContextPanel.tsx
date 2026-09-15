@@ -133,6 +133,26 @@ export default function ContextPanel( {
 		}
 	}, [ selectedObject?.id ] );
 
+	// Canvas drags and keyboard nudges move the object on the list; the form was
+	// only filled when the selection changed, so its X/Y went stale and Save
+	// posted the pre-drag coordinates back — reverting the move. Mirror the live
+	// position into the form instead.
+	//
+	// Only the coordinates are copied, unlike the label effect below which
+	// rebuilds the whole form: label edits round-trip through the list via
+	// onLabelLocalUpdate, so a full reset is a no-op there. Object edits do not,
+	// so rebuilding here would throw away any unsaved title or style the user
+	// had typed before dragging.
+	useEffect( () => {
+		if ( ! selectedObject ) return;
+		const { x, y } = selectedObject;
+		setObjFormData( ( prev ) =>
+			prev && ( prev.x !== x || prev.y !== y )
+				? { ...prev, x, y }
+				: prev
+		);
+	}, [ selectedObject?.x, selectedObject?.y ] );
+
 	useEffect( () => {
 		if ( selectedArea ) {
 			setAreaFormData( defaultAreaFormData( selectedArea ) );

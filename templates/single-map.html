@@ -1,0 +1,21 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"cns-map-single","layout":{"type":"constrained","contentSize":"var(--wp--style--global--wide-size, 1340px)"}} -->
+<main class="wp-block-group cns-map-single">
+	<!-- wp:post-title {"level":1,"className":"cns-map-single__title"} /-->
+
+	{{canvas}}
+
+	<!-- wp:group {"className":"cns-map-single__meta","layout":{"type":"flex","flexWrap":"wrap"}} -->
+	<div class="wp-block-group cns-map-single__meta">
+		<!-- wp:post-author {"showAvatar":false,"className":"cns-map-single__author"} /-->
+
+		<!-- wp:post-date {"className":"cns-map-single__updated","metadata":{"bindings":{"datetime":{"source":"clouds-and-spaceships/updated-date"}}}} /-->
+	</div>
+	<!-- /wp:group -->
+
+	{{description}}
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer"} /-->

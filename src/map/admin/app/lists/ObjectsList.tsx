@@ -63,7 +63,7 @@ export default function ObjectsList( {
 			items={ objects }
 			columns={ COLUMNS }
 			emptyText={ __(
-				'No objects yet. Click on the canvas to place one.',
+				'No objects on map. Click on canvas or [Add Object] button to place your first map object.',
 				'clouds-and-spaceships'
 			) }
 			renderActions={ ( obj ) => (

@@ -17,6 +17,10 @@
       "default": 0
     }
   },
+  "usesContext": [
+    "postId",
+    "postType"
+  ],
   "textdomain": "clouds-and-spaceships",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./editor-index.css",
