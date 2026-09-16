@@ -60,13 +60,10 @@ function cns_story_suite_current_page(): string {
 function cns_story_suite_enqueue_admin_assets(): void {
 	$page = cns_story_suite_current_page();
 
-	$is_story_page = in_array($page, [
-		CNS_STORY_PAGE_EDITOR,
-		CNS_STORY_PAGE_SETTINGS,
-		CNS_STORY_PAGE_SETTINGS_SUBSTORIES,
-	], true);
-
-	if (! $is_story_page) {
+	// Only the story editor mounts a React app. The Stories and Substories tabs
+	// are server-rendered and are styled by the admin-settings bundle that every
+	// CNS settings page loads.
+	if ($page !== CNS_STORY_PAGE_EDITOR) {
 		return;
 	}
 
@@ -103,13 +100,11 @@ function cns_story_suite_enqueue_admin_assets(): void {
 		'substoriesUrl' => admin_url('edit.php?post_type=cns_substory'),
 	]);
 
-	if ($page === CNS_STORY_PAGE_EDITOR) {
-		wp_enqueue_media();
-		wp_enqueue_style('wp-color-picker');
-		// Styles for @wordpress/components (the script dep comes from the
-		// generated asset file, but the stylesheet must be enqueued manually).
-		wp_enqueue_style('wp-components');
-	}
+	wp_enqueue_media();
+	wp_enqueue_style('wp-color-picker');
+	// Styles for @wordpress/components (the script dep comes from the generated
+	// asset file, but the stylesheet must be enqueued manually).
+	wp_enqueue_style('wp-components');
 }
 add_action('admin_enqueue_scripts', 'cns_story_suite_enqueue_admin_assets');
 

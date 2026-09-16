@@ -58,6 +58,10 @@ function cns_sanitize_wiki_section( array $input ): array {
     $output['wiki_enabled']   = ! empty( $input['wiki_enabled'] );
     $output['wiki_show_menu'] = ! empty( $input['wiki_show_menu'] );
 
+    // Opt-in, read by uninstall.php. Defaults to off: wiki articles are the
+    // user's own writing, so deleting them is never the silent default.
+    $output['wiki_delete_on_uninstall'] = ! empty( $input['wiki_delete_on_uninstall'] );
+
     // Layout — infobox column width in px. Empty means no
     // --cns-wiki-infobox-width is emitted, so the infobox block's stylesheet
     // falls back to its built-in 360px.
@@ -111,6 +115,9 @@ function cns_sanitize_wiki_glossary_section( array $input ): array {
     $output['glossary_text_color'] = sanitize_hex_color( $input['glossary_text_color'] ?? '' ) ?? '';
 
     $output['glossary_show_menu'] = ! empty( $input['glossary_show_menu'] );
+
+    // Opt-in, read by uninstall.php. Defaults to off, like the wiki one.
+    $output['glossary_delete_on_uninstall'] = ! empty( $input['glossary_delete_on_uninstall'] );
 
     return $output;
 }

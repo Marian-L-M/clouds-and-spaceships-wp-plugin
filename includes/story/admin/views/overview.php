@@ -6,10 +6,20 @@ $requested_per_page = (int) ($_GET['per_page'] ?? 20);
 $per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
 $paged              = max(1, absint($_GET['paged'] ?? 1));
 $in_trash           = (sanitize_key($_GET['status'] ?? '') === 'trash');
-$total_stories      = cns_story_suite_count_stories($in_trash);
+$search             = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+$total_stories      = cns_story_suite_count_stories($in_trash, $search);
+// The All/Trash counts describe each bucket as a whole, so they ignore the
+// search — same as the core list tables.
 $trash_count        = cns_story_suite_count_stories(true);
 $total_pages        = (int) ceil($total_stories / $per_page);
-$stories            = cns_story_suite_get_all_stories($per_page, ($paged - 1) * $per_page, $in_trash);
+
+// A stale paged value — a bookmark, or a search that shrank the list — would
+// otherwise render an empty table while matches sit on earlier pages.
+if ($total_pages > 0 && $paged > $total_pages) {
+	$paged = $total_pages;
+}
+
+$stories            = cns_story_suite_get_all_stories($per_page, ($paged - 1) * $per_page, $in_trash, $search);
 
 $return_page = sanitize_key($_GET['page'] ?? CNS_STORY_PAGE_SETTINGS);
 $editor_url  = add_query_arg(['page' => CNS_STORY_PAGE_EDITOR], admin_url('admin.php'));
@@ -23,7 +33,7 @@ $archive_order        = cns_archive_order('cns_story');
 $archive_order_opts   = cns_archive_order_options();
 $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story') : '';
 ?>
-<div class="cns-stories-overview">
+<div class="cns-settings-page">
 
 	<?php if (isset($_GET['trashed']) && $_GET['trashed'] === '1') : ?>
 		<div class="notice notice-success is-dismissible">
@@ -49,24 +59,33 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 		</div>
 	<?php endif; ?>
 
-	<div class="cns-maps-overview__header">
+	<div class="cns-settings-page__header">
 		<h1><?php esc_html_e('Stories', 'clouds-and-spaceships'); ?></h1>
-		<a href="<?php echo esc_url($editor_url); ?>" class="button button-primary">
-			<?php esc_html_e('+ New Story', 'clouds-and-spaceships'); ?>
-		</a>
+		<div class="cns-settings-page__actions">
+			<a href="<?php echo esc_url($editor_url); ?>" class="button button-primary">
+				<?php esc_html_e('+ New Story', 'clouds-and-spaceships'); ?>
+			</a>
+		</div>
 	</div>
 
 	<?php if ($trash_count > 0 || $in_trash) : ?>
 		<ul class="subsubsub" style="margin: 0 0 4px;">
+			<?php $status_args = $search !== '' ? ['s' => $search] : []; ?>
 			<li>
-				<a href="<?php echo esc_url(add_query_arg(['page' => $return_page], admin_url('admin.php'))); ?>"
+				<a href="<?php echo esc_url(add_query_arg(
+					$status_args + ['page' => $return_page],
+					admin_url('admin.php')
+				)); ?>"
 					<?php if (! $in_trash) : ?>class="current"<?php endif; ?>>
 					<?php esc_html_e('All', 'clouds-and-spaceships'); ?>
 					<span class="count">(<?php echo (int) cns_story_suite_count_stories(); ?>)</span>
 				</a> |
 			</li>
 			<li>
-				<a href="<?php echo esc_url(add_query_arg(['page' => $return_page, 'status' => 'trash'], admin_url('admin.php'))); ?>"
+				<a href="<?php echo esc_url(add_query_arg(
+					$status_args + ['page' => $return_page, 'status' => 'trash'],
+					admin_url('admin.php')
+				)); ?>"
 					<?php if ($in_trash) : ?>class="current"<?php endif; ?>>
 					<?php esc_html_e('Trash', 'clouds-and-spaceships'); ?>
 					<span class="count">(<?php echo (int) $trash_count; ?>)</span>
@@ -75,24 +94,67 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 		</ul>
 	<?php endif; ?>
 
-	<div class="cns-maps-overview__page-count">
+	<!--
+		One form for both controls so each keeps the other's value. It carries no
+		paged field on purpose: any change to the filter returns to page one,
+		which is the only page guaranteed to exist in the new result set.
+	-->
+	<div class="cns-settings-toolbar">
 		<form method="get">
 			<?php if ($in_trash) : ?>
 				<input type="hidden" name="status" value="trash" />
 			<?php endif; ?>
 			<input type="hidden" name="page" value="<?php echo esc_attr($return_page); ?>" />
-			<label for="cns-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
-			<select name="per_page" id="cns-per-page" onchange="this.form.submit()">
-				<?php foreach ($per_page_options as $option) : ?>
-					<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
-						<?php echo $option; ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+
+			<span class="cns-settings-toolbar__group">
+				<label class="screen-reader-text" for="cns-story-search">
+					<?php esc_html_e('Search stories by name', 'clouds-and-spaceships'); ?>
+				</label>
+				<input
+					type="search"
+					id="cns-story-search"
+					name="s"
+					value="<?php echo esc_attr($search); ?>"
+					placeholder="<?php esc_attr_e('Search stories by name…', 'clouds-and-spaceships'); ?>"
+				/>
+				<button type="submit" class="button"><?php esc_html_e('Search', 'clouds-and-spaceships'); ?></button>
+				<?php if ($search !== '') : ?>
+					<a class="cns-settings-toolbar__clear" href="<?php echo esc_url(add_query_arg(
+						($in_trash ? ['status' => 'trash'] : []) + ['page' => $return_page, 'per_page' => $per_page],
+						admin_url('admin.php')
+					)); ?>"><?php esc_html_e('Clear', 'clouds-and-spaceships'); ?></a>
+				<?php endif; ?>
+			</span>
+
+			<span class="cns-settings-toolbar__group">
+				<label for="cns-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
+				<select name="per_page" id="cns-per-page" onchange="this.form.submit()">
+					<?php foreach ($per_page_options as $option) : ?>
+						<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
+							<?php echo $option; ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			</span>
 		</form>
 	</div>
 
-	<table class="wp-list-table widefat fixed striped cns-maps-table">
+	<?php if ($search !== '') : ?>
+		<p class="cns-settings-toolbar__count">
+			<?php printf(
+				esc_html(_n(
+					'%1$s story matching “%2$s”.',
+					'%1$s stories matching “%2$s”.',
+					$total_stories,
+					'clouds-and-spaceships'
+				)),
+				esc_html(number_format_i18n($total_stories)),
+				esc_html($search)
+			); ?>
+		</p>
+	<?php endif; ?>
+
+	<table class="wp-list-table widefat fixed striped cns-settings-table">
 		<thead>
 			<tr>
 				<th class="col-thumb"></th>
@@ -107,7 +169,13 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 		<tbody>
 			<?php if (! $stories) : ?>
 				<tr>
-					<td colspan="7"><?php esc_html_e('No stories found.', 'clouds-and-spaceships'); ?></td>
+					<td colspan="7" class="cns-settings-table__empty">
+						<?php if ($search !== '') : ?>
+							<?php esc_html_e('No stories match that name.', 'clouds-and-spaceships'); ?>
+						<?php else : ?>
+							<?php esc_html_e('No stories found.', 'clouds-and-spaceships'); ?>
+						<?php endif; ?>
+					</td>
 				</tr>
 			<?php endif; ?>
 			<?php foreach ($stories as $story) :
@@ -161,7 +229,7 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 						echo esc_html($labels[$story->post_status] ?? ucfirst($story->post_status));
 					?></td>
 					<td><?php echo esc_html(get_the_date('Y-m-d', $story)); ?></td>
-					<td class="cns-maps-actions">
+					<td class="cns-row-actions">
 						<?php if ($in_trash) : ?>
 							<a href="<?php echo $action_url('restore'); ?>"><?php esc_html_e('Restore', 'clouds-and-spaceships'); ?></a>
 							&nbsp;&middot;&nbsp;

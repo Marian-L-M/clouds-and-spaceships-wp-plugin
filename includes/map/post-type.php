@@ -111,18 +111,50 @@ function cns_map_suite_editor_url(int $map_id = 0): string {
 	return add_query_arg($args, admin_url('admin.php'));
 }
 
-function cns_map_suite_get_all_maps(int $take = -1, int $skip = 0): array {
-	return get_posts([
-		'post_type'      => 'maps',
-		'posts_per_page' => $take,
-		'offset'         => $skip,
-		'post_status'    => ['publish', 'draft', 'private'],
-		'orderby'        => 'date',
-		'order'          => 'DESC',
-	]);
+/**
+ * Shared query args for the admin map list.
+ *
+ * $search matches the title only. The overview lists maps by name, so a
+ * full-text match would surface maps whose body happens to mention the term
+ * while their title does not — confusing in a list that shows no body text.
+ */
+function cns_map_suite_map_query_args(string $search = ''): array {
+	$args = [
+		'post_type'   => 'maps',
+		'post_status' => ['publish', 'draft', 'private'],
+		'orderby'     => 'date',
+		'order'       => 'DESC',
+	];
+
+	if ($search !== '') {
+		$args['s']              = $search;
+		$args['search_columns'] = ['post_title'];
+	}
+
+	return $args;
 }
 
-function cns_map_suite_count_maps(): int {
-	$counts = wp_count_posts('maps');
-	return (int) $counts->publish + (int) $counts->draft + (int) $counts->private;
+function cns_map_suite_get_all_maps(int $take = -1, int $skip = 0, string $search = ''): array {
+	return get_posts(array_merge(cns_map_suite_map_query_args($search), [
+		'posts_per_page' => $take,
+		'offset'         => $skip,
+	]));
+}
+
+function cns_map_suite_count_maps(string $search = ''): int {
+	// The unfiltered total comes from the cached per-status counts; only a
+	// search needs a real query, and then found_posts is the cheapest answer.
+	if ($search === '') {
+		$counts = wp_count_posts('maps');
+		return (int) $counts->publish + (int) $counts->draft + (int) $counts->private;
+	}
+
+	$query = new WP_Query(array_merge(cns_map_suite_map_query_args($search), [
+		'posts_per_page'         => 1,
+		'fields'                 => 'ids',
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
+	]));
+
+	return (int) $query->found_posts;
 }

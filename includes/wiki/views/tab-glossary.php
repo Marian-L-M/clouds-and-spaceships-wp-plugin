@@ -11,6 +11,7 @@ $glossary_enabled   = (bool) cns_get_wiki_setting( 'glossary_enabled', false );
 $glossary_slug      = cns_get_wiki_setting( 'glossary_slug', 'glossary' );
 $glossary_color     = cns_get_wiki_setting( 'glossary_text_color', '' );
 $glossary_show_menu = (bool) cns_get_wiki_setting( 'glossary_show_menu', true );
+$glossary_delete_on_uninstall = (bool) cns_get_wiki_setting( 'glossary_delete_on_uninstall', false );
 $glossary_url       = $glossary_enabled ? get_post_type_archive_link( 'glossary' ) : false;
 
 // Counts are only meaningful once the post type is registered.
@@ -90,7 +91,7 @@ if ( $glossary_enabled ) {
 								value="1"
 								<?php checked( $glossary_enabled ); ?>
 							/>
-							<?php esc_html_e( 'Enable the glossary post type, archive, and editor toolbar button', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Enable glossary', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
 							<?php esc_html_e( 'Disabling glossary terms will not delete existing terms in database.', 'clouds-and-spaceships' ); ?>
@@ -157,6 +158,30 @@ if ( $glossary_enabled ) {
 						</label>
 						<p class="description">
 							<?php esc_html_e( 'Adds Glossary to the Wordpress Admin Sidebar.', 'clouds-and-spaceships' ); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<?php /* ── Danger Zone ──────────────────────────────────────────── */ ?>
+		<div class="cns-danger-zone">
+			<h2><?php esc_html_e( 'Uninstall behaviour', 'clouds-and-spaceships' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Glossary entries', 'clouds-and-spaceships' ); ?></th>
+					<td>
+						<label>
+							<input
+								type="checkbox"
+								name="cns_wiki_settings[glossary_delete_on_uninstall]"
+								value="1"
+								<?php checked( $glossary_delete_on_uninstall ); ?>
+							/>
+							<?php esc_html_e( 'Delete all glossary posts when this plugin is uninstalled', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e( 'When unchecked (default), glossary entries are kept after uninstall. Deactivating the plugin never deletes anything — this only applies when the plugin is deleted.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>

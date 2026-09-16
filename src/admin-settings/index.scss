@@ -1,0 +1,283 @@
+@use "../shared/scss/tokens" as *;
+@use "../shared/scss/badges";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// The CNS settings screen.
+// One layout language for every tab — Info, Wiki, Glossary, Maps, Icons,
+// Stories, Substories. Previously two competing sets existed: the settings tabs
+// used .cns-settings-page/__header/-card, the list tabs used
+// .cns-maps-overview__header/-table, and the story views borrowed the map-named
+// classes while redefining them in their own bundle. Both are replaced here.
+// This sheet ships as its own bundle so the list tabs no longer pull the ~16 KB
+// map/story editor CSS just to draw a table.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Page shell ───────────────────────────────────────────────────────────────
+
+.cns-settings-page {
+	display: flex;
+	flex-direction: column;
+	gap: $space-10;
+	padding: $space-10;
+
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
+
+		h1 {
+			padding: 0;
+			margin: 0;
+		}
+	}
+
+	// Buttons grouped on the right of a header.
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: $space-05;
+	}
+
+	// Intro copy directly under a header.
+	&__intro {
+		margin: 0;
+		max-width: $measure;
+		color: $color-text-muted;
+	}
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
+// The default container for a group of settings or a list. Danger Zone below is
+// the same box with a red top edge.
+
+.cns-settings-card {
+	padding: 20px 24px;
+	border: 1px solid $color-border;
+	background: $color-surface;
+
+	> h2 {
+		font-size: 14px;
+		font-weight: 600;
+		margin: 0 0 4px;
+		color: $color-text;
+	}
+
+	> h2:not(:last-child) + .description {
+		margin: 0 0 12px;
+		max-width: $measure;
+	}
+
+	.form-table {
+		margin-top: 0;
+	}
+
+	.form-table:first-of-type th,
+	.form-table:first-of-type td {
+		padding-top: 12px;
+	}
+}
+
+// "View archive ↗" links sitting next to a section or row heading.
+.cns-settings-link {
+	display: block;
+	font-size: 12px;
+	font-weight: 400;
+}
+
+// ── Toolbar ──────────────────────────────────────────────────────────────────
+// Search, per-page and result count above a list. Replaces
+// .cns-maps-overview__toolbar, which the story views used under the map's name.
+
+.cns-settings-toolbar {
+
+	form {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 12px;
+
+		select,
+		input {
+			width: fit-content;
+		}
+	}
+
+	// A label paired with its control.
+	&__group {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	&__clear {
+		color: $color-text-muted;
+		font-size: 13px;
+		text-decoration: none;
+
+		&:hover {
+			color: $color-text;
+		}
+	}
+
+	&__count {
+		margin: 0;
+		color: $color-text-muted;
+	}
+}
+
+// ── List table ───────────────────────────────────────────────────────────────
+// Sits on top of core's .wp-list-table. Replaces .cns-maps-table.
+
+.cns-settings-table {
+
+	.col-thumb {
+		padding: 0;
+		width: $thumb-size;
+
+		img,
+		.cns-thumb-placeholder {
+			display: block;
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1 / 1;
+			border-radius: $radius;
+		}
+
+		img {
+			object-fit: cover;
+		}
+
+		.cns-thumb-placeholder {
+			background: $color-border;
+		}
+	}
+
+	// Empty state row.
+	.cns-settings-table__empty {
+		padding: $space-15;
+		text-align: center;
+		color: $color-text-muted;
+	}
+}
+
+// Row action links under a list item's title. Shared with both editors, which
+// render the same affordance inside their entity tables.
+.cns-row-actions {
+
+	a {
+		text-decoration: none;
+	}
+
+	.cns-delete-link {
+		color: $color-danger;
+
+		&:hover {
+			color: $color-danger-dark;
+		}
+	}
+}
+
+// ── Stat strip ───────────────────────────────────────────────────────────────
+
+.cns-settings-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		flex: 1 1 8rem;
+		margin: 0;
+		padding: 12px 16px;
+		border: 1px solid $color-border;
+		background: $color-surface;
+	}
+
+	&__value {
+		display: block;
+		font-size: 20px;
+		font-weight: 600;
+		line-height: 1.3;
+		color: $color-text;
+	}
+
+	&__label {
+		display: block;
+		font-size: 12px;
+		color: $color-text-muted;
+	}
+}
+
+// ── Danger Zone ──────────────────────────────────────────────────────────────
+// Destructive settings. One definition; the map and story sheets each carried a
+// slightly different copy of this before.
+
+.cns-danger-zone {
+	margin-top: 40px;
+	padding: 20px 24px;
+	border: 1px solid $color-border;
+	border-top: 3px solid $color-danger;
+	background: $color-surface;
+
+	h2,
+	.text-danger {
+		font-weight: 600;
+		color: $color-danger;
+	}
+
+	h2 {
+		font-size: 14px;
+		margin: 0 0 16px;
+	}
+
+	.form-table {
+		margin-top: 0;
+	}
+}
+
+// ── News list (Info tab) ─────────────────────────────────────────────────────
+
+.cns-news-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+		padding: 12px 0;
+		border-top: 1px solid $color-border-subtle;
+
+		&:first-child {
+			border-top: 0;
+			padding-top: 0;
+		}
+	}
+
+	&__title {
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	&__meta {
+		display: block;
+		font-size: 12px;
+		color: $color-text-muted;
+		margin-top: 2px;
+	}
+
+	&__excerpt {
+		margin: 4px 0 0;
+		color: $color-text-soft;
+	}
+
+	// Shown instead of the list when the project site is unreachable.
+	&__notice {
+		margin: 0;
+		color: $color-text-muted;
+	}
+}

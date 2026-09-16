@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || exit;
 // ── Settings values ───────────────────────────────────────────────────────────
 $wiki_enabled      = (bool) cns_get_wiki_setting( 'wiki_enabled', true );
 $wiki_show_menu    = (bool) cns_get_wiki_setting( 'wiki_show_menu', true );
+$wiki_delete_on_uninstall = (bool) cns_get_wiki_setting( 'wiki_delete_on_uninstall', false );
 $infobox_width     = cns_get_wiki_setting( 'infobox_width', '' );
 $content_width     = cns_get_wiki_setting( 'content_width', '' );
 
@@ -158,7 +159,7 @@ if ( $wiki_enabled ) {
 
 		<?php /* ── Template ─────────────────────────────────────────────── */ ?>
 		<div class="cns-settings-card">
-			<h2><?php esc_html_e( 'Layout', 'clouds-and-spaceships' ); ?></h2>
+			<h2><?php esc_html_e( 'Wiki Post Layout', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
 				<?php esc_html_e( 'Default widths for the wiki layout.', 'clouds-and-spaceships' ); ?>
 			</p>
@@ -423,6 +424,30 @@ if ( $wiki_enabled ) {
 					</td>
 				</tr>
 		
+			</table>
+		</div>
+
+		<?php /* ── Danger Zone ──────────────────────────────────────────── */ ?>
+		<div class="cns-danger-zone">
+			<h2><?php esc_html_e( 'Danger Zone', 'clouds-and-spaceships' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Uninstall behavior', 'clouds-and-spaceships' ); ?></th>
+					<td>
+						<label class="text-danger">
+							<input
+								type="checkbox"
+								name="cns_wiki_settings[wiki_delete_on_uninstall]"
+								value="1"
+								<?php checked( $wiki_delete_on_uninstall ); ?>
+							/>
+							<?php esc_html_e( 'Delete all wiki posts when this plugin is uninstalled', 'clouds-and-spaceships' ); ?>
+						</label>
+						<p class="description text-danger">
+							<?php esc_html_e( 'When unchecked (default), wiki articles are kept after uninstall. Deactivating the plugin never deletes anything — this only applies when the plugin is deleted.', 'clouds-and-spaceships' ); ?>
+						</p>
+					</td>
+				</tr>
 			</table>
 		</div>
 

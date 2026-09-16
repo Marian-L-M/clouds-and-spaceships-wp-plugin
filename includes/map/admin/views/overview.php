@@ -5,9 +5,17 @@ $per_page_options = [10, 20, 50, 100];
 $requested_per_page = (int) ($_GET['per_page'] ?? 20);
 $per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
 $paged            = max(1, absint($_GET['paged'] ?? 1));
-$total_maps  = cns_map_suite_count_maps();
+$search           = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+$total_maps  = cns_map_suite_count_maps($search);
 $total_pages = (int) ceil($total_maps / $per_page);
-$maps        = cns_map_suite_get_all_maps($per_page, ($paged - 1) * $per_page);
+
+// A stale paged value — a bookmark, or a search that shrank the list — would
+// otherwise render an empty table while matches sit on earlier pages.
+if ($total_pages > 0 && $paged > $total_pages) {
+	$paged = $total_pages;
+}
+
+$maps        = cns_map_suite_get_all_maps($per_page, ($paged - 1) * $per_page, $search);
 
 $return_page         = sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS);
 $editor_url          = cns_map_suite_editor_url();
@@ -20,7 +28,7 @@ $archive_order       = cns_archive_order('maps');
 $archive_order_opts  = cns_archive_order_options();
 $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '';
 ?>
-<div class="cns-maps-overview">
+<div class="cns-settings-page">
 	<!-- System notices start -->
 	<?php if (isset($_GET['deleted'])) : ?>
 		<div class="notice notice-success is-dismissible">
@@ -36,29 +44,68 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 	<!-- System notices end -->
 
 	<!-- Header -->
-	<div class="cns-maps-overview__header">
+	<div class="cns-settings-page__header">
 		<h1><?php esc_html_e('Maps', 'clouds-and-spaceships'); ?></h1>
-		<a href="<?php echo esc_url($editor_url); ?>" class="button button-primary">
-			<?php esc_html_e('+ New Map', 'clouds-and-spaceships'); ?>
-		</a>
+		<div class="cns-settings-page__actions">
+			<a href="<?php echo esc_url($editor_url); ?>" class="button button-primary">
+				<?php esc_html_e('+ New Map', 'clouds-and-spaceships'); ?>
+			</a>
+		</div>
 	</div>
-
-	<div class="cns-maps-overview__page-count">
+	<!-- Search and Pagination -->
+	<div class="cns-settings-toolbar">
 		<form method="get">
 			<input type="hidden" name="page" value="<?php echo esc_attr($return_page); ?>" />
-			<label for="cns-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
-			<select name="per_page" id="cns-per-page" onchange="this.form.submit()">
-				<?php foreach ($per_page_options as $option) : ?>
-					<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
-						<?php echo $option; ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+			<span class="cns-settings-toolbar__group">
+				<label class="screen-reader-text" for="cns-map-search">
+					<?php esc_html_e('Search maps', 'clouds-and-spaceships'); ?>
+				</label>
+				<input
+					type="search"
+					id="cns-map-search"
+					name="s"
+					value="<?php echo esc_attr($search); ?>"
+					placeholder="<?php esc_attr_e('Search maps…', 'clouds-and-spaceships'); ?>"
+				/>
+				<button type="submit" class="button"><?php esc_html_e('Search', 'clouds-and-spaceships'); ?></button>
+				<?php if ($search !== '') : ?>
+					<a class="cns-settings-toolbar__clear" href="<?php echo esc_url(add_query_arg(
+						['page' => $return_page, 'per_page' => $per_page],
+						admin_url('admin.php')
+					)); ?>"><?php esc_html_e('Clear', 'clouds-and-spaceships'); ?></a>
+				<?php endif; ?>
+			</span>
+
+			<span class="cns-settings-toolbar__group">
+				<label for="cns-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
+				<select name="per_page" id="cns-per-page" onchange="this.form.submit()">
+					<?php foreach ($per_page_options as $option) : ?>
+						<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
+							<?php echo $option; ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			</span>
 		</form>
 	</div>
 
+	<?php if ($search !== '') : ?>
+		<p class="cns-settings-toolbar__count">
+			<?php printf(
+				esc_html(_n(
+					'%1$s map found for “%2$s”.',
+					'%1$s maps found for “%2$s”.',
+					$total_maps,
+					'clouds-and-spaceships'
+				)),
+				esc_html(number_format_i18n($total_maps)),
+				esc_html($search)
+			); ?>
+		</p>
+	<?php endif; ?>
+
 	<!-- Map list -->
-	<table class="wp-list-table widefat fixed striped cns-maps-table">
+	<table class="wp-list-table widefat fixed striped cns-settings-table">
 		<thead>
 			<tr>
 				<th class="col-thumb"></th>
@@ -70,6 +117,20 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 			</tr>
 		</thead>
 		<tbody>
+			<?php if (! $maps) : ?>
+				<tr>
+					<td colspan="6" class="cns-settings-table__empty">
+						<?php if ($search !== '') : ?>
+							<?php esc_html_e('No maps match that name.', 'clouds-and-spaceships'); ?>
+						<?php else : ?>
+							<?php esc_html_e('No maps yet.', 'clouds-and-spaceships'); ?>
+							<a href="<?php echo esc_url($editor_url); ?>">
+								<?php esc_html_e('Create your first map', 'clouds-and-spaceships'); ?>
+							</a>
+						<?php endif; ?>
+					</td>
+				</tr>
+			<?php endif; ?>
 			<?php foreach ($maps as $map) :
 				$is_master   = (bool) get_post_meta($map->ID, '_cns_map_is_master', true);
 				$thumb_id    = (int) get_post_meta($map->ID, '_cns_map_image_id', true);
@@ -111,7 +172,7 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 						echo esc_html($status_labels[$map->post_status] ?? ucfirst($map->post_status));
 					?></td>
 					<td><?php echo esc_html(get_the_date('Y-m-d', $map)); ?></td>
-					<td class="cns-maps-actions">
+					<td class="cns-row-actions">
 						<a href="<?php echo $edit_url; ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
 						<?php if (in_array($map->post_status, ['publish', 'private'], true)) : ?>
 							&nbsp;&middot;&nbsp;

@@ -20,6 +20,7 @@ const withEntries = {
 
 		return {
 			...blockEntries,
+			'admin-settings/index': './src/admin-settings/index.ts',
 			'map-admin/index': './src/map/admin/index.tsx',
 			'story-admin/index': './src/story/admin/index.tsx',
 			'map-panel/index': './src/map-panel/index.tsx',

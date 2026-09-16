@@ -56,7 +56,13 @@ function cns_map_suite_current_page(): string {
 }
 
 add_action('admin_init', function (): void {
-	if (cns_map_suite_current_page() === CNS_MAP_PAGE_SETTINGS_MAPS) {
+	// Both tabs post to handlers in actions.php; each block there checks its own
+	// action name, capability and nonce, so loading the file on either is safe.
+	if (in_array(
+		cns_map_suite_current_page(),
+		[CNS_MAP_PAGE_SETTINGS_MAPS, CNS_MAP_PAGE_SETTINGS_ICONS],
+		true
+	)) {
 		require_once CNS_DIR . 'includes/map/admin/actions.php';
 	}
 });
@@ -69,14 +75,18 @@ function cns_map_suite_enqueue_admin_assets(): void {
 		return;
 	}
 
-	$page         = cns_map_suite_current_page();
-	$is_maps_page = in_array($page, [
+	$page = cns_map_suite_current_page();
+
+	// Only the screens that mount a React app need this bundle: the map editor
+	// and the Icons library. The Maps tab is server-rendered and gets its
+	// layout — and its delete confirmations — from the admin-settings bundle
+	// that every CNS settings page loads.
+	$needs_app = in_array($page, [
 		CNS_MAP_PAGE_EDITOR,
-		CNS_MAP_PAGE_SETTINGS_MAPS,
 		CNS_MAP_PAGE_SETTINGS_ICONS,
 	], true);
 
-	if (! $is_maps_page) {
+	if (! $needs_app) {
 		return;
 	}
 
@@ -114,13 +124,12 @@ function cns_map_suite_enqueue_admin_assets(): void {
 		'iconsUrl'  => add_query_arg(['page' => CNS_MAP_PAGE_SETTINGS_ICONS], admin_url('admin.php')),
 	]);
 
-	if (in_array($page, [CNS_MAP_PAGE_EDITOR, CNS_MAP_PAGE_SETTINGS_ICONS], true)) {
-		wp_enqueue_media();
-		wp_enqueue_style('wp-color-picker');
-		// Styles for @wordpress/components (the script dep comes from the
-		// generated asset file, but the stylesheet must be enqueued manually).
-		wp_enqueue_style('wp-components');
-	}
+	// Both remaining screens mount a React app built on @wordpress/components.
+	wp_enqueue_media();
+	wp_enqueue_style('wp-color-picker');
+	// The script dep comes from the generated asset file, but the stylesheet
+	// must be enqueued manually.
+	wp_enqueue_style('wp-components');
 
 	if ($page === CNS_MAP_PAGE_EDITOR) {
 		// Classic TinyMCE editor for the Description tab (wp.editor / wp.oldEditor).

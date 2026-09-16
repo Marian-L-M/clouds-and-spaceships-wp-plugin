@@ -1,0 +1,33 @@
+// Design tokens for every CNS admin surface.
+// Before this file the same values were re-declared per bundle: $border-color
+// lived inside src/map/admin/admin.scss, the story sheet hardcoded #e0e0e0 next
+// to it, and assets/css/admin-settings.css hardcoded it a third time. The three
+// copies had already drifted. Everything visual now resolves here.
+
+// ── Surfaces & lines ─────────────────────────────────────────────────────────
+$color-surface:       #fff;
+$color-border:        #e0e0e0;
+$color-border-subtle: #f0f0f1;
+
+// ── Text ─────────────────────────────────────────────────────────────────────
+$color-text:       #1d2327;
+$color-text-soft:  #50575e;
+$color-text-muted: #646970;
+
+// ── Intent ───────────────────────────────────────────────────────────────────
+$color-accent:      #2271b1;
+$color-danger:      #b32d2e;
+$color-danger-dark: #7a1f1f;
+
+// ── Spacing ──────────────────────────────────────────────────────────────────
+$space-05: 0.5rem;
+$space-10: 1rem;
+$space-15: 1.5rem;
+$space-20: 2rem;
+
+// ── Shape ────────────────────────────────────────────────────────────────────
+$radius:     3px;
+$thumb-size: 3em;
+
+// Content measure for prose that should not run the full screen width.
+$measure: 46rem;

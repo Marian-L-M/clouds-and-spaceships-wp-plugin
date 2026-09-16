@@ -162,9 +162,15 @@ function cns_admin_render_page(): void {
 //
 // The media picker is used by tabs from several providers (theme login images,
 // wiki placeholder thumbnail), so it lives in the framework and loads on every
-// CNS settings page. So does the stylesheet that gives every tab the same
-// chrome — the map and story editors ship their own bundles, but those only
-// load on their own pages.
+// CNS settings page. So does the admin-settings bundle, which carries the
+// layout language every tab is built from and the confirm prompt for
+// destructive links.
+//
+// That bundle is deliberately separate from the map and story editor bundles.
+// The list tabs used to pull a whole editor's stylesheet (~16 KB of canvas and
+// panel rules) to draw a table, and the two editors each kept their own drifted
+// copy of the shared pieces. Tabs that need an editor's React app — Icons — add
+// that bundle on top; nothing else does.
 
 add_action( 'admin_enqueue_scripts', 'cns_admin_enqueue_shared_assets' );
 
@@ -172,12 +178,26 @@ function cns_admin_enqueue_shared_assets( string $hook ): void {
     if ( ! str_contains( $hook, 'cns-settings' ) ) {
         return;
     }
+
+    $asset_file = CNS_DIR . 'build/admin-settings/index.asset.php';
+    $asset      = file_exists( $asset_file )
+        ? require $asset_file
+        : [ 'dependencies' => [], 'version' => CNS_VERSION ];
+
     wp_enqueue_style(
         'cns-admin-settings',
-        CNS_URL . 'assets/css/admin-settings.css',
+        CNS_URL . 'build/admin-settings/index.css',
         [],
-        CNS_VERSION
+        $asset['version']
     );
+    wp_enqueue_script(
+        'cns-admin-settings',
+        CNS_URL . 'build/admin-settings/index.js',
+        $asset['dependencies'],
+        $asset['version'],
+        true
+    );
+
     wp_enqueue_media();
     wp_add_inline_script( 'jquery', cns_admin_media_picker_js() );
     wp_add_inline_script( 'jquery', cns_admin_color_clear_js() );

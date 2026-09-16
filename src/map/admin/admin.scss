@@ -1,8 +1,8 @@
+@use "../../shared/scss/tokens" as *;
+@use "../../shared/scss/badges";
 @use "../../shared/scss/admin";
 
 // Clouds and Spaceships — map editor styles.
-$background-color: #fff;
-$border-color: #e0e0e0;
 $space-05: 0.5rem;
 $space-10: 1rem;
 $space-15: 1.5rem;
@@ -20,7 +20,6 @@ $bp-lpc: 1400px;
 	flex-direction: column;
 }
 
-
 // L1000 Editor Layout
 .cns-map-editor {
 	display: flex;
@@ -33,7 +32,7 @@ $bp-lpc: 1400px;
 		padding: 1rem;
 		gap: 16px;
 		margin: 0;
-		border-bottom: 1px solid $border-color;
+		border-bottom: 1px solid $color-border;
 
 		h1 {
 			margin: 0;
@@ -58,13 +57,13 @@ $bp-lpc: 1400px;
 	&__tabs {
 		display: flex;
 		gap: 0;
-		border-bottom: 1px solid $border-color;
+		border-bottom: 1px solid $color-border;
 		margin: 0;
 	}
 
 	&__content {
-		background: $background-color;
-		border: 1px solid $border-color;
+		background: $color-surface;
+		border: 1px solid $color-border;
 		border-top: none;
 	}
 }
@@ -163,7 +162,7 @@ $bp-lpc: 1400px;
 	}
 	&__value,
 	&__scroll {
-		border: 1px solid $border-color;
+		border: 1px solid $color-border;
 	}
 	&__value {
 		width: 100%;
@@ -197,14 +196,14 @@ $bp-lpc: 1400px;
 		gap: $space-10;
 		padding: $space-05;
 
-		background-color: $background-color;
-		border: 1px solid $border-color;
+		background-color: $color-surface;
+		border: 1px solid $color-border;
 	}
 	&__context-header,
 	&__context-body,
 	&__context-footer {
 		box-sizing: border-box;
-		border: 1px solid $border-color;
+		border: 1px solid $color-border;
 		padding: $space-05;
 	}
 	&__context-header {
@@ -267,7 +266,7 @@ $bp-lpc: 1400px;
 
 .cns-modal-section {
 	padding: $space-10 $space-05;
-	border-bottom: 1px solid $border-color;
+	border-bottom: 1px solid $color-border;
 	&:last-child {
 		border-bottom: none;
 	}
@@ -285,100 +284,11 @@ $bp-lpc: 1400px;
 
 // Action-button rows inside tables / list items.
 
-
 // Snackbar notices (wp/notices store) — pinned bottom-left like the editor.
-
 
 // Compact swatch-button color control (ColorField).
 
-
-// ── Overview ──────────────────────────────────────────────────────────────────
-.cns-maps-overview {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	padding: 1rem;
-	&__header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 12px;
-		h1 {
-			padding: 0;
-			margin: 0;
-		}
-	}
-	&__page-count {
-		align-self: flex-end;
-		form {
-			select,
-			input {
-				width: fit-content;
-			}
-		}
-	}
-}
-
-$thumb-size: 3em;
-.cns-maps-table {
-	th {
-	}
-	td {
-	}
-	.col-thumb {
-		padding: 0;
-		width: $thumb-size;
-		img,
-		.cns-thumb-placeholder {
-			display: block;
-			width: 100%;
-			height: auto;
-			aspect-ratio: 1 / 1;
-			border-radius: 3px;
-		}
-		img {
-			object-fit: cover;
-		}
-		.cns-thumb-placeholder {
-			background: $border-color;
-		}
-	}
-}
-
-
 // ── Badges ────────────────────────────────────────────────────────────────────
-
-.cns-badge {
-	display: inline-block;
-	padding: 1px 7px;
-	border-radius: 10px;
-	font-size: 11px;
-	font-weight: 600;
-	line-height: 1.6;
-	vertical-align: middle;
-
-	// Kept for the story editor's "Start" node badge, its only consumer since
-	// the maps' featured flag was removed.
-	&--featured {
-		background: #fef3cd;
-		color: #856404;
-	}
-
-	&--map {
-		background: #dbeafe;
-		color: #1e40af;
-	}
-
-	&--master {
-		background: #ede9fe;
-		color: #5b21b6;
-	}
-
-	&--type {
-		background: #f0fdf4;
-		color: #166534;
-	}
-}
 
 // ── Editor layout ─────────────────────────────────────────────────────────────
 
@@ -393,11 +303,9 @@ $thumb-size: 3em;
 
 // ── Map editor header ─────────────────────────────────────────────────────────
 
-
 // (Save feedback now uses snackbar notices from the wp/notices store.)
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
-
 
 // ── Settings two-column layout ────────────────────────────────────────────────
 
@@ -410,7 +318,7 @@ $thumb-size: 3em;
 	gap: 8px;
 
 	canvas {
-		border: 1px solid $border-color;
+		border: 1px solid $color-border;
 		border-radius: 3px;
 		max-width: 100%;
 		height: auto;
@@ -473,7 +381,7 @@ $thumb-size: 3em;
 }
 
 #cns-preview-canvas {
-	border: 1px solid $border-color;
+	border: 1px solid $color-border;
 	border-radius: 3px;
 	max-width: 100%;
 	height: auto;
@@ -482,25 +390,10 @@ $thumb-size: 3em;
 
 // ── Danger Zone ───────────────────────────────────────────────────────────────
 
-.cns-danger-zone {
-	margin-top: 40px;
-	padding: 20px 24px;
-	border: 1px solid $border-color;
-	border-top: 3px solid #b32d2e;
-	background: #fff;
-
-	h2 {
-		font-size: 14px;
-		font-weight: 600;
-		margin: 0 0 16px;
-		color: #b32d2e;
-	}
-}
-
 // ── Objects tab ───────────────────────────────────────────────────────────────
 
 #cns-objects-canvas {
-	border: 1px solid $border-color;
+	border: 1px solid $color-border;
 	border-radius: 3px;
 	max-width: 100%;
 	height: auto;
@@ -549,7 +442,7 @@ $thumb-size: 3em;
 	max-height: 180px;
 	overflow-y: auto;
 	padding: 4px;
-	border: 1px solid $border-color;
+	border: 1px solid $color-border;
 	border-radius: 3px;
 	background: #f6f7f7;
 }
@@ -597,7 +490,7 @@ $thumb-size: 3em;
 	left: 0;
 	right: 0;
 	background: #fff;
-	border: 1px solid $border-color;
+	border: 1px solid $color-border;
 	border-top: none;
 	border-radius: 0 0 3px 3px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -680,7 +573,7 @@ $thumb-size: 3em;
 
 .cns-icon-library-item {
 	background: #fff;
-	border: 1px solid $border-color;
+	border: 1px solid $color-border;
 	border-radius: 4px;
 	padding: 12px;
 	display: flex;
@@ -730,7 +623,7 @@ $thumb-size: 3em;
 // ── Areas canvas ──────────────────────────────────────────────────────────────
 
 #cns-areas-canvas {
-	border: 1px solid $border-color;
+	border: 1px solid $color-border;
 	border-radius: 3px;
 	max-width: 100%;
 	height: auto;

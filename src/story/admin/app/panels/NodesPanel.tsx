@@ -165,7 +165,7 @@ export default function NodesPanel( {
 										);
 									} ) }
 								</td>
-								<td className="cns-maps-actions">
+								<td className="cns-row-actions">
 									<div className="cns-actions-row">
 										{ node.id !== startNodeId && (
 											<Button

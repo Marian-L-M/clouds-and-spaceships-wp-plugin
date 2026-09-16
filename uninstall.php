@@ -11,9 +11,12 @@
  * Conditionally removes (each requires opt-in via its Danger Zone setting):
  *  - All maps
  *  - All stories and substories
+ *  - All wiki articles
+ *  - All glossary entries
+ *  - The icon library's SVG attachments
  *
- * Wiki and glossary posts are always kept — they are the user's articles;
- * delete them manually if desired.
+ * Every one of those defaults to off, so an uninstall with untouched settings
+ * still leaves all of the user's content in place.
  */
 
 defined('WP_UNINSTALL_PLUGIN') || exit;
@@ -40,16 +43,27 @@ foreach ($tables as $table) {
 
 // ── Content, only where the user opted in ─────────────────────────────────────
 
+// The wiki and glossary flags live inside the shared cns_wiki_settings array
+// rather than in options of their own; read it before the options loop below
+// deletes it.
+$wiki_settings = (array) get_option('cns_wiki_settings', []);
+
 $opt_in = [
-	'cns_map_suite_delete_on_uninstall'   => ['maps'],
-	'cns_story_suite_delete_on_uninstall' => ['cns_story', 'cns_substory'],
+	['enabled' => (bool) get_option('cns_map_suite_delete_on_uninstall'),   'post_types' => ['maps']],
+	['enabled' => (bool) get_option('cns_story_suite_delete_on_uninstall'), 'post_types' => ['cns_story', 'cns_substory']],
+	['enabled' => ! empty($wiki_settings['wiki_delete_on_uninstall']),      'post_types' => ['wiki']],
+	['enabled' => ! empty($wiki_settings['glossary_delete_on_uninstall']),  'post_types' => ['glossary']],
 ];
 
-foreach ($opt_in as $option => $post_types) {
-	if (! get_option($option)) {
+foreach ($opt_in as $group) {
+	if (! $group['enabled']) {
 		continue;
 	}
-	foreach ($post_types as $post_type) {
+	foreach ($group['post_types'] as $post_type) {
+		// The plugin is not loaded here, so these post types are unregistered.
+		// WP_Query builds the post_type/post_status clauses straight from the
+		// arguments and guards its post-type-object lookups, so the query is
+		// unaffected by that.
 		$ids = get_posts([
 			'post_type'      => $post_type,
 			'posts_per_page' => -1,
@@ -62,6 +76,22 @@ foreach ($opt_in as $option => $post_types) {
 	}
 }
 
+// Icon library. These are ordinary media attachments the plugin only tagged, so
+// deleting them is a separate opt-in from the map posts — and it must run before
+// the _cns_map_icon meta is dropped below, which is what identifies them.
+if (get_option('cns_map_suite_delete_icons_on_uninstall')) {
+	$icon_ids = get_posts([
+		'post_type'      => 'attachment',
+		'post_status'    => 'inherit',
+		'posts_per_page' => -1,
+		'fields'         => 'ids',
+		'meta_query'     => [['key' => '_cns_map_icon', 'value' => '1']],
+	]);
+	foreach ($icon_ids as $icon_id) {
+		wp_delete_attachment((int) $icon_id, true);
+	}
+}
+
 // ── Options ───────────────────────────────────────────────────────────────────
 
 $options = [
@@ -70,6 +100,7 @@ $options = [
 	'cns_needs_rewrite_flush',
 	// Maps
 	'cns_map_suite_delete_on_uninstall',
+	'cns_map_suite_delete_icons_on_uninstall',
 	'cns_map_suite_show_maps_menu',
 	'cns_map_suite_archive_enabled',
 	'cns_map_suite_archive_slug',
@@ -114,8 +145,8 @@ $wpdb->query(
 	    OR option_name LIKE '\_transient\_timeout\_cns\_story\_rows\_%'"
 );
 
-// Icon-library attachments are user media and stay, but the tag meta that
-// marked them as map icons is plugin data — remove it.
+// Any icon attachment still present is user media and stays, but the tag meta
+// that marked it as a map icon is plugin data — remove it.
 delete_post_meta_by_key('_cns_map_icon');
 
 // ── Capabilities ──────────────────────────────────────────────────────────────

@@ -22,6 +22,22 @@ if (
 	exit;
 }
 
+// Handle the Icons tab's settings save.
+if (
+	isset($_POST['cns_map_action']) &&
+	$_POST['cns_map_action'] === 'save_icon_settings' &&
+	current_user_can('manage_maps') &&
+	check_admin_referer('cns_map_save_icon_settings')
+) {
+	update_option('cns_map_suite_delete_icons_on_uninstall', isset($_POST['delete_icons_on_uninstall']) ? 1 : 0, false);
+
+	wp_safe_redirect(add_query_arg(
+		['page' => CNS_MAP_PAGE_SETTINGS_ICONS, 'settings-saved' => '1'],
+		admin_url('admin.php')
+	));
+	exit;
+}
+
 // Handle plugin settings save (archive, admin visibility, uninstall).
 if (
 	isset($_POST['cns_map_action']) &&

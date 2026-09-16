@@ -116,20 +116,52 @@ add_filter('use_block_editor_for_post_type', 'cns_story_suite_disable_gutenberg'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function cns_story_suite_get_all_stories(int $take = -1, int $skip = 0, bool $trash = false): array {
-	return get_posts([
-		'post_type'      => 'cns_story',
-		'posts_per_page' => $take,
-		'offset'         => $skip,
-		'post_status'    => $trash ? ['trash'] : ['publish', 'draft', 'private'],
-		'orderby'        => 'date',
-		'order'          => 'DESC',
-	]);
+/**
+ * Shared query args for the admin story list.
+ *
+ * $search matches the title only. The overview lists stories by name, so a
+ * full-text match would surface stories whose body happens to mention the term
+ * while their title does not — confusing in a list that shows no body text.
+ */
+function cns_story_suite_story_query_args(bool $trash = false, string $search = ''): array {
+	$args = [
+		'post_type'   => 'cns_story',
+		'post_status' => $trash ? ['trash'] : ['publish', 'draft', 'private'],
+		'orderby'     => 'date',
+		'order'       => 'DESC',
+	];
+
+	if ($search !== '') {
+		$args['s']              = $search;
+		$args['search_columns'] = ['post_title'];
+	}
+
+	return $args;
 }
 
-function cns_story_suite_count_stories(bool $trash = false): int {
-	$counts = wp_count_posts('cns_story');
-	return $trash
-		? (int) $counts->trash
-		: (int) $counts->publish + (int) $counts->draft + (int) $counts->private;
+function cns_story_suite_get_all_stories(int $take = -1, int $skip = 0, bool $trash = false, string $search = ''): array {
+	return get_posts(array_merge(cns_story_suite_story_query_args($trash, $search), [
+		'posts_per_page' => $take,
+		'offset'         => $skip,
+	]));
+}
+
+function cns_story_suite_count_stories(bool $trash = false, string $search = ''): int {
+	// The unfiltered totals come from the cached per-status counts; only a
+	// search needs a real query, and then found_posts is the cheapest answer.
+	if ($search === '') {
+		$counts = wp_count_posts('cns_story');
+		return $trash
+			? (int) $counts->trash
+			: (int) $counts->publish + (int) $counts->draft + (int) $counts->private;
+	}
+
+	$query = new WP_Query(array_merge(cns_story_suite_story_query_args($trash, $search), [
+		'posts_per_page'         => 1,
+		'fields'                 => 'ids',
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
+	]));
+
+	return (int) $query->found_posts;
 }

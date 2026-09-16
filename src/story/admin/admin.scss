@@ -1,3 +1,5 @@
+@use "../../shared/scss/tokens" as *;
+@use "../../shared/scss/badges";
 @use "../../shared/scss/admin";
 
 // Clouds and Spaceships — story editor styles.
@@ -77,78 +79,9 @@ $bp-spc: 1200px;
 
 // ── Overview ──────────────────────────────────────────────────────────────────
 
-.cns-stories-overview {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	padding: 1rem;
-}
-
-.cns-maps-overview__header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 12px;
-
-	h1 {
-		padding: 0;
-		margin: 0;
-	}
-}
-
-.cns-maps-overview__page-count {
-	align-self: flex-end;
-
-	form {
-		select,
-		input {
-			width: fit-content;
-		}
-	}
-}
-
-$thumb-size: 3em;
-
-.cns-maps-table {
-	.col-thumb {
-		padding: 0;
-		width: $thumb-size;
-
-		img,
-		.cns-thumb-placeholder {
-			display: block;
-			width: 100%;
-			height: auto;
-			aspect-ratio: 1 / 1;
-			border-radius: 3px;
-		}
-
-		img {
-			object-fit: cover;
-		}
-
-		.cns-thumb-placeholder {
-			background: #e0e0e0;
-		}
-	}
-}
 
 
 // ── Badges ────────────────────────────────────────────────────────────────────
-
-.cns-badge {
-	display: inline-block;
-	padding: 1px 7px;
-	border-radius: 10px;
-	font-size: 11px;
-	font-weight: 600;
-	line-height: 1.6;
-	vertical-align: middle;
-
-	&--draft    { background: #f0f0f1; color: #646970; }
-	&--publish  { background: #dff0d8; color: #3a7d44; }
-	&--private  { background: #fef3cd; color: #856404; }
-}
 
 // ── Editor layout ─────────────────────────────────────────────────────────────
 
@@ -281,21 +214,6 @@ $thumb-size: 3em;
 }
 
 // ── Danger Zone ───────────────────────────────────────────────────────────────
-
-.cns-danger-zone {
-	margin-top: 40px;
-	padding: 20px 24px;
-	border: 1px solid #e0e0e0;
-	border-top: 3px solid #b32d2e;
-	background: #fff;
-
-	h2 {
-		font-size: 14px;
-		font-weight: 600;
-		margin: 0 0 16px;
-		color: #b32d2e;
-	}
-}
 
 // ── Modal sections ────────────────────────────────────────────────────────────
 // The modal chrome itself comes from @wordpress/components' <Modal>; only the
