@@ -1,1 +1,0 @@
-import{getContext as t,store as e}from"@wordpress/interactivity";e("cns-theme/cns-section",{state:{get isTabActive(){const e=t();return e.tabIndex===e.activeTab},get isPanelActive(){const e=t();return e.panelIndex===e.activeTab}},actions:{setTab(){const e=t();e.activeTab=e.tabIndex}}});
