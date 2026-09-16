@@ -1,14 +1,6 @@
 @charset "UTF-8";
 @use "../../shared/scss" as *;
 
-// Block wrapper defaults, in CSS rather than as attribute defaults: changing a
-// default here is a stylesheet edit, where changing an attribute default would
-// alter every save() output and invalidate saved markup. A colour set on the
-// block itself is written as an inline style and still wins.
-//
-// NOTE: this selector used to read `.wp-block-cns-theme-infobox-group`, a name
-// left behind by the rename to `cns-wiki-suite/`, so none of it had been
-// applying. The declarations below it are unchanged from that dead rule.
 .wp-block-cns-wiki-suite-infobox-group {
 	@include fx($direction: column, $gap: 1rem);
 	width: 100%;
@@ -45,8 +37,6 @@
 			--cns-wiki-infobox-title-bg,
 			var(--wp--preset--color--element-contrast)
 		);
-		// Falls through to the infobox text colour, which is what the title
-		// bars inherited before they had a setting of their own.
 		color: var(
 			--cns-wiki-infobox-title-text,
 			var(

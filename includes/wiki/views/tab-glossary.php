@@ -91,56 +91,10 @@ if ( $glossary_enabled ) {
 								value="1"
 								<?php checked( $glossary_enabled ); ?>
 							/>
-							<?php esc_html_e( 'Enable glossary', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Enable glossary post type and functionality', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
 							<?php esc_html_e( 'Disabling glossary terms will not delete existing terms in database.', 'clouds-and-spaceships' ); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_glossary_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
-						<?php if ( $glossary_url ) : ?>
-							<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="cns-settings-link">
-								<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
-							</a>
-						<?php endif; ?>
-					</th>
-					<td>
-						<input
-							type="text"
-							id="cns_glossary_slug"
-							name="cns_wiki_settings[glossary_slug]"
-							value="<?php echo esc_attr( $glossary_slug ); ?>"
-							class="regular-text"
-							pattern="[a-z0-9\-]+"
-							placeholder="glossary"
-						/>
-						<p class="description">
-							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single term URL — existing links will break.', 'clouds-and-spaceships' ); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_glossary_color"><?php esc_html_e( 'Glossary Term text colour', 'clouds-and-spaceships' ); ?></label>
-					</th>
-					<td>
-						<input
-							type="color"
-							id="cns_glossary_color"
-							name="cns_wiki_settings[glossary_text_color]"
-							value="<?php echo esc_attr( $glossary_color ?: '#ffffff' ); ?>"
-							<?php disabled( '', $glossary_color ); ?>
-						/>
-						<label style="margin-left:8px;">
-							<input type="checkbox" class="cns-color-clear" data-color="cns_glossary_color"
-								<?php checked( '', $glossary_color ); ?> />
-							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
-						</label>
-						<p class="description">
-							<?php esc_html_e( 'Color of inline glossary terms in content. Leave empty to inherit the current text color.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -161,15 +115,72 @@ if ( $glossary_enabled ) {
 						</p>
 					</td>
 				</tr>
-			</table>
-		</div>
+				<tr>
+				<th scope="row">
+					<label for="cns_glossary_color"><?php esc_html_e( 'Glossary term text color', 'clouds-and-spaceships' ); ?></label>
+				</th>
+				<td>
+					<input
+						type="color"
+						id="cns_glossary_color"
+						name="cns_wiki_settings[glossary_text_color]"
+						value="<?php echo esc_attr( $glossary_color ?: '#ffffff' ); ?>"
+						<?php disabled( '', $glossary_color ); ?>
+					/>
+					<label style="margin-left:8px;">
+						<input type="checkbox" class="cns-color-clear" data-color="cns_glossary_color"
+							<?php checked( '', $glossary_color ); ?> />
+						<?php esc_html_e( 'inherit', 'clouds-and-spaceships' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'Color of inline glossary terms in content. Check to inherit the current text color.', 'clouds-and-spaceships' ); ?>
+					</p>
+					<h4><?php esc_html_e( '*Uncheck to set custom global default', 'clouds-and-spaceships' ); ?></h4>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!-- ── Archive ──────────────────────────────────────────────── -->
+	<div class="cns-settings-card">
+		<h2><?php esc_html_e( 'Archive', 'clouds-and-spaceships' ); ?></h2>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row">
+					<label for="cns_glossary_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
+					<?php if ( $glossary_url ) : ?>
+						<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="cns-settings-link">
+							<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
+						</a>
+					<?php endif; ?>
+				</th>
+				<td>
+					<input
+						type="text"
+						id="cns_glossary_slug"
+						name="cns_wiki_settings[glossary_slug]"
+						value="<?php echo esc_attr( $glossary_slug ); ?>"
+						class="regular-text"
+						pattern="[a-z0-9\-]+"
+						placeholder="glossary"
+					/>
+					<p class="description">
+						<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes glossary archive URL and all single glossary term URLs.', 'clouds-and-spaceships' ); ?>
+					</p>
+					<p class="text-danger">
+						<?php esc_html_e( 'CAUTION! On change existing links will break.', 'clouds-and-spaceships' ); ?>
+					</p>
+				</td>
+			</tr>
+			
+		</table>
+	</div>
 
 		<?php /* ── Danger Zone ──────────────────────────────────────────── */ ?>
 		<div class="cns-danger-zone">
-			<h2><?php esc_html_e( 'Uninstall behaviour', 'clouds-and-spaceships' ); ?></h2>
+			<h2><?php esc_html_e( 'Danger Zone', 'clouds-and-spaceships' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Glossary entries', 'clouds-and-spaceships' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Uninstall behavior', 'clouds-and-spaceships' ); ?></th>
 					<td>
 						<label>
 							<input
@@ -178,10 +189,10 @@ if ( $glossary_enabled ) {
 								value="1"
 								<?php checked( $glossary_delete_on_uninstall ); ?>
 							/>
-							<?php esc_html_e( 'Delete all glossary posts when this plugin is uninstalled', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Delete all glossary posts when the plugin is uninstalled', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'When unchecked (default), glossary entries are kept after uninstall. Deactivating the plugin never deletes anything — this only applies when the plugin is deleted.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'When unchecked (default), glossary entries are kept after uninstall. Deactivating the plugin does not delete. Only applies when the plugin is deleted.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>

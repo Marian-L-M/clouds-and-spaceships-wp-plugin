@@ -112,7 +112,7 @@ if ( $wiki_enabled ) {
 		<?php settings_fields( 'cns_wiki_settings_group' ); ?>
 		<input type="hidden" name="cns_wiki_settings[_section]" value="wiki" />
 
-		<?php /* ── Post type ────────────────────────────────────────────── */ ?>
+		<!-- ── Post type ────────────────────────────────────────────── -->
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Wiki', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
@@ -133,7 +133,7 @@ if ( $wiki_enabled ) {
 							<?php esc_html_e( 'Enable wiki post type, archive, and page templates', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e( 'On by default. Deactivate to use your own template. Disabling will not change existing wiki posts in database.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'On by default. Deactivate to not use the wiki post type entirely and use your own template. Disabling will not change existing wiki posts in database.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -156,8 +156,82 @@ if ( $wiki_enabled ) {
 				</tr>
 			</table>
 		</div>
-
-		<?php /* ── Template ─────────────────────────────────────────────── */ ?>
+		<!-- ── Archive ──────────────────────────────────────────────── -->
+		<div class="cns-settings-card">
+			<h2><?php esc_html_e( 'Archive', 'clouds-and-spaceships' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">
+						<label for="cns_wiki_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
+						<?php if ( $archive_url ) : ?>
+							<a href="<?php echo esc_url( $archive_url ); ?>" target="_blank" rel="noopener" class="cns-settings-link">
+								<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
+							</a>
+						<?php endif; ?>
+					</th>
+					<td>
+						<input
+							type="text"
+							id="cns_wiki_slug"
+							name="cns_wiki_settings[archive_slug]"
+							value="<?php echo esc_attr( $archive_slug ); ?>"
+							class="regular-text"
+							pattern="[a-z0-9\-]+"
+							placeholder="wiki"
+						/>
+						<p class="description">
+							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes wiki archive URL and all single wiki URLs.', 'clouds-and-spaceships' ); ?>
+						</p>
+						<p class="text-danger">
+							<?php esc_html_e( 'CAUTION! On change existing links will break.', 'clouds-and-spaceships' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label><?php esc_html_e( 'Placeholder thumbnail', 'clouds-and-spaceships' ); ?></label>
+					</th>
+					<td>
+						<input
+							type="hidden"
+							id="cns_wiki_placeholder_id"
+							name="cns_wiki_settings[placeholder_thumb_id]"
+							value="<?php echo esc_attr( $placeholder_id ?: '' ); ?>"
+						/>
+						<img
+							id="cns_wiki_placeholder_preview"
+							src="<?php echo $placeholder_url ? esc_url( $placeholder_url ) : ''; ?>"
+							style="max-height:80px;display:<?php echo $placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
+							alt=""
+						/>
+						<button
+							type="button"
+							id="cns_wiki_placeholder_btn"
+							class="button cns-media-btn"
+							data-input="cns_wiki_placeholder_id"
+							data-preview="cns_wiki_placeholder_preview"
+							data-remove="cns_wiki_placeholder_remove"
+							data-title="<?php esc_attr_e( 'Select placeholder thumbnail', 'clouds-and-spaceships' ); ?>"
+							data-select-label="<?php esc_attr_e( 'Select image', 'clouds-and-spaceships' ); ?>"
+							data-change-label="<?php esc_attr_e( 'Change image', 'clouds-and-spaceships' ); ?>"
+						><?php echo $placeholder_id ? esc_html__( 'Change image', 'clouds-and-spaceships' ) : esc_html__( 'Select image', 'clouds-and-spaceships' ); ?></button>
+						<button
+							type="button"
+							id="cns_wiki_placeholder_remove"
+							class="button cns-media-remove-btn"
+							data-input="cns_wiki_placeholder_id"
+							data-preview="cns_wiki_placeholder_preview"
+							data-picker="cns_wiki_placeholder_btn"
+							style="display:<?php echo $placeholder_id ? 'inline-block' : 'none'; ?>;"
+						><?php esc_html_e( 'Remove', 'clouds-and-spaceships' ); ?></button>
+						<p class="description">
+							<?php esc_html_e( 'Placeholder for wiki card images. Leave empty to show no image as placeholder.', 'clouds-and-spaceships' ); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- ── Template ─────────────────────────────────────────────── -->
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Wiki Post Layout', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
@@ -208,80 +282,7 @@ if ( $wiki_enabled ) {
 			</table>
 		</div>
 
-		<?php /* ── Archive ──────────────────────────────────────────────── */ ?>
-		<div class="cns-settings-card">
-			<h2><?php esc_html_e( 'Archive', 'clouds-and-spaceships' ); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row">
-						<label for="cns_wiki_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
-						<?php if ( $archive_url ) : ?>
-							<a href="<?php echo esc_url( $archive_url ); ?>" target="_blank" rel="noopener" class="cns-settings-link">
-								<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
-							</a>
-						<?php endif; ?>
-					</th>
-					<td>
-						<input
-							type="text"
-							id="cns_wiki_slug"
-							name="cns_wiki_settings[archive_slug]"
-							value="<?php echo esc_attr( $archive_slug ); ?>"
-							class="regular-text"
-							pattern="[a-z0-9\-]+"
-							placeholder="wiki"
-						/>
-						<p class="description">
-							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes the wiki archive URL and every single wiki URL.', 'clouds-and-spaceships' ); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label><?php esc_html_e( 'Placeholder thumbnail', 'clouds-and-spaceships' ); ?></label>
-					</th>
-					<td>
-						<input
-							type="hidden"
-							id="cns_wiki_placeholder_id"
-							name="cns_wiki_settings[placeholder_thumb_id]"
-							value="<?php echo esc_attr( $placeholder_id ?: '' ); ?>"
-						/>
-						<img
-							id="cns_wiki_placeholder_preview"
-							src="<?php echo $placeholder_url ? esc_url( $placeholder_url ) : ''; ?>"
-							style="max-height:80px;display:<?php echo $placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
-							alt=""
-						/>
-						<button
-							type="button"
-							id="cns_wiki_placeholder_btn"
-							class="button cns-media-btn"
-							data-input="cns_wiki_placeholder_id"
-							data-preview="cns_wiki_placeholder_preview"
-							data-remove="cns_wiki_placeholder_remove"
-							data-title="<?php esc_attr_e( 'Select placeholder thumbnail', 'clouds-and-spaceships' ); ?>"
-							data-select-label="<?php esc_attr_e( 'Select image', 'clouds-and-spaceships' ); ?>"
-							data-change-label="<?php esc_attr_e( 'Change image', 'clouds-and-spaceships' ); ?>"
-						><?php echo $placeholder_id ? esc_html__( 'Change image', 'clouds-and-spaceships' ) : esc_html__( 'Select image', 'clouds-and-spaceships' ); ?></button>
-						<button
-							type="button"
-							id="cns_wiki_placeholder_remove"
-							class="button cns-media-remove-btn"
-							data-input="cns_wiki_placeholder_id"
-							data-preview="cns_wiki_placeholder_preview"
-							data-picker="cns_wiki_placeholder_btn"
-							style="display:<?php echo $placeholder_id ? 'inline-block' : 'none'; ?>;"
-						><?php esc_html_e( 'Remove', 'clouds-and-spaceships' ); ?></button>
-						<p class="description">
-							<?php esc_html_e( 'Placeholder for wiki card images. Leave empty to show no image as placeholder.', 'clouds-and-spaceships' ); ?>
-						</p>
-					</td>
-				</tr>
-			</table>
-		</div>
-
-		<?php /* ── Wiki Contents Grid block defaults ─────────────────────────────────────────── */ ?>
+		<!-- ── Wiki Contents Grid block defaults ─────────────────────────────────────────── -->
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Wiki Content Grid defaults', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
@@ -330,7 +331,7 @@ if ( $wiki_enabled ) {
 			</table>
 		</div>
 
-		<?php /* ── Infobox colours ─────────────────────────────────────── */ ?>
+		<!-- ── Infobox colours ─────────────────────────────────────── -->
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e( 'Infobox colours', 'clouds-and-spaceships' ); ?></h2>
 			<p class="description">
@@ -349,7 +350,7 @@ if ( $wiki_enabled ) {
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_bg"
 								<?php checked( '', $infobox_bg ); ?> />
-							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Background color for the infobox wrapper. Defaults to #ffffff.', 'clouds-and-spaceships' ); ?></p>
 					</td>
@@ -366,7 +367,7 @@ if ( $wiki_enabled ) {
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_text"
 								<?php checked( '', $infobox_text ); ?> />
-							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Text color for infoboxes, groups and their title bars. Defaults to the theme text color.', 'clouds-and-spaceships' ); ?></p>
 					</td>
@@ -383,7 +384,7 @@ if ( $wiki_enabled ) {
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_title"
 								<?php checked( '', $infobox_title ); ?> />
-							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Text color for the infobox and group title bars. Defaults to the infobox text color.', 'clouds-and-spaceships' ); ?></p>
 					</td>
@@ -400,7 +401,7 @@ if ( $wiki_enabled ) {
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_contrast"
 								<?php checked( '', $infobox_contrast ); ?> />
-							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Background color for the infobox title bars. Defaults to #e0e0e0.', 'clouds-and-spaceships' ); ?></p>
 					</td>
@@ -418,16 +419,17 @@ if ( $wiki_enabled ) {
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="cns-color-clear" data-color="cns_infobox_accent"
 								<?php checked( '', $infobox_accent ); ?> />
-							<?php esc_html_e( 'Clear (use theme default)', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Infobox inner group background color. Defaults to #f2f2f2.', 'clouds-and-spaceships' ); ?></p>
 					</td>
 				</tr>
 		
 			</table>
+			<h4><?php esc_html_e( '*Uncheck to set custom global default', 'clouds-and-spaceships' ); ?></h4>
 		</div>
 
-		<?php /* ── Danger Zone ──────────────────────────────────────────── */ ?>
+		<!-- ── Danger Zone ──────────────────────────────────────────── -->
 		<div class="cns-danger-zone">
 			<h2><?php esc_html_e( 'Danger Zone', 'clouds-and-spaceships' ); ?></h2>
 			<table class="form-table" role="presentation">
@@ -441,10 +443,10 @@ if ( $wiki_enabled ) {
 								value="1"
 								<?php checked( $wiki_delete_on_uninstall ); ?>
 							/>
-							<?php esc_html_e( 'Delete all wiki posts when this plugin is uninstalled', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Delete all wiki posts when the plugin is uninstalled', 'clouds-and-spaceships' ); ?>
 						</label>
-						<p class="description text-danger">
-							<?php esc_html_e( 'When unchecked (default), wiki articles are kept after uninstall. Deactivating the plugin never deletes anything — this only applies when the plugin is deleted.', 'clouds-and-spaceships' ); ?>
+						<p class="description">
+							<?php esc_html_e( 'When unchecked (default), wiki articles are kept after uninstall. Deactivating the plugin does not delete. Only applies when the plugin is deleted.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>

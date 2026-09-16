@@ -1,1 +1,49 @@
-.wiki-card-modal{min-width:360px}.wiki-card-modal .components-select-control{margin-bottom:1rem}.wiki-card-modal__results{display:flex;flex-direction:column;gap:2px;margin-top:1rem;max-height:320px;overflow-y:auto}.wiki-card-modal__result{background:none;border:1px solid transparent;border-radius:3px;cursor:pointer;display:block;font-size:.9rem;line-height:1.4;padding:.5rem .75rem;text-align:left;width:100%}.wiki-card-modal__result:hover{background-color:#f0f0f0;border-color:#ccc}.wiki-card-modal__empty{color:#757575;font-size:.875rem;margin:0;padding:.5rem 0}.wiki-card--loading{align-items:center;border-radius:6px;display:flex;justify-content:center;min-height:160px}
+/*!*********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/wiki-card/editor.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************/
+.wiki-card-modal {
+  min-width: 360px;
+}
+.wiki-card-modal .components-select-control {
+  margin-bottom: 1rem;
+}
+.wiki-card-modal__results {
+  margin-top: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wiki-card-modal__result {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.wiki-card-modal__result:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+.wiki-card-modal__empty {
+  color: #757575;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
+.wiki-card--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  border-radius: 6px;
+}
+
+/*# sourceMappingURL=index.css.map*/

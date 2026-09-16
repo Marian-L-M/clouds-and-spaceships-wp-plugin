@@ -12,38 +12,21 @@ defined('ABSPATH') || exit;
  * Default content template for new wiki posts.
  *
  * This is the *editable* portion of a wiki article only: the center content
- * column (section/tabs) and the per-post infobox column. The surrounding page
- * chrome — the left navigation sidebar and the outer layout wrapper — lives in
- * the single-wiki.html block template, so it renders on the front end without
+ * column and the per-post infobox column. The surrounding page chrome — the
+ * left navigation sidebar and the outer layout wrapper — lives in the
+ * single-wiki.html block template, so it renders on the front end without
  * appearing in the post editor (matching how normal posts behave).
  *
- * On the Clouds and Spaceships theme this uses the theme's section/tab blocks.
- * On any other theme it degrades to a plain columns skeleton so new posts are
- * never born with unknown blocks.
+ * The centre column starts as a single empty paragraph. It used to seed a
+ * cns-theme/cns-section with three tabs when the Clouds and Spaceships theme
+ * was active; those blocks were removed in favour of core/tabs, which an author
+ * can insert here like any other block.
  */
 function cns_wiki_post_content_template(): array
 {
-    $is_cns_theme = get_template() === 'clouds-and-spaceships';
-
-    $center_column = $is_cns_theme
-        ? [
-            [
-                'cns-theme/cns-section',
-                [],
-                [
-                    ['cns-theme/cns-tab', ['label' => 'Option 1'], [
-                        ['core/paragraph', ['placeholder' => 'Option 1 content goes here...']],
-                    ]],
-                    ['cns-theme/cns-tab', ['label' => 'Option 2'], [
-                        ['core/paragraph', ['placeholder' => 'Option 2 content goes here...']],
-                    ]],
-                    ['cns-theme/cns-tab', ['label' => 'Option 3'], [
-                        ['core/paragraph', ['placeholder' => 'Option 3 content goes here...']],
-                    ]],
-                ],
-            ],
-        ]
-        : [['core/paragraph', ['placeholder' => __('Write your wiki article…', 'clouds-and-spaceships')]]];
+    $center_column = [
+        ['core/paragraph', ['placeholder' => __('Write your wiki article…', 'clouds-and-spaceships')]],
+    ];
 
     return [
         [
