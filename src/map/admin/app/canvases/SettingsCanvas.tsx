@@ -7,32 +7,38 @@ interface Props {
 }
 
 export default function SettingsCanvas( { settings }: Props ) {
-	const canvasRef = useRef<HTMLCanvasElement>( null );
+	const canvasRef = useRef< HTMLCanvasElement >( null );
 
 	useEffect( () => {
 		const canvas = canvasRef.current;
 		if ( ! canvas ) return;
 		drawMapCanvas( canvas, {
-			width:       settings.width,
+			width: settings.width,
 			aspectRatio: settings.aspectRatio,
-			bgType:      settings.bgType,
-			bgColor:     settings.bgColor,
-			bgImageUrl:  settings.bgImageUrl,
-			imgUrl:      settings.imageUrl,
-			imageX:      settings.imageX,
-			imageY:      settings.imageY,
-			imageW:      settings.imageW,
+			bgType: settings.bgType,
+			bgColor: settings.bgColor,
+			bgImageUrl: settings.bgImageUrl,
+			imgUrl: settings.imageUrl,
+			imageX: settings.imageX,
+			imageY: settings.imageY,
+			imageW: settings.imageW,
 		} );
 	}, [
-		settings.width, settings.aspectRatio,
-		settings.bgType, settings.bgColor, settings.bgImageUrl,
-		settings.imageUrl, settings.imageX, settings.imageY, settings.imageW,
+		settings.width,
+		settings.aspectRatio,
+		settings.bgType,
+		settings.bgColor,
+		settings.bgImageUrl,
+		settings.imageUrl,
+		settings.imageX,
+		settings.imageY,
+		settings.imageW,
 	] );
 
 	return (
 		<div className="cns-settings-canvas">
 			<canvas ref={ canvasRef } />
-			<p className="description">Live preview — updates as you edit settings.</p>
+			<p className="description">Canvas base live preview.</p>
 		</div>
 	);
 }

@@ -54,8 +54,10 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						{ /* Title Input */ }
 						<div className="cns-grid__group cns-grid__span-3">
 							<TextControl
-								__next40pxDefaultSize
-								label={ __( 'Map Title', 'clouds-and-spaceships' ) }
+								label={ __(
+									'Map Title',
+									'clouds-and-spaceships'
+								) }
 								value={ settings.title }
 								placeholder={ __(
 									'Enter map title…',
@@ -65,9 +67,9 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 							/>
 						</div>
 						{ /*  Map Time Value */ }
-						<div className="cns-grid__group cns-grid__span-1">
+						{ /*  Sneaky sneaky. Map time is a placeholder for a future functionality */ }
+						{ /* <div className="cns-grid__group cns-grid__span-1">
 							<NumberControl
-								__next40pxDefaultSize
 								label={ __(
 									'Timeline value',
 									'clouds-and-spaceships'
@@ -85,13 +87,16 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 									)
 								}
 							/>
-						</div>
+						</div> */ }
 
 						{ /* Flags */ }
 						<div className="cns-grid__group cns-grid__span-4">
 							<Flex gap={ 1 } align="center" justify="start">
 								<ToggleControl
-									label={ __( 'MasterMap', 'clouds-and-spaceships' ) }
+									label={ __(
+										'MasterMap',
+										'clouds-and-spaceships'
+									) }
 									checked={ settings.isMaster }
 									onChange={ ( v ) => set( 'isMaster', v ) }
 								/>
@@ -109,8 +114,10 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						{ /* Aspect Ratio */ }
 						<div className="cns-grid__group cns-grid__span-3">
 							<RangeControl
-								__next40pxDefaultSize
-								label={ __( 'Aspect Ratio', 'clouds-and-spaceships' ) }
+								label={ __(
+									'Aspect Ratio',
+									'clouds-and-spaceships'
+								) }
 								help={ __(
 									'Width ÷ Height (1.77 = 16:9, 1.0 = square, 0.75 = portrait)',
 									'clouds-and-spaceships'
@@ -141,7 +148,6 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						{ /*  Canvas max width input */ }
 						<div className="cns-grid__group cns-grid__span-1">
 							<NumberControl
-								__next40pxDefaultSize
 								label={ __(
 									'Max Width (px)',
 									'clouds-and-spaceships'
@@ -186,7 +192,6 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 							<Card className="image-scale-positioning">
 								<CardBody>
 									<RangeControl
-										__next40pxDefaultSize
 										label={ __(
 											'Image Width',
 											'clouds-and-spaceships'
@@ -208,7 +213,6 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 								<CardDivider />
 								<CardBody>
 									<RangeControl
-										__next40pxDefaultSize
 										label={ __(
 											'Image Y offset',
 											'clouds-and-spaceships'
@@ -226,7 +230,6 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 								<CardDivider />
 								<CardBody>
 									<RangeControl
-										__next40pxDefaultSize
 										label={ __(
 											'Image X offset',
 											'clouds-and-spaceships'
@@ -249,7 +252,10 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 							<MediaPicker
 								imageId={ settings.thumbnailId ?? 0 }
 								imageUrl={ settings.thumbnailUrl }
-								label={ __( 'Thumbnail', 'clouds-and-spaceships' ) }
+								label={ __(
+									'Thumbnail',
+									'clouds-and-spaceships'
+								) }
 								title={ __(
 									'Select Map Thumbnail',
 									'clouds-and-spaceships'
@@ -273,11 +279,17 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 								selected={ settings.bgType }
 								options={ [
 									{
-										label: __( 'Color', 'clouds-and-spaceships' ),
+										label: __(
+											'Color',
+											'clouds-and-spaceships'
+										),
 										value: 'color',
 									},
 									{
-										label: __( 'Image', 'clouds-and-spaceships' ),
+										label: __(
+											'Image',
+											'clouds-and-spaceships'
+										),
 										value: 'image',
 									},
 								] }
@@ -318,15 +330,17 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 
 						{ /* Zoom controls */ }
-						<div className="cns-grid__group cns-grid__span-full">
+						<div
+							className="cns-grid__group cns-grid__span-full"
+							style={ { marginBottom: '8px' } }
+						>
 							<ToggleControl
-								__nextHasNoMarginBottom
 								label={ __(
-									'Override zoom control colors',
+									'Set custom controls color',
 									'clouds-and-spaceships'
 								) }
 								help={ __(
-									'Off: this map uses the global colors from the Maps settings tab.',
+									'Uses theme or plugin colors by default.',
 									'clouds-and-spaceships'
 								) }
 								checked={ overridesZoomColors }
