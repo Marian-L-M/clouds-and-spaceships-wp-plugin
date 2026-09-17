@@ -9,8 +9,6 @@ $search           = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'
 $total_maps  = cns_map_suite_count_maps($search);
 $total_pages = (int) ceil($total_maps / $per_page);
 
-// A stale paged value — a bookmark, or a search that shrank the list — would
-// otherwise render an empty table while matches sit on earlier pages.
 if ($total_pages > 0 && $paged > $total_pages) {
 	$paged = $total_pages;
 }
@@ -21,12 +19,8 @@ $return_page         = sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS)
 $editor_url          = cns_map_suite_editor_url();
 $delete_on_uninstall = (bool) get_option('cns_map_suite_delete_on_uninstall', false);
 $show_maps_menu      = (bool) get_option('cns_map_suite_show_maps_menu', false);
-$archive_enabled     = cns_archive_enabled('maps');
-$archive_slug        = cns_archive_slug('maps');
-$archive_per_page    = cns_archive_per_page('maps');
-$archive_order       = cns_archive_order('maps');
-$archive_order_opts  = cns_archive_order_options();
-$archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '';
+$zoom_main_color     = (string) get_option('cns_map_suite_zoom_main_color', '');
+$zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', '');
 ?>
 <div class="cns-settings-page">
 	<!-- System notices start -->
@@ -205,85 +199,18 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 		</div>
 	<?php endif; ?>
 
-	<!-- ── Danger Zone ──────────────────────────────────────────────────────── -->
-	<div class="cns-danger-zone">
-		<h2><?php esc_html_e('Plugin Settings', 'clouds-and-spaceships'); ?></h2>
-		<form method="post">
-			<?php wp_nonce_field('cns_map_save_settings'); ?>
-			<input type="hidden" name="cns_map_action" value="save_settings" />
+	<!-- ── Plugin settings ──────────────────────────────────────────────────── -->
+	<form method="post">
+		<?php wp_nonce_field('cns_map_save_settings'); ?>
+		<input type="hidden" name="cns_map_action" value="save_settings" />
 
+		<!-- ── Maps ─────────────────────────────────────────────────── -->
+		<div class="cns-settings-card">
+			<h2><?php esc_html_e('Maps', 'clouds-and-spaceships'); ?></h2>
+			<p class="description">
+				<?php esc_html_e('Interactive canvas maps, managed from the CNS editor pages.', 'clouds-and-spaceships'); ?>
+			</p>
 			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row">
-						<?php esc_html_e('Map archive', 'clouds-and-spaceships'); ?>
-						<?php if ($archive_url) : ?>
-							<a href="<?php echo esc_url($archive_url); ?>" target="_blank"
-							   style="display:block;font-size:12px;font-weight:normal;">
-								<?php esc_html_e('View archive ↗', 'clouds-and-spaceships'); ?>
-							</a>
-						<?php endif; ?>
-					</th>
-					<td>
-						<label>
-							<input type="checkbox" name="archive_enabled" value="1" <?php checked($archive_enabled); ?> />
-							<?php esc_html_e('Enable the public map archive', 'clouds-and-spaceships'); ?>
-						</label>
-						<p class="description">
-							<?php esc_html_e('Publishes a listing of all maps at the slug below, and lets maps appear in search and nav menus. Off by default.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_map_archive_slug"><?php esc_html_e('URL slug', 'clouds-and-spaceships'); ?></label>
-					</th>
-					<td>
-						<input
-							type="text"
-							id="cns_map_archive_slug"
-							name="archive_slug"
-							value="<?php echo esc_attr($archive_slug); ?>"
-							class="regular-text"
-							pattern="[a-z0-9\-]+"
-							placeholder="<?php echo esc_attr('maps'); ?>"
-						/>
-						<p class="description">
-							<?php esc_html_e('Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single map URL — existing links will break.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_map_archive_per_page"><?php esc_html_e('Maps per page', 'clouds-and-spaceships'); ?></label>
-					</th>
-					<td>
-						<input
-							type="number"
-							id="cns_map_archive_per_page"
-							name="archive_per_page"
-							value="<?php echo esc_attr($archive_per_page); ?>"
-							min="1" step="1"
-							class="small-text"
-						/>
-						<p class="description">
-							<?php esc_html_e('Overrides the global Reading Settings value for the map archive only.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_map_archive_order"><?php esc_html_e('Default sort order', 'clouds-and-spaceships'); ?></label>
-					</th>
-					<td>
-						<select id="cns_map_archive_order" name="archive_order">
-							<?php foreach ($archive_order_opts as $value => $label) : ?>
-								<option value="<?php echo esc_attr($value); ?>" <?php selected($archive_order, $value); ?>>
-									<?php echo esc_html($label); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</td>
-				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e('Admin menu visibility', 'clouds-and-spaceships'); ?></th>
 					<td>
@@ -296,27 +223,88 @@ $archive_url         = $archive_enabled ? get_post_type_archive_link('maps') : '
 						</p>
 					</td>
 				</tr>
+			</table>
+		</div>
+
+		<!-- ── Map controls ─────────────────────────────────────────── -->
+		<div class="cns-settings-card">
+			<h2><?php esc_html_e('Map controls', 'clouds-and-spaceships'); ?></h2>
+			<p class="description">
+				<?php esc_html_e('Set the colors of map control buttons. Uses theme colors by default. Can by overwritten on individual map level.', 'clouds-and-spaceships'); ?>
+			</p>
+			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><?php esc_html_e('Uninstall behaviour', 'clouds-and-spaceships'); ?></th>
+					<th scope="row">
+						<label for="cns_map_zoom_main"><?php esc_html_e('Main color', 'clouds-and-spaceships'); ?></label>
+					</th>
 					<td>
-						<label>
+						<input
+							type="color"
+							id="cns_map_zoom_main"
+							name="zoom_main_color"
+							value="<?php echo esc_attr($zoom_main_color ?: '#2271b1'); ?>"
+							<?php disabled('', $zoom_main_color); ?>
+						/>
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_map_zoom_main"
+								<?php checked('', $zoom_main_color); ?> />
+							<?php esc_html_e('Use default', 'clouds-and-spaceships'); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e('Button fill color.', 'clouds-and-spaceships'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="cns_map_zoom_accent"><?php esc_html_e('Accent color', 'clouds-and-spaceships'); ?></label>
+					</th>
+					<td>
+						<input
+							type="color"
+							id="cns_map_zoom_accent"
+							name="zoom_accent_color"
+							value="<?php echo esc_attr($zoom_accent_color ?: '#ffffff'); ?>"
+							<?php disabled('', $zoom_accent_color); ?>
+						/>
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="cns-color-clear" data-color="cns_map_zoom_accent"
+								<?php checked('', $zoom_accent_color); ?> />
+							<?php esc_html_e('Use default', 'clouds-and-spaceships'); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e('Color of the button glyphs.', 'clouds-and-spaceships'); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- ── Danger Zone ──────────────────────────────────────────── -->
+		<div class="cns-danger-zone">
+			<h2><?php esc_html_e('Danger Zone', 'clouds-and-spaceships'); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e('Uninstall behavior', 'clouds-and-spaceships'); ?></th>
+					<td>
+						<label class="text-danger">
 							<input
 								type="checkbox"
 								name="delete_on_uninstall"
 								value="1"
 								<?php checked($delete_on_uninstall); ?>
 							/>
-							<?php esc_html_e('Delete all map posts and their data when this plugin is uninstalled', 'clouds-and-spaceships'); ?>
+							<?php esc_html_e('Delete all map posts and their data when the plugin is uninstalled', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e('When unchecked (default), maps are kept after uninstall. Custom DB tables are always removed.', 'clouds-and-spaceships'); ?>
+							<?php esc_html_e('When unchecked (default), maps are kept after uninstall. Deactivating the plugin does not delete. Custom DB tables are always removed.', 'clouds-and-spaceships'); ?>
 						</p>
 					</td>
 				</tr>
 			</table>
+		</div>
 
-			<?php submit_button(__('Save Settings', 'clouds-and-spaceships'), 'secondary'); ?>
-		</form>
-	</div>
+		<?php submit_button(__('Save Settings', 'clouds-and-spaceships'), 'secondary'); ?>
+	</form>
 
 </div>

@@ -18,10 +18,13 @@ $meta = $map_id ? [
     'bg_type'      => get_post_meta($map_id, '_cns_map_bg_type', true) ?: 'color',
     'bg_color'     => get_post_meta($map_id, '_cns_map_bg_color', true) ?: '#1a1a2e',
     'bg_image_id'  => (int) get_post_meta($map_id, '_cns_map_bg_image_id', true),
+    'zoom_main'    => (string) get_post_meta($map_id, '_cns_map_zoom_main_color', true),
+    'zoom_accent'  => (string) get_post_meta($map_id, '_cns_map_zoom_accent_color', true),
 ] : [
     'width' => 1000, 'aspect_ratio' => 1.0,
     'time' => 0, 'image_id' => 0, 'image_x' => 0.0, 'image_y' => 0.0, 'image_width' => 1.0,
     'bg_type' => 'color', 'bg_color' => '#1a1a2e', 'bg_image_id' => 0,
+    'zoom_main' => '', 'zoom_accent' => '',
 ];
 
 $image_url      = $meta['image_id']    ? wp_get_attachment_image_url($meta['image_id'], 'large') : '';
@@ -92,6 +95,12 @@ window.cnsMapEditor = {
     overviewUrl:  <?php echo wp_json_encode($overview_url); ?>,
     viewUrl:     <?php echo wp_json_encode($view_url); ?>,
     wpEditUrl:   <?php echo wp_json_encode($wp_edit_url); ?>,
+    zoomMainColor:      <?php echo wp_json_encode($meta['zoom_main']); ?>,
+    zoomAccentColor:    <?php echo wp_json_encode($meta['zoom_accent']); ?>,
+    // Global defaults from the Maps settings tab, shown when the map has no
+    // override of its own so the editor previews what a visitor would see.
+    zoomMainDefault:    <?php echo wp_json_encode((string) get_option('cns_map_suite_zoom_main_color', '')); ?>,
+    zoomAccentDefault:  <?php echo wp_json_encode((string) get_option('cns_map_suite_zoom_accent_color', '')); ?>,
     parentMaps:  <?php echo wp_json_encode($parent_maps); ?>,
 };
 </script>

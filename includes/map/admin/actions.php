@@ -38,7 +38,7 @@ if (
 	exit;
 }
 
-// Handle plugin settings save (archive, admin visibility, uninstall).
+// Handle plugin settings save (admin visibility, uninstall).
 if (
 	isset($_POST['cns_map_action']) &&
 	$_POST['cns_map_action'] === 'save_settings' &&
@@ -48,20 +48,13 @@ if (
 	update_option('cns_map_suite_delete_on_uninstall', isset($_POST['delete_on_uninstall']) ? 1 : 0, false);
 	update_option('cns_map_suite_show_maps_menu',      isset($_POST['show_maps_menu']) ? 1 : 0);
 
-	// Archive. The slug and enabled flag are watched in includes/archive.php,
-	// which schedules a rewrite flush for the next init.
-	update_option('cns_map_suite_archive_enabled', isset($_POST['archive_enabled']) ? 1 : 0);
+	// Zoom control colors. A cleared field posts nothing (the input is disabled
+	// by the "Use default" checkbox), which stores an empty string and returns
+	// the controls to the stylesheet fallback.
+	update_option('cns_map_suite_zoom_main_color',   cns_map_suite_sanitize_optional_color((string) ($_POST['zoom_main_color']   ?? '')));
+	update_option('cns_map_suite_zoom_accent_color', cns_map_suite_sanitize_optional_color((string) ($_POST['zoom_accent_color'] ?? '')));
 
-	$slug = preg_replace('/[^a-z0-9\-]/', '', strtolower((string) ($_POST['archive_slug'] ?? '')));
-	update_option('cns_map_suite_archive_slug', $slug ?: 'maps');
-
-	update_option('cns_map_suite_archive_per_page', max(1, (int) ($_POST['archive_per_page'] ?? CNS_ARCHIVE_DEFAULT_PER_PAGE)));
-
-	$order = sanitize_key((string) ($_POST['archive_order'] ?? ''));
-	update_option(
-		'cns_map_suite_archive_order',
-		array_key_exists($order, cns_archive_order_options()) ? $order : CNS_ARCHIVE_DEFAULT_ORDER
-	);
+	// Nothing archive-related is saved: the plugin publishes no map archive.
 	wp_safe_redirect(add_query_arg(
 		['page' => sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS), 'settings-saved' => '1'],
 		admin_url('admin.php')

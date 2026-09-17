@@ -100,6 +100,17 @@ function cns_map_suite_register_rest_routes(): void {
 				'default'           => 0,
 				'sanitize_callback' => 'absint',
 			],
+			// Empty keeps the map on the global default from the Maps tab.
+			'zoom_main_color' => [
+				'type'              => 'string',
+				'default'           => '',
+				'sanitize_callback' => fn($v) => cns_map_suite_sanitize_optional_color((string) $v),
+			],
+			'zoom_accent_color' => [
+				'type'              => 'string',
+				'default'           => '',
+				'sanitize_callback' => fn($v) => cns_map_suite_sanitize_optional_color((string) $v),
+			],
 		],
 	]);
 
@@ -344,6 +355,8 @@ function cns_map_suite_rest_save_map(WP_REST_Request $request): WP_REST_Response
 		'_cns_map_bg_type'      => (string) $request->get_param('bg_type'),
 		'_cns_map_bg_color'     => cns_map_suite_sanitize_color((string) $request->get_param('bg_color'), '#1a1a2e'),
 		'_cns_map_bg_image_id'  => (int) $request->get_param('bg_image_id'),
+		'_cns_map_zoom_main_color'   => (string) $request->get_param('zoom_main_color'),
+		'_cns_map_zoom_accent_color' => (string) $request->get_param('zoom_accent_color'),
 	];
 
 	foreach ($meta as $key => $value) {
@@ -434,6 +447,16 @@ function cns_map_suite_rest_remove_icon(WP_REST_Request $request): WP_REST_Respo
  * else falls back to the given default. Values end up in canvas fill/stroke
  * styles and injected SVG attributes, so only real colors are stored.
  */
+/**
+ * Colors that may legitimately be unset. An empty value means "inherit" and is
+ * preserved as-is; anything invalid collapses to empty rather than to a
+ * concrete color, so a bad value never silently becomes a real override.
+ */
+function cns_map_suite_sanitize_optional_color(string $value): string {
+	$value = trim($value);
+	return $value === '' ? '' : cns_map_suite_sanitize_color($value, '');
+}
+
 function cns_map_suite_sanitize_color(string $value, string $default): string {
 	$value = trim($value);
 	// 3, 6, or 8 hex digits. Core's sanitize_hex_color() stops at 6, but colors

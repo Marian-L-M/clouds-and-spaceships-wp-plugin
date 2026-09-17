@@ -84,6 +84,12 @@ export interface CnsMapEditorGlobal {
 	viewUrl: string;
 	/** Stock post editor for this map; empty when unsaved or not permitted. */
 	wpEditUrl: string;
+	/** Per-map zoom control colors; empty means "use the global default". */
+	zoomMainColor: string;
+	zoomAccentColor: string;
+	/** Global defaults from the Maps settings tab; empty means "unset". */
+	zoomMainDefault: string;
+	zoomAccentDefault: string;
 	parentMaps: ParentMapRef[];
 }
 
@@ -328,6 +334,9 @@ export interface MapSettings {
 	bgImageUrl: string;
 	thumbnailId: number | null;
 	thumbnailUrl: string;
+	/** Empty means this map follows the global default. */
+	zoomMainColor: string;
+	zoomAccentColor: string;
 }
 
 export interface DrawState {

@@ -4,10 +4,6 @@ defined('ABSPATH') || exit;
 
 // Register Map post type
 function cns_map_suite_register_post_type(): void {
-	// An enabled archive also means maps should be findable: a listing nobody
-	// can search or link to from a menu would be half a feature.
-	$archive_enabled = cns_archive_enabled('maps');
-
 	register_post_type('maps', [
 		'labels' => [
 			'name'               => __('Maps', 'clouds-and-spaceships'),
@@ -28,10 +24,13 @@ function cns_map_suite_register_post_type(): void {
 		// Off by default: maps are managed from the CNS editor pages. The
 		// setting adds the standard WP list screen to the sidebar as well.
 		'show_in_menu'        => (bool) get_option('cns_map_suite_show_maps_menu', false),
-		'show_in_nav_menus'   => $archive_enabled,
-		'exclude_from_search' => ! $archive_enabled,
-		'has_archive'         => $archive_enabled,
-		'rewrite'             => ['slug' => cns_archive_slug('maps')],
+		// No plugin-owned archive: /maps/ is not a listing. Single map pages stay
+		// public and render through the single-maps template, and a site that
+		// wants a listing builds one in the theme or Site Editor with a query
+		// loop. show_in_nav_menus and exclude_from_search are left to default
+		// from 'public', which matches how maps behaved with the archive on.
+		'has_archive'         => false,
+		'rewrite'             => ['slug' => 'maps'],
 		// 'author' is what lets core/post-author render the byline on the
 		// single-map template; without it the block deliberately outputs nothing.
 		'supports'            => ['title', 'editor', 'author', 'thumbnail', 'custom-fields', 'excerpt'],
@@ -53,6 +52,10 @@ function cns_map_suite_register_post_meta(): void {
 		'_cns_map_bg_type'      => 'string',
 		'_cns_map_bg_color'     => 'string',
 		'_cns_map_bg_image_id'  => 'integer',
+		// Per-map override of the zoom controls' colors. Empty means "inherit
+		// the global default from the Maps settings tab".
+		'_cns_map_zoom_main_color'   => 'string',
+		'_cns_map_zoom_accent_color' => 'string',
 	];
 
 	foreach ($fields as $key => $type) {
@@ -132,6 +135,59 @@ function cns_map_suite_map_query_args(string $search = ''): array {
 	}
 
 	return $args;
+}
+
+/**
+ * Effective colors of a map's zoom controls.
+ *
+ * Three layers, narrowest first: the map's own override, then the global
+ * default from the Maps settings tab, then nothing — an empty string, which
+ * leaves the CSS custom property unset so the stylesheet's own fallback
+ * applies. Those fallbacks are each surface's existing look (the WP admin
+ * accent in the editor, the light chrome on the front end), so a site that
+ * sets neither color sees exactly what it saw before.
+ *
+ * Deliberately separate from any theme or admin primary color: these feed
+ * --cns-map-zoom-main / --cns-map-zoom-accent only, and never redefine a
+ * palette variable something else might be reading.
+ *
+ * @return array{main:string,accent:string}
+ */
+function cns_map_suite_zoom_colors(int $map_id = 0): array {
+	// Each layer is sanitized before it is accepted, so a value that is somehow
+	// invalid in storage falls through to the next layer instead of blanking
+	// the color. Values written through the UI are already clean; this only
+	// matters for rows edited outside it.
+	$pick = static function (string $meta_key, string $option_key) use ($map_id): string {
+		$own = $map_id
+			? cns_map_suite_sanitize_optional_color((string) get_post_meta($map_id, $meta_key, true))
+			: '';
+		return $own !== ''
+			? $own
+			: cns_map_suite_sanitize_optional_color((string) get_option($option_key, ''));
+	};
+
+	return [
+		'main'   => $pick('_cns_map_zoom_main_color',   'cns_map_suite_zoom_main_color'),
+		'accent' => $pick('_cns_map_zoom_accent_color', 'cns_map_suite_zoom_accent_color'),
+	];
+}
+
+/**
+ * The same colors as an inline `style` value. Empty when neither is set, so no
+ * attribute is emitted and the stylesheet fallback wins.
+ */
+function cns_map_suite_zoom_color_style(int $map_id = 0): string {
+	$colors = cns_map_suite_zoom_colors($map_id);
+	$css    = '';
+
+	foreach (['main' => '--cns-map-zoom-main', 'accent' => '--cns-map-zoom-accent'] as $key => $prop) {
+		if ($colors[$key] !== '') {
+			$css .= $prop . ':' . $colors[$key] . ';';
+		}
+	}
+
+	return $css;
 }
 
 function cns_map_suite_get_all_maps(int $take = -1, int $skip = 0, string $search = ''): array {

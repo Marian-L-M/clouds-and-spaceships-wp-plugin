@@ -26,9 +26,15 @@ defined('ABSPATH') || exit;
 const CNS_ARCHIVE_DEFAULT_PER_PAGE = 12;
 const CNS_ARCHIVE_DEFAULT_ORDER    = 'date_desc';
 
-/** Archives whose settings live in one option per field. */
+/**
+ * Archives whose settings live in one option per field.
+ *
+ * Maps are deliberately absent: the plugin publishes no map archive. Single map
+ * pages are public and render through the single-maps template, but a listing
+ * of maps is the theme's or the Site Editor's job, so there is no slug,
+ * per-page or sort-order setting to own.
+ */
 const CNS_OPTION_ARCHIVES = [
-	'maps'      => ['prefix' => 'cns_map_suite_',   'default_slug' => 'maps'],
 	'cns_story' => ['prefix' => 'cns_story_suite_', 'default_slug' => 'stories'],
 ];
 

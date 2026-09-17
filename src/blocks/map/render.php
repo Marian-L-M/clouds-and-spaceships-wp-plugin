@@ -110,10 +110,16 @@ if ($has_infoboxes) {
 // title, author, last-updated date, the description held in post_content — is
 // the single-map template's job (includes/map-template.php), so a map embedded
 // in another post brings only its canvas along.
-$wrapper_attrs = get_block_wrapper_attributes([
+// Zoom control colors: the map's own override, else the global default, else
+// nothing — in which case no style attribute is emitted and style.scss keeps
+// the built-in look. See cns_map_suite_zoom_colors().
+$zoom_style = cns_map_suite_zoom_color_style($map_id);
+
+$wrapper_attrs = get_block_wrapper_attributes(array_filter([
 	'class'       => 'cns-map',
 	'data-map-id' => (string) $map_id,
-]);
+	'style'       => $zoom_style,
+]));
 ?>
 <div <?php echo $wrapper_attrs; ?>>
 	<div class="cns-map-canvas-wrap">

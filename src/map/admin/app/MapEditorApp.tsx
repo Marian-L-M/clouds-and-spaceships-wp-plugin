@@ -59,6 +59,8 @@ function buildInitialSettings(): MapSettings {
 		bgImageUrl: d.bgImageUrl ?? '',
 		thumbnailId: d.thumbnailId ? d.thumbnailId : null,
 		thumbnailUrl: d.thumbnailUrl ?? '',
+		zoomMainColor: d.zoomMainColor ?? '',
+		zoomAccentColor: d.zoomAccentColor ?? '',
 	};
 }
 
@@ -163,6 +165,8 @@ export default function MapEditorApp() {
 			bg_color: next.bgColor,
 			bg_image_id: next.bgImageId,
 			thumbnail_id: next.thumbnailId ?? 0,
+			zoom_main_color: next.zoomMainColor,
+			zoom_accent_color: next.zoomAccentColor,
 		};
 		try {
 			const data = await apiFetch< {
@@ -572,8 +576,18 @@ export default function MapEditorApp() {
 		? 'New Map'
 		: `Edit: ${ settings.title || '(no title)' }`;
 
+	// Zoom control colors, resolved the same way the front end resolves them:
+	// this map's override, else the global default, else unset so the
+	// stylesheet fallback applies. Set once on the editor root so every
+	// CanvasZoomWrap inside inherits them.
+	const zoomVars: Record< string, string > = {};
+	const zoomMain = settings.zoomMainColor || d.zoomMainDefault || '';
+	const zoomAccent = settings.zoomAccentColor || d.zoomAccentDefault || '';
+	if ( zoomMain ) zoomVars[ '--cns-map-zoom-main' ] = zoomMain;
+	if ( zoomAccent ) zoomVars[ '--cns-map-zoom-accent' ] = zoomAccent;
+
 	return (
-		<div className="cns-map-editor">
+		<div className="cns-map-editor" style={ zoomVars }>
 			<EditorHeader
 				pageTitle={ pageTitle }
 				overviewUrl={ overviewUrl }

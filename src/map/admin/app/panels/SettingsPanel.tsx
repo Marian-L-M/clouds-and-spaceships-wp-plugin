@@ -37,6 +37,11 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 		onChange( ( prev ) => ( { ...prev, [ key ]: val } ) );
 	}
 
+	// Either color being set makes this map an override; clearing the toggle
+	// empties both, which is what "follow the global default" is stored as.
+	const overridesZoomColors =
+		settings.zoomMainColor !== '' || settings.zoomAccentColor !== '';
+
 	return (
 		<div
 			className="cns-tab-panel cns-tab-panel--active"
@@ -309,6 +314,57 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 										} ) )
 									}
 								/>
+							) }
+						</div>
+
+						{ /* Zoom controls */ }
+						<div className="cns-grid__group cns-grid__span-full">
+							<ToggleControl
+								__nextHasNoMarginBottom
+								label={ __(
+									'Override zoom control colors',
+									'clouds-and-spaceships'
+								) }
+								help={ __(
+									'Off: this map uses the global colors from the Maps settings tab.',
+									'clouds-and-spaceships'
+								) }
+								checked={ overridesZoomColors }
+								onChange={ ( on ) =>
+									onChange( ( prev ) => ( {
+										...prev,
+										zoomMainColor: on
+											? prev.zoomMainColor || '#2271b1'
+											: '',
+										zoomAccentColor: on
+											? prev.zoomAccentColor || '#ffffff'
+											: '',
+									} ) )
+								}
+							/>
+							{ overridesZoomColors && (
+								<Flex gap={ 2 } justify="start" wrap>
+									<ColorField
+										label={ __(
+											'Control Main Color',
+											'clouds-and-spaceships'
+										) }
+										value={ settings.zoomMainColor }
+										onChange={ ( v ) =>
+											set( 'zoomMainColor', v )
+										}
+									/>
+									<ColorField
+										label={ __(
+											'Control Accent Color',
+											'clouds-and-spaceships'
+										) }
+										value={ settings.zoomAccentColor }
+										onChange={ ( v ) =>
+											set( 'zoomAccentColor', v )
+										}
+									/>
+								</Flex>
 							) }
 						</div>
 					</div>

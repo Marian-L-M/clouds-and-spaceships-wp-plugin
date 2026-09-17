@@ -51,20 +51,27 @@ $bp-lpc: 1400px;
 	align-items: stretch;
 	gap: 4px;
 
+	// --cns-map-zoom-main / --cns-map-zoom-accent come from the map's own
+	// setting or the global default (see cns_map_suite_zoom_colors). When
+	// neither is set the fallbacks below keep the original light chrome, so
+	// nothing changes for a site that never touches the setting.
 	&__btn {
 		width: 32px;
 		height: 32px;
 		padding: 0;
 		border: 1px solid rgba(0, 0, 0, 0.25);
 		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.9);
-		color: #1e1e1e;
+		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--cns-map-zoom-accent, #1e1e1e);
 		font-size: 18px;
 		line-height: 1;
 		cursor: pointer;
 
 		&:hover:not(:disabled) {
-			background: #fff;
+			// Derived rather than configurable: one more color to set for every
+			// map, to express "the same, a shade darker".
+			filter: brightness(0.92);
+			background: var(--cns-map-zoom-main, #fff);
 		}
 
 		&:disabled {
@@ -77,8 +84,8 @@ $bp-lpc: 1400px;
 		font-size: 11px;
 		line-height: normal;
 		text-align: center;
-		color: #1e1e1e;
-		background: rgba(255, 255, 255, 0.85);
+		color: var(--cns-map-zoom-accent, #1e1e1e);
+		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.85));
 		border-radius: 3px;
 		padding: 2px 0;
 	}

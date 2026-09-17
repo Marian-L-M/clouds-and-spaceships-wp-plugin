@@ -102,10 +102,8 @@ $options = [
 	'cns_map_suite_delete_on_uninstall',
 	'cns_map_suite_delete_icons_on_uninstall',
 	'cns_map_suite_show_maps_menu',
-	'cns_map_suite_archive_enabled',
-	'cns_map_suite_archive_slug',
-	'cns_map_suite_archive_per_page',
-	'cns_map_suite_archive_order',
+	'cns_map_suite_zoom_main_color',
+	'cns_map_suite_zoom_accent_color',
 	'cns_map_suite_cache_ver',
 	// Stories
 	'cns_story_suite_delete_on_uninstall',
@@ -119,6 +117,11 @@ $options = [
 	// Wiki
 	'cns_wiki_settings',
 	'cns_wiki_cpt_structure_version',
+	// Retired settings — the plugin no longer publishes a map archive.
+	'cns_map_suite_archive_enabled',
+	'cns_map_suite_archive_slug',
+	'cns_map_suite_archive_per_page',
+	'cns_map_suite_archive_order',
 	// Left behind by the three plugins this one replaces.
 	'cns_map_suite_db_version',
 	'cns_map_suite_needs_flush',
