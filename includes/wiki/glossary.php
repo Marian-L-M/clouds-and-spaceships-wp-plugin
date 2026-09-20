@@ -77,7 +77,7 @@ function cns_wiki_register_glossary_post_type(): void
         'hierarchical'       => false,
         'menu_position'      => 21,
         'menu_icon'          => 'dashicons-book-alt',
-        'supports'           => ['title', 'editor', 'thumbnail', 'excerpt'],
+        'supports'           => ['title', 'editor', 'author', 'thumbnail', 'excerpt'],
         'taxonomies'         => ['glossary_category'],
         'show_in_rest'       => true,
         'template_lock'      => false,
