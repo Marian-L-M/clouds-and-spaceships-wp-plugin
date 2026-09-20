@@ -413,6 +413,16 @@ export default function MapEditorApp() {
 		return data;
 	}
 
+	// Live preview: form edits update the in-memory area immediately so the
+	// canvas reflects fill/stroke/label styling before saving. Geometry and
+	// shape type have their own handlers — they normalize nodes and schedule a
+	// persist, which a blind style patch must not bypass.
+	function handleAreaLocalUpdate( id: number, patch: Partial< MapArea > ) {
+		setAreasList( ( prev ) =>
+			prev.map( ( a ) => ( a.id === id ? { ...a, ...patch } : a ) )
+		);
+	}
+
 	function handleAreaNodesUpdate( areaId: number, nodes: Node[] ) {
 		setAreasList( ( prev ) =>
 			prev.map( ( a ) => ( a.id === areaId ? { ...a, nodes } : a ) )
@@ -488,6 +498,16 @@ export default function MapEditorApp() {
 	}
 
 	// ── Hierarchy region operations ───────────────────────────────────────────
+
+	// Live preview, as for areas — region styling repaints as you edit it.
+	function handleRegionLocalUpdate(
+		id: number,
+		patch: Partial< HierarchyRegion >
+	) {
+		setRegionsList( ( prev ) =>
+			prev.map( ( r ) => ( r.id === id ? { ...r, ...patch } : r ) )
+		);
+	}
 
 	function handleRegionNodesUpdate( regionId: number, nodes: Node[] ) {
 		setRegionsList( ( prev ) =>
@@ -726,6 +746,7 @@ export default function MapEditorApp() {
 					onObjectDuplicate={ () =>
 						handleObjectDuplicate( selectedObjectId! )
 					}
+					onObjectLocalUpdate={ handleObjectLocalUpdate }
 					onLabelSave={ handleLabelSave }
 					onLabelDelete={ () =>
 						handleLabelDeleteById( selectedLabelId! )
@@ -743,6 +764,7 @@ export default function MapEditorApp() {
 					onAreaDuplicate={ () =>
 						handleAreaDuplicate( selectedAreaId! )
 					}
+					onAreaLocalUpdate={ handleAreaLocalUpdate }
 					onAreaNodesUpdate={ handleAreaNodesUpdate }
 					onAreaShapeTypeChange={ handleAreaShapeTypeChange }
 					onRegionSave={ handleRegionSave }
@@ -751,6 +773,7 @@ export default function MapEditorApp() {
 						handleRegionDeleteById( selectedRegionId! )
 					}
 					onRegionClose={ () => setSelectedRegionId( null ) }
+					onRegionLocalUpdate={ handleRegionLocalUpdate }
 					onRegionNodesUpdate={ handleRegionNodesUpdate }
 				/>
 			</div>

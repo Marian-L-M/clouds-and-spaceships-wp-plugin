@@ -57,6 +57,7 @@ function ContextPanel({
   onObjectDelete,
   onObjectClose,
   onObjectDuplicate,
+  onObjectLocalUpdate,
   onLabelSave,
   onLabelDelete,
   onLabelClose,
@@ -66,11 +67,13 @@ function ContextPanel({
   onAreaDelete,
   onAreaClose,
   onAreaDuplicate,
+  onAreaLocalUpdate,
   onAreaNodesUpdate,
   onAreaShapeTypeChange,
   onRegionSave,
   onRegionDelete,
   onRegionClose,
+  onRegionLocalUpdate,
   onRegionNodesUpdate,
   onRegionShapeTypeChange
 }) {
@@ -285,7 +288,43 @@ function ContextPanel({
       className: "cns-map-editor__context-body",
       children: [selection.kind === 'object' && objFormData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_ObjectForm__WEBPACK_IMPORTED_MODULE_7__["default"], {
         formData: objFormData,
-        onChange: setObjFormData,
+        onChange: fd => {
+          setObjFormData(fd);
+          // Live preview, as for labels below: mirror the
+          // form onto the in-memory object so the canvas
+          // repaints as you edit (Save persists it).
+          if (!selectedObject) {
+            return;
+          }
+          const isSvg = fd.icon_source !== 'image';
+          const iconId = isSvg ? fd.icon_image_id_svg || 0 : fd.icon_image_id_custom || 0;
+          onObjectLocalUpdate(selectedObject.id, {
+            title: fd.title,
+            type: fd.type,
+            x: fd.x,
+            y: fd.y,
+            object_time: fd.object_time,
+            icon_image_id: iconId || null,
+            // The canvas draws from the URL, not the ID, so
+            // a newly picked icon needs one straight away.
+            // The library holds only SVGs; a custom image
+            // clears the mime so it takes the bitmap path.
+            icon_url: isSvg ? icons.find(i => i.id === iconId)?.url ?? '' : fd.icon_image_url,
+            icon_mime: isSvg ? 'image/svg+xml' : '',
+            infobox_source: fd.infobox_source,
+            linked_post_id: fd.linked_post_id,
+            infobox_data: {
+              title: fd.infobox_title,
+              description: fd.infobox_description,
+              image_id: fd.infobox_image_id
+            },
+            canvas_styles: {
+              size: fd.style_size,
+              fillStyle: fd.style_fill,
+              strokeStyle: fd.style_stroke
+            }
+          });
+        },
         icons: icons
       }), selection.kind === 'label' && labelFormData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_LabelForm__WEBPACK_IMPORTED_MODULE_8__["default"], {
         formData: labelFormData,
@@ -321,7 +360,36 @@ function ContextPanel({
       }), selection.kind === 'area' && areaFormData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_AreaForm__WEBPACK_IMPORTED_MODULE_9__["default"], {
           formData: areaFormData,
-          onChange: setAreaFormData,
+          onChange: fd => {
+            setAreaFormData(fd);
+            // shape_type is deliberately absent — it goes
+            // through onShapeTypeChange, which normalizes
+            // the nodes for the new shape.
+            if (!selectedArea) {
+              return;
+            }
+            onAreaLocalUpdate(selectedArea.id, {
+              title: fd.title,
+              type: fd.type,
+              object_time: fd.object_time,
+              infobox_source: fd.infobox_source,
+              linked_post_id: fd.linked_post_id,
+              infobox_data: {
+                title: fd.infobox_title,
+                description: fd.infobox_description,
+                image_id: fd.infobox_image_id
+              },
+              canvas_styles: {
+                fill: fd.style_fill,
+                stroke: fd.style_stroke,
+                strokeWidth: fd.style_stroke_width,
+                labelHidden: fd.style_label_hidden,
+                labelFontFamily: fd.style_label_font_family,
+                labelFontSize: fd.style_label_font_size,
+                labelColor: fd.style_label_color
+              }
+            });
+          },
           onShapeTypeChange: st => {
             if (selectedArea) onAreaShapeTypeChange?.(selectedArea.id, st);
             setAreaFormData(prev => prev ? {
@@ -337,7 +405,35 @@ function ContextPanel({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_HierarchyRegionForm__WEBPACK_IMPORTED_MODULE_10__["default"], {
           formData: regionFormData,
           region: selectedRegion,
-          onChange: setRegionFormData,
+          onChange: fd => {
+            setRegionFormData(fd);
+            // As for areas: shape_type stays with
+            // onShapeTypeChange so nodes get normalized.
+            if (!selectedRegion) {
+              return;
+            }
+            onRegionLocalUpdate(selectedRegion.id, {
+              child_map_id: fd.child_map_id,
+              // regionLabelText falls back to this, so
+              // picking another child map relabels the
+              // shape right away.
+              child_map_title: fd.child_map_label,
+              title_override: fd.title_override,
+              description_override: fd.description_override,
+              canvas_styles: {
+                fill: fd.style_fill,
+                stroke: fd.style_stroke,
+                strokeWidth: fd.style_stroke_width,
+                labelHidden: fd.style_label_hidden,
+                labelFontFamily: fd.style_label_font_family,
+                labelFontSize: fd.style_label_font_size,
+                labelColor: fd.style_label_color,
+                tipBgColor: fd.style_tip_bg,
+                tipBorderColor: fd.style_tip_border,
+                tipTextColor: fd.style_tip_text
+              }
+            });
+          },
           onShapeTypeChange: st => {
             if (selectedRegion) onRegionShapeTypeChange?.(selectedRegion.id, st);
             setRegionFormData(prev => prev ? {
@@ -832,6 +928,17 @@ function MapEditorApp() {
     setAreasList(prev => prev.map(a => a.id === selectedAreaId ? data : a));
     return data;
   }
+
+  // Live preview: form edits update the in-memory area immediately so the
+  // canvas reflects fill/stroke/label styling before saving. Geometry and
+  // shape type have their own handlers — they normalize nodes and schedule a
+  // persist, which a blind style patch must not bypass.
+  function handleAreaLocalUpdate(id, patch) {
+    setAreasList(prev => prev.map(a => a.id === id ? {
+      ...a,
+      ...patch
+    } : a));
+  }
   function handleAreaNodesUpdate(areaId, nodes) {
     setAreasList(prev => prev.map(a => a.id === areaId ? {
       ...a,
@@ -890,6 +997,13 @@ function MapEditorApp() {
 
   // ── Hierarchy region operations ───────────────────────────────────────────
 
+  // Live preview, as for areas — region styling repaints as you edit it.
+  function handleRegionLocalUpdate(id, patch) {
+    setRegionsList(prev => prev.map(r => r.id === id ? {
+      ...r,
+      ...patch
+    } : r));
+  }
   function handleRegionNodesUpdate(regionId, nodes) {
     setRegionsList(prev => prev.map(r => r.id === regionId ? {
       ...r,
@@ -1070,6 +1184,7 @@ function MapEditorApp() {
         onObjectDelete: () => handleObjectDeleteById(selectedObjectId),
         onObjectClose: () => setSelectedObjectId(null),
         onObjectDuplicate: () => handleObjectDuplicate(selectedObjectId),
+        onObjectLocalUpdate: handleObjectLocalUpdate,
         onLabelSave: handleLabelSave,
         onLabelDelete: () => handleLabelDeleteById(selectedLabelId),
         onLabelClose: () => setSelectedLabelId(null),
@@ -1079,12 +1194,14 @@ function MapEditorApp() {
         onAreaDelete: () => handleAreaDeleteById(selectedAreaId),
         onAreaClose: () => setSelectedAreaId(null),
         onAreaDuplicate: () => handleAreaDuplicate(selectedAreaId),
+        onAreaLocalUpdate: handleAreaLocalUpdate,
         onAreaNodesUpdate: handleAreaNodesUpdate,
         onAreaShapeTypeChange: handleAreaShapeTypeChange,
         onRegionSave: handleRegionSave,
         onRegionShapeTypeChange: handleRegionShapeTypeChange,
         onRegionDelete: () => handleRegionDeleteById(selectedRegionId),
         onRegionClose: () => setSelectedRegionId(null),
+        onRegionLocalUpdate: handleRegionLocalUpdate,
         onRegionNodesUpdate: handleRegionNodesUpdate
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_shared_admin_Notices__WEBPACK_IMPORTED_MODULE_4__["default"], {})]

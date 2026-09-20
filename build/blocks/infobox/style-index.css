@@ -1,1 +1,186 @@
-.wp-block-cns-wiki-suite-infobox{background-color:var(--cns-wiki-infobox-bg,var(--wp--preset--color--element-bg));color:var(--cns-wiki-infobox-text,var(--wp--preset--color--text));max-width:var(--cns-wiki-infobox-width,360px);order:1;width:100%}.infobox,.infobox .block-editor-block-list__layout,.infobox .block-editor-inner-blocks,.infobox__content{display:flex;flex-direction:column;gap:1rem;width:100%}.infobox{border:1px solid #dedede;box-sizing:border-box;font-size:1rem;margin-bottom:2rem;padding:1em}.infobox h2{font-size:1.25em}.infobox h3{font-size:1.125em}.infobox dd,.infobox dt{font-size:.875rem}.infobox button{font-size:1em}.infobox>*{box-sizing:border-box}.infobox__inner,.infobox__inner .size-full{width:100%}.infobox__title{background-color:var(--cns-wiki-infobox-title-bg,var(--wp--preset--color--element-contrast));color:var(--cns-wiki-infobox-title-text,var(--cns-wiki-infobox-text,var(--wp--preset--color--text)))}.infobox__title button,.infobox__title input{color:inherit}.infobox__content{position:relative;z-index:2}.infobox__image{height:200px;width:100%}.infobox button,.infobox h2{width:100%}.infobox button{appearance:none;background:unset;border:unset;font-family:inherit}.infobox h2{margin:0;padding-bottom:.2em;padding-top:.2em}.infobox h2,.infobox h2 button{font-weight:700;line-height:120%;text-align:center}.infobox ul{padding-left:1.2em}.infobox button.toggle-btn{padding:.2rem 2rem;position:relative}.infobox.collapse__all button.toggle-btn{cursor:pointer}.infobox.collapse__all button.toggle-btn:after{aspect-ratio:1/1;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 fill=%27pink%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27M1 2h14v2H1zM1 7h14v2H1zM1 12h14v2H1z%27/%3E%3C/g%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain;content:"";display:block;position:absolute;right:0;top:0;width:1.5rem}.infobox.collapse__all button.toggle-btn:hover{opacity:.6}.infobox.collapse__groups .collapse-ibg__mobile button.toggle-btn,.infobox.collapse__groups .inherit button.toggle-btn{cursor:pointer}.infobox.collapse__groups .collapse-ibg__mobile button.toggle-btn:after,.infobox.collapse__groups .inherit button.toggle-btn:after{aspect-ratio:1/1;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 fill=%27pink%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27M1 2h14v2H1zM1 7h14v2H1zM1 12h14v2H1z%27/%3E%3C/g%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain;content:"";display:block;position:absolute;right:0;top:0;width:1.5rem}.infobox.collapse__groups .collapse-ibg__mobile button.toggle-btn:hover,.infobox.collapse__groups .inherit button.toggle-btn:hover{opacity:.6}.infobox.collapse__all:not(.infobox.collapse__all.is-active) .infobox__inner,.infobox.collapse__groups:not(.infobox.collapse__groups.is-active) .infobox-group__inner{display:none}@media screen and (max-width:768px){.infobox.collapse .inherit button.toggle-btn,.infobox.collapse__all-mobile button.toggle-btn{cursor:pointer}.infobox.collapse .inherit button.toggle-btn:after,.infobox.collapse__all-mobile button.toggle-btn:after{aspect-ratio:1/1;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 fill=%27pink%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27M1 2h14v2H1zM1 7h14v2H1zM1 12h14v2H1z%27/%3E%3C/g%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain;content:"";display:block;position:absolute;right:0;top:0;width:1.5rem}.infobox.collapse .inherit button.toggle-btn:hover,.infobox.collapse__all-mobile button.toggle-btn:hover{opacity:.6}.infobox.collapse .inherit:not(.infobox.collapse .inherit.is-active,.infobox.collapse__all-mobile.is-active) .infobox__inner,.infobox.collapse__all-mobile:not(.infobox.collapse .inherit.is-active,.infobox.collapse__all-mobile.is-active) .infobox__inner{display:none}.infobox.collapse__groups-mobile .inherit button.toggle-btn{cursor:pointer}.infobox.collapse__groups-mobile .inherit button.toggle-btn:after{aspect-ratio:1/1;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 fill=%27pink%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27M1 2h14v2H1zM1 7h14v2H1zM1 12h14v2H1z%27/%3E%3C/g%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain;content:"";display:block;position:absolute;right:0;top:0;width:1.5rem}.infobox.collapse__groups-mobile .inherit button.toggle-btn:hover{opacity:.6}.infobox.collapse__groups-mobile:not(.infobox.collapse__groups-mobile.is-active) .infobox-group__inner{display:none}}
+/*!******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/infobox/style.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************/
+.wp-block-cns-wiki-suite-infobox {
+  width: 100%;
+  max-width: var(--cns-wiki-infobox-width, 360px);
+  order: 1;
+  background-color: var(--cns-wiki-infobox-bg, var(--wp--preset--color--element-bg));
+  color: var(--cns-wiki-infobox-text, var(--wp--preset--color--text));
+}
+
+.infobox,
+.infobox .block-editor-inner-blocks,
+.infobox .block-editor-block-list__layout,
+.infobox__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.infobox {
+  border: 1px solid #dedede;
+  padding: 1em;
+  margin-bottom: 2rem;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+.infobox h2 {
+  font-size: 1.25em;
+}
+.infobox h3 {
+  font-size: 1.125em;
+}
+.infobox dt,
+.infobox dd {
+  font-size: 0.875rem;
+}
+.infobox button {
+  font-size: 1em;
+}
+.infobox > * {
+  box-sizing: border-box;
+}
+.infobox__inner {
+  width: 100%;
+}
+.infobox__inner .size-full {
+  width: 100%;
+}
+.infobox__title {
+  background-color: var(--cns-wiki-infobox-title-bg, var(--wp--preset--color--element-contrast));
+  color: var(--cns-wiki-infobox-title-text, var(--cns-wiki-infobox-text, var(--wp--preset--color--text)));
+}
+.infobox__title input,
+.infobox__title button {
+  color: inherit;
+}
+.infobox__content {
+  position: relative;
+  z-index: 2;
+}
+.infobox__image {
+  width: 100%;
+  height: 200px;
+}
+.infobox h2,
+.infobox button {
+  width: 100%;
+}
+.infobox button {
+  appearance: none;
+  background: unset;
+  border: unset;
+  font-family: inherit;
+}
+.infobox h2 {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+}
+.infobox h2,
+.infobox h2 button {
+  font-weight: bold;
+  line-height: 120%;
+  text-align: center;
+}
+.infobox ul {
+  padding-left: 1.2em;
+}
+.infobox button.toggle-btn {
+  position: relative;
+  padding: 0.2rem 2rem;
+}
+.infobox.collapse__all button.toggle-btn {
+  cursor: pointer;
+}
+.infobox.collapse__all button.toggle-btn:after {
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg width=%2716%27 height=%2716%27 fill=%27pink%27 viewBox=%270 0 16 16%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27m 1 2 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 7 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 12 h 14 v 2 h -14 z%27/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  display: block;
+  width: 1.5rem;
+  aspect-ratio: 1/1;
+  right: 0;
+  top: 0;
+}
+.infobox.collapse__all button.toggle-btn:hover {
+  opacity: 0.6;
+}
+.infobox.collapse__groups .inherit button.toggle-btn,
+.infobox.collapse__groups .collapse-ibg__mobile button.toggle-btn {
+  cursor: pointer;
+}
+.infobox.collapse__groups .inherit button.toggle-btn:after,
+.infobox.collapse__groups .collapse-ibg__mobile button.toggle-btn:after {
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg width=%2716%27 height=%2716%27 fill=%27pink%27 viewBox=%270 0 16 16%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27m 1 2 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 7 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 12 h 14 v 2 h -14 z%27/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  display: block;
+  width: 1.5rem;
+  aspect-ratio: 1/1;
+  right: 0;
+  top: 0;
+}
+.infobox.collapse__groups .inherit button.toggle-btn:hover,
+.infobox.collapse__groups .collapse-ibg__mobile button.toggle-btn:hover {
+  opacity: 0.6;
+}
+.infobox.collapse__groups:not(.infobox.collapse__groups.is-active) .infobox-group__inner {
+  display: none;
+}
+.infobox.collapse__all:not(.infobox.collapse__all.is-active) .infobox__inner {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .infobox.collapse .inherit button.toggle-btn, .infobox.collapse__all-mobile button.toggle-btn {
+    cursor: pointer;
+  }
+  .infobox.collapse .inherit button.toggle-btn:after, .infobox.collapse__all-mobile button.toggle-btn:after {
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg width=%2716%27 height=%2716%27 fill=%27pink%27 viewBox=%270 0 16 16%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27m 1 2 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 7 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 12 h 14 v 2 h -14 z%27/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    display: block;
+    width: 1.5rem;
+    aspect-ratio: 1/1;
+    right: 0;
+    top: 0;
+  }
+  .infobox.collapse .inherit button.toggle-btn:hover, .infobox.collapse__all-mobile button.toggle-btn:hover {
+    opacity: 0.6;
+  }
+  .infobox.collapse .inherit:not(.infobox.collapse .inherit.is-active, .infobox.collapse__all-mobile.is-active) .infobox__inner, .infobox.collapse__all-mobile:not(.infobox.collapse .inherit.is-active, .infobox.collapse__all-mobile.is-active) .infobox__inner {
+    display: none;
+  }
+  .infobox.collapse__groups-mobile .inherit button.toggle-btn {
+    cursor: pointer;
+  }
+  .infobox.collapse__groups-mobile .inherit button.toggle-btn:after {
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg width=%2716%27 height=%2716%27 fill=%27pink%27 viewBox=%270 0 16 16%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27currentColor%27%3E%3Cpath d=%27m 1 2 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 7 h 14 v 2 h -14 z%27/%3E%3Cpath d=%27m 1 12 h 14 v 2 h -14 z%27/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    display: block;
+    width: 1.5rem;
+    aspect-ratio: 1/1;
+    right: 0;
+    top: 0;
+  }
+  .infobox.collapse__groups-mobile .inherit button.toggle-btn:hover {
+    opacity: 0.6;
+  }
+  .infobox.collapse__groups-mobile:not(.infobox.collapse__groups-mobile.is-active) .infobox-group__inner {
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=style-index.css.map*/

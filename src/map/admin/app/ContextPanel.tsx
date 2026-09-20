@@ -54,6 +54,7 @@ interface Props {
 	onObjectDelete: () => Promise< void >;
 	onObjectClose: () => void;
 	onObjectDuplicate: () => void;
+	onObjectLocalUpdate: ( id: number, patch: Partial< MapObject > ) => void;
 	onLabelSave: (
 		payload: LabelSavePayload
 	) => Promise< MapLabel | undefined >;
@@ -65,6 +66,7 @@ interface Props {
 	onAreaDelete: () => Promise< void >;
 	onAreaClose: () => void;
 	onAreaDuplicate: () => void;
+	onAreaLocalUpdate: ( id: number, patch: Partial< MapArea > ) => void;
 	onAreaNodesUpdate: ( areaId: number, nodes: Node[] ) => void;
 	onAreaShapeTypeChange: ( areaId: number, shapeType: ShapeType ) => void;
 	onRegionSave: (
@@ -72,6 +74,10 @@ interface Props {
 	) => Promise< HierarchyRegion | undefined >;
 	onRegionDelete: () => Promise< void >;
 	onRegionClose: () => void;
+	onRegionLocalUpdate: (
+		id: number,
+		patch: Partial< HierarchyRegion >
+	) => void;
 	onRegionNodesUpdate: ( regionId: number, nodes: Node[] ) => void;
 	onRegionShapeTypeChange: ( regionId: number, shapeType: ShapeType ) => void;
 }
@@ -86,6 +92,7 @@ export default function ContextPanel( {
 	onObjectDelete,
 	onObjectClose,
 	onObjectDuplicate,
+	onObjectLocalUpdate,
 	onLabelSave,
 	onLabelDelete,
 	onLabelClose,
@@ -95,11 +102,13 @@ export default function ContextPanel( {
 	onAreaDelete,
 	onAreaClose,
 	onAreaDuplicate,
+	onAreaLocalUpdate,
 	onAreaNodesUpdate,
 	onAreaShapeTypeChange,
 	onRegionSave,
 	onRegionDelete,
 	onRegionClose,
+	onRegionLocalUpdate,
 	onRegionNodesUpdate,
 	onRegionShapeTypeChange,
 }: Props ) {
@@ -370,7 +379,48 @@ export default function ContextPanel( {
 				{ selection.kind === 'object' && objFormData && (
 					<ObjectForm
 						formData={ objFormData }
-						onChange={ setObjFormData }
+						onChange={ ( fd ) => {
+							setObjFormData( fd );
+							// Live preview, as for labels below: mirror the
+							// form onto the in-memory object so the canvas
+							// repaints as you edit (Save persists it).
+							if ( ! selectedObject ) {
+								return;
+							}
+							const isSvg = fd.icon_source !== 'image';
+							const iconId = isSvg
+								? fd.icon_image_id_svg || 0
+								: fd.icon_image_id_custom || 0;
+							onObjectLocalUpdate( selectedObject.id, {
+								title: fd.title,
+								type: fd.type,
+								x: fd.x,
+								y: fd.y,
+								object_time: fd.object_time,
+								icon_image_id: iconId || null,
+								// The canvas draws from the URL, not the ID, so
+								// a newly picked icon needs one straight away.
+								// The library holds only SVGs; a custom image
+								// clears the mime so it takes the bitmap path.
+								icon_url: isSvg
+									? icons.find( ( i ) => i.id === iconId )
+											?.url ?? ''
+									: fd.icon_image_url,
+								icon_mime: isSvg ? 'image/svg+xml' : '',
+								infobox_source: fd.infobox_source,
+								linked_post_id: fd.linked_post_id,
+								infobox_data: {
+									title: fd.infobox_title,
+									description: fd.infobox_description,
+									image_id: fd.infobox_image_id,
+								},
+								canvas_styles: {
+									size: fd.style_size,
+									fillStyle: fd.style_fill,
+									strokeStyle: fd.style_stroke,
+								},
+							} );
+						} }
 						icons={ icons }
 					/>
 				) }
@@ -412,7 +462,37 @@ export default function ContextPanel( {
 					<>
 						<AreaForm
 							formData={ areaFormData }
-							onChange={ setAreaFormData }
+							onChange={ ( fd ) => {
+								setAreaFormData( fd );
+								// shape_type is deliberately absent — it goes
+								// through onShapeTypeChange, which normalizes
+								// the nodes for the new shape.
+								if ( ! selectedArea ) {
+									return;
+								}
+								onAreaLocalUpdate( selectedArea.id, {
+									title: fd.title,
+									type: fd.type,
+									object_time: fd.object_time,
+									infobox_source: fd.infobox_source,
+									linked_post_id: fd.linked_post_id,
+									infobox_data: {
+										title: fd.infobox_title,
+										description: fd.infobox_description,
+										image_id: fd.infobox_image_id,
+									},
+									canvas_styles: {
+										fill: fd.style_fill,
+										stroke: fd.style_stroke,
+										strokeWidth: fd.style_stroke_width,
+										labelHidden: fd.style_label_hidden,
+										labelFontFamily:
+											fd.style_label_font_family,
+										labelFontSize: fd.style_label_font_size,
+										labelColor: fd.style_label_color,
+									},
+								} );
+							} }
 							onShapeTypeChange={ ( st ) => {
 								if ( selectedArea )
 									onAreaShapeTypeChange?.(
@@ -442,7 +522,37 @@ export default function ContextPanel( {
 						<HierarchyRegionForm
 							formData={ regionFormData }
 							region={ selectedRegion }
-							onChange={ setRegionFormData }
+							onChange={ ( fd ) => {
+								setRegionFormData( fd );
+								// As for areas: shape_type stays with
+								// onShapeTypeChange so nodes get normalized.
+								if ( ! selectedRegion ) {
+									return;
+								}
+								onRegionLocalUpdate( selectedRegion.id, {
+									child_map_id: fd.child_map_id,
+									// regionLabelText falls back to this, so
+									// picking another child map relabels the
+									// shape right away.
+									child_map_title: fd.child_map_label,
+									title_override: fd.title_override,
+									description_override:
+										fd.description_override,
+									canvas_styles: {
+										fill: fd.style_fill,
+										stroke: fd.style_stroke,
+										strokeWidth: fd.style_stroke_width,
+										labelHidden: fd.style_label_hidden,
+										labelFontFamily:
+											fd.style_label_font_family,
+										labelFontSize: fd.style_label_font_size,
+										labelColor: fd.style_label_color,
+										tipBgColor: fd.style_tip_bg,
+										tipBorderColor: fd.style_tip_border,
+										tipTextColor: fd.style_tip_text,
+									},
+								} );
+							} }
 							onShapeTypeChange={ ( st ) => {
 								if ( selectedRegion )
 									onRegionShapeTypeChange?.(
