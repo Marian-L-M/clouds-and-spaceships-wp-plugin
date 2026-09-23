@@ -72,22 +72,6 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 								set( 'display_mode', v as ObjectDisplayMode )
 							}
 						/>
-						<p className="description">
-							{ isTextMode
-								? __(
-										'Text mode draws the object title on a rectangular backdrop.',
-										'clouds-and-spaceships'
-								  )
-								: isIconMode
-								? __(
-										'Icon mode draws the icon on a round background.',
-										'clouds-and-spaceships'
-								  )
-								: __(
-										'Shape modes draw a filled shape at the object position.',
-										'clouds-and-spaceships'
-								  ) }
-						</p>
 					</div>
 				</div>
 			</section>
@@ -179,7 +163,8 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							onChange={ ( v ) => set( 'type', v as ObjectType ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					{ /* Oops you found a placeholder for a future functionality. Please keep it commented out. */ }
+					{ /* <div className="cns-grid__group">
 						<NumberControl
 							label={ __(
 								'Object Time',
@@ -194,7 +179,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 								)
 							}
 						/>
-					</div>
+					</div> */ }
 					<div className="cns-grid__group">
 						<NumberControl
 							label={ __( 'X (px)', 'clouds-and-spaceships' ) }
@@ -279,22 +264,6 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 						/>
 					</div>
 				</div>
-				<p className="description">
-					{ isIconMode
-						? __(
-								'The background fills the round shape behind the icon.',
-								'clouds-and-spaceships'
-						  )
-						: isTextMode
-						? __(
-								'The background fills the rectangle behind the text.',
-								'clouds-and-spaceships'
-						  )
-						: __(
-								'The background fills the shape itself.',
-								'clouds-and-spaceships'
-						  ) }
-				</p>
 			</section>
 
 			{ /* ── Text ── */ }
@@ -346,12 +315,6 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							/>
 						</div>
 					</div>
-					<p className="description">
-						{ __(
-							'Text mode draws the object title above.',
-							'clouds-and-spaceships'
-						) }
-					</p>
 				</section>
 			) }
 

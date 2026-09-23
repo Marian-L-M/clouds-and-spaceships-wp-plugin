@@ -61,8 +61,6 @@ export default function AreaForm( {
 					</div>
 					<div className="cns-grid__group">
 						<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 							label={ __( 'Type', 'clouds-and-spaceships' ) }
 							value={ formData.type }
 							options={ AREA_TYPES }
@@ -71,18 +69,19 @@ export default function AreaForm( {
 					</div>
 					<div className="cns-grid__group">
 						<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 							label={ __( 'Shape', 'clouds-and-spaceships' ) }
 							value={ formData.shape_type }
 							options={ SHAPE_TYPES }
 							onChange={ handleShapeChange }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					{ /* Oops you found a placeholder for a future functionality. Please keep it commented out. */ }
+					{ /* <div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
-							label={ __( 'Object Time', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Object Time',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.object_time }
 							step={ 1 }
 							onChange={ ( v ) =>
@@ -92,7 +91,7 @@ export default function AreaForm( {
 								)
 							}
 						/>
-					</div>
+					</div> */ }
 				</div>
 			</section>
 
@@ -103,14 +102,20 @@ export default function AreaForm( {
 				<div className="cns-grid cns-grid__12">
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Fill Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Fill Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_fill }
 							onChange={ ( v ) => set( 'style_fill', v ) }
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Stroke Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Stroke Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_stroke }
 							onChange={ ( v ) => set( 'style_stroke', v ) }
 						/>
@@ -118,7 +123,10 @@ export default function AreaForm( {
 					<div className="cns-grid__group">
 						<NumberControl
 							__next40pxDefaultSize
-							label={ __( 'Stroke Width (px)', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Stroke Width (px)',
+								'clouds-and-spaceships'
+							) }
 							min={ 1 }
 							max={ 10 }
 							step={ 1 }
@@ -156,7 +164,10 @@ export default function AreaForm( {
 						<SelectControl
 							__next40pxDefaultSize
 							__nextHasNoMarginBottom
-							label={ __( 'Font Family', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Font Family',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_label_font_family }
 							options={ LABEL_FONTS }
 							onChange={ ( v ) =>
@@ -167,7 +178,10 @@ export default function AreaForm( {
 					<div className="cns-grid__group">
 						<NumberControl
 							__next40pxDefaultSize
-							label={ __( 'Font Size (px)', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Font Size (px)',
+								'clouds-and-spaceships'
+							) }
 							min={ 6 }
 							max={ 96 }
 							step={ 1 }
@@ -182,7 +196,10 @@ export default function AreaForm( {
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Font Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Font Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_label_color }
 							onChange={ ( v ) => set( 'style_label_color', v ) }
 						/>

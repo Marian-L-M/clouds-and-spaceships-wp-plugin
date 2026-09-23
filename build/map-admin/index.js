@@ -2396,8 +2396,6 @@ function AreaForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-            __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Type', 'clouds-and-spaceships'),
             value: formData.type,
             options: _choices__WEBPACK_IMPORTED_MODULE_5__.AREA_TYPES,
@@ -2406,21 +2404,10 @@ function AreaForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-            __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Shape', 'clouds-and-spaceships'),
             value: formData.shape_type,
             options: _choices__WEBPACK_IMPORTED_MODULE_5__.SHAPE_TYPES,
             onChange: handleShapeChange
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-          className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Object Time', 'clouds-and-spaceships'),
-            value: formData.object_time,
-            step: 1,
-            onChange: v => set('object_time', parseInt(v ?? '', 10) || 0)
           })
         })]
       })]
@@ -3208,17 +3195,14 @@ function ObjectForm({
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display Settings', 'clouds-and-spaceships')
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "cns-grid",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__row",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mode', 'clouds-and-spaceships'),
             selected: formData.display_mode,
             options: _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_DISPLAY_MODES,
             onChange: v => set('display_mode', v)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
-            className: "description",
-            children: isTextMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text mode draws the object title on a rectangular backdrop.', 'clouds-and-spaceships') : isIconMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon mode draws the icon on a round background.', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Shape modes draw a filled shape at the object position.', 'clouds-and-spaceships')
-          })]
+          })
         })
       })]
     }), isIconMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
@@ -3288,14 +3272,6 @@ function ObjectForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Object Time', 'clouds-and-spaceships'),
-            value: formData.object_time,
-            step: 1,
-            onChange: v => set('object_time', parseInt(v ?? '', 10) || 0)
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-          className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('X (px)', 'clouds-and-spaceships'),
             value: formData.x,
             step: 1,
@@ -3356,9 +3332,6 @@ function ObjectForm({
             onChange: v => set('style_border_color', v)
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
-        className: "description",
-        children: isIconMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The background fills the round shape behind the icon.', 'clouds-and-spaceships') : isTextMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The background fills the rectangle behind the text.', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The background fills the shape itself.', 'clouds-and-spaceships')
       })]
     }), isTextMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
       className: "cns-modal-section",
@@ -3392,9 +3365,6 @@ function ObjectForm({
             onChange: v => set('style_text_color', v)
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
-        className: "description",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text mode draws the object title above.', 'clouds-and-spaceships')
       })]
     }), isIconMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
       className: "cns-modal-section",
