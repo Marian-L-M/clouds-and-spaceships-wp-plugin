@@ -11,8 +11,16 @@ import MediaPicker from '../shared/MediaPicker';
 import IconPicker from '../shared/IconPicker';
 import ColorField from '../../../../shared/admin/ColorField';
 import InfoboxSection, { infoboxFormDefaults } from './shared/InfoboxSection';
-import { OBJECT_TYPES, OBJECT_TYPE_DEFAULT } from '../../../choices';
+import { LABEL_FONTS } from '../shared/labelFonts';
+import {
+	OBJECT_DISPLAY_MODES,
+	OBJECT_DISPLAY_MODE_DEFAULT,
+	OBJECT_TYPES,
+	OBJECT_TYPE_DEFAULT,
+} from '../../../choices';
 import type {
+	ObjectCanvasStyles,
+	ObjectDisplayMode,
 	ObjectFormData,
 	ObjectSavePayload,
 	ObjectType,
@@ -46,66 +54,110 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 	}
 
 	const isSvgSource = formData.icon_source !== 'image';
+	const isIconMode = formData.display_mode === 'icon';
+	const isTextMode = formData.display_mode === 'text';
 
 	return (
 		<>
-			{ /* ── Icon ── */ }
+			{ /* ── Display mode ── */ }
 			<section className="cns-modal-section">
-				<h3>{ __( 'Icon', 'clouds-and-spaceships' ) }</h3>
+				<h3>{ __( 'Display Settings', 'clouds-and-spaceships' ) }</h3>
 				<div className="cns-grid">
 					<div className="cns-grid__row">
 						<RadioControl
-							label={ __( 'Icon source', 'clouds-and-spaceships' ) }
-							hideLabelFromVision
-							selected={ isSvgSource ? 'svg' : 'image' }
-							options={ ICON_OPTIONS }
+							label={ __( 'Mode', 'clouds-and-spaceships' ) }
+							selected={ formData.display_mode }
+							options={ OBJECT_DISPLAY_MODES }
 							onChange={ ( v ) =>
-								set( 'icon_source', v as 'svg' | 'image' )
+								set( 'display_mode', v as ObjectDisplayMode )
 							}
 						/>
-					</div>
-					{ isSvgSource && (
-						<div className="cns-grid__row cns__fx-col">
-							<IconPicker
-								icons={ icons }
-								selectedIconId={ formData.icon_image_id_svg }
-								onSelect={ ( id ) =>
-									set( 'icon_image_id_svg', id )
-								}
-							/>
-							<p className="description">
-								<ExternalLink
-									href={ window.cnsMapSuite.iconsUrl }
-								>
-									{ __(
-										'Manage icon library',
+						<p className="description">
+							{ isTextMode
+								? __(
+										'Text mode draws the object title on a rectangular backdrop.',
 										'clouds-and-spaceships'
-									) }
-								</ExternalLink>
-							</p>
-						</div>
-					) }
-					{ ! isSvgSource && (
-						<div className="cns-grid__row">
-							<MediaPicker
-								imageId={ formData.icon_image_id_custom }
-								imageUrl={ formData.icon_image_url }
-								title={ __(
-									'Select Icon Image',
-									'clouds-and-spaceships'
-								) }
-								onChange={ ( att ) =>
-									onChange( {
-										...formData,
-										icon_image_id_custom: att ? att.id : 0,
-										icon_image_url: att ? att.url : '',
-									} )
-								}
-							/>
-						</div>
-					) }
+								  )
+								: isIconMode
+								? __(
+										'Icon mode draws the icon on a round background.',
+										'clouds-and-spaceships'
+								  )
+								: __(
+										'Shape modes draw a filled shape at the object position.',
+										'clouds-and-spaceships'
+								  ) }
+						</p>
+					</div>
 				</div>
 			</section>
+
+			{ /* ── Icon ── */ }
+			{ isIconMode && (
+				<section className="cns-modal-section">
+					<h3>{ __( 'Icon', 'clouds-and-spaceships' ) }</h3>
+					<div className="cns-grid">
+						<div className="cns-grid__row">
+							<RadioControl
+								label={ __(
+									'Icon source',
+									'clouds-and-spaceships'
+								) }
+								hideLabelFromVision
+								selected={ isSvgSource ? 'svg' : 'image' }
+								options={ ICON_OPTIONS }
+								onChange={ ( v ) =>
+									set( 'icon_source', v as 'svg' | 'image' )
+								}
+							/>
+						</div>
+						{ isSvgSource && (
+							<div className="cns-grid__row cns__fx-col">
+								<IconPicker
+									icons={ icons }
+									selectedIconId={
+										formData.icon_image_id_svg
+									}
+									onSelect={ ( id ) =>
+										set( 'icon_image_id_svg', id )
+									}
+								/>
+								<p className="description">
+									<ExternalLink
+										href={ window.cnsMapSuite.iconsUrl }
+									>
+										{ __(
+											'Manage icon library',
+											'clouds-and-spaceships'
+										) }
+									</ExternalLink>
+								</p>
+							</div>
+						) }
+						{ ! isSvgSource && (
+							<div className="cns-grid__row">
+								<MediaPicker
+									imageId={ formData.icon_image_id_custom }
+									imageUrl={ formData.icon_image_url }
+									title={ __(
+										'Select Icon Image',
+										'clouds-and-spaceships'
+									) }
+									onChange={ ( att ) =>
+										onChange( {
+											...formData,
+											icon_image_id_custom: att
+												? att.id
+												: 0,
+											icon_image_url: att ? att.url : '',
+										} )
+									}
+								/>
+							</div>
+						) }
+					</div>
+				</section>
+			) }
 
 			{ /* ── Details ── */ }
 			<section className="cns-modal-section">
@@ -129,8 +181,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
-							label={ __( 'Object Time', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Object Time',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.object_time }
 							step={ 1 }
 							onChange={ ( v ) =>
@@ -143,7 +197,6 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
 							label={ __( 'X (px)', 'clouds-and-spaceships' ) }
 							value={ formData.x }
 							step={ 1 }
@@ -154,7 +207,6 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
 							label={ __( 'Y (px)', 'clouds-and-spaceships' ) }
 							value={ formData.y }
 							step={ 1 }
@@ -175,8 +227,14 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 				<div className="cns-grid cns-grid__12">
 					<div className="cns-grid__group cns-grid__span-full">
 						<RangeControl
-							__next40pxDefaultSize
-							label={ __( 'Icon Size (px)', 'clouds-and-spaceships' ) }
+							label={
+								isIconMode
+									? __(
+											'Icon Size (px)',
+											'clouds-and-spaceships'
+									  )
+									: __( 'Size (px)', 'clouds-and-spaceships' )
+							}
 							min={ 8 }
 							max={ 128 }
 							step={ 1 }
@@ -186,26 +244,151 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Fill Color', 'clouds-and-spaceships' ) }
-							value={ formData.style_fill }
-							onChange={ ( v ) => set( 'style_fill', v ) }
+							label={ __(
+								'Background Color',
+								'clouds-and-spaceships'
+							) }
+							value={ formData.style_bg }
+							onChange={ ( v ) => set( 'style_bg', v ) }
+						/>
+					</div>
+					<div className="cns-grid__group">
+						<RangeControl
+							label={ __(
+								'Border Thickness (px)',
+								'clouds-and-spaceships'
+							) }
+							min={ 0 }
+							max={ 10 }
+							step={ 0.5 }
+							withInputField
+							value={ formData.style_border_width }
+							onChange={ ( v ) =>
+								set( 'style_border_width', v ?? 0 )
+							}
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Stroke Color', 'clouds-and-spaceships' ) }
-							value={ formData.style_stroke }
-							onChange={ ( v ) => set( 'style_stroke', v ) }
+							label={ __(
+								'Border Color',
+								'clouds-and-spaceships'
+							) }
+							value={ formData.style_border_color }
+							onChange={ ( v ) => set( 'style_border_color', v ) }
 						/>
 					</div>
 				</div>
 				<p className="description">
-					{ __(
-						'Fill and stroke are applied to SVG icons only.',
-						'clouds-and-spaceships'
-					) }
+					{ isIconMode
+						? __(
+								'The background fills the round shape behind the icon.',
+								'clouds-and-spaceships'
+						  )
+						: isTextMode
+						? __(
+								'The background fills the rectangle behind the text.',
+								'clouds-and-spaceships'
+						  )
+						: __(
+								'The background fills the shape itself.',
+								'clouds-and-spaceships'
+						  ) }
 				</p>
 			</section>
+
+			{ /* ── Text ── */ }
+			{ isTextMode && (
+				<section className="cns-modal-section">
+					<h3>{ __( 'Text', 'clouds-and-spaceships' ) }</h3>
+					<div className="cns-grid cns-grid__12">
+						<div className="cns-grid__group">
+							<SelectControl
+								label={ __(
+									'Font Family',
+									'clouds-and-spaceships'
+								) }
+								value={ formData.style_font_family }
+								options={ LABEL_FONTS }
+								onChange={ ( v ) =>
+									set( 'style_font_family', v )
+								}
+							/>
+						</div>
+						<div className="cns-grid__group">
+							<NumberControl
+								label={ __(
+									'Font Size (px)',
+									'clouds-and-spaceships'
+								) }
+								min={ 6 }
+								max={ 96 }
+								step={ 1 }
+								value={ formData.style_font_size }
+								onChange={ ( v ) =>
+									set(
+										'style_font_size',
+										parseInt( v ?? '', 10 ) || 14
+									)
+								}
+							/>
+						</div>
+						<div className="cns-grid__group">
+							<ColorField
+								label={ __(
+									'Font Color',
+									'clouds-and-spaceships'
+								) }
+								value={ formData.style_text_color }
+								onChange={ ( v ) =>
+									set( 'style_text_color', v )
+								}
+							/>
+						</div>
+					</div>
+					<p className="description">
+						{ __(
+							'Text mode draws the object title above.',
+							'clouds-and-spaceships'
+						) }
+					</p>
+				</section>
+			) }
+
+			{ /* ── Icon colors ── */ }
+			{ isIconMode && (
+				<section className="cns-modal-section">
+					<h3>{ __( 'Icon Colors', 'clouds-and-spaceships' ) }</h3>
+					<div className="cns-grid cns-grid__12">
+						<div className="cns-grid__group">
+							<ColorField
+								label={ __(
+									'Fill Color',
+									'clouds-and-spaceships'
+								) }
+								value={ formData.style_fill }
+								onChange={ ( v ) => set( 'style_fill', v ) }
+							/>
+						</div>
+						<div className="cns-grid__group">
+							<ColorField
+								label={ __(
+									'Stroke Color',
+									'clouds-and-spaceships'
+								) }
+								value={ formData.style_stroke }
+								onChange={ ( v ) => set( 'style_stroke', v ) }
+							/>
+						</div>
+					</div>
+					<p className="description">
+						{ __(
+							'Fill and stroke recolor the icon artwork, and apply to SVG icons only.',
+							'clouds-and-spaceships'
+						) }
+					</p>
+				</section>
+			) }
 		</>
 	);
 }
@@ -217,7 +400,9 @@ export function defaultObjectFormData(
 ): ObjectFormData {
 	const isSvg =
 		! obj || ! obj.icon_image_id || obj.icon_mime === 'image/svg+xml';
+	const styles = obj?.canvas_styles;
 	return {
+		display_mode: styles?.displayMode || OBJECT_DISPLAY_MODE_DEFAULT,
 		icon_source: isSvg ? 'svg' : 'image',
 		icon_image_id_svg:
 			isSvg && obj?.icon_image_id ? obj.icon_image_id : null,
@@ -230,9 +415,38 @@ export function defaultObjectFormData(
 		x: obj ? obj.x : x ?? 0,
 		y: obj ? obj.y : y ?? 0,
 		...infoboxFormDefaults( obj ),
-		style_size: obj?.canvas_styles?.size || 32,
-		style_fill: obj?.canvas_styles?.fillStyle || '#ffffff',
-		style_stroke: obj?.canvas_styles?.strokeStyle || '#2271b1',
+		style_size: styles?.size || 32,
+		style_fill: styles?.fillStyle || '#ffffff',
+		style_stroke: styles?.strokeStyle || '#2271b1',
+		style_bg: styles?.bgColor || '#2271b1',
+		style_border_color: styles?.borderColor || '#1e1e1e',
+		style_border_width: styles?.borderWidth ?? 0,
+		style_font_family: styles?.textFontFamily || 'sans-serif',
+		style_font_size: styles?.textFontSize || 14,
+		style_text_color: styles?.textColor || '#ffffff',
+	};
+}
+
+/**
+ * The form's styling as the canvas reads it — the inverse of the style half of
+ * defaultObjectFormData. The context panel mirrors this onto the in-memory
+ * object so edits preview immediately, which is also why it lives beside the
+ * form: a style field added to one side has to appear on the other.
+ */
+export function objectCanvasStylesFromForm(
+	formData: ObjectFormData
+): ObjectCanvasStyles {
+	return {
+		displayMode: formData.display_mode || OBJECT_DISPLAY_MODE_DEFAULT,
+		size: formData.style_size || 32,
+		fillStyle: formData.style_fill || '#ffffff',
+		strokeStyle: formData.style_stroke || '#2271b1',
+		bgColor: formData.style_bg || '#2271b1',
+		borderColor: formData.style_border_color || '#1e1e1e',
+		borderWidth: formData.style_border_width ?? 0,
+		textFontFamily: formData.style_font_family || 'sans-serif',
+		textFontSize: formData.style_font_size || 14,
+		textColor: formData.style_text_color || '#ffffff',
 	};
 }
 
@@ -244,6 +458,7 @@ export function collectObjectPayload(
 			? formData.icon_image_id_svg || 0
 			: formData.icon_image_id_custom || 0;
 	return {
+		display_mode: formData.display_mode || OBJECT_DISPLAY_MODE_DEFAULT,
 		icon_image_id: iconImageId,
 		title: formData.title || '',
 		type: formData.type || OBJECT_TYPE_DEFAULT,
@@ -262,5 +477,11 @@ export function collectObjectPayload(
 		style_size: formData.style_size || 32,
 		style_fill: formData.style_fill || '#ffffff',
 		style_stroke: formData.style_stroke || '#2271b1',
+		style_bg: formData.style_bg || '#2271b1',
+		style_border_color: formData.style_border_color || '#1e1e1e',
+		style_border_width: formData.style_border_width ?? 0,
+		style_font_family: formData.style_font_family || 'sans-serif',
+		style_font_size: formData.style_font_size || 14,
+		style_text_color: formData.style_text_color || '#ffffff',
 	};
 }

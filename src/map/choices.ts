@@ -50,6 +50,30 @@ export const OBJECT_TYPES: { value: ObjectType; label: string }[] = [
 
 export const OBJECT_TYPE_DEFAULT: ObjectType = 'LOCATION';
 
+// ── Object display modes ──────────────────────────────────────────────────────
+// How an object draws itself on the canvas, mirroring the story node's shape
+// list. Keep in sync with cns_map_suite_object_display_modes() in
+// includes/map/admin/api.php.
+
+const OBJECT_DISPLAY_MODE_CHOICES = [
+	{ value: 'round', label: 'Round' },
+	{ value: 'square', label: 'Square' },
+	{ value: 'diamond', label: 'Diamond' },
+	{ value: 'icon', label: 'Icon' },
+	{ value: 'text', label: 'Text' },
+] as const;
+
+export type ObjectDisplayMode =
+	( typeof OBJECT_DISPLAY_MODE_CHOICES )[ number ][ 'value' ];
+
+export const OBJECT_DISPLAY_MODES: {
+	value: ObjectDisplayMode;
+	label: string;
+}[] = [ ...OBJECT_DISPLAY_MODE_CHOICES ];
+
+/** Rows saved before display modes existed were icons, so icon is the default. */
+export const OBJECT_DISPLAY_MODE_DEFAULT: ObjectDisplayMode = 'icon';
+
 // ── Shape types ───────────────────────────────────────────────────────────────
 // Shared by areas and hierarchy regions. Keep in sync with
 // cns_map_suite_shape_types() in includes/admin/api.php.

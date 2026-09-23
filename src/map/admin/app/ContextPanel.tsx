@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import ObjectForm, {
 	defaultObjectFormData,
 	collectObjectPayload,
+	objectCanvasStylesFromForm,
 } from './forms/ObjectForm';
 import LabelForm, {
 	defaultLabelFormData,
@@ -414,11 +415,8 @@ export default function ContextPanel( {
 									description: fd.infobox_description,
 									image_id: fd.infobox_image_id,
 								},
-								canvas_styles: {
-									size: fd.style_size,
-									fillStyle: fd.style_fill,
-									strokeStyle: fd.style_stroke,
-								},
+								canvas_styles:
+									objectCanvasStylesFromForm( fd ),
 							} );
 						} }
 						icons={ icons }

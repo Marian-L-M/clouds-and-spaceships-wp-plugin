@@ -1,3 +1,7 @@
+// The story canvas renders a map as its backdrop, so map objects arrive in the
+// same style shape the map suite stores them in.
+import type { ObjectCanvasStyles } from '../map/types';
+
 // ── Primitive unions ──────────────────────────────────────────────────────────
 
 export type PostStatus   = 'publish' | 'draft' | 'private';
@@ -156,7 +160,7 @@ export interface MapObjectRef {
 	title:        string;
 	iconUrl:      string;
 	iconMime:     string;
-	canvasStyles: { size?: number; fillStyle?: string; strokeStyle?: string } | null;
+	canvasStyles: ObjectCanvasStyles | null;
 }
 
 export interface MapAreaRef {

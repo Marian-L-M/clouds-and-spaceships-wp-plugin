@@ -6,6 +6,8 @@ import {
 	findAreaAtPoint,
 	findLabelPartAtPoint,
 	findObjectAtPoint,
+	drawObjectMarker,
+	objectUsesIcon,
 	drawShapeLabel,
 	regionLabelText,
 	areaLabelText,
@@ -152,38 +154,14 @@ import {
 		drawLabelShape(ctx, label);
 	}
 
-	function drawFallbackMarker(ctx, x, y, size, fill, stroke) {
-		ctx.save();
-		ctx.beginPath();
-		ctx.arc(x, y, size / 2, 0, Math.PI * 2);
-		ctx.fillStyle   = fill   || '#2271b1';
-		ctx.strokeStyle = stroke || '#fff';
-		ctx.lineWidth   = 2;
-		ctx.fill();
-		ctx.stroke();
-		ctx.restore();
-	}
-
-	// Resolves the marker image for an object (or null → fallback dot).
+	// Resolves an object's icon artwork; only icon mode draws one.
 	function loadObjectMarkerImage(obj) {
+		if (!obj.icon_url || !objectUsesIcon(obj.canvas_styles)) return Promise.resolve(null);
 		const fill   = obj.canvas_styles?.fillStyle   || '#ffffff';
 		const stroke = obj.canvas_styles?.strokeStyle || '#2271b1';
-		if (!obj.icon_url) return Promise.resolve(null);
 		return obj.icon_mime === 'image/svg+xml'
 			? loadSvgWithColors(obj.icon_url, fill, stroke)
 			: loadImage(obj.icon_url);
-	}
-
-	function drawObjectMarker(ctx, obj, img) {
-		const size   = obj.canvas_styles?.size        || 32;
-		const fill   = obj.canvas_styles?.fillStyle   || '#ffffff';
-		const stroke = obj.canvas_styles?.strokeStyle || '#2271b1';
-
-		if (img) {
-			ctx.drawImage(img, obj.x - size / 2, obj.y - size / 2, size, size);
-			return;
-		}
-		drawFallbackMarker(ctx, obj.x, obj.y, size, fill, stroke);
 	}
 
 	// ── Infobox drawer ────────────────────────────────────────────────────────
@@ -507,7 +485,11 @@ import {
 		const objects    = data.objects || [];
 		const markerImgs = await Promise.all(objects.map(loadObjectMarkerImage));
 		objects.forEach(function (obj, i) {
-			drawObjectMarker(ctx, obj, markerImgs[i]);
+			drawObjectMarker(
+				ctx,
+				{ x: obj.x, y: obj.y, title: obj.title, styles: obj.canvas_styles },
+				{ image: markerImgs[i] }
+			);
 		});
 
 		for (const label of (data.labels || [])) {

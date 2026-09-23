@@ -488,6 +488,11 @@ function cns_map_suite_object_types(): array {
 	return ['LOCATION', 'HISTORY', 'NATURAL', 'EVENT', 'OTHER'];
 }
 
+/** How an object draws itself on the canvas. */
+function cns_map_suite_object_display_modes(): array {
+	return ['round', 'square', 'diamond', 'icon', 'text'];
+}
+
 /** Shared by areas and hierarchy regions. */
 function cns_map_suite_shape_types(): array {
 	return ['POLYGON', 'RECTANGLE', 'BEZIER', 'CIRCLE'];
@@ -611,6 +616,13 @@ function cns_map_suite_normalize_row(array $row, array $json_cols, array $int_co
 
 function cns_map_suite_object_rest_args(): array {
 	return array_merge(cns_map_suite_infobox_rest_args(), [
+		// Rows saved before display modes existed carry none, and those were
+		// icons — so 'icon' is both the default here and the reader's fallback.
+		'display_mode' => [
+			'type'    => 'string',
+			'default' => 'icon',
+			'enum'    => cns_map_suite_object_display_modes(),
+		],
 		'icon_image_id' => [
 			'type'              => 'integer',
 			'default'           => 0,
@@ -654,6 +666,38 @@ function cns_map_suite_object_rest_args(): array {
 			'default'           => '#2271b1',
 			'sanitize_callback' => fn($v) => cns_map_suite_sanitize_color((string) $v, '#2271b1'),
 		],
+		'style_bg' => [
+			'type'              => 'string',
+			'default'           => '#2271b1',
+			'sanitize_callback' => fn($v) => cns_map_suite_sanitize_color((string) $v, '#2271b1'),
+		],
+		'style_border_color' => [
+			'type'              => 'string',
+			'default'           => '#1e1e1e',
+			'sanitize_callback' => fn($v) => cns_map_suite_sanitize_color((string) $v, '#1e1e1e'),
+		],
+		'style_border_width' => [
+			'type'    => 'number',
+			'default' => 0,
+			'minimum' => 0,
+			'maximum' => 10,
+		],
+		'style_font_family' => [
+			'type'              => 'string',
+			'default'           => 'sans-serif',
+			'sanitize_callback' => fn($v) => cns_map_suite_sanitize_font_family((string) $v),
+		],
+		'style_font_size' => [
+			'type'    => 'integer',
+			'default' => 14,
+			'minimum' => 6,
+			'maximum' => 96,
+		],
+		'style_text_color' => [
+			'type'              => 'string',
+			'default'           => '#ffffff',
+			'sanitize_callback' => fn($v) => cns_map_suite_sanitize_color((string) $v, '#ffffff'),
+		],
 	]);
 }
 
@@ -661,9 +705,16 @@ function cns_map_suite_object_rest_args(): array {
 
 function cns_map_suite_object_styles_from_args(WP_REST_Request $request): string {
 	return wp_json_encode([
-		'size'        => (int) $request->get_param('style_size'),
-		'fillStyle'   => (string) $request->get_param('style_fill'),
-		'strokeStyle' => (string) $request->get_param('style_stroke'),
+		'displayMode'    => (string) $request->get_param('display_mode'),
+		'size'           => (int)    $request->get_param('style_size'),
+		'fillStyle'      => (string) $request->get_param('style_fill'),
+		'strokeStyle'    => (string) $request->get_param('style_stroke'),
+		'bgColor'        => (string) $request->get_param('style_bg'),
+		'borderColor'    => (string) $request->get_param('style_border_color'),
+		'borderWidth'    => (float)  $request->get_param('style_border_width'),
+		'textFontFamily' => (string) $request->get_param('style_font_family'),
+		'textFontSize'   => (int)    $request->get_param('style_font_size'),
+		'textColor'      => (string) $request->get_param('style_text_color'),
 	]);
 }
 

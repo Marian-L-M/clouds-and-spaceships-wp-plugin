@@ -194,6 +194,12 @@ export default function ObjectsPanel( {
 										>
 											<li>
 												{ __(
+													'After creating a new object, you can toggle its display mode in the context sidebar.',
+													'clouds-and-spaceships'
+												) }
+											</li>
+											<li>
+												{ __(
 													'Click an object to pick it up — it follows the cursor.',
 													'clouds-and-spaceships'
 												) }

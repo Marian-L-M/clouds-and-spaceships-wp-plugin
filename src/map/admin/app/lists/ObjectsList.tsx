@@ -3,6 +3,7 @@ import { copy, pencil, trash } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import EntityTable from './EntityTable';
 import type { EntityColumn } from './EntityTable';
+import { objectUsesIcon } from '../../../../shared/map-geometry';
 import type { MapObject } from '../../../types';
 
 interface Props {
@@ -18,7 +19,7 @@ const COLUMNS: EntityColumn< MapObject >[] = [
 		width: 36,
 		className: 'col-icon',
 		render: ( obj ) =>
-			obj.icon_url ? (
+			obj.icon_url && objectUsesIcon( obj.canvas_styles ) ? (
 				<img
 					src={ obj.icon_url }
 					width="28"
@@ -30,7 +31,7 @@ const COLUMNS: EntityColumn< MapObject >[] = [
 				<span
 					className="cns-obj-dot"
 					style={ {
-						background: obj.canvas_styles?.fillStyle || '#2271b1',
+						background: obj.canvas_styles?.bgColor || '#2271b1',
 					} }
 				/>
 			),

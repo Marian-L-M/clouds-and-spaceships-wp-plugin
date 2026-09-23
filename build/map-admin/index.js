@@ -318,11 +318,7 @@ function ContextPanel({
               description: fd.infobox_description,
               image_id: fd.infobox_image_id
             },
-            canvas_styles: {
-              size: fd.style_size,
-              fillStyle: fd.style_fill,
-              strokeStyle: fd.style_stroke
-            }
+            canvas_styles: (0,_forms_ObjectForm__WEBPACK_IMPORTED_MODULE_7__.objectCanvasStylesFromForm)(fd)
           });
         },
         icons: icons
@@ -3160,7 +3156,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   collectObjectPayload: () => (/* binding */ collectObjectPayload),
 /* harmony export */   "default": () => (/* binding */ ObjectForm),
-/* harmony export */   defaultObjectFormData: () => (/* binding */ defaultObjectFormData)
+/* harmony export */   defaultObjectFormData: () => (/* binding */ defaultObjectFormData),
+/* harmony export */   objectCanvasStylesFromForm: () => (/* binding */ objectCanvasStylesFromForm)
 /* harmony export */ });
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
@@ -3170,9 +3167,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_IconPicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/IconPicker */ "./src/map/admin/app/shared/IconPicker.tsx");
 /* harmony import */ var _shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../shared/admin/ColorField */ "./src/shared/admin/ColorField.tsx");
 /* harmony import */ var _shared_InfoboxSection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./shared/InfoboxSection */ "./src/map/admin/app/forms/shared/InfoboxSection.tsx");
-/* harmony import */ var _choices__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../choices */ "./src/map/choices.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _shared_labelFonts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../shared/labelFonts */ "./src/map/admin/app/shared/labelFonts.ts");
+/* harmony import */ var _choices__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../choices */ "./src/map/choices.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+
 
 
 
@@ -3200,38 +3199,59 @@ function ObjectForm({
     });
   }
   const isSvgSource = formData.icon_source !== 'image';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("section", {
+  const isIconMode = formData.display_mode === 'icon';
+  const isTextMode = formData.display_mode === 'text';
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
       className: "cns-modal-section",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h3", {
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon', 'clouds-and-spaceships')
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display Settings', 'clouds-and-spaceships')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "cns-grid",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "cns-grid__row",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mode', 'clouds-and-spaceships'),
+            selected: formData.display_mode,
+            options: _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_DISPLAY_MODES,
+            onChange: v => set('display_mode', v)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            className: "description",
+            children: isTextMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text mode draws the object title on a rectangular backdrop.', 'clouds-and-spaceships') : isIconMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon mode draws the icon on a round background.', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Shape modes draw a filled shape at the object position.', 'clouds-and-spaceships')
+          })]
+        })
+      })]
+    }), isIconMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+      className: "cns-modal-section",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon', 'clouds-and-spaceships')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        className: "cns-grid",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__row",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon source', 'clouds-and-spaceships'),
             hideLabelFromVision: true,
             selected: isSvgSource ? 'svg' : 'image',
             options: ICON_OPTIONS,
             onChange: v => set('icon_source', v)
           })
-        }), isSvgSource && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        }), isSvgSource && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "cns-grid__row cns__fx-col",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_IconPicker__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_IconPicker__WEBPACK_IMPORTED_MODULE_3__["default"], {
             icons: icons,
             selectedIconId: formData.icon_image_id_svg,
             onSelect: id => set('icon_image_id_svg', id)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
             className: "description",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ExternalLink, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ExternalLink, {
               href: window.cnsMapSuite.iconsUrl,
               children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Manage icon library', 'clouds-and-spaceships')
             })
           })]
-        }), !isSvgSource && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), !isSvgSource && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__row",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_MediaPicker__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_MediaPicker__WEBPACK_IMPORTED_MODULE_2__["default"], {
             imageId: formData.icon_image_id_custom,
             imageUrl: formData.icon_image_url,
             title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select Icon Image', 'clouds-and-spaceships'),
@@ -3243,50 +3263,47 @@ function ObjectForm({
           })
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("section", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
       className: "cns-modal-section",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Details', 'clouds-and-spaceships')
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "cns-grid cns-grid__12",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__row",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextControl, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextControl, {
             __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'clouds-and-spaceships'),
             value: formData.title,
             onChange: v => set('title', v)
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Type', 'clouds-and-spaceships'),
             value: formData.type,
-            options: _choices__WEBPACK_IMPORTED_MODULE_6__.OBJECT_TYPES,
+            options: _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_TYPES,
             onChange: v => set('type', v)
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Object Time', 'clouds-and-spaceships'),
             value: formData.object_time,
             step: 1,
             onChange: v => set('object_time', parseInt(v ?? '', 10) || 0)
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('X (px)', 'clouds-and-spaceships'),
             value: formData.x,
             step: 1,
             onChange: v => set('x', parseInt(v ?? '', 10) || 0)
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Y (px)', 'clouds-and-spaceships'),
             value: formData.y,
             step: 1,
@@ -3294,72 +3311,173 @@ function ObjectForm({
           })
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_InfoboxSection__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_InfoboxSection__WEBPACK_IMPORTED_MODULE_5__["default"], {
       formData: formData,
       onChange: onChange
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("section", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
       className: "cns-modal-section",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Design', 'clouds-and-spaceships')
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "cns-grid cns-grid__12",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RangeControl, {
-            __next40pxDefaultSize: true,
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Size (px)', 'clouds-and-spaceships'),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RangeControl, {
+            label: isIconMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Size (px)', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Size (px)', 'clouds-and-spaceships'),
             min: 8,
             max: 128,
             step: 1,
             value: formData.style_size,
             onChange: v => set('style_size', v ?? 32)
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background Color', 'clouds-and-spaceships'),
+            value: formData.style_bg,
+            onChange: v => set('style_bg', v)
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__group",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RangeControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Thickness (px)', 'clouds-and-spaceships'),
+            min: 0,
+            max: 10,
+            step: 0.5,
+            withInputField: true,
+            value: formData.style_border_width,
+            onChange: v => set('style_border_width', v ?? 0)
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__group",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Color', 'clouds-and-spaceships'),
+            value: formData.style_border_color,
+            onChange: v => set('style_border_color', v)
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+        className: "description",
+        children: isIconMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The background fills the round shape behind the icon.', 'clouds-and-spaceships') : isTextMode ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The background fills the rectangle behind the text.', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The background fills the shape itself.', 'clouds-and-spaceships')
+      })]
+    }), isTextMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+      className: "cns-modal-section",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text', 'clouds-and-spaceships')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        className: "cns-grid cns-grid__12",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__group",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Family', 'clouds-and-spaceships'),
+            value: formData.style_font_family,
+            options: _shared_labelFonts__WEBPACK_IMPORTED_MODULE_6__.LABEL_FONTS,
+            onChange: v => set('style_font_family', v)
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__group",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Size (px)', 'clouds-and-spaceships'),
+            min: 6,
+            max: 96,
+            step: 1,
+            value: formData.style_font_size,
+            onChange: v => set('style_font_size', parseInt(v ?? '', 10) || 14)
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__group",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Color', 'clouds-and-spaceships'),
+            value: formData.style_text_color,
+            onChange: v => set('style_text_color', v)
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+        className: "description",
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text mode draws the object title above.', 'clouds-and-spaceships')
+      })]
+    }), isIconMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+      className: "cns-modal-section",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Colors', 'clouds-and-spaceships')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        className: "cns-grid cns-grid__12",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "cns-grid__group",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Fill Color', 'clouds-and-spaceships'),
             value: formData.style_fill,
             onChange: v => set('style_fill', v)
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "cns-grid__group",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_4__["default"], {
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Stroke Color', 'clouds-and-spaceships'),
             value: formData.style_stroke,
             onChange: v => set('style_stroke', v)
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
         className: "description",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Fill and stroke are applied to SVG icons only.', 'clouds-and-spaceships')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Fill and stroke recolor the icon artwork, and apply to SVG icons only.', 'clouds-and-spaceships')
       })]
     })]
   });
 }
 function defaultObjectFormData(obj, x, y) {
   const isSvg = !obj || !obj.icon_image_id || obj.icon_mime === 'image/svg+xml';
+  const styles = obj?.canvas_styles;
   return {
+    display_mode: styles?.displayMode || _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_DISPLAY_MODE_DEFAULT,
     icon_source: isSvg ? 'svg' : 'image',
     icon_image_id_svg: isSvg && obj?.icon_image_id ? obj.icon_image_id : null,
     icon_image_id_custom: !isSvg && obj?.icon_image_id ? obj.icon_image_id : 0,
     icon_image_url: obj?.icon_url && !isSvg ? obj.icon_url : '',
     title: obj?.title || '',
-    type: obj?.type || _choices__WEBPACK_IMPORTED_MODULE_6__.OBJECT_TYPE_DEFAULT,
+    type: obj?.type || _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_TYPE_DEFAULT,
     object_time: obj?.object_time ?? 0,
     x: obj ? obj.x : x ?? 0,
     y: obj ? obj.y : y ?? 0,
     ...(0,_shared_InfoboxSection__WEBPACK_IMPORTED_MODULE_5__.infoboxFormDefaults)(obj),
-    style_size: obj?.canvas_styles?.size || 32,
-    style_fill: obj?.canvas_styles?.fillStyle || '#ffffff',
-    style_stroke: obj?.canvas_styles?.strokeStyle || '#2271b1'
+    style_size: styles?.size || 32,
+    style_fill: styles?.fillStyle || '#ffffff',
+    style_stroke: styles?.strokeStyle || '#2271b1',
+    style_bg: styles?.bgColor || '#2271b1',
+    style_border_color: styles?.borderColor || '#1e1e1e',
+    style_border_width: styles?.borderWidth ?? 0,
+    style_font_family: styles?.textFontFamily || 'sans-serif',
+    style_font_size: styles?.textFontSize || 14,
+    style_text_color: styles?.textColor || '#ffffff'
+  };
+}
+
+/**
+ * The form's styling as the canvas reads it — the inverse of the style half of
+ * defaultObjectFormData. The context panel mirrors this onto the in-memory
+ * object so edits preview immediately, which is also why it lives beside the
+ * form: a style field added to one side has to appear on the other.
+ */
+function objectCanvasStylesFromForm(formData) {
+  return {
+    displayMode: formData.display_mode || _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_DISPLAY_MODE_DEFAULT,
+    size: formData.style_size || 32,
+    fillStyle: formData.style_fill || '#ffffff',
+    strokeStyle: formData.style_stroke || '#2271b1',
+    bgColor: formData.style_bg || '#2271b1',
+    borderColor: formData.style_border_color || '#1e1e1e',
+    borderWidth: formData.style_border_width ?? 0,
+    textFontFamily: formData.style_font_family || 'sans-serif',
+    textFontSize: formData.style_font_size || 14,
+    textColor: formData.style_text_color || '#ffffff'
   };
 }
 function collectObjectPayload(formData) {
   const iconImageId = formData.icon_source === 'svg' ? formData.icon_image_id_svg || 0 : formData.icon_image_id_custom || 0;
   return {
+    display_mode: formData.display_mode || _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_DISPLAY_MODE_DEFAULT,
     icon_image_id: iconImageId,
     title: formData.title || '',
-    type: formData.type || _choices__WEBPACK_IMPORTED_MODULE_6__.OBJECT_TYPE_DEFAULT,
+    type: formData.type || _choices__WEBPACK_IMPORTED_MODULE_7__.OBJECT_TYPE_DEFAULT,
     x: formData.x || 0,
     y: formData.y || 0,
     object_time: formData.object_time || 0,
@@ -3374,7 +3492,13 @@ function collectObjectPayload(formData) {
     show_thumbnail: formData.show_thumbnail,
     style_size: formData.style_size || 32,
     style_fill: formData.style_fill || '#ffffff',
-    style_stroke: formData.style_stroke || '#2271b1'
+    style_stroke: formData.style_stroke || '#2271b1',
+    style_bg: formData.style_bg || '#2271b1',
+    style_border_color: formData.style_border_color || '#1e1e1e',
+    style_border_width: formData.style_border_width ?? 0,
+    style_font_family: formData.style_font_family || 'sans-serif',
+    style_font_size: formData.style_font_size || 14,
+    style_text_color: formData.style_text_color || '#ffffff'
   };
 }
 
@@ -3976,8 +4100,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _EntityTable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityTable */ "./src/map/admin/app/lists/EntityTable.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _shared_map_geometry__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../shared/map-geometry */ "./src/shared/map-geometry.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
+
 
 
 
@@ -3987,7 +4113,7 @@ const COLUMNS = [{
   header: '',
   width: 36,
   className: 'col-icon',
-  render: obj => obj.icon_url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+  render: obj => obj.icon_url && (0,_shared_map_geometry__WEBPACK_IMPORTED_MODULE_6__.objectUsesIcon)(obj.canvas_styles) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
     src: obj.icon_url,
     width: "28",
     height: "28",
@@ -3996,10 +4122,10 @@ const COLUMNS = [{
       display: 'block',
       objectFit: 'contain'
     }
-  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
     className: "cns-obj-dot",
     style: {
-      background: obj.canvas_styles?.fillStyle || '#2271b1'
+      background: obj.canvas_styles?.bgColor || '#2271b1'
     }
   })
 }, {
@@ -4007,13 +4133,13 @@ const COLUMNS = [{
   render: obj => obj.title || '(no title)'
 }, {
   header: 'Type',
-  render: obj => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+  render: obj => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
     className: "cns-badge cns-badge--type",
     children: obj.type
   })
 }, {
   header: 'Position',
-  render: obj => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
+  render: obj => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
     children: [obj.x, ", ", obj.y]
   })
 }];
@@ -4023,22 +4149,22 @@ function ObjectsList({
   onDuplicate,
   onDelete
 }) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_EntityTable__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_EntityTable__WEBPACK_IMPORTED_MODULE_5__["default"], {
     items: objects,
     columns: COLUMNS,
     emptyText: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('No objects on map. Click on canvas or [Add Object] button to place your first map object.', 'clouds-and-spaceships'),
-    renderActions: obj => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+    renderActions: obj => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
         variant: "secondary",
         icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Edit', 'clouds-and-spaceships'),
         onClick: () => onEdit(obj)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
         variant: "secondary",
         icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_1__["default"],
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Duplicate', 'clouds-and-spaceships'),
         onClick: () => onDuplicate(obj.id)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
         variant: "secondary",
         icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
         isDestructive: true,
@@ -5024,6 +5150,8 @@ function ObjectsPanel({
                     maxWidth: '100%'
                   },
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
+                    children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('After creating a new object, you can toggle its display mode in the context sidebar.', 'clouds-and-spaceships')
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
                     children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click an object to pick it up — it follows the cursor.', 'clouds-and-spaceships')
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
                     children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Click again or press Enter to place object', 'clouds-and-spaceships')
@@ -5254,7 +5382,7 @@ function SettingsPanel({
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Max Width (px)', 'clouds-and-spaceships'),
               min: 100,
-              step: 10,
+              step: 1,
               value: settings.width,
               onChange: value => set('width', parseInt(value ?? '', 10) || 1000)
             })
@@ -6245,47 +6373,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_map_geometry__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/map-geometry */ "./src/shared/map-geometry.ts");
 
 
-// Marker hit-testing lives in src/shared/map-geometry.ts so the editor and
-// the frontend map block agree on the clickable region.
+
+// Marker hit-testing and the marker drawing itself live in
+// src/shared/map-geometry.ts so the editor and the frontend map block agree on
+// the clickable region and on how each display mode looks.
 
 
 // ── Canvas rendering ──────────────────────────────────────────────────────────
 
-function drawFallbackMarker(ctx, x, y, size, fill, stroke) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x, y, size / 2, 0, Math.PI * 2);
-  ctx.fillStyle = fill || '#2271b1';
-  ctx.strokeStyle = stroke || '#fff';
-  ctx.lineWidth = 2;
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore();
+/** Resolves an object's icon artwork, recolored when it is an SVG. */
+async function loadObjectIcon(obj) {
+  if (!obj.icon_url || !(0,_shared_map_geometry__WEBPACK_IMPORTED_MODULE_2__.objectUsesIcon)(obj.canvas_styles)) return null;
+  const fill = obj.canvas_styles?.fillStyle ?? _shared_map_geometry__WEBPACK_IMPORTED_MODULE_2__.OBJECT_FILL;
+  const stroke = obj.canvas_styles?.strokeStyle ?? _shared_map_geometry__WEBPACK_IMPORTED_MODULE_2__.OBJECT_STROKE;
+  return obj.icon_mime === 'image/svg+xml' ? (0,_utils__WEBPACK_IMPORTED_MODULE_0__.loadSvgWithColors)(obj.icon_url, fill, stroke) : (0,_utils__WEBPACK_IMPORTED_MODULE_0__.loadImage)(obj.icon_url);
 }
 async function drawObjectMarker(ctx, obj, isSelected) {
-  const size = obj.canvas_styles?.size ?? 32;
-  const fill = obj.canvas_styles?.fillStyle ?? '#ffffff';
-  const stroke = obj.canvas_styles?.strokeStyle ?? '#2271b1';
-  if (obj.icon_url) {
-    const img = obj.icon_mime === 'image/svg+xml' ? await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.loadSvgWithColors)(obj.icon_url, fill, stroke) : await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.loadImage)(obj.icon_url);
-    if (img) {
-      ctx.drawImage(img, obj.x - size / 2, obj.y - size / 2, size, size);
-    } else {
-      drawFallbackMarker(ctx, obj.x, obj.y, size, fill, stroke);
-    }
-  } else {
-    drawFallbackMarker(ctx, obj.x, obj.y, size, fill, stroke);
-  }
-  if (isSelected) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(obj.x, obj.y, size / 2 + 4, 0, Math.PI * 2);
-    ctx.strokeStyle = '#2271b1';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 3]);
-    ctx.stroke();
-    ctx.restore();
-  }
+  ;(0,_shared_map_geometry__WEBPACK_IMPORTED_MODULE_2__.drawObjectMarker)(ctx, {
+    x: obj.x,
+    y: obj.y,
+    title: obj.title,
+    styles: obj.canvas_styles
+  }, {
+    image: await loadObjectIcon(obj),
+    selected: isSelected
+  });
 }
 async function drawObjectsOnCanvas(canvas, drawState, objects, selectedObjectId, repositioningId, repositionCursor) {
   await (0,_canvas__WEBPACK_IMPORTED_MODULE_1__.drawMapCanvas)(canvas, drawState);
@@ -6399,6 +6511,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   AREA_TYPES: () => (/* binding */ AREA_TYPES),
 /* harmony export */   AREA_TYPE_DEFAULT: () => (/* binding */ AREA_TYPE_DEFAULT),
+/* harmony export */   OBJECT_DISPLAY_MODES: () => (/* binding */ OBJECT_DISPLAY_MODES),
+/* harmony export */   OBJECT_DISPLAY_MODE_DEFAULT: () => (/* binding */ OBJECT_DISPLAY_MODE_DEFAULT),
 /* harmony export */   OBJECT_TYPES: () => (/* binding */ OBJECT_TYPES),
 /* harmony export */   OBJECT_TYPE_DEFAULT: () => (/* binding */ OBJECT_TYPE_DEFAULT),
 /* harmony export */   SHAPE_TYPES: () => (/* binding */ SHAPE_TYPES),
@@ -6463,6 +6577,32 @@ const OBJECT_TYPE_CHOICES = [{
 }];
 const OBJECT_TYPES = [...OBJECT_TYPE_CHOICES];
 const OBJECT_TYPE_DEFAULT = 'LOCATION';
+
+// ── Object display modes ──────────────────────────────────────────────────────
+// How an object draws itself on the canvas, mirroring the story node's shape
+// list. Keep in sync with cns_map_suite_object_display_modes() in
+// includes/map/admin/api.php.
+
+const OBJECT_DISPLAY_MODE_CHOICES = [{
+  value: 'round',
+  label: 'Round'
+}, {
+  value: 'square',
+  label: 'Square'
+}, {
+  value: 'diamond',
+  label: 'Diamond'
+}, {
+  value: 'icon',
+  label: 'Icon'
+}, {
+  value: 'text',
+  label: 'Text'
+}];
+const OBJECT_DISPLAY_MODES = [...OBJECT_DISPLAY_MODE_CHOICES];
+
+/** Rows saved before display modes existed were icons, so icon is the default. */
+const OBJECT_DISPLAY_MODE_DEFAULT = 'icon';
 
 // ── Shape types ───────────────────────────────────────────────────────────────
 // Shared by areas and hierarchy regions. Keep in sync with
@@ -6780,15 +6920,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   LABEL_COLOR: () => (/* binding */ LABEL_COLOR),
 /* harmony export */   LABEL_FONT_FAMILY: () => (/* binding */ LABEL_FONT_FAMILY),
 /* harmony export */   LABEL_FONT_SIZE: () => (/* binding */ LABEL_FONT_SIZE),
+/* harmony export */   OBJECT_BG_COLOR: () => (/* binding */ OBJECT_BG_COLOR),
+/* harmony export */   OBJECT_BORDER_COLOR: () => (/* binding */ OBJECT_BORDER_COLOR),
+/* harmony export */   OBJECT_FILL: () => (/* binding */ OBJECT_FILL),
+/* harmony export */   OBJECT_SIZE: () => (/* binding */ OBJECT_SIZE),
+/* harmony export */   OBJECT_STROKE: () => (/* binding */ OBJECT_STROKE),
+/* harmony export */   OBJECT_TEXT_COLOR: () => (/* binding */ OBJECT_TEXT_COLOR),
+/* harmony export */   OBJECT_TEXT_FONT_FAMILY: () => (/* binding */ OBJECT_TEXT_FONT_FAMILY),
+/* harmony export */   OBJECT_TEXT_FONT_SIZE: () => (/* binding */ OBJECT_TEXT_FONT_SIZE),
 /* harmony export */   areaLabelText: () => (/* binding */ areaLabelText),
 /* harmony export */   buildAreaPathFromNodes: () => (/* binding */ buildAreaPathFromNodes),
 /* harmony export */   buildPolygonPath: () => (/* binding */ buildPolygonPath),
 /* harmony export */   drawLabelShape: () => (/* binding */ drawLabelShape),
+/* harmony export */   drawObjectMarker: () => (/* binding */ drawObjectMarker),
 /* harmony export */   drawShapeLabel: () => (/* binding */ drawShapeLabel),
 /* harmony export */   findAreaAtPoint: () => (/* binding */ findAreaAtPoint),
 /* harmony export */   findLabelPartAtPoint: () => (/* binding */ findLabelPartAtPoint),
 /* harmony export */   findObjectAtPoint: () => (/* binding */ findObjectAtPoint),
 /* harmony export */   measureLabelBox: () => (/* binding */ measureLabelBox),
+/* harmony export */   measureObjectMarker: () => (/* binding */ measureObjectMarker),
+/* harmony export */   objectDisplayMode: () => (/* binding */ objectDisplayMode),
+/* harmony export */   objectUsesIcon: () => (/* binding */ objectUsesIcon),
 /* harmony export */   regionLabelText: () => (/* binding */ regionLabelText),
 /* harmony export */   traceRoundedRect: () => (/* binding */ traceRoundedRect)
 /* harmony export */ });
@@ -6900,10 +7052,14 @@ function buildAreaPathFromNodes(ctx, nodes, shapeType, W, H) {
 function findObjectAtPoint(ctx, x, y, objects) {
   for (let i = objects.length - 1; i >= 0; i--) {
     const obj = objects[i];
-    const size = obj.canvas_styles?.size ?? 32;
-    const half = size / 2;
+    const box = measureObjectMarker(ctx, {
+      x: obj.x,
+      y: obj.y,
+      title: obj.title,
+      styles: obj.canvas_styles
+    });
     ctx.beginPath();
-    ctx.rect(obj.x - half, obj.y - half, size, size);
+    ctx.rect(box.left, box.top, box.w, box.h);
     if (ctx.isPointInPath(x, y)) return obj;
   }
   return null;
@@ -7027,6 +7183,157 @@ function findLabelPartAtPoint(ctx, x, y, labels) {
     };
   }
   return null;
+}
+
+// ── Object markers ────────────────────────────────────────────────────────────
+// An object draws itself in one of five display modes. The drawing lives here
+// so the map editor, the map block, and the two story canvases that render a
+// map as their backdrop all agree on footprint and appearance.
+
+const OBJECT_SIZE = 32;
+const OBJECT_FILL = '#ffffff';
+const OBJECT_STROKE = '#2271b1';
+const OBJECT_BG_COLOR = '#2271b1';
+const OBJECT_BORDER_COLOR = '#1e1e1e';
+const OBJECT_TEXT_COLOR = '#ffffff';
+const OBJECT_TEXT_FONT_FAMILY = 'sans-serif';
+const OBJECT_TEXT_FONT_SIZE = 14;
+
+/**
+ * Icon-mode backdrop diameter, as a multiple of the icon size. A square icon's
+ * corners sit at size × √2 / 2 ≈ 0.71 × size from the center, so the circle
+ * behind it has to be at least that wide to contain the artwork.
+ */
+const ICON_BACKDROP = 1.44;
+
+/** Horizontal padding around text, as a fraction of the element size. */
+const TEXT_PAD_RATIO = 0.25;
+const TEXT_PAD_MIN = 6;
+
+/** The fields the marker drawing needs, in either row shape. */
+
+/** Rows saved before display modes existed carry none, and those were icons. */
+function objectDisplayMode(styles) {
+  return styles?.displayMode || 'icon';
+}
+
+/** Icon artwork is drawn in icon mode only, so the other modes skip the load. */
+function objectUsesIcon(styles) {
+  return objectDisplayMode(styles) === 'icon';
+}
+/**
+ * The marker's footprint in canvas pixels, which is also its hit area. Sets
+ * ctx.font as a side effect when it measures text.
+ *
+ * `scale` multiplies the stored sizes, for canvases that draw the map at a
+ * size other than its own.
+ */
+function measureObjectMarker(ctx, marker, scale = 1) {
+  const styles = marker.styles;
+  const mode = objectDisplayMode(styles);
+  const size = (styles?.size ?? OBJECT_SIZE) * scale;
+  const fontSize = (styles?.textFontSize ?? OBJECT_TEXT_FONT_SIZE) * scale;
+  if (mode === 'text') {
+    const family = styles?.textFontFamily || OBJECT_TEXT_FONT_FAMILY;
+    ctx.font = `bold ${fontSize}px ${family}`;
+    const padX = Math.max(TEXT_PAD_MIN * scale, size * TEXT_PAD_RATIO);
+    const w = ctx.measureText(marker.title || '').width + padX * 2;
+    const h = Math.max(size, fontSize + 10 * scale);
+    return {
+      left: marker.x - w / 2,
+      top: marker.y - h / 2,
+      w,
+      h,
+      size,
+      fontSize
+    };
+  }
+
+  // The icon's round backdrop is wider than the artwork it contains.
+  const side = mode === 'icon' ? size * ICON_BACKDROP : size;
+  return {
+    left: marker.x - side / 2,
+    top: marker.y - side / 2,
+    w: side,
+    h: side,
+    size,
+    fontSize
+  };
+}
+/** Traces the mode's outline over the given box, without filling or stroking. */
+function traceObjectShape(ctx, mode, marker, box) {
+  const r = box.w / 2;
+  ctx.beginPath();
+  switch (mode) {
+    case 'text':
+      traceRoundedRect(ctx, box.left, box.top, box.w, box.h, 4);
+      break;
+    case 'square':
+      ctx.rect(box.left, box.top, box.w, box.h);
+      break;
+    case 'diamond':
+      ctx.moveTo(marker.x, marker.y - r);
+      ctx.lineTo(marker.x + r, marker.y);
+      ctx.lineTo(marker.x, marker.y + r);
+      ctx.lineTo(marker.x - r, marker.y);
+      ctx.closePath();
+      break;
+    case 'icon':
+    case 'round':
+    default:
+      ctx.arc(marker.x, marker.y, r, 0, Math.PI * 2);
+      break;
+  }
+}
+
+/**
+ * Draws one object marker. The caller resolves the icon artwork first (see
+ * objectUsesIcon), because the canvases that draw objects each cache images
+ * their own way.
+ */
+function drawObjectMarker(ctx, marker, opts = {}) {
+  const styles = marker.styles;
+  const mode = objectDisplayMode(styles);
+  const scale = opts.scale ?? 1;
+  const box = measureObjectMarker(ctx, marker, scale);
+  const borderWidth = (styles?.borderWidth ?? 0) * scale;
+  ctx.save();
+
+  // The body: the shape itself, the round backdrop behind an icon, or the
+  // rectangular backdrop behind text.
+  traceObjectShape(ctx, mode, marker, box);
+  ctx.fillStyle = styles?.bgColor ?? OBJECT_BG_COLOR;
+  ctx.fill();
+  if (borderWidth > 0) {
+    ctx.strokeStyle = styles?.borderColor ?? OBJECT_BORDER_COLOR;
+    ctx.lineWidth = borderWidth;
+    ctx.setLineDash([]);
+    ctx.stroke();
+  }
+  if (mode === 'icon' && opts.image) {
+    const half = box.size / 2;
+    ctx.drawImage(opts.image, marker.x - half, marker.y - half, box.size, box.size);
+  } else if (mode === 'text' && marker.title) {
+    const family = styles?.textFontFamily || OBJECT_TEXT_FONT_FAMILY;
+    ctx.font = `bold ${box.fontSize}px ${family}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = styles?.textColor ?? OBJECT_TEXT_COLOR;
+    ctx.fillText(marker.title, marker.x, marker.y);
+  }
+  if (opts.selected) {
+    traceObjectShape(ctx, mode, marker, {
+      left: box.left - 4,
+      top: box.top - 4,
+      w: box.w + 8,
+      h: box.h + 8
+    });
+    ctx.strokeStyle = '#2271b1';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 3]);
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 
 /***/ },

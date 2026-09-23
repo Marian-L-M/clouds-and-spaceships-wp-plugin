@@ -2,6 +2,14 @@
  * Frontend view script for the cns-story-suite/story block.
  */
 
+// Map objects drawn as the story backdrop use the map suite's own marker
+// rendering, so an object looks the same behind a story as it does on its map.
+import {
+	drawObjectMarker,
+	measureObjectMarker,
+	objectUsesIcon,
+} from '../../shared/map-geometry';
+
 // ── Image loading ─────────────────────────────────────────────────────────────
 
 const imgCache = new Map();
@@ -466,18 +474,24 @@ function drawStory( canvas, data, activeNodeId, onImgLoad ) {
 		const mapH = mapW * m.aspectRatio;
 		ctx.save();
 		ctx.globalAlpha = 0.4;
+		// The map is drawn at the story canvas size, so stored sizes are scaled.
+		const scale = W / mapW;
 		for ( const obj of m.objects ) {
-			const cx   = ( obj.x / mapW ) * W;
-			const cy   = ( obj.y / mapH ) * H;
-			const size = ( obj.canvasStyles?.size ?? 32 ) * ( W / mapW );
-			if ( obj.iconUrl ) {
+			let image = null;
+			if ( obj.iconUrl && objectUsesIcon( obj.canvasStyles ) ) {
 				const img = loadImg( obj.iconUrl, onImgLoad );
-				if ( img.complete && img.naturalWidth ) { ctx.drawImage( img, cx - size / 2, cy - size / 2, size, size ); continue; }
+				if ( img.complete && img.naturalWidth ) image = img;
 			}
-			ctx.beginPath();
-			ctx.arc( cx, cy, size / 2, 0, Math.PI * 2 );
-			ctx.fillStyle = obj.canvasStyles?.fillStyle ?? '#888';
-			ctx.fill();
+			drawObjectMarker(
+				ctx,
+				{
+					x:      ( obj.x / mapW ) * W,
+					y:      ( obj.y / mapH ) * H,
+					title:  obj.title,
+					styles: obj.canvasStyles,
+				},
+				{ image, scale }
+			);
 		}
 		ctx.restore();
 	}
@@ -907,14 +921,26 @@ function initBlock( blockEl ) {
 		const my = ( e.clientY - rect.top  ) * scaleY;
 
 		if ( m?.objects ) {
-			const mapW = m.width;
-			const mapH = mapW * m.aspectRatio;
+			const mapW  = m.width;
+			const mapH  = mapW * m.aspectRatio;
+			const scale = canvas.width / mapW;
+			const ctxO  = canvas.getContext( '2d' );
 			for ( const obj of m.objects ) {
 				if ( ! obj.infoboxResolved ) continue;
-				const cx   = ( obj.x / mapW ) * canvas.width;
-				const cy   = ( obj.y / mapH ) * canvas.height;
-				const r    = ( ( obj.canvasStyles?.size ?? 32 ) * ( canvas.width / mapW ) ) / 2;
-				if ( ( mx - cx ) ** 2 + ( my - cy ) ** 2 <= r ** 2 ) {
+				const box = measureObjectMarker(
+					ctxO,
+					{
+						x:      ( obj.x / mapW ) * canvas.width,
+						y:      ( obj.y / mapH ) * canvas.height,
+						title:  obj.title,
+						styles: obj.canvasStyles,
+					},
+					scale
+				);
+				if (
+					mx >= box.left && mx <= box.left + box.w &&
+					my >= box.top  && my <= box.top  + box.h
+				) {
 					showInfobox( obj );
 					return;
 				}

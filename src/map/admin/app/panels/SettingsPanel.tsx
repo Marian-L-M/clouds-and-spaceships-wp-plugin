@@ -153,7 +153,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 									'clouds-and-spaceships'
 								) }
 								min={ 100 }
-								step={ 10 }
+								step={ 1 }
 								value={ settings.width }
 								onChange={ ( value ) =>
 									set(

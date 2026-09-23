@@ -1,3 +1,4 @@
+import { drawObjectMarker, objectUsesIcon } from '../../../shared/map-geometry';
 import type { StoryNode, StoryEdge, StoryPath, MapRenderData, MapObjectRef, MapAreaRef, LineStyle, MarkerType } from '../../types';
 
 // ── Image cache ───────────────────────────────────────────────────────────────
@@ -179,22 +180,25 @@ function drawMapObjects( ctx: CanvasRenderingContext2D, W: number, H: number, st
 	ctx.save();
 	ctx.globalAlpha = 0.4;
 
-	for ( const obj of state.mapObjects ) {
-		const cx   = ( obj.x / mapW ) * W;
-		const cy   = ( obj.y / mapH ) * H;
-		const size = ( obj.canvasStyles?.size ?? 32 ) * ( W / mapW );
+	// The map is drawn at the story canvas size, so stored sizes are scaled.
+	const scale = W / mapW;
 
-		if ( obj.iconUrl ) {
+	for ( const obj of state.mapObjects ) {
+		let image: HTMLImageElement | null = null;
+		if ( obj.iconUrl && objectUsesIcon( obj.canvasStyles ) ) {
 			const img = loadImage( obj.iconUrl );
-			if ( img.complete && img.naturalWidth ) {
-				ctx.drawImage( img, cx - size / 2, cy - size / 2, size, size );
-				continue;
-			}
+			if ( img.complete && img.naturalWidth ) image = img;
 		}
-		ctx.beginPath();
-		ctx.arc( cx, cy, size / 2, 0, Math.PI * 2 );
-		ctx.fillStyle = obj.canvasStyles?.fillStyle ?? '#888888';
-		ctx.fill();
+		drawObjectMarker(
+			ctx,
+			{
+				x:      ( obj.x / mapW ) * W,
+				y:      ( obj.y / mapH ) * H,
+				title:  obj.title,
+				styles: obj.canvasStyles,
+			},
+			{ image, scale }
+		);
 	}
 
 	ctx.restore();

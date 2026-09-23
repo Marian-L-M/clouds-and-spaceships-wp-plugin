@@ -1,4 +1,9 @@
-import type { AreaType, ObjectType, ShapeType } from './choices';
+import type {
+	AreaType,
+	ObjectDisplayMode,
+	ObjectType,
+	ShapeType,
+} from './choices';
 
 // ── WordPress globals ─────────────────────────────────────────────────────────
 
@@ -103,9 +108,10 @@ export interface CnsMapSuiteGlobal {
 // ── Primitive unions ──────────────────────────────────────────────────────────
 
 export type PostStatus = 'publish' | 'draft' | 'private';
-// AreaType, ObjectType and ShapeType are derived from the choice lists in
-// choices.ts, so each union and its form dropdown cannot drift apart.
-export type { AreaType, ObjectType, ShapeType };
+// AreaType, ObjectDisplayMode, ObjectType and ShapeType are derived from the
+// choice lists in choices.ts, so each union and its form dropdown cannot drift
+// apart.
+export type { AreaType, ObjectDisplayMode, ObjectType, ShapeType };
 export type InfoboxSource = 'manual' | 'post';
 export type IconSource = 'svg' | 'image';
 export type BgType = 'color' | 'image';
@@ -136,10 +142,28 @@ export interface Node {
 
 // ── Domain: canvas style bags ─────────────────────────────────────────────────
 
+/**
+ * Object canvas styling. `size` is the element's overall size in every mode
+ * except `icon`, where it sizes the icon artwork itself.
+ *
+ * `fillStyle` / `strokeStyle` recolor an SVG icon and apply to `icon` mode
+ * only; `bgColor` paints the shape body (round/square/diamond), the round
+ * backdrop behind an icon, and the rectangular backdrop behind text.
+ *
+ * `displayMode` is absent on rows saved before display modes existed — those
+ * are icons, which is why OBJECT_DISPLAY_MODE_DEFAULT is 'icon'.
+ */
 export interface ObjectCanvasStyles {
+	displayMode?: ObjectDisplayMode;
 	size?: number;
 	fillStyle?: string;
 	strokeStyle?: string;
+	bgColor?: string;
+	borderColor?: string;
+	borderWidth?: number;
+	textFontFamily?: string;
+	textFontSize?: number;
+	textColor?: string;
 }
 
 /**
@@ -371,6 +395,7 @@ export interface InfoboxFormFields {
 }
 
 export interface ObjectFormData extends InfoboxFormFields {
+	display_mode: ObjectDisplayMode;
 	icon_source: IconSource;
 	icon_image_id_svg: number | null;
 	icon_image_id_custom: number;
@@ -383,6 +408,12 @@ export interface ObjectFormData extends InfoboxFormFields {
 	style_size: number;
 	style_fill: string;
 	style_stroke: string;
+	style_bg: string;
+	style_border_color: string;
+	style_border_width: number;
+	style_font_family: string;
+	style_font_size: number;
+	style_text_color: string;
 }
 
 export interface AreaFormData extends InfoboxFormFields {
@@ -416,6 +447,7 @@ export interface LabelFormData extends InfoboxFormFields {
 // ── API payloads ──────────────────────────────────────────────────────────────
 
 export interface ObjectSavePayload {
+	display_mode: ObjectDisplayMode;
 	icon_image_id: number;
 	title: string;
 	type: ObjectType;
@@ -434,6 +466,12 @@ export interface ObjectSavePayload {
 	style_size: number;
 	style_fill: string;
 	style_stroke: string;
+	style_bg: string;
+	style_border_color: string;
+	style_border_width: number;
+	style_font_family: string;
+	style_font_size: number;
+	style_text_color: string;
 }
 
 export type AreaSavePayload = AreaFormData & { nodes: string };
