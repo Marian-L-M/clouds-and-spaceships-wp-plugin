@@ -56,6 +56,11 @@ function cns_map_suite_register_post_meta(): void {
 		// the global default from the Maps settings tab".
 		'_cns_map_zoom_main_color'   => 'string',
 		'_cns_map_zoom_accent_color' => 'string',
+		// Which layers the frontend shows. Absent means "on", so maps saved
+		// before these existed keep rendering everything.
+		'_cns_map_show_areas'   => 'boolean',
+		'_cns_map_show_objects' => 'boolean',
+		'_cns_map_show_labels'  => 'boolean',
 	];
 
 	foreach ($fields as $key => $type) {
@@ -171,6 +176,17 @@ function cns_map_suite_zoom_colors(int $map_id = 0): array {
 		'main'   => $pick('_cns_map_zoom_main_color',   'cns_map_suite_zoom_main_color'),
 		'accent' => $pick('_cns_map_zoom_accent_color', 'cns_map_suite_zoom_accent_color'),
 	];
+}
+
+/**
+ * Whether a map shows one of its layers on the frontend.
+ *
+ * Unset meta reads as '', which must mean "visible": maps saved before the
+ * layer flags existed rendered everything, and upgrading must not blank them.
+ * Only an explicit '0' hides a layer.
+ */
+function cns_map_suite_layer_visible(int $map_id, string $meta_key): bool {
+	return (string) get_post_meta($map_id, $meta_key, true) !== '0';
 }
 
 /**

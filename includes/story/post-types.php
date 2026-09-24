@@ -87,6 +87,11 @@ function cns_story_suite_register_post_meta(): void {
 		'_cns_story_marker_icon_id'        => 'integer',
 		'_cns_story_marker_icon_offset_x'  => 'number',
 		'_cns_story_marker_icon_offset_y'  => 'number',
+		// Which layers of the linked map the story shows. Absent means "on",
+		// so stories saved before these existed keep rendering the full map.
+		'_cns_story_show_areas'    => 'boolean',
+		'_cns_story_show_objects'  => 'boolean',
+		'_cns_story_show_labels'   => 'boolean',
 	];
 
 	foreach ($story_fields as $key => $type) {

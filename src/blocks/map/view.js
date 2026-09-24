@@ -452,6 +452,54 @@ import {
 
 	// ── Map initialiser ───────────────────────────────────────────────────────
 
+	// ── Base layer toggles ────────────────────────────────────────────────────
+	// Visitor-facing show/hide for the map's three layers. The author's saved
+	// choice is the starting state; a visitor's change lives for the page view
+	// only and is never written back.
+
+	const LAYER_LABELS = { areas: 'Areas', objects: 'Objects', labels: 'Labels' };
+
+	function setupLayerToggles(wrapper, data, layers, onChange) {
+		// Sits on the block wrapper, outside .cns-map-canvas-wrap, so the
+		// buttons stay put while a zoomed canvas pans — same as the zoom
+		// controls above.
+		if (!wrapper) return;
+
+		// Only offer a toggle for a layer the map actually has something in.
+		const present = {
+			areas:   (data.areas   || []).length > 0,
+			objects: (data.objects || []).length > 0,
+			labels:  (data.labels  || []).length > 0,
+		};
+		if (!present.areas && !present.objects && !present.labels) return;
+
+		const box = document.createElement('div');
+		box.className = 'cns-map-layers';
+		box.setAttribute('role', 'group');
+		box.setAttribute('aria-label', 'Map layers');
+
+		['areas', 'objects', 'labels'].forEach(function (key) {
+			if (!present[key]) return;
+			const btn = document.createElement('button');
+			btn.type = 'button';
+			btn.className = 'cns-map-layers__btn';
+			btn.textContent = LAYER_LABELS[key];
+			const sync = function () {
+				btn.classList.toggle('is-off', !layers[key]);
+				btn.setAttribute('aria-pressed', layers[key] ? 'true' : 'false');
+			};
+			btn.addEventListener('click', function () {
+				layers[key] = !layers[key];
+				sync();
+				onChange();
+			});
+			sync();
+			box.appendChild(btn);
+		});
+
+		wrapper.appendChild(box);
+	}
+
 	async function initMap(wrapper) {
 		const scriptEl = wrapper.querySelector('script[data-cns-map]');
 		if (!scriptEl) return;
@@ -467,34 +515,55 @@ import {
 
 		setupZoomControls(wrapper, canvas);
 
-		await drawBackground(canvas, data);
-
 		const ctx = canvas.getContext('2d');
 		const W   = canvas.width;
 		const H   = canvas.height;
 
-		for (const area of (data.areas || [])) {
-			drawAreaShape(ctx, area, W, H);
-		}
-		for (const region of (data.hierarchyRegions || [])) {
-			drawHierarchyRegion(ctx, region, W, H);
-		}
-		// Load all marker images in parallel, then draw in list order so
-		// stacking is deterministic and first paint isn't serialized on
+		// Author's saved layer choice, which the toggles mutate in place.
+		// A missing flag means "on", matching the PHP reader.
+		const layers = {
+			areas:   data.showAreas   !== false,
+			objects: data.showObjects !== false,
+			labels:  data.showLabels  !== false,
+		};
+
+		// Load all marker images in parallel once, so toggling a layer
+		// repaints without re-fetching, and first paint isn't serialized on
 		// one request per icon.
 		const objects    = data.objects || [];
 		const markerImgs = await Promise.all(objects.map(loadObjectMarkerImage));
-		objects.forEach(function (obj, i) {
-			drawObjectMarker(
-				ctx,
-				{ x: obj.x, y: obj.y, title: obj.title, styles: obj.canvas_styles },
-				{ image: markerImgs[i] }
-			);
-		});
 
-		for (const label of (data.labels || [])) {
-			drawLabel(ctx, label);
+		// One paint of every layer, in the order that gives labels the top of
+		// the stack. Re-run whenever a layer is toggled.
+		async function paint() {
+			await drawBackground(canvas, data);
+
+			if (layers.areas) {
+				for (const area of (data.areas || [])) {
+					drawAreaShape(ctx, area, W, H);
+				}
+			}
+			for (const region of (data.hierarchyRegions || [])) {
+				drawHierarchyRegion(ctx, region, W, H);
+			}
+			if (layers.objects) {
+				objects.forEach(function (obj, i) {
+					drawObjectMarker(
+						ctx,
+						{ x: obj.x, y: obj.y, title: obj.title, styles: obj.canvas_styles },
+						{ image: markerImgs[i] }
+					);
+				});
+			}
+			if (layers.labels) {
+				for (const label of (data.labels || [])) {
+					drawLabel(ctx, label);
+				}
+			}
 		}
+
+		await paint();
+		setupLayerToggles(wrapper, data, layers, function () { void paint(); });
 
 		// Pre-load all hierarchy region thumbnails for smooth hover.
 		for (const region of (data.hierarchyRegions || [])) {
@@ -567,14 +636,21 @@ import {
 			if (!hasClickable) return;
 
 			// Labels are drawn on top of objects, so they win the hit test.
-			const hitLabel = findLabelPartAtPoint(ctx, x, y, clickableLabels);
-			if (hitLabel) { showInfobox(wrapper, hitLabel.label); return; }
+			// A hidden layer is not clickable either.
+			if (layers.labels) {
+				const hitLabel = findLabelPartAtPoint(ctx, x, y, clickableLabels);
+				if (hitLabel) { showInfobox(wrapper, hitLabel.label); return; }
+			}
 
-			const hitObj = findObjectAtPoint(ctx, x, y, clickableObjects);
-			if (hitObj) { showInfobox(wrapper, hitObj); return; }
+			if (layers.objects) {
+				const hitObj = findObjectAtPoint(ctx, x, y, clickableObjects);
+				if (hitObj) { showInfobox(wrapper, hitObj); return; }
+			}
 
-			const hitArea = findAreaAtPoint(ctx, x, y, clickableAreas, W, H);
-			if (hitArea) { showInfobox(wrapper, hitArea); return; }
+			if (layers.areas) {
+				const hitArea = findAreaAtPoint(ctx, x, y, clickableAreas, W, H);
+				if (hitArea) { showInfobox(wrapper, hitArea); return; }
+			}
 
 			hideInfobox();
 		});

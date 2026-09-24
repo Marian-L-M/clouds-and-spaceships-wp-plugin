@@ -172,6 +172,17 @@ function cns_story_suite_format_edge(array $row): array {
 }
 
 /**
+ * Whether a story shows one of the linked map's layers.
+ *
+ * Unset meta reads as '', which must mean "visible": stories saved before the
+ * layer flags existed rendered the whole map, and upgrading the plugin must
+ * not blank their base map. Only an explicit '0' hides a layer.
+ */
+function cns_story_suite_layer_visible(int $story_id, string $meta_key): bool {
+	return (string) get_post_meta($story_id, $meta_key, true) !== '0';
+}
+
+/**
  * Map render data in the story block's camelCase shape.
  *
  * Thin adapter over the public cns_map_suite_get_map_data() — the story code
@@ -184,7 +195,7 @@ function cns_story_suite_get_map_render_data(int $map_id, bool $resolve_infoboxe
 	$map = cns_map_suite_get_map_data($map_id, [
 		'image_size'        => 'large',
 		'resolve_infoboxes' => $resolve_infoboxes,
-		'labels'            => false, // story canvas doesn't render map labels
+		'labels'            => true,  // the story canvas renders map labels too
 		'hierarchy'         => true,  // MasterMaps draw their child-map regions
 	]);
 	if (! $map) {
@@ -238,6 +249,25 @@ function cns_story_suite_get_map_render_data(int $map_id, bool $resolve_infoboxe
 		return $area;
 	}, $map['areas']);
 
+	// Labels carry canvas pixel coordinates like objects, and the same
+	// placement/offset model the map block draws them with.
+	$labels = array_map(function (array $row) use ($to_infobox): array {
+		$label = [
+			'id'           => (int) $row['id'],
+			'text'         => $row['text'],
+			'x'            => (int) $row['x'],
+			'y'            => (int) $row['y'],
+			'placement'    => $row['placement'],
+			'offsetX'      => (int) $row['offset_x'],
+			'offsetY'      => (int) $row['offset_y'],
+			'canvasStyles' => $row['canvas_styles'] ?: null,
+		];
+		if ($ib = $to_infobox($row)) {
+			$label['infoboxResolved'] = $ib;
+		}
+		return $label;
+	}, $map['labels'] ?? []);
+
 	// MasterMap child regions in the same camelCase shape as objects/areas, so
 	// the story canvases can treat them as one more base-map layer.
 	$regions = array_map(static function (array $row): array {
@@ -268,6 +298,7 @@ function cns_story_suite_get_map_render_data(int $map_id, bool $resolve_infoboxe
 		'isMaster'    => (bool) ($map['is_master'] ?? false),
 		'objects'     => $objects,
 		'areas'       => $areas,
+		'labels'      => $labels,
 		'hierarchyRegions' => $regions,
 	];
 }
@@ -291,6 +322,11 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	$marker_icon_id    = (int)    ($req->get_param('marker_icon_id')        ?? 0);
 	$marker_icon_off_x = (float)  ($req->get_param('marker_icon_offset_x') ?? 0.0);
 	$marker_icon_off_y = (float)  ($req->get_param('marker_icon_offset_y') ?? -30.0);
+	// Base-map layers. Absent means "on", so a client that doesn't send them
+	// (or a story saved before they existed) keeps the whole map visible.
+	$show_areas   = $req->has_param('show_areas')   ? rest_sanitize_boolean($req->get_param('show_areas'))   : true;
+	$show_objects = $req->has_param('show_objects') ? rest_sanitize_boolean($req->get_param('show_objects')) : true;
+	$show_labels  = $req->has_param('show_labels')  ? rest_sanitize_boolean($req->get_param('show_labels'))  : true;
 
 	$allowed_statuses = ['publish', 'draft', 'private'];
 	if (! in_array($status, $allowed_statuses, true)) {
@@ -345,6 +381,9 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	update_post_meta($story_id, '_cns_story_marker_icon_id',        $marker_icon_id);
 	update_post_meta($story_id, '_cns_story_marker_icon_offset_x',  $marker_icon_off_x);
 	update_post_meta($story_id, '_cns_story_marker_icon_offset_y',  $marker_icon_off_y);
+	update_post_meta($story_id, '_cns_story_show_areas',            $show_areas   ? 1 : 0);
+	update_post_meta($story_id, '_cns_story_show_objects',          $show_objects ? 1 : 0);
+	update_post_meta($story_id, '_cns_story_show_labels',           $show_labels  ? 1 : 0);
 
 	if ($start_node !== null) {
 		update_post_meta($story_id, '_cns_story_start_node_id', (int) $start_node);
@@ -390,6 +429,11 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 	$line_width         = (float)  (get_post_meta($story_id, '_cns_story_line_width', true)         ?: 3.0);
 	$line_style         = (string) (get_post_meta($story_id, '_cns_story_line_style', true)         ?: 'solid');
 	$start_node         = (int)    get_post_meta($story_id, '_cns_story_start_node_id', true);
+	// Unset meta reads as '', which must mean "on" — only an explicit '0' hides
+	// a layer, so stories saved before these flags existed show the whole map.
+	$show_areas         = cns_story_suite_layer_visible($story_id, '_cns_story_show_areas');
+	$show_objects       = cns_story_suite_layer_visible($story_id, '_cns_story_show_objects');
+	$show_labels        = cns_story_suite_layer_visible($story_id, '_cns_story_show_labels');
 	$marker_color      = (string) (get_post_meta($story_id, '_cns_story_marker_color', true)          ?: '#00aaff');
 	$marker_size       = (float)  (get_post_meta($story_id, '_cns_story_marker_size', true)           ?: 5.0);
 	$marker_type       = (string) (get_post_meta($story_id, '_cns_story_marker_type', true)           ?: 'ring');
@@ -458,6 +502,9 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 			'viewUrl'          => $view_url,
 			'thumbnailId'      => $thumb_id ?: null,
 			'thumbnailUrl'     => $thumb_url,
+			'showAreas'        => $show_areas,
+			'showObjects'      => $show_objects,
+			'showLabels'       => $show_labels,
 			'markerColor'       => $marker_color,
 			'markerSize'        => $marker_size,
 			'markerType'        => $marker_type,

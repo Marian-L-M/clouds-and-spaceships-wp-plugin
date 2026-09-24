@@ -2,10 +2,14 @@
  * Frontend view script for the cns-story-suite/story block.
  */
 
-// Map objects drawn as the story backdrop use the map suite's own marker
-// rendering, so an object looks the same behind a story as it does on its map.
+// The base map is drawn with the map suite's own geometry and marker code, so
+// a map looks and behaves the same under a story as it does on its own page.
 import {
+	buildAreaPathFromNodes,
+	drawLabelShape,
 	drawObjectMarker,
+	drawShapeLabel,
+	findLabelPartAtPoint,
 	measureObjectMarker,
 	objectUsesIcon,
 } from '../../shared/map-geometry';
@@ -320,63 +324,45 @@ function buildOrderedNodes( nodes, edges, startNodeId ) {
 	return result;
 }
 
-// ── Area path builders (ported from cns-map-suite view.js so shapes match) ────
+// ── Base-map layer helpers ────────────────────────────────────────────────────
 
-function buildPolygonPath( ctx, nodes, W, H ) {
-	ctx.moveTo( nodes[ 0 ].x * W, nodes[ 0 ].y * H );
-	for ( let i = 1; i < nodes.length; i++ ) {
-		ctx.lineTo( nodes[ i ].x * W, nodes[ i ].y * H );
-	}
-	ctx.closePath();
+/**
+ * An area's label text, matching the map block: the infobox title override
+ * wins over the area's own title.
+ */
+function areaLabelText( area ) {
+	return ( area.infoboxResolved?.title || area.title || '' ).trim();
 }
 
-function buildBezierPath( ctx, nodes, W, H ) {
-	const n      = nodes.length;
-	const startX = ( ( nodes[ n - 1 ].x + nodes[ 0 ].x ) / 2 ) * W;
-	const startY = ( ( nodes[ n - 1 ].y + nodes[ 0 ].y ) / 2 ) * H;
-	ctx.moveTo( startX, startY );
-	for ( let i = 0; i < n; i++ ) {
-		const cp   = nodes[ i ];
-		const next = nodes[ ( i + 1 ) % n ];
-		ctx.quadraticCurveTo( cp.x * W, cp.y * H, ( ( cp.x + next.x ) / 2 ) * W, ( ( cp.y + next.y ) / 2 ) * H );
-	}
-	ctx.closePath();
+/**
+ * Map labels in the shape drawLabelShape/findLabelPartAtPoint read, with the
+ * story canvas scale folded into the coordinates and the font size so a label
+ * keeps its proportions when the story draws the map at another size.
+ */
+function toMapLabel( label, scale ) {
+	const styles = label.canvasStyles || {};
+	return {
+		text:       label.text,
+		placement:  label.placement,
+		x:          label.x * scale,
+		y:          label.y * scale,
+		offset_x:   ( label.offsetX ?? 40 ) * scale,
+		offset_y:   ( label.offsetY ?? -40 ) * scale,
+		canvas_styles: {
+			...styles,
+			fontSize: ( styles.fontSize || 14 ) * scale,
+		},
+	};
 }
 
-function buildCirclePath( ctx, nodes, W, H ) {
-	const cx = nodes[ 0 ].x * W;
-	const cy = nodes[ 0 ].y * H;
-	const rx = Math.max( Math.abs( nodes[ 1 ].x - nodes[ 0 ].x ) * W, 1 );
-	const ry = Math.max( Math.abs( nodes[ 1 ].y - nodes[ 0 ].y ) * H, 1 );
-	ctx.ellipse( cx, cy, rx, ry, 0, 0, Math.PI * 2 );
-}
-
-// Builds the area outline for the given shape type; returns false when the
-// node count is below the shape's minimum (2 for CIRCLE, 3 otherwise).
-function buildAreaPath( ctx, area, W, H ) {
-	const nodes     = area.nodes || [];
-	const shapeType = area.shapeType || 'POLYGON';
-	const minNodes  = shapeType === 'CIRCLE' ? 2 : 3;
-	if ( nodes.length < minNodes ) return false;
-
-	ctx.beginPath();
-	switch ( shapeType ) {
-		case 'BEZIER':
-			buildBezierPath( ctx, nodes, W, H );
-			break;
-		case 'CIRCLE':
-			buildCirclePath( ctx, nodes, W, H );
-			break;
-		default:
-			buildPolygonPath( ctx, nodes, W, H );
-			break;
-	}
-	return true;
+/** The story canvas scale relative to the map's own pixel size. */
+function mapScale( m, W ) {
+	return m?.width ? W / m.width : 1;
 }
 
 // ── Canvas drawing ────────────────────────────────────────────────────────────
 
-function drawStory( canvas, data, activeNodeId, onImgLoad ) {
+function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 	const ctx = canvas.getContext( '2d' );
 	if ( ! ctx ) return;
 
@@ -414,10 +400,10 @@ function drawStory( canvas, data, activeNodeId, onImgLoad ) {
 	for ( const region of ( m?.hierarchyRegions ?? [] ) ) {
 		const pts = region.nodes || [];
 
-		const s = region.canvasStyles;
-		// buildAreaPath is shape-aware (polygon / rectangle / bezier / circle)
-		// and returns false when the node count is too low for the shape.
-		if ( ! buildAreaPath( ctx, { shapeType: region.shapeType, nodes: pts }, W, H ) ) continue;
+		const s         = region.canvasStyles;
+		const shapeType = region.shapeType || 'POLYGON';
+		if ( pts.length < ( shapeType === 'CIRCLE' ? 2 : 3 ) ) continue;
+		buildAreaPathFromNodes( ctx, pts, shapeType, W, H );
 
 		ctx.save();
 		ctx.fillStyle   = s?.fill ?? '#e8a02040';
@@ -452,28 +438,34 @@ function drawStory( canvas, data, activeNodeId, onImgLoad ) {
 		}
 	}
 
-	if ( m?.areas ) {
+	// Areas, objects and labels render exactly as on the map's own page — same
+	// geometry, same defaults, same labels. Story edges and nodes are drawn
+	// after all of them, so the story always sits on top.
+	if ( m?.areas && layers.areas ) {
 		ctx.save();
 		for ( const area of m.areas ) {
-			if ( ! buildAreaPath( ctx, area, W, H ) ) continue;
-			const s = area.canvasStyles;
-			ctx.globalAlpha = 0.15;
-			ctx.fillStyle   = s?.fill ?? '#888888';
+			const nodes     = area.nodes || [];
+			const shapeType = area.shapeType || 'POLYGON';
+			if ( nodes.length < ( shapeType === 'CIRCLE' ? 2 : 3 ) ) continue;
+			const s = area.canvasStyles || {};
+
+			buildAreaPathFromNodes( ctx, nodes, shapeType, W, H );
+			ctx.fillStyle = s.fill || '#2271b14d';
 			ctx.fill();
-			ctx.globalAlpha = 0.25;
-			ctx.strokeStyle = s?.stroke ?? '#aaa';
-			ctx.lineWidth   = s?.strokeWidth ?? 1;
+			ctx.strokeStyle = s.stroke || '#2271b1';
+			ctx.lineWidth   = s.strokeWidth || 2;
 			ctx.setLineDash( [] );
 			ctx.stroke();
+
+			drawShapeLabel( ctx, areaLabelText( area ), s, nodes, shapeType, W, H );
 		}
 		ctx.restore();
 	}
 
-	if ( m?.objects ) {
+	if ( m?.objects && layers.objects ) {
 		const mapW = m.width;
 		const mapH = mapW * m.aspectRatio;
 		ctx.save();
-		ctx.globalAlpha = 0.4;
 		// The map is drawn at the story canvas size, so stored sizes are scaled.
 		const scale = W / mapW;
 		for ( const obj of m.objects ) {
@@ -492,6 +484,18 @@ function drawStory( canvas, data, activeNodeId, onImgLoad ) {
 				},
 				{ image, scale }
 			);
+		}
+		ctx.restore();
+	}
+
+	// Labels last of the map layers, as on the map page, so they read over
+	// areas and objects.
+	if ( m?.labels && layers.labels ) {
+		const scale = mapScale( m, W );
+		ctx.save();
+		for ( const label of m.labels ) {
+			if ( ! label.text ) continue;
+			drawLabelShape( ctx, toMapLabel( label, scale ) );
 		}
 		ctx.restore();
 	}
@@ -847,6 +851,52 @@ function setupZoomControls( canvas ) {
 	render();
 }
 
+// ── Base-map layer toggles ────────────────────────────────────────────────────
+// Visitor-facing show/hide for the linked map's three layers. The author's
+// saved choice is the starting state; a visitor's change lives for the page
+// view only and is never written back.
+
+const LAYER_LABELS = { areas: 'Areas', objects: 'Objects', labels: 'Labels' };
+
+function setupLayerToggles( canvas, mapData, layers, onChange ) {
+	const wrap = canvas.closest( '.cns-story-block__canvas-wrap' );
+	if ( ! wrap || ! mapData ) return;
+
+	// Only offer a toggle for a layer the map actually has something in.
+	const present = {
+		areas:   ( mapData.areas   ?? [] ).length > 0,
+		objects: ( mapData.objects ?? [] ).length > 0,
+		labels:  ( mapData.labels  ?? [] ).length > 0,
+	};
+	if ( ! present.areas && ! present.objects && ! present.labels ) return;
+
+	const box = document.createElement( 'div' );
+	box.className = 'cns-story-layers';
+	box.setAttribute( 'role', 'group' );
+	box.setAttribute( 'aria-label', 'Map layers' );
+
+	for ( const key of [ 'areas', 'objects', 'labels' ] ) {
+		if ( ! present[ key ] ) continue;
+		const btn = document.createElement( 'button' );
+		btn.type = 'button';
+		btn.className = 'cns-story-layers__btn';
+		btn.textContent = LAYER_LABELS[ key ];
+		const sync = () => {
+			btn.classList.toggle( 'is-off', ! layers[ key ] );
+			btn.setAttribute( 'aria-pressed', layers[ key ] ? 'true' : 'false' );
+		};
+		btn.addEventListener( 'click', () => {
+			layers[ key ] = ! layers[ key ];
+			sync();
+			onChange();
+		} );
+		sync();
+		box.appendChild( btn );
+	}
+
+	wrap.appendChild( box );
+}
+
 function initBlock( blockEl ) {
 	const rawData = blockEl.dataset.storyData;
 	if ( ! rawData ) return;
@@ -874,6 +924,16 @@ function initBlock( blockEl ) {
 	let activeNodeId = data.story.startNodeId ?? ( data.nodes[ 0 ]?.id ?? null );
 	const expandedIds = new Set();
 
+	// Author's saved layer choice, which the toggles below mutate in place.
+	// A missing flag means "on", matching the PHP reader.
+	const layers = {
+		areas:   data.story.showAreas   !== false,
+		objects: data.story.showObjects !== false,
+		labels:  data.story.showLabels  !== false,
+	};
+
+	setupLayerToggles( canvas, m, layers, () => scheduleRedraw() );
+
 	// Coalesce redraw requests into one paint per frame. Used as the image
 	// onload callback, so the canvas repaints exactly when assets arrive —
 	// no free-running animation loop.
@@ -887,7 +947,7 @@ function initBlock( blockEl ) {
 		} );
 	}
 
-	function redraw()   { drawStory( canvas, data, activeNodeId, scheduleRedraw ); }
+	function redraw()   { drawStory( canvas, data, activeNodeId, scheduleRedraw, layers ); }
 	function rerender() { renderWindow( windowEl, data, activeNodeId, expandedIds ); redraw(); }
 
 	// Opens (or re-targets) the node dialog and keeps canvas + list in sync.
@@ -912,7 +972,10 @@ function initBlock( blockEl ) {
 
 	urls.forEach( ( url ) => { loadImg( url, scheduleRedraw ); } );
 
-	// Canvas click — check map objects/areas first, then select story node.
+	// Canvas click. Story nodes are tested first so they keep click priority
+	// over the base map they are drawn on top of; the map layers then follow
+	// in reverse paint order (labels over objects over areas), each one only
+	// while its layer is visible.
 	canvas.addEventListener( 'click', ( e ) => {
 		const rect   = canvas.getBoundingClientRect();
 		const scaleX = canvas.width  / rect.width;
@@ -920,15 +983,39 @@ function initBlock( blockEl ) {
 		const mx = ( e.clientX - rect.left ) * scaleX;
 		const my = ( e.clientY - rect.top  ) * scaleY;
 
-		if ( m?.objects ) {
-			const mapW  = m.width;
-			const mapH  = mapW * m.aspectRatio;
-			const scale = canvas.width / mapW;
-			const ctxO  = canvas.getContext( '2d' );
-			for ( const obj of m.objects ) {
+		const BASE_R = 14;
+		for ( let i = data.nodes.length - 1; i >= 0; i-- ) {
+			const n = data.nodes[ i ];
+			const r = ( BASE_R * n.iconSize ) + 5;
+			if ( ( mx - n.x * canvas.width ) ** 2 + ( my - n.y * canvas.height ) ** 2 <= r ** 2 ) {
+				openNodeDialog( n.id );
+				return;
+			}
+		}
+
+		const ctx2  = canvas.getContext( '2d' );
+		const scale = mapScale( m, canvas.width );
+
+		if ( m?.labels && layers.labels ) {
+			const clickable = m.labels.filter( ( l ) => l.infoboxResolved );
+			// findLabelPartAtPoint hands back the very element it was given,
+			// so its position maps straight back to the source label.
+			const adapted = clickable.map( ( l ) => toMapLabel( l, scale ) );
+			const hit = findLabelPartAtPoint( ctx2, mx, my, adapted );
+			if ( hit ) {
+				showInfobox( clickable[ adapted.indexOf( hit.label ) ] );
+				return;
+			}
+		}
+
+		if ( m?.objects && layers.objects ) {
+			const mapW = m.width;
+			const mapH = mapW * m.aspectRatio;
+			for ( let i = m.objects.length - 1; i >= 0; i-- ) {
+				const obj = m.objects[ i ];
 				if ( ! obj.infoboxResolved ) continue;
 				const box = measureObjectMarker(
-					ctxO,
+					ctx2,
 					{
 						x:      ( obj.x / mapW ) * canvas.width,
 						y:      ( obj.y / mapH ) * canvas.height,
@@ -947,25 +1034,18 @@ function initBlock( blockEl ) {
 			}
 		}
 
-		if ( m?.areas ) {
-			const ctx2 = canvas.getContext( '2d' );
-			for ( const area of m.areas ) {
+		if ( m?.areas && layers.areas ) {
+			for ( let i = m.areas.length - 1; i >= 0; i-- ) {
+				const area = m.areas[ i ];
 				if ( ! area.infoboxResolved ) continue;
-				if ( ! buildAreaPath( ctx2, area, canvas.width, canvas.height ) ) continue;
+				const nodes     = area.nodes || [];
+				const shapeType = area.shapeType || 'POLYGON';
+				if ( nodes.length < ( shapeType === 'CIRCLE' ? 2 : 3 ) ) continue;
+				buildAreaPathFromNodes( ctx2, nodes, shapeType, canvas.width, canvas.height );
 				if ( ctx2.isPointInPath( mx, my ) ) {
 					showInfobox( area );
 					return;
 				}
-			}
-		}
-
-		const BASE_R = 14;
-		for ( let i = data.nodes.length - 1; i >= 0; i-- ) {
-			const n = data.nodes[ i ];
-			const r = ( BASE_R * n.iconSize ) + 5;
-			if ( ( mx - n.x * canvas.width ) ** 2 + ( my - n.y * canvas.height ) ** 2 <= r ** 2 ) {
-				openNodeDialog( n.id );
-				return;
 			}
 		}
 	} );

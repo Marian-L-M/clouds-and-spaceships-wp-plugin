@@ -141,6 +141,11 @@ if ($map_id && function_exists('cns_story_suite_get_map_render_data')) {
 $block_data = [
 	'story' => [
 		'id'                => $story_id,
+		// Which base-map layers the author left on. The frontend starts from
+		// these and lets the visitor toggle from there.
+		'showAreas'         => cns_story_suite_layer_visible($story_id, '_cns_story_show_areas'),
+		'showObjects'       => cns_story_suite_layer_visible($story_id, '_cns_story_show_objects'),
+		'showLabels'        => cns_story_suite_layer_visible($story_id, '_cns_story_show_labels'),
 		'lineColor'         => $line_color,
 		'lineWidth'         => $line_width,
 		'lineStyle'         => $line_style,
@@ -158,7 +163,17 @@ $block_data = [
 	'edges'   => $edges,
 ];
 
-$wrapper_attributes = get_block_wrapper_attributes(['class' => 'cns-story-block']);
+// Zoom/fullscreen control colors come from the linked map, so a story's chrome
+// matches the map it is built on. Empty when the map sets neither and there is
+// no global default, which leaves the stylesheet fallback in charge.
+$zoom_style = ($map_id && function_exists('cns_map_suite_zoom_color_style'))
+	? cns_map_suite_zoom_color_style($map_id)
+	: '';
+
+$wrapper_attributes = get_block_wrapper_attributes(array_filter([
+	'class' => 'cns-story-block',
+	'style' => $zoom_style,
+]));
 ?>
 <div <?php echo $wrapper_attributes; ?> data-story-data="<?php echo esc_attr(wp_json_encode($block_data)); ?>">
 	<div class="cns-story-block__canvas-wrap">

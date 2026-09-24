@@ -1,5 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import {
+	BaseControl,
+	CheckboxControl,
 	RadioControl,
 	RangeControl,
 	TextControl,
@@ -380,6 +382,42 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 									/>
 								</Flex>
 							) }
+						</div>
+						<div
+							className="cns-grid__group cns-grid__span-full"
+							style={ { marginBottom: '8px' } }
+						>
+							<BaseControl
+								__nextHasNoMarginBottom
+								id="cns-map-layers"
+								label={ __(
+									'Frontend layers',
+									'clouds-and-spaceships'
+								) }
+								help={ __(
+									'Which layers the map shows to visitors. Visitors can toggle them again on the map itself; this sets where they start.',
+									'clouds-and-spaceships'
+								) }
+							>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ __( 'Show areas', 'clouds-and-spaceships' ) }
+									checked={ settings.showAreas }
+									onChange={ ( v ) => set( 'showAreas', v ) }
+								/>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ __( 'Show objects', 'clouds-and-spaceships' ) }
+									checked={ settings.showObjects }
+									onChange={ ( v ) => set( 'showObjects', v ) }
+								/>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ __( 'Show labels', 'clouds-and-spaceships' ) }
+									checked={ settings.showLabels }
+									onChange={ ( v ) => set( 'showLabels', v ) }
+								/>
+							</BaseControl>
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,6 @@
 // The story canvas renders a map as its backdrop, so map objects arrive in the
 // same style shape the map suite stores them in.
-import type { ObjectCanvasStyles } from '../map/types';
+import type { AreaCanvasStyles, LabelCanvasStyles, ObjectCanvasStyles } from '../map/types';
 
 // ── Primitive unions ──────────────────────────────────────────────────────────
 
@@ -149,6 +149,10 @@ export interface StorySettings {
 	markerIconUrl:     string;
 	markerIconOffsetX: number;
 	markerIconOffsetY: number;
+	/** Which layers of the linked map this story shows. */
+	showAreas:         boolean;
+	showObjects:       boolean;
+	showLabels:        boolean;
 }
 
 // ── Domain: Map render data (from API) ────────────────────────────────────────
@@ -168,7 +172,7 @@ export interface MapAreaRef {
 	title:        string;
 	shapeType:    'POLYGON' | 'BEZIER' | 'CIRCLE' | 'RECTANGLE';
 	nodes:        Array<{ x: number; y: number }>;
-	canvasStyles: { fill?: string; stroke?: string; strokeWidth?: number } | null;
+	canvasStyles: AreaCanvasStyles | null;
 }
 
 export interface MapHierarchyRegionRef {
@@ -179,6 +183,17 @@ export interface MapHierarchyRegionRef {
 	thumbnailUrl: string;
 	nodes:        Array<{ x: number; y: number }>;
 	canvasStyles: { fill?: string; stroke?: string; strokeWidth?: number } | null;
+}
+
+export interface MapLabelRef {
+	id:           number;
+	text:         string;
+	x:            number; // canvas pixel coordinate (anchor point)
+	y:            number;
+	placement:    'centered' | 'indicator';
+	offsetX:      number;
+	offsetY:      number;
+	canvasStyles: LabelCanvasStyles | null;
 }
 
 export interface MapRenderData {
@@ -196,6 +211,7 @@ export interface MapRenderData {
 	isMaster?:   boolean;
 	objects:     MapObjectRef[];
 	areas:       MapAreaRef[];
+	labels?:     MapLabelRef[];
 	hierarchyRegions?: MapHierarchyRegionRef[];
 }
 

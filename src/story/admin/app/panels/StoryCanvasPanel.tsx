@@ -1,4 +1,5 @@
 import {
+    CheckboxControl,
     SelectControl,
     __experimentalNumberControl as NumberControl,
     __experimentalToggleGroupControl as ToggleGroupControl,
@@ -186,6 +187,32 @@ export default function StoryCanvasPanel( {
                         onChange={ ( v ) => set( 'lineStyle', v as LineStyle ) }
                     />
                 </div>
+
+                { settings.mapId && (
+                    <div className="cns-story-canvas-toolbar__row">
+                        <span className="cns-story-canvas-toolbar__label">
+                            { __( 'Map layers:', 'clouds-and-spaceships' ) }
+                        </span>
+                        <CheckboxControl
+                            __nextHasNoMarginBottom
+                            label={ __( 'Areas', 'clouds-and-spaceships' ) }
+                            checked={ settings.showAreas }
+                            onChange={ ( v ) => set( 'showAreas', v ) }
+                        />
+                        <CheckboxControl
+                            __nextHasNoMarginBottom
+                            label={ __( 'Objects', 'clouds-and-spaceships' ) }
+                            checked={ settings.showObjects }
+                            onChange={ ( v ) => set( 'showObjects', v ) }
+                        />
+                        <CheckboxControl
+                            __nextHasNoMarginBottom
+                            label={ __( 'Labels', 'clouds-and-spaceships' ) }
+                            checked={ settings.showLabels }
+                            onChange={ ( v ) => set( 'showLabels', v ) }
+                        />
+                    </div>
+                ) }
             </div>
 
             <div className="cns-story-canvas-layout">
@@ -203,6 +230,11 @@ export default function StoryCanvasPanel( {
                             onClick={ () => setIsFullscreen( ( f ) => ! f ) }
                         />
                         <StoryCanvas
+                            layers={ {
+                                areas:   settings.showAreas,
+                                objects: settings.showObjects,
+                                labels:  settings.showLabels,
+                            } }
                           	mapData={ mapData }
 							mapObjects={ mapObjects }
 							mapAreas={ mapAreas }

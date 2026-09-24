@@ -1,4 +1,10 @@
-import { drawObjectMarker, objectUsesIcon } from '../../../shared/map-geometry';
+import {
+	buildAreaPathFromNodes,
+	drawLabelShape,
+	drawObjectMarker,
+	drawShapeLabel,
+	objectUsesIcon,
+} from '../../../shared/map-geometry';
 import type { StoryNode, StoryEdge, StoryPath, MapRenderData, MapObjectRef, MapAreaRef, LineStyle, MarkerType } from '../../types';
 
 // ── Image cache ───────────────────────────────────────────────────────────────
@@ -19,7 +25,15 @@ export function preloadImages( urls: string[] ): void {
 
 // ── Draw state ────────────────────────────────────────────────────────────────
 
+/** Which layers of the linked map the story shows. */
+export interface MapLayerVisibility {
+	areas:   boolean;
+	objects: boolean;
+	labels:  boolean;
+}
+
 export interface DrawState {
+	layers:             MapLayerVisibility;
 	mapData:            MapRenderData | null;
 	mapObjects:         MapObjectRef[];
 	mapAreas:           MapAreaRef[];
@@ -53,6 +67,8 @@ export function drawStory(
 	drawHierarchyRegions( ctx, W, H, state );
 	drawMapAreas( ctx, W, H, state );
 	drawMapObjects( ctx, W, H, state );
+	drawMapLabels( ctx, W, H, state );
+	// Edges and nodes paint last, so the story always sits above the base map.
 	drawEdges( ctx, W, H, state );
 	drawNodes( ctx, W, H, state );
 }
@@ -141,44 +157,64 @@ function drawHierarchyRegions( ctx: CanvasRenderingContext2D, W: number, H: numb
 // ── Layer: map areas (read-only, dimmed) ──────────────────────────────────────
 
 function drawMapAreas( ctx: CanvasRenderingContext2D, W: number, H: number, state: DrawState ): void {
-	if ( ! state.mapData ) return;
+	if ( ! state.mapData || ! state.layers.areas ) return;
 	ctx.save();
 
 	for ( const area of state.mapAreas ) {
-		const pts = area.nodes;
-		if ( pts.length < 2 ) continue;
-		const s = area.canvasStyles;
+		const pts       = area.nodes;
+		const shapeType = area.shapeType || 'POLYGON';
+		if ( pts.length < ( shapeType === 'CIRCLE' ? 2 : 3 ) ) continue;
+		const s = area.canvasStyles || {};
 
-		ctx.beginPath();
-		ctx.moveTo( pts[ 0 ].x * W, pts[ 0 ].y * H );
-		for ( let i = 1; i < pts.length; i++ ) {
-			ctx.lineTo( pts[ i ].x * W, pts[ i ].y * H );
-		}
-		ctx.closePath();
-
-		ctx.globalAlpha = 0.15;
-		ctx.fillStyle   = s?.fill ?? '#888888';
+		buildAreaPathFromNodes( ctx, pts, shapeType, W, H );
+		ctx.fillStyle = s.fill || '#2271b14d';
 		ctx.fill();
-
-		ctx.globalAlpha = 0.25;
-		ctx.strokeStyle = s?.stroke ?? '#aaaaaa';
-		ctx.lineWidth   = s?.strokeWidth ?? 1;
+		ctx.strokeStyle = s.stroke || '#2271b1';
+		ctx.lineWidth   = s.strokeWidth || 2;
 		ctx.setLineDash( [] );
 		ctx.stroke();
+
+		drawShapeLabel( ctx, ( area.title || '' ).trim(), s, pts, shapeType, W, H );
 	}
 
+	ctx.restore();
+}
+
+// ── Layer: map labels (read-only) ─────────────────────────────────────────────
+
+function drawMapLabels( ctx: CanvasRenderingContext2D, W: number, H: number, state: DrawState ): void {
+	const m = state.mapData;
+	if ( ! m || ! state.layers.labels ) return;
+	const scale = m.width ? W / m.width : 1;
+
+	ctx.save();
+	for ( const label of m.labels ?? [] ) {
+		if ( ! label.text ) continue;
+		const styles = label.canvasStyles || {};
+		drawLabelShape( ctx, {
+			text:      label.text,
+			placement: label.placement,
+			x:         label.x * scale,
+			y:         label.y * scale,
+			offset_x:  label.offsetX * scale,
+			offset_y:  label.offsetY * scale,
+			canvas_styles: {
+				...styles,
+				fontSize: ( styles.fontSize || 14 ) * scale,
+			},
+		} );
+	}
 	ctx.restore();
 }
 
 // ── Layer: map objects (read-only, dimmed) ────────────────────────────────────
 
 function drawMapObjects( ctx: CanvasRenderingContext2D, W: number, H: number, state: DrawState ): void {
-	if ( ! state.mapData ) return;
+	if ( ! state.mapData || ! state.layers.objects ) return;
 	const { width: mapW, aspectRatio } = state.mapData;
 	const mapH = mapW * aspectRatio;
 
 	ctx.save();
-	ctx.globalAlpha = 0.4;
 
 	// The map is drawn at the story canvas size, so stored sizes are scaled.
 	const scale = W / mapW;

@@ -46,20 +46,27 @@
 	gap: 4px;
 	line-height: normal;
 
+	// --cns-map-zoom-main / --cns-map-zoom-accent are emitted on the block
+	// wrapper from the linked map's own zoom colors (see
+	// cns_map_suite_zoom_colors), so a story's chrome matches the map it is
+	// built on. The fallbacks keep the original light chrome when the map sets
+	// neither and there is no global default.
 	&__btn {
 		width: 32px;
 		height: 32px;
 		padding: 0;
 		border: 1px solid rgba(0, 0, 0, 0.25);
 		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.9);
-		color: #1e1e1e;
+		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--cns-map-zoom-accent, #1e1e1e);
 		font-size: 18px;
 		line-height: 1;
 		cursor: pointer;
 
 		&:hover:not(:disabled) {
-			background: #fff;
+			// Derived rather than configurable, as on the map block.
+			filter: brightness(0.92);
+			background: var(--cns-map-zoom-main, #fff);
 		}
 
 		&:disabled {
@@ -71,10 +78,47 @@
 	&__value {
 		font-size: 11px;
 		text-align: center;
-		color: #1e1e1e;
-		background: rgba(255, 255, 255, 0.85);
+		color: var(--cns-map-zoom-accent, #1e1e1e);
+		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.85));
 		border-radius: 3px;
 		padding: 2px 0;
+	}
+}
+
+// ── Base-map layer toggles ────────────────────────────────────────────────────
+// Sits opposite the zoom controls and borrows the same inherited colors, so
+// both control clusters read as one set of chrome.
+
+.cns-story-layers {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 10;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	line-height: normal;
+
+	&__btn {
+		padding: 4px 8px;
+		border: 1px solid rgba(0, 0, 0, 0.25);
+		border-radius: 4px;
+		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--cns-map-zoom-accent, #1e1e1e);
+		font-size: 11px;
+		line-height: 1.4;
+		cursor: pointer;
+
+		&:hover {
+			filter: brightness(0.92);
+		}
+
+		// Hidden layer: same chrome, dimmed and struck through, so the control
+		// still reads as a toggle rather than disappearing.
+		&.is-off {
+			opacity: 0.45;
+			text-decoration: line-through;
+		}
 	}
 }
 
@@ -104,6 +148,11 @@
 	.cns-story-zoom {
 		top: 34px;
 		right: 34px;
+	}
+
+	.cns-story-layers {
+		top: 34px;
+		left: 34px;
 	}
 
 	.cns-story-canvas-scroll {

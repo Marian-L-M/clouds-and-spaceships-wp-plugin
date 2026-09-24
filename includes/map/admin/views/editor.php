@@ -101,6 +101,11 @@ window.cnsMapEditor = {
     // override of its own so the editor previews what a visitor would see.
     zoomMainDefault:    <?php echo wp_json_encode((string) get_option('cns_map_suite_zoom_main_color', '')); ?>,
     zoomAccentDefault:  <?php echo wp_json_encode((string) get_option('cns_map_suite_zoom_accent_color', '')); ?>,
+    // Frontend layer visibility; unset meta means "on" (see
+    // cns_map_suite_layer_visible).
+    showAreas:   <?php echo wp_json_encode(cns_map_suite_layer_visible($map_id, '_cns_map_show_areas')); ?>,
+    showObjects: <?php echo wp_json_encode(cns_map_suite_layer_visible($map_id, '_cns_map_show_objects')); ?>,
+    showLabels:  <?php echo wp_json_encode(cns_map_suite_layer_visible($map_id, '_cns_map_show_labels')); ?>,
     parentMaps:  <?php echo wp_json_encode($parent_maps); ?>,
 };
 </script>

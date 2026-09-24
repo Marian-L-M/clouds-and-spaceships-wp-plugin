@@ -2,6 +2,8 @@ import type {
 	MapArea,
 	MapObject,
 	MapLabel,
+	LabelCanvasStyles,
+	LabelPlacement,
 	Node,
 	ObjectCanvasStyles,
 	ObjectDisplayMode,
@@ -191,6 +193,20 @@ export function findAreaAtPoint(
 //               (x + offset_x, y + offset_y); the line is drawn first so the
 //               box covers the segment that would cross it.
 
+/**
+ * The fields the label drawing needs. A stored MapLabel satisfies it, and so
+ * does a label a story canvas has rescaled to its own coordinate system.
+ */
+export interface LabelMarker {
+	text: string;
+	placement: LabelPlacement;
+	x: number;
+	y: number;
+	offset_x?: number;
+	offset_y?: number;
+	canvas_styles?: LabelCanvasStyles | null;
+}
+
 export interface LabelBox {
 	left: number;
 	top: number;
@@ -205,7 +221,7 @@ const PAD_X = 8;
 const PAD_Y = 5;
 
 /** Computes the label box in canvas pixels (sets ctx.font as a side effect). */
-export function measureLabelBox( ctx: CanvasRenderingContext2D, label: MapLabel ): LabelBox {
+export function measureLabelBox( ctx: CanvasRenderingContext2D, label: LabelMarker ): LabelBox {
 	const fontSize = label.canvas_styles?.fontSize || 14;
 	ctx.font = `bold ${ fontSize }px sans-serif`;
 	const textW = ctx.measureText( label.text || '' ).width;
@@ -238,7 +254,7 @@ export interface DrawLabelOptions {
 
 export function drawLabelShape(
 	ctx: CanvasRenderingContext2D,
-	label: MapLabel,
+	label: LabelMarker,
 	opts: DrawLabelOptions = {},
 ): void {
 	const styles    = label.canvas_styles;
@@ -293,8 +309,8 @@ export function drawLabelShape(
 /** Which part of a label was hit: the anchor dot or the text box. */
 export type LabelPart = 'anchor' | 'box';
 
-export interface LabelHit {
-	label: MapLabel;
+export interface LabelHit< T extends LabelMarker = MapLabel > {
+	label: T;
 	part: LabelPart;
 }
 
@@ -303,12 +319,12 @@ export interface LabelHit {
  * box. The dot is checked first with a generous radius so it stays grabbable
  * next to the box. Reverse order so the top-most drawn label wins.
  */
-export function findLabelPartAtPoint(
+export function findLabelPartAtPoint< T extends LabelMarker >(
 	ctx: CanvasRenderingContext2D,
 	x: number,
 	y: number,
-	labels: MapLabel[],
-): LabelHit | null {
+	labels: T[],
+): LabelHit< T > | null {
 	for ( let i = labels.length - 1; i >= 0; i-- ) {
 		const label = labels[ i ];
 		if ( label.placement === 'indicator' ) {

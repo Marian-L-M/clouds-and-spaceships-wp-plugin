@@ -1,8 +1,10 @@
 import { useRef, useEffect, useCallback } from '@wordpress/element';
 import { drawStory, drawPendingEdge, getNodeAtPoint, getEdgeAtPoint, preloadImages } from './canvas';
+import type { MapLayerVisibility } from './canvas';
 import type { StoryNode, StoryEdge, StoryPath, MapRenderData, MapObjectRef, MapAreaRef, LineStyle, MarkerType } from '../../types';
 
 interface Props {
+	layers:            MapLayerVisibility;
 	mapData:           MapRenderData | null;
 	mapObjects:        MapObjectRef[];
 	mapAreas:          MapAreaRef[];
@@ -28,6 +30,7 @@ interface Props {
 }
 
 export default function StoryCanvas( {
+	layers,
 	mapData, mapObjects, mapAreas,
 	nodes, edges, paths,
 	selectedNodeId, edgeStartNodeId, isEdgeMode,
@@ -37,6 +40,7 @@ export default function StoryCanvas( {
 }: Props ) {
 	const canvasRef  = useRef< HTMLCanvasElement >( null );
 	const stateRef   = useRef( {
+		layers,
 		mapData, mapObjects, mapAreas, nodes, edges, paths,
 		selectedNodeId, edgeStartNodeId, isEdgeMode,
 		lineColor, lineWidth, lineStyle,
@@ -52,6 +56,7 @@ export default function StoryCanvas( {
 	// Keep stateRef current and sync cursor whenever isEdgeMode changes.
 	useEffect( () => {
 		stateRef.current = {
+			layers,
 			mapData, mapObjects, mapAreas, nodes, edges, paths,
 			selectedNodeId, edgeStartNodeId, isEdgeMode,
 			lineColor, lineWidth, lineStyle,

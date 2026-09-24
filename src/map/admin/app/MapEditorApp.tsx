@@ -61,6 +61,9 @@ function buildInitialSettings(): MapSettings {
 		thumbnailUrl: d.thumbnailUrl ?? '',
 		zoomMainColor: d.zoomMainColor ?? '',
 		zoomAccentColor: d.zoomAccentColor ?? '',
+		showAreas: d.showAreas ?? true,
+		showObjects: d.showObjects ?? true,
+		showLabels: d.showLabels ?? true,
 	};
 }
 
@@ -167,6 +170,9 @@ export default function MapEditorApp() {
 			thumbnail_id: next.thumbnailId ?? 0,
 			zoom_main_color: next.zoomMainColor,
 			zoom_accent_color: next.zoomAccentColor,
+			show_areas: next.showAreas,
+			show_objects: next.showObjects,
+			show_labels: next.showLabels,
 		};
 		try {
 			const data = await apiFetch< {

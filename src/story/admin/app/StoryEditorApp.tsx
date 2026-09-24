@@ -38,6 +38,10 @@ function buildInitialSettings(): StorySettings {
 		lineColor:       '#ffffff',
 		lineWidth:       3,
 		lineStyle:       'solid',
+		// A new story shows the whole linked map until the author says otherwise.
+		showAreas:       true,
+		showObjects:     true,
+		showLabels:      true,
 		startNodeId:     null,
 		viewUrl:         d.viewUrl  ?? '',
 		thumbnailId:     null,
@@ -138,6 +142,9 @@ export default function StoryEditorApp() {
 				marker_icon_id:        settings.markerIconId ?? 0,
 				marker_icon_offset_x:  settings.markerIconOffsetX,
 				marker_icon_offset_y:  settings.markerIconOffsetY,
+				show_areas:            settings.showAreas,
+				show_objects:          settings.showObjects,
+				show_labels:           settings.showLabels,
 			} );
 			if ( data.created && data.editUrl ) {
 				window.location.href = data.editUrl;

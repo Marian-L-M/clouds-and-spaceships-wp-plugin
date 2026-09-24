@@ -1,6 +1,7 @@
 import {
 	BaseControl,
 	Button,
+	CheckboxControl,
 	Flex,
 	FlexBlock,
 	FlexItem,
@@ -55,7 +56,7 @@ export default function SettingsPanel( { settings, onChange, onMapChange }: Prop
 							id="cns-story-map"
 							label={ __( 'Map', 'clouds-and-spaceships' ) }
 							help={ __(
-								'The story canvas overlays this map. Objects and areas are shown read-only.',
+								'The story canvas overlays this map. Its objects, areas and labels stay read-only here, and keep their infoboxes on the frontend.',
 								'clouds-and-spaceships'
 							) }
 						>
@@ -66,6 +67,37 @@ export default function SettingsPanel( { settings, onChange, onMapChange }: Prop
 							/>
 						</BaseControl>
 					</FlexItem>
+					{ settings.mapId && (
+						<FlexItem>
+							<BaseControl
+								id="cns-story-layers"
+								label={ __( 'Map layers', 'clouds-and-spaceships' ) }
+								help={ __(
+									'Which layers of the linked map this story shows. Readers can toggle them again on the frontend; this sets where they start.',
+									'clouds-and-spaceships'
+								) }
+							>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ __( 'Show areas', 'clouds-and-spaceships' ) }
+									checked={ settings.showAreas }
+									onChange={ ( v ) => set( 'showAreas', v ) }
+								/>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ __( 'Show objects', 'clouds-and-spaceships' ) }
+									checked={ settings.showObjects }
+									onChange={ ( v ) => set( 'showObjects', v ) }
+								/>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ __( 'Show labels', 'clouds-and-spaceships' ) }
+									checked={ settings.showLabels }
+									onChange={ ( v ) => set( 'showLabels', v ) }
+								/>
+							</BaseControl>
+						</FlexItem>
+					) }
 				</Flex>
 		
 

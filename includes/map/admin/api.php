@@ -111,6 +111,11 @@ function cns_map_suite_register_rest_routes(): void {
 				'default'           => '',
 				'sanitize_callback' => fn($v) => cns_map_suite_sanitize_optional_color((string) $v),
 			],
+			// Frontend layer visibility. Default true, so a client that does
+			// not send them leaves the map showing everything.
+			'show_areas'   => ['type' => 'boolean', 'default' => true],
+			'show_objects' => ['type' => 'boolean', 'default' => true],
+			'show_labels'  => ['type' => 'boolean', 'default' => true],
 		],
 	]);
 
@@ -357,6 +362,9 @@ function cns_map_suite_rest_save_map(WP_REST_Request $request): WP_REST_Response
 		'_cns_map_bg_image_id'  => (int) $request->get_param('bg_image_id'),
 		'_cns_map_zoom_main_color'   => (string) $request->get_param('zoom_main_color'),
 		'_cns_map_zoom_accent_color' => (string) $request->get_param('zoom_accent_color'),
+		'_cns_map_show_areas'        => $request->get_param('show_areas')   ? 1 : 0,
+		'_cns_map_show_objects'      => $request->get_param('show_objects') ? 1 : 0,
+		'_cns_map_show_labels'       => $request->get_param('show_labels')  ? 1 : 0,
 	];
 
 	foreach ($meta as $key => $value) {

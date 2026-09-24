@@ -95,6 +95,10 @@ export interface CnsMapEditorGlobal {
 	/** Global defaults from the Maps settings tab; empty means "unset". */
 	zoomMainDefault: string;
 	zoomAccentDefault: string;
+	/** Which layers the frontend shows; absent meta reads as true. */
+	showAreas: boolean;
+	showObjects: boolean;
+	showLabels: boolean;
 	parentMaps: ParentMapRef[];
 }
 
@@ -361,6 +365,10 @@ export interface MapSettings {
 	/** Empty means this map follows the global default. */
 	zoomMainColor: string;
 	zoomAccentColor: string;
+	/** Which layers the frontend shows. */
+	showAreas: boolean;
+	showObjects: boolean;
+	showLabels: boolean;
 }
 
 export interface DrawState {

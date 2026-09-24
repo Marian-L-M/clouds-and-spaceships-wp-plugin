@@ -85,6 +85,11 @@ $map_data = [
 	'labels'           => $data['labels'],
 	'hierarchyRegions' => $visible_regions,
 	'parentMaps'       => $data['parent_maps'],
+	// Which layers the author left on. The frontend starts from these and
+	// lets the visitor toggle from there.
+	'showAreas'        => cns_map_suite_layer_visible($map_id, '_cns_map_show_areas'),
+	'showObjects'      => cns_map_suite_layer_visible($map_id, '_cns_map_show_objects'),
+	'showLabels'       => cns_map_suite_layer_visible($map_id, '_cns_map_show_labels'),
 ];
 
 // If any item resolves to wiki infoboxes, load the infobox block styles so the
