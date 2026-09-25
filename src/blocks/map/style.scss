@@ -42,8 +42,7 @@ $bp-lpc: 1400px;
 // ── Zoom controls (top right of the map, outside the scroll area) ─────────────
 
 // ── Base layer toggles ────────────────────────────────────────────────────────
-// Sits opposite the zoom controls and shares their inherited colors, so both
-// control clusters read as one set of chrome.
+// Sits opposite the zoom controls and shares their inherited colors
 
 .cns-map-layers {
 	position: absolute;
@@ -64,16 +63,11 @@ $bp-lpc: 1400px;
 		font-size: 11px;
 		line-height: 1.4;
 		cursor: pointer;
-
 		&:hover {
 			filter: brightness(0.92);
 		}
-
-		// Hidden layer: same chrome, dimmed and struck through, so the control
-		// still reads as a toggle rather than disappearing.
 		&.is-off {
 			opacity: 0.45;
-			text-decoration: line-through;
 		}
 	}
 }
