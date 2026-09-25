@@ -93,7 +93,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<PanelRow>
 						<SelectControl
 							label={ __(
-								'Mobile display',
+								'Display Mode',
 								'clouds-and-spaceships'
 							) }
 							value={ attributes.display_mode }
@@ -101,18 +101,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								{
 									label: 'Collapse Groups on Mobile',
 									value: 'collapse__groups-mobile',
-								},
-								{
-									label: 'Always Collapse Groups',
-									value: 'collapse__groups',
-								},
-								{
-									label: 'Collapse Everything on Mobile',
-									value: 'collapse__all-mobile',
-								},
-								{
-									label: 'Always Collapse Everything',
-									value: 'collapse__all',
 								},
 								{
 									label: 'Always Expanded',

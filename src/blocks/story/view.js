@@ -761,6 +761,9 @@ function setupZoomControls( canvas ) {
 		if ( blockEl ) blockEl.classList.toggle( 'is-fullscreen', on );
 		document.body.classList.toggle( 'cns-story-fullscreen-open', on );
 		renderFsBtn();
+		// Fullscreen fits the canvas to the viewport, normal mode fits it to the
+		// wrap, so the zoom-1 size differs and the base has to be taken again.
+		remeasureFit();
 	}
 
 	fsBtn.addEventListener( 'click', () => setFullscreen( ! fullscreen ) );
@@ -780,6 +783,33 @@ function setupZoomControls( canvas ) {
 		zoomOut.disabled = zoom <= MIN;
 	}
 
+	// The canvas's displayed width at zoom 1, in whichever mode is active.
+	// Zooming multiplies this rather than setting a percentage of the scroll
+	// container: in fullscreen the container is a flex box, and a percentage
+	// width there is a flex base size that gets shrunk straight back to the
+	// container — so zooming appeared to stop after one step.
+	let fitWidth = 0;
+
+	function applyZoom( z ) {
+		if ( z > 1 ) {
+			scroller.classList.add( 'is-zoomed' );
+			canvas.style.maxWidth = 'none';
+			canvas.style.width    = ( fitWidth * z ) + 'px';
+		} else {
+			scroller.classList.remove( 'is-zoomed' );
+			canvas.style.maxWidth = '100%';
+			canvas.style.width    = '';
+		}
+	}
+
+	/** Re-reads the zoom-1 width, keeping the current zoom level. */
+	function remeasureFit() {
+		const current = zoom;
+		applyZoom( 1 );
+		fitWidth = canvas.getBoundingClientRect().width;
+		applyZoom( current );
+	}
+
 	function apply( next ) {
 		// Round to one decimal so repeated 0.1 steps don't accumulate
 		// float drift (1.7000000000000002).
@@ -788,16 +818,11 @@ function setupZoomControls( canvas ) {
 		// Keep the viewport centered on the same map point.
 		const cx = ( scroller.scrollLeft + scroller.clientWidth / 2 ) / zoom;
 		const cy = ( scroller.scrollTop + scroller.clientHeight / 2 ) / zoom;
+		// Stepping away from 1: the canvas is at its fit size now, so this is
+		// the moment to measure it.
+		if ( zoom === 1 ) fitWidth = canvas.getBoundingClientRect().width;
 		zoom = next;
-		if ( zoom > 1 ) {
-			canvas.style.maxWidth = 'none';
-			canvas.style.width    = ( zoom * 100 ) + '%';
-			scroller.classList.add( 'is-zoomed' );
-		} else {
-			canvas.style.maxWidth = '100%';
-			canvas.style.width    = '';
-			scroller.classList.remove( 'is-zoomed' );
-		}
+		applyZoom( zoom );
 		render();
 		scroller.scrollLeft = cx * zoom - scroller.clientWidth / 2;
 		scroller.scrollTop  = cy * zoom - scroller.clientHeight / 2;

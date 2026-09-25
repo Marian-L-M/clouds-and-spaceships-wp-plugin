@@ -116,50 +116,19 @@
 		position: relative;
 		padding: 0.2rem 2rem;
 	}
-	&.collapse {
-		&__all {
-			@include toggleBtn();
-		}
-		&__groups {
-			.inherit,
-			.collapse-ibg__mobile {
+}
+// Collapse Groups on Mobile: below the breakpoint each group that inherits the
+// infobox's mode becomes a toggle, and group contents start hidden. Desktop
+// gets no collapse rules at all, so everything is open there.
+@media screen and (max-width: 768px) {
+	.infobox {
+		&.collapse__groups-mobile {
+			.inherit {
 				@include toggleBtn();
 			}
 			&:not(&.is-active) {
 				.infobox-group__inner {
 					display: none;
-				}
-			}
-		}
-	}
-	&.collapse__all {
-		&:not(&.is-active) {
-			.infobox__inner {
-				display: none;
-			}
-		}
-	}
-}
-@media screen and (max-width: 768px) {
-	.infobox {
-		&.collapse {
-			.inherit,
-			&__all-mobile {
-				@include toggleBtn();
-				&:not(&.is-active) {
-					.infobox__inner {
-						display: none;
-					}
-				}
-			}
-			&__groups-mobile {
-				.inherit {
-					@include toggleBtn();
-				}
-				&:not(&.is-active) {
-					.infobox-group__inner {
-						display: none;
-					}
 				}
 			}
 		}

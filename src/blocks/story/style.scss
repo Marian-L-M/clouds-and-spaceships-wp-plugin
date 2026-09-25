@@ -169,6 +169,15 @@
 		// At 100% the canvas fits the screen like a lightbox image; the zoomed
 		// state keeps the width-driven scaling from view.js's inline styles.
 		// !important beats the inline max-width view.js puts on the canvas.
+		// This scroller is a flex container, so a zoomed canvas is a flex item
+		// and would be shrunk back to the container width — which stopped
+		// zooming dead after the first step. Hold its size and let the
+		// container scroll instead.
+		&.is-zoomed canvas {
+			flex: 0 0 auto;
+			margin: auto;
+		}
+
 		&:not(.is-zoomed) canvas {
 			width: auto !important;
 			max-width: calc(100vw - 48px) !important;

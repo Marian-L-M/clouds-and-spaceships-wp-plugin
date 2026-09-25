@@ -171,6 +171,15 @@ $bp-lpc: 1400px;
 				max-width: calc(100vw - 48px);
 				max-height: calc(100vh - 48px);
 			}
+
+			// This wrap is a flex container, so a zoomed canvas is a flex item
+			// and would be shrunk back to the container width — which stopped
+			// zooming dead after the first step. Hold its size and let the
+			// container scroll instead.
+			&.is-zoomed canvas {
+				flex: 0 0 auto;
+				margin: auto;
+			}
 		}
 	}
 }
