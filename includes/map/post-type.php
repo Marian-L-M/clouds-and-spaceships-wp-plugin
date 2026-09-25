@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 
 // Register Map post type
 function cns_map_suite_register_post_type(): void {
-	register_post_type('maps', [
+	register_post_type('cns_map', [
 		'labels' => [
 			'name'               => __('Maps', 'clouds-and-spaceships'),
 			'singular_name'      => __('Map', 'clouds-and-spaceships'),
@@ -64,7 +64,7 @@ function cns_map_suite_register_post_meta(): void {
 	];
 
 	foreach ($fields as $key => $type) {
-		register_post_meta('maps', $key, [
+		register_post_meta('cns_map', $key, [
 			'type'          => $type,
 			'single'        => true,
 			'show_in_rest'  => false,
@@ -76,7 +76,7 @@ add_action('init', 'cns_map_suite_register_post_meta');
 
 // Disable Gutenberg for the maps CPT; Custom editor used.
 function cns_map_suite_disable_gutenberg(bool $use_editor, string $post_type): bool {
-	if ($post_type === 'maps') {
+	if ($post_type === 'cns_map') {
 		return false;
 	}
 	return $use_editor;
@@ -94,7 +94,7 @@ add_filter('use_block_editor_for_post_type', 'cns_map_suite_disable_gutenberg', 
 // render_block() handles the viewScript, but style must be queued before wp_head().
 function cns_map_suite_enqueue_map_page_assets(): void {
 	$block = WP_Block_Type_Registry::get_instance()->get_registered('cns-map-suite/map');
-	if (!is_singular('maps') || !$block) {
+	if (!is_singular('cns_map') || !$block) {
 		return;
 	}
 	foreach ($block->style_handles as $handle) {
@@ -128,7 +128,7 @@ function cns_map_suite_editor_url(int $map_id = 0): string {
  */
 function cns_map_suite_map_query_args(string $search = ''): array {
 	$args = [
-		'post_type'   => 'maps',
+		'post_type'   => 'cns_map',
 		'post_status' => ['publish', 'draft', 'private'],
 		'orderby'     => 'date',
 		'order'       => 'DESC',
@@ -217,7 +217,7 @@ function cns_map_suite_count_maps(string $search = ''): int {
 	// The unfiltered total comes from the cached per-status counts; only a
 	// search needs a real query, and then found_posts is the cheapest answer.
 	if ($search === '') {
-		$counts = wp_count_posts('maps');
+		$counts = wp_count_posts('cns_map');
 		return (int) $counts->publish + (int) $counts->draft + (int) $counts->private;
 	}
 

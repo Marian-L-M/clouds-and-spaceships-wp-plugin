@@ -24,7 +24,7 @@ function cns_wiki_register_glossary_post_type(): void
         return;
     }
 
-    register_taxonomy('glossary_category', ['glossary'], [
+    register_taxonomy('cns_glossary_category', ['cns_glossary'], [
         'labels' => [
             'name'          => _x('Glossary Categories', 'taxonomy general name', 'clouds-and-spaceships'),
             'singular_name' => _x('Glossary Category', 'taxonomy singular name', 'clouds-and-spaceships'),
@@ -61,7 +61,7 @@ function cns_wiki_register_glossary_post_type(): void
         'archives'              => _x('Glossary', 'The post type archive label used in nav menus.', 'clouds-and-spaceships'),
     ];
 
-    register_post_type('glossary', [
+    register_post_type('cns_glossary', [
         'labels'             => $labels,
         'description'        => 'Glossary entry custom post type.',
         'public'             => true,
@@ -78,7 +78,7 @@ function cns_wiki_register_glossary_post_type(): void
         'menu_position'      => 21,
         'menu_icon'          => 'dashicons-book-alt',
         'supports'           => ['title', 'editor', 'author', 'thumbnail', 'excerpt'],
-        'taxonomies'         => ['glossary_category'],
+        'taxonomies'         => ['cns_glossary_category'],
         'show_in_rest'       => true,
         'template_lock'      => false,
     ]);
@@ -91,7 +91,7 @@ add_action('init', 'cns_wiki_register_glossary_post_type');
  * entries via the REST API.
  */
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
-    return 'glossary' === $post_type ? false : $use_block_editor;
+    return 'cns_glossary' === $post_type ? false : $use_block_editor;
 }, 10, 2);
 
 
@@ -130,7 +130,7 @@ function cns_wiki_glossary_render_terms(string $content): string
         $entry_id = (int) $processor->get_attribute('data-glossary-id');
         $entry    = $entry_id ? get_post($entry_id) : null;
 
-        if (! $entry || 'glossary' !== $entry->post_type || 'publish' !== $entry->post_status) {
+        if (! $entry || 'cns_glossary' !== $entry->post_type || 'publish' !== $entry->post_status) {
             $processor->remove_attribute('href');
             $processor->add_class('cns-glossary-term--missing');
             continue;

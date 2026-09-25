@@ -10,9 +10,30 @@
 
 defined('ABSPATH') || exit;
 
-/** Where the news items come from. */
+/**
+ * Where the news items come from.
+ *
+ * Third-party service notice: the Info tab shows the latest post from
+ * cloudsandspaceships.com, the plugin's own project site, read through its
+ * public WordPress REST API. The request sends no site data and no personal
+ * data — it is an unauthenticated GET for the newest post's title, date,
+ * excerpt and link. It runs only while an administrator has the Info tab open,
+ * at most once per cache window, and can be switched off entirely with the
+ * "Show news" setting on that tab (see cns_info_news_enabled()). This is
+ * disclosed in readme.txt under "External services".
+ */
 const CNS_INFO_NEWS_URL   = 'https://cloudsandspaceships.com/';
-const CNS_INFO_NEWS_COUNT = 10;
+
+/** Only the newest post is shown. */
+const CNS_INFO_NEWS_COUNT = 1;
+
+/** Option holding the opt-out; unset means "on". */
+const CNS_INFO_NEWS_OPTION = 'cns_info_news_enabled';
+
+/** Whether the Info tab may contact the project site at all. */
+function cns_info_news_enabled(): bool {
+    return get_option(CNS_INFO_NEWS_OPTION, '1') !== '0';
+}
 
 /**
  * Category ID to limit the feed to, or 0 for posts from every category.
@@ -43,6 +64,11 @@ const CNS_INFO_NEWS_TIMEOUT = 8;
  * }
  */
 function cns_info_get_news(): array {
+    // Opted out: never touch the network, and never report an error for it.
+    if (! cns_info_news_enabled()) {
+        return ['items' => [], 'error' => ''];
+    }
+
     $cached = get_transient(CNS_INFO_NEWS_TRANSIENT);
     if (is_array($cached) && isset($cached['items'], $cached['error'])) {
         return $cached;
@@ -86,6 +112,12 @@ function cns_info_fetch_news() {
     $response = wp_remote_get($url, [
         'timeout' => CNS_INFO_NEWS_TIMEOUT,
         'headers' => ['Accept' => 'application/json'],
+        // WordPress's default user agent is "WordPress/{version}; {site_url}",
+        // which would send this site's address and WordPress version with
+        // every request. The plugin identifies itself instead, so the only
+        // thing the project site can see is the originating IP address that
+        // any HTTP request necessarily carries.
+        'user-agent' => 'Clouds and Spaceships WordPress plugin',
     ]);
 
     if (is_wp_error($response)) {
@@ -154,6 +186,29 @@ add_filter('cns_admin_tabs', function (array $tabs): array {
         'priority'   => 10,
     ];
     return $tabs;
+});
+
+// Handle the Info tab's "Show news" toggle. Nonce is CSRF protection; the
+// capability check is the authorization.
+add_action('admin_init', function (): void {
+    if (
+        ! isset($_POST['cns_info_action']) ||
+        sanitize_key(wp_unslash($_POST['cns_info_action'])) !== 'save_news_settings' ||
+        ! current_user_can('manage_options') ||
+        ! check_admin_referer('cns_info_save_news_settings')
+    ) {
+        return;
+    }
+
+    update_option(CNS_INFO_NEWS_OPTION, isset($_POST['news_enabled']) ? '1' : '0');
+    // Drop any cached payload so switching back on re-fetches immediately.
+    delete_transient(CNS_INFO_NEWS_TRANSIENT);
+
+    wp_safe_redirect(add_query_arg(
+        ['page' => 'cns-settings', 'settings-saved' => '1'],
+        admin_url('admin.php')
+    ));
+    exit;
 });
 
 function cns_info_render_tab(): void {

@@ -276,7 +276,7 @@ return array(
 			),
 			'postType' => array(
 				'type' => 'string',
-				'default' => 'wiki'
+				'default' => 'cns_wiki'
 			),
 			'backgroundColor' => array(
 				'type' => 'string',

@@ -21,6 +21,15 @@
 
 defined('WP_UNINSTALL_PLUGIN') || exit;
 
+/**
+ * Direct database access notice.
+ *
+ * Uninstall drops the plugin's own custom tables and deletes its rows. This
+ * runs once, at uninstall, and there is nothing to cache or to read through a
+ * WordPress API instead.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+
 global $wpdb;
 
 // ── Custom tables, dropped in reverse dependency order ────────────────────────
@@ -37,7 +46,9 @@ $tables = [
 ];
 
 foreach ($tables as $table) {
-	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	// $table comes from the fixed list above, built from $wpdb->prefix; a table
+	// name cannot be passed as a placeholder.
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$wpdb->query("DROP TABLE IF EXISTS {$table}");
 }
 
@@ -49,10 +60,10 @@ foreach ($tables as $table) {
 $wiki_settings = (array) get_option('cns_wiki_settings', []);
 
 $opt_in = [
-	['enabled' => (bool) get_option('cns_map_suite_delete_on_uninstall'),   'post_types' => ['maps']],
+	['enabled' => (bool) get_option('cns_map_suite_delete_on_uninstall'),   'post_types' => ['cns_map']],
 	['enabled' => (bool) get_option('cns_story_suite_delete_on_uninstall'), 'post_types' => ['cns_story', 'cns_substory']],
-	['enabled' => ! empty($wiki_settings['wiki_delete_on_uninstall']),      'post_types' => ['wiki']],
-	['enabled' => ! empty($wiki_settings['glossary_delete_on_uninstall']),  'post_types' => ['glossary']],
+	['enabled' => ! empty($wiki_settings['wiki_delete_on_uninstall']),      'post_types' => ['cns_wiki']],
+	['enabled' => ! empty($wiki_settings['glossary_delete_on_uninstall']),  'post_types' => ['cns_glossary']],
 ];
 
 foreach ($opt_in as $group) {
@@ -80,12 +91,18 @@ foreach ($opt_in as $group) {
 // deleting them is a separate opt-in from the map posts — and it must run before
 // the _cns_map_icon meta is dropped below, which is what identifies them.
 if (get_option('cns_map_suite_delete_icons_on_uninstall')) {
+	// Runs once, during uninstall, and only when the user opted in. The meta
+	// flag is the only thing identifying a library icon.
 	$icon_ids = get_posts([
 		'post_type'      => 'attachment',
 		'post_status'    => 'inherit',
 		'posts_per_page' => -1,
 		'fields'         => 'ids',
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 		'meta_query'     => [['key' => '_cns_map_icon', 'value' => '1']],
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
 	]);
 	foreach ($icon_ids as $icon_id) {
 		wp_delete_attachment((int) $icon_id, true);

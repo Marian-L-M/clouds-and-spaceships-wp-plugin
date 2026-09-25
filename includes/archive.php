@@ -97,7 +97,7 @@ function cns_archive_config(string $post_type): ?array {
 		// wiki archive template, so the listing is the theme's, and its query is
 		// left to WordPress (Reading Settings) and the theme. Only the slug is
 		// owned here, because it is the same slug the single permalinks use.
-		$config['wiki'] = [
+		$config['cns_wiki'] = [
 			'enabled'  => static fn(): bool   => true,
 			'slug'     => static fn(): string => cns_archive_sanitize_slug(
 				(string) cns_get_wiki_setting('archive_slug', 'wiki'),
@@ -111,7 +111,7 @@ function cns_archive_config(string $post_type): ?array {
 
 /** Post types with a configured archive. */
 function cns_archive_post_types(): array {
-	return array_merge(array_keys(CNS_OPTION_ARCHIVES), ['wiki']);
+	return array_merge(array_keys(CNS_OPTION_ARCHIVES), ['cns_wiki']);
 }
 
 function cns_archive_enabled(string $post_type): bool {

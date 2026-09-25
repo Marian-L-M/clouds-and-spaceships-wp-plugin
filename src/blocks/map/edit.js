@@ -35,11 +35,11 @@ export default function Edit({ attributes, setAttributes }) {
 				...(search ? { search } : {}),
 			};
 			return {
-				map: mapId ? getEntityRecord("postType", "maps", mapId) : null,
-				searchResults: getEntityRecords("postType", "maps", query),
+				map: mapId ? getEntityRecord("postType", "cns_map", mapId) : null,
+				searchResults: getEntityRecords("postType", "cns_map", query),
 				isSearching: isResolving("getEntityRecords", [
 					"postType",
-					"maps",
+					"cns_map",
 					query,
 				]),
 			};

@@ -3,6 +3,16 @@
 defined('ABSPATH') || exit;
 
 /**
+ * Direct database access notice.
+ *
+ * This file creates and tears down the plugin's own custom tables. Schema work
+ * goes through dbDelta(), and the row cleanup below runs on post deletion.
+ * Neither has a WordPress API to use instead, and neither is cacheable: they
+ * are one-time, event-driven writes.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+
+/**
  * DB query standard: all SELECT / INSERT / UPDATE / DELETE against custom tables
  * must use $wpdb->prepare() for any value derived from user input or external data.
  */
@@ -83,10 +93,14 @@ function cns_story_suite_create_tables(): void {
 
 	// Colors carry their own alpha (#rrggbbaa), so the separate opacity column
 	// is obsolete. dbDelta() widens columns but never drops them.
+	// $edges is built from $wpdb->prefix, never from input, and a table name
+	// cannot be passed as a placeholder.
 	$edges = "{$wpdb->prefix}cns_story_edges";
 	if ($wpdb->get_var($wpdb->prepare(
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		"SHOW COLUMNS FROM `{$edges}` LIKE %s", 'line_opacity'
 	))) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query("ALTER TABLE `{$edges}` DROP COLUMN `line_opacity`");
 	}
 
@@ -119,8 +133,10 @@ function cns_story_suite_purge_story_rows(int $story_id): void {
 	);
 	if ($node_ids) {
 		$placeholders = implode(',', array_fill(0, count($node_ids), '%d'));
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// $placeholders is built from array_fill(..., '%d') and every id is passed
+		// to prepare(), so the IN() list is fully parameterised.
 		$wpdb->query($wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 			"DELETE FROM {$wpdb->prefix}cns_story_edges WHERE from_node_id IN ($placeholders) OR to_node_id IN ($placeholders)",
 			...array_merge($node_ids, $node_ids)
 		));

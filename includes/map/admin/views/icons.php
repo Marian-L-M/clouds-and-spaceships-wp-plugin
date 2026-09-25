@@ -2,6 +2,13 @@
 
 defined('ABSPATH') || exit;
 
+// This screen only reads $_GET to decide what to display — which page, which
+// filters, which page of results. Nothing here changes state, so there is no
+// action to protect and no nonce to verify; WordPress's own list tables read
+// their filters the same way. Every write path in this plugin verifies a nonce
+// or goes through the REST API's permission callbacks.
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 $delete_icons_on_uninstall = (bool) get_option('cns_map_suite_delete_icons_on_uninstall', false);
 ?>
 <div class="cns-settings-page cns-icon-library">

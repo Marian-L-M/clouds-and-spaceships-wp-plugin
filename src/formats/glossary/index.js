@@ -61,12 +61,12 @@ function GlossaryPicker( { value, onChange, onClose, contentRef, settings } ) {
 				entries:
 					select( coreStore ).getEntityRecords(
 						'postType',
-						'glossary',
+						'cns_glossary',
 						query
 					) ?? [],
 				isResolving: select( coreStore ).isResolving(
 					'getEntityRecords',
-					[ 'postType', 'glossary', query ]
+					[ 'postType', 'cns_glossary', query ]
 				),
 			};
 		},

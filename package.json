@@ -33,5 +33,15 @@
 		"@wordpress/scripts": "^31.8.0",
 		"ajv": "^8.17.1",
 		"typescript": "^6.0.3"
-	}
+	},
+	"files": [
+		"build",
+		"includes",
+		"templates",
+		"assets",
+		"clouds-and-spaceships.php",
+		"uninstall.php",
+		"readme.txt",
+		"README.md"
+	]
 }

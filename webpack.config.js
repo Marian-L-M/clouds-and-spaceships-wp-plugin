@@ -25,7 +25,6 @@ const withEntries = {
 			'story-admin/index': './src/story/admin/index.tsx',
 			'map-panel/index': './src/map-panel/index.tsx',
 			'formats/glossary': './src/formats/glossary/index.js',
-			'toast/index': './src/toast/index.ts',
 		};
 	},
 };

@@ -3,6 +3,18 @@
 defined('ABSPATH') || exit;
 
 /**
+ * Direct database access notice.
+ *
+ * Reads the plugin's own custom tables, which have no WordPress API
+ * equivalent, with every value passed through $wpdb->prepare(). These reads
+ * *are* cached: raw rows go through cns_cache_get()/cns_cache_set() in
+ * includes/cache.php, which stores them in transients (so a persistent object
+ * cache is used when one is installed) and invalidates them by generation bump
+ * on any write. The sniff cannot see through that wrapper.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+/**
  * Public map-data API.
  *
  * Other plugins (e.g. CNS Story Suite) and themes should read map data through
@@ -154,7 +166,7 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 	], $opts);
 
 	$map = get_post($map_id);
-	if (! $map || $map->post_type !== 'maps') {
+	if (! $map || $map->post_type !== 'cns_map') {
 		return null;
 	}
 
@@ -301,7 +313,7 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 		) ?: []);
 		$data['parent_maps'] = array_values(array_filter(array_map(function ($row) {
 			$parent = get_post((int) $row['parent_map_id']);
-			if (! $parent || $parent->post_type !== 'maps') return null;
+			if (! $parent || $parent->post_type !== 'cns_map') return null;
 			$image_id = (int) get_post_meta($parent->ID, '_cns_map_image_id', true);
 			return [
 				'map_id'    => $parent->ID,

@@ -3,6 +3,16 @@
 defined('ABSPATH') || exit;
 
 /**
+ * Direct database access notice.
+ *
+ * This file creates and tears down the plugin's own custom tables. Schema work
+ * goes through dbDelta(), and the row cleanup below runs on post deletion.
+ * Neither has a WordPress API to use instead, and neither is cacheable: they
+ * are one-time, event-driven writes.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+
+/**
  * DB query standard: all future SELECT / INSERT / UPDATE / DELETE against the
  * custom tables must use $wpdb->prepare() for any value derived from user input
  * or external data. The CREATE TABLE calls below are exempt — they contain no
@@ -124,7 +134,7 @@ function cns_map_suite_purge_map_rows(int $map_id): void {
 }
 
 add_action('before_delete_post', function (int $post_id, WP_Post $post): void {
-	if ($post->post_type === 'maps') {
+	if ($post->post_type === 'cns_map') {
 		cns_map_suite_purge_map_rows($post_id);
 	}
 }, 10, 2);

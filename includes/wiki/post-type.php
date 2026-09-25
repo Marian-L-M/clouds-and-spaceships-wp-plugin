@@ -17,10 +17,8 @@ defined('ABSPATH') || exit;
  * single-wiki.html block template, so it renders on the front end without
  * appearing in the post editor (matching how normal posts behave).
  *
- * The centre column starts as a single empty paragraph. It used to seed a
- * cns-theme/cns-section with three tabs when the Clouds and Spaceships theme
- * was active; those blocks were removed in favour of core/tabs, which an author
- * can insert here like any other block.
+ * The centre column starts as a single empty paragraph; an author inserts
+ * whatever else the article needs, core/tabs included, like any other block.
  */
 function cns_wiki_post_content_template(): array
 {
@@ -137,7 +135,7 @@ function cns_wiki_register_post_type()
         'template_lock'      => 'insert',
     ];
 
-    register_post_type('wiki', $args);
+    register_post_type('cns_wiki', $args);
 }
 add_action('init', 'cns_wiki_register_post_type');
 
@@ -172,7 +170,7 @@ function cns_wiki_placeholder_thumbnail_id( $thumbnail_id, $post )
     }
 
     $post = get_post( $post );
-    if ( ! $post || 'wiki' !== $post->post_type ) {
+    if ( ! $post || 'cns_wiki' !== $post->post_type ) {
         return $thumbnail_id;
     }
 
@@ -197,10 +195,10 @@ function cns_wiki_register_block_templates()
     $single = CNS_DIR . 'templates/single-wiki.html';
 
     if ( file_exists( $single ) ) {
-        register_block_template('clouds-and-spaceships//single-wiki', [
+        register_block_template('clouds-and-spaceships//single-cns_wiki', [
             'title'       => __('Single Wiki', 'clouds-and-spaceships'),
             'description' => __('Template for single wiki posts', 'clouds-and-spaceships'),
-            'post_types'  => ['wiki'],
+            'post_types'  => ['cns_wiki'],
             'content'     => file_get_contents( $single ),
         ]);
     }
@@ -218,11 +216,11 @@ add_action('init', 'cns_wiki_register_block_templates');
  * Layout fallbacks for the wiki columns.
  *
  * The `cns-col*` classes used by the wiki template and the wiki post-content
- * template are only styled by the Clouds and Spaceships theme; everywhere else
- * core's columns rule splits the row into equal shares. This stylesheet lets the
- * infobox column shrink-wrap and gives the article column the remainder on any
- * theme. The infobox's own width comes from `--cns-wiki-infobox-width`, emitted
- * below from the Layout setting and read by the infobox block's stylesheet.
+ * template carry no widths of their own, and core's columns rule splits the row
+ * into equal shares. This stylesheet lets the infobox column shrink-wrap and
+ * gives the article column the remainder on any theme. The infobox's own width
+ * comes from `--cns-wiki-infobox-width`, emitted below from the Layout setting
+ * and read by the infobox block's stylesheet.
  *
  * enqueue_block_assets fires on both the frontend and in the editor, so the
  * post editor previews the same proportions the visitor gets.
@@ -277,7 +275,7 @@ function cns_wiki_add_editor_canvas_width(): void
     }
 
     $screen = get_current_screen();
-    if ( ! $screen || 'wiki' !== $screen->post_type || ! $screen->is_block_editor() ) {
+    if ( ! $screen || 'cns_wiki' !== $screen->post_type || ! $screen->is_block_editor() ) {
         return;
     }
 

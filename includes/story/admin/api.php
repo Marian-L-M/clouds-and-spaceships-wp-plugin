@@ -2,6 +2,23 @@
 
 defined('ABSPATH') || exit;
 
+/**
+ * Direct database access notice.
+ *
+ * Every query in this file runs against the plugin's own custom tables
+ * ({$wpdb->prefix}cns_*), which hold data WordPress has no API for — there is
+ * no post, meta or options equivalent to read instead. All values are passed
+ * through $wpdb->prepare().
+ *
+ * These endpoints are deliberately uncached: they are the editor's read/write
+ * path, permission-gated, and must return exactly what was just written rather
+ * than a cached generation. Frontend reads of the same tables do go through
+ * the render cache in includes/cache.php, and every write here bumps that
+ * cache's generation via the rest_request_after_callbacks filter registered
+ * there, so the public side never serves stale rows.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
 // ── Route registration ────────────────────────────────────────────────────────
 
 add_action('rest_api_init', 'cns_story_suite_register_routes');
@@ -341,7 +358,7 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	$allowed_marker_types = ['ring', 'icon'];
 	if (! in_array($marker_type, $allowed_marker_types, true)) $marker_type = 'ring';
 
-	if ($map_id && (! get_post($map_id) || get_post_type($map_id) !== 'maps')) {
+	if ($map_id && (! get_post($map_id) || get_post_type($map_id) !== 'cns_map')) {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 400]);
 	}
 
@@ -522,13 +539,20 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 
 function cns_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Response {
 	$map_id  = (int) $req['id'];
+	// Reverse lookup of the stories built on one map: a single-clause query on
+	// an indexed meta_key, admin-only, and bounded in practice by how many
+	// stories a map has. Only the ID, title and status are read below.
 	$stories = get_posts([
 		'post_type'      => 'cns_story',
 		'posts_per_page' => -1,
 		'post_status'    => ['publish', 'draft', 'private'],
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 		'meta_query'     => [
 			['key' => '_cns_story_map_id', 'value' => $map_id, 'type' => 'NUMERIC'],
 		],
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
 	]);
 
 	// One aggregated count query instead of one COUNT per story.
@@ -537,8 +561,11 @@ function cns_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Resp
 		global $wpdb;
 		$story_ids    = array_map(fn(WP_Post $s): int => $s->ID, $stories);
 		$placeholders = implode(',', array_fill(0, count($story_ids), '%d'));
+		// $placeholders is built from array_fill(..., '%d') and every id is passed
+		// to prepare(), so the IN() list is fully parameterised.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				"SELECT story_id, COUNT(*) AS n FROM {$wpdb->prefix}cns_story_nodes WHERE story_id IN ($placeholders) GROUP BY story_id",
 				...$story_ids
 			),
@@ -788,7 +815,11 @@ function cns_story_suite_api_delete_node(WP_REST_Request $req): WP_REST_Response
 		)
 	);
 	$deleted = $wpdb->delete($wpdb->prefix . 'cns_story_nodes', ['id' => $node_id], ['%d']);
-	$wpdb->query($deleted === false ? 'ROLLBACK' : 'COMMIT');
+	if ($deleted === false) {
+		$wpdb->query('ROLLBACK');
+	} else {
+		$wpdb->query('COMMIT');
+	}
 
 	if ($deleted === false) {
 		return new WP_Error('db_error', __('Could not delete node.', 'clouds-and-spaceships'), ['status' => 500]);
@@ -1260,7 +1291,11 @@ function cns_story_suite_api_delete_path(WP_REST_Request $req): WP_REST_Response
 	$wpdb->query('START TRANSACTION');
 	$wpdb->update($wpdb->prefix . 'cns_story_nodes', ['path_id' => null], ['path_id' => $path_id], ['%d'], ['%d']);
 	$deleted = $wpdb->delete($wpdb->prefix . 'cns_story_paths', ['id' => $path_id], ['%d']);
-	$wpdb->query($deleted === false ? 'ROLLBACK' : 'COMMIT');
+	if ($deleted === false) {
+		$wpdb->query('ROLLBACK');
+	} else {
+		$wpdb->query('COMMIT');
+	}
 
 	if ($deleted === false) {
 		return new WP_Error('db_error', __('Could not delete path.', 'clouds-and-spaceships'), ['status' => 500]);

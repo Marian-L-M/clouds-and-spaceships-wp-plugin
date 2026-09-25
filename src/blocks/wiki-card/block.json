@@ -13,7 +13,7 @@
 	},
 	"attributes": {
 		"postId": { "type": "number", "default": 0 },
-		"postType": { "type": "string", "default": "wiki" },
+		"postType": { "type": "string", "default": "cns_wiki" },
 		"backgroundColor": { "type": "string", "default": "#f0f0f0" },
 		"textColor": { "type": "string", "default": "" },
 		"showThumbnail": { "type": "boolean", "default": true },

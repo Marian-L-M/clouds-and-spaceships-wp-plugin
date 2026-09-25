@@ -16,7 +16,7 @@ $infobox_width     = cns_get_wiki_setting( 'infobox_width', '' );
 $content_width     = cns_get_wiki_setting( 'content_width', '' );
 
 $archive_slug  = cns_get_wiki_setting( 'archive_slug',  'wiki' );
-$archive_url   = $wiki_enabled ? get_post_type_archive_link( 'wiki' ) : false;
+$archive_url   = $wiki_enabled ? get_post_type_archive_link( 'cns_wiki' ) : false;
 
 $grid_desktop  = (int) cns_get_wiki_setting( 'grid_columns_desktop', 3 );
 $grid_tablet   = (int) cns_get_wiki_setting( 'grid_columns_tablet',  2 );
@@ -41,11 +41,11 @@ $cat_count = 0;
 $tag_count = 0;
 
 if ( $wiki_enabled ) {
-    $counts    = wp_count_posts( 'wiki' );
+    $counts    = wp_count_posts( 'cns_wiki' );
     $published = (int) ( $counts->publish ?? 0 );
     $draft     = (int) ( $counts->draft   ?? 0 );
     $wiki_ids  = $published > 0
-        ? get_posts( [ 'post_type' => 'wiki', 'posts_per_page' => -1, 'fields' => 'ids', 'post_status' => 'publish' ] )
+        ? get_posts( [ 'post_type' => 'cns_wiki', 'posts_per_page' => -1, 'fields' => 'ids', 'post_status' => 'publish' ] )
         : [];
 
     foreach ( [ 'category' => 'cat_count', 'post_tag' => 'tag_count' ] as $taxonomy => $var ) {

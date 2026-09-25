@@ -1,10 +1,17 @@
 <?php
 defined('ABSPATH') || exit;
 
+// This screen only reads $_GET to decide what to display — which page, which
+// filters, which page of results. Nothing here changes state, so there is no
+// action to protect and no nonce to verify; WordPress's own list tables read
+// their filters the same way. Every write path in this plugin verifies a nonce
+// or goes through the REST API's permission callbacks.
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 $per_page_options = [10, 20, 50, 100];
-$requested_per_page = (int) ($_GET['per_page'] ?? 20);
+$requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
 $per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
-$paged            = max(1, absint($_GET['paged'] ?? 1));
+$paged            = max(1, absint(wp_unslash($_GET['paged'] ?? 1)));
 $search           = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
 $total_maps  = cns_map_suite_count_maps($search);
 $total_pages = (int) ceil($total_maps / $per_page);
@@ -74,8 +81,8 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 				<label for="cns-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
 				<select name="per_page" id="cns-per-page" onchange="this.form.submit()">
 					<?php foreach ($per_page_options as $option) : ?>
-						<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
-							<?php echo $option; ?>
+						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
+							<?php echo esc_html($option); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -86,6 +93,7 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 	<?php if ($search !== '') : ?>
 		<p class="cns-settings-toolbar__count">
 			<?php printf(
+				/* translators: %1$s: number of maps, %2$s: search term */
 				esc_html(_n(
 					'%1$s map found for “%2$s”.',
 					'%1$s maps found for “%2$s”.',
@@ -141,7 +149,7 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 			?>
 				<tr>
 					<td class="col-thumb">
-						<a href="<?php echo $edit_url; ?>">
+						<a href="<?php echo esc_url($edit_url); ?>">
 						<?php if ($thumb_url) : ?>
 							<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_html($map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>" />
 						<?php else : ?>
@@ -151,7 +159,7 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 					</td>
 					<td>
 						<strong>
-							<a href="<?php echo $edit_url; ?>">
+							<a href="<?php echo esc_url($edit_url); ?>">
 								<?php echo esc_html($map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
 							</a>
 						</strong>
@@ -167,14 +175,14 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 					?></td>
 					<td><?php echo esc_html(get_the_date('Y-m-d', $map)); ?></td>
 					<td class="cns-row-actions">
-						<a href="<?php echo $edit_url; ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
+						<a href="<?php echo esc_url($edit_url); ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
 						<?php if (in_array($map->post_status, ['publish', 'private'], true)) : ?>
 							&nbsp;&middot;&nbsp;
 							<a href="<?php echo esc_url(get_permalink($map->ID)); ?>" target="_blank" rel="noopener"><?php esc_html_e('View', 'clouds-and-spaceships'); ?></a>
 						<?php endif; ?>
 						&nbsp;&middot;&nbsp;
 						<a
-							href="<?php echo $delete_url; ?>"
+							href="<?php echo esc_url($delete_url); ?>"
 							class="cns-delete-link"
 							data-confirm="<?php esc_attr_e('Permanently delete this map?', 'clouds-and-spaceships'); ?>"
 						><?php esc_html_e('Delete', 'clouds-and-spaceships'); ?></a>
@@ -187,14 +195,14 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 	<?php if ($total_pages > 1) : ?>
 		<div class="tablenav bottom">
 			<div class="tablenav-pages">
-				<?php echo paginate_links([
+				<?php echo wp_kses_post(paginate_links([
 					'base'      => add_query_arg('paged', '%#%'),
 					'format'    => '',
 					'current'   => $paged,
 					'total'     => $total_pages,
 					'prev_text' => '&laquo;',
 					'next_text' => '&raquo;',
-				]); ?>
+				])); ?>
 			</div>
 		</div>
 	<?php endif; ?>

@@ -4,8 +4,8 @@ defined('ABSPATH') || exit;
 
 
 /**
- * Maps + Icons tabs on the shared CNS settings page. The framework builds the
- * page whether or not the CNS theme is active, so no standalone menu is needed.
+ * Maps + Icons tabs on the shared CNS settings page, which the plugin builds
+ * itself — no standalone menu is needed.
  */
 add_filter('cns_admin_tabs', function (array $tabs): array {
 	$tabs['maps'] = [
@@ -46,7 +46,8 @@ add_action('admin_menu', 'cns_map_suite_register_menus', 10);
  * from the bare cns-settings slug, so resolve that back to our tab pages.
  */
 function cns_map_suite_current_page(): string {
-	$page = sanitize_key($_GET['page'] ?? '');
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- routing only; reads which admin page is being rendered.
+	$page = sanitize_key(wp_unslash($_GET['page'] ?? ''));
 	if ($page === 'cns-settings') {
 		$active = cns_admin_active_tab();
 		if ($active === 'maps')  return CNS_MAP_PAGE_SETTINGS_MAPS;
@@ -106,16 +107,14 @@ function cns_map_suite_enqueue_admin_assets(): void {
 	wp_enqueue_script(
 		'cns-map-admin',
 		CNS_URL . 'build/map-admin/index.js',
-		array_merge( [ 'wp-color-picker', 'cns-toast' ], $admin_asset['dependencies'] ),
+		array_merge( [ 'wp-color-picker' ], $admin_asset['dependencies'] ),
 		$admin_asset['version'],
 		true
 	);
 
-	wp_set_script_translations(
-		'cns-map-admin',
-		'clouds-and-spaceships',
-		CNS_DIR . 'languages'
-	);
+	// No path: wp.org language packs land in WP_LANG_DIR, where core looks by
+	// default.
+	wp_set_script_translations('cns-map-admin', 'clouds-and-spaceships');
 
 	wp_localize_script('cns-map-admin', 'cnsMapSuite', [
 		'restUrl'   => rest_url('cns-map-suite/v1'),

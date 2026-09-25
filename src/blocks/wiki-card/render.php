@@ -61,7 +61,7 @@ $wrapper = get_block_wrapper_attributes( [
 	'style' => $inline_style,
 ] );
 ?>
-<div <?php echo $wrapper; ?>>
+<div <?php echo $wrapper; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
 
 	<?php if ( $show_thumb && $thumb ) : ?>
 		<div class="wiki-card__thumbnail">

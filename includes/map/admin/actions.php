@@ -12,7 +12,7 @@ if (
 	check_admin_referer('cns_delete_map_' . (int) $_GET['map_id'])
 ) {
 	$map_id = (int) $_GET['map_id'];
-	if (get_post_type($map_id) === 'maps') {
+	if (get_post_type($map_id) === 'cns_map') {
 		wp_delete_post($map_id, true);
 	}
 	wp_safe_redirect(add_query_arg(
@@ -51,8 +51,8 @@ if (
 	// Zoom control colors. A cleared field posts nothing (the input is disabled
 	// by the "Use default" checkbox), which stores an empty string and returns
 	// the controls to the stylesheet fallback.
-	update_option('cns_map_suite_zoom_main_color',   cns_map_suite_sanitize_optional_color((string) ($_POST['zoom_main_color']   ?? '')));
-	update_option('cns_map_suite_zoom_accent_color', cns_map_suite_sanitize_optional_color((string) ($_POST['zoom_accent_color'] ?? '')));
+	update_option('cns_map_suite_zoom_main_color',   cns_map_suite_sanitize_optional_color(sanitize_text_field(wp_unslash($_POST['zoom_main_color']   ?? ''))));
+	update_option('cns_map_suite_zoom_accent_color', cns_map_suite_sanitize_optional_color(sanitize_text_field(wp_unslash($_POST['zoom_accent_color'] ?? ''))));
 
 	// Nothing archive-related is saved: the plugin publishes no map archive.
 	wp_safe_redirect(add_query_arg(

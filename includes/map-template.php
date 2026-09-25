@@ -56,8 +56,8 @@ add_action('init', 'cns_register_updated_date_binding');
 
 function cns_single_map_template_variants(): array {
 	return [
-		'maps' => [
-			'slug'        => 'single-maps',
+		'cns_map' => [
+			'slug'        => 'single-cns_map',
 			'title'       => __('Single Map', 'clouds-and-spaceships'),
 			'description' => __('Template for single map pages.', 'clouds-and-spaceships'),
 			'canvas'      => '<!-- wp:cns-map-suite/map /-->',

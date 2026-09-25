@@ -21,10 +21,9 @@ if (! defined('ABSPATH')) {
 }
 
 define('CNS_VERSION', '0.1.0');
-define('CNS_DB_VERSION', '1.0.0');
+define('CNS_DB_VERSION', '1.1.0');
 define('CNS_DIR', plugin_dir_path(__FILE__));
 define('CNS_URL', plugin_dir_url(__FILE__));
-define('CNS_BASENAME', plugin_basename(__FILE__));
 
 // Admin page slugs
 define('CNS_MAP_PAGE_EDITOR', 'cns-map-editor');
@@ -66,15 +65,9 @@ require_once CNS_DIR . 'includes/story/serializers.php';
 require_once CNS_DIR . 'includes/story/admin/menu.php';
 require_once CNS_DIR . 'includes/story/admin/api.php';
 
-// Multi language
-function cns_load_textdomain(): void {
-	load_plugin_textdomain(
-		'clouds-and-spaceships',
-		false,
-		dirname(CNS_BASENAME) . '/languages'
-	);
-}
-add_action('init', 'cns_load_textdomain');
+// Translations are loaded by WordPress itself: the text domain matches the
+// plugin slug, so wp.org's language packs are picked up with no call of our
+// own (core has done this since 4.6, and just-in-time since 6.7).
 
 // Blocks
 function cns_register_blocks(): void {
@@ -83,31 +76,11 @@ function cns_register_blocks(): void {
 			CNS_DIR . 'build/blocks',
 			CNS_DIR . 'build/blocks-manifest.php'
 		);
-	} elseif (defined('WP_DEBUG') && WP_DEBUG) {
-		trigger_error('Clouds and Spaceships: block manifest not found — run `npm run build` in the plugin directory.', E_USER_NOTICE);
 	}
 }
 add_action('init', 'cns_register_blocks');
 
 // Admin settings
-// Toast notifications
-function cns_register_toast(): void {
-	$asset_file = CNS_DIR . 'build/toast/index.asset.php';
-	$asset      = file_exists($asset_file)
-		? require $asset_file
-		: ['dependencies' => [], 'version' => CNS_VERSION];
-
-	wp_register_script('cns-toast', CNS_URL . 'build/toast/index.js', $asset['dependencies'], $asset['version'], true);
-	wp_register_style('cns-toast', CNS_URL . 'build/toast/index.css', [], $asset['version']);
-}
-add_action('init', 'cns_register_toast');
-
-function cns_enqueue_toast(): void {
-	wp_enqueue_script('cns-toast');
-	wp_enqueue_style('cns-toast');
-}
-add_action('admin_enqueue_scripts', 'cns_enqueue_toast');
-
 // Database schema
 // Runs dbDelta() on every plugin update so schema changes are applied
 // automatically without requiring a manual deactivate/reactivate cycle.
@@ -116,10 +89,88 @@ function cns_maybe_upgrade_db(): void {
 	if (get_option('cns_db_version') !== CNS_DB_VERSION) {
 		cns_map_suite_create_tables();
 		cns_story_suite_create_tables();
+		cns_migrate_post_type_prefixes();
 		update_option('cns_db_version', CNS_DB_VERSION, false);
 	}
 }
 add_action('plugins_loaded', 'cns_maybe_upgrade_db');
+
+/**
+ * Moves content onto the prefixed post type and taxonomy names.
+ *
+ * The three oldest types were registered as 'maps', 'wiki' and 'glossary' —
+ * names generic enough that another plugin could claim them and silently take
+ * over this plugin's content. They are now cns_map / cns_wiki / cns_glossary,
+ * and the rows have to follow or the existing content becomes invisible.
+ *
+ * Permalinks are unaffected: each type already declares an explicit
+ * rewrite slug ('maps', the wiki archive slug, the glossary slug), and
+ * has_archive derives its own slug from that, so public URLs are unchanged.
+ *
+ * Runs once, guarded by cns_db_version, and is written to be safe to re-run:
+ * every statement is a no-op once there are no old rows left.
+ */
+function cns_migrate_post_type_prefixes(): void {
+	global $wpdb;
+
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$post_types = [
+		'maps'     => 'cns_map',
+		'wiki'     => 'cns_wiki',
+		'glossary' => 'cns_glossary',
+	];
+
+	$moved = 0;
+	foreach ($post_types as $old => $new) {
+		// Collect first: after the update these rows no longer match $old, and
+		// each one's cached WP_Post still carries the stale post_type.
+		$ids = $wpdb->get_col($wpdb->prepare(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_type = %s",
+			$old
+		));
+		if (! $ids) {
+			continue;
+		}
+
+		$wpdb->update(
+			$wpdb->posts,
+			['post_type' => $new],
+			['post_type' => $old],
+			['%s'],
+			['%s']
+		);
+		$moved += count($ids);
+
+		foreach ($ids as $id) {
+			clean_post_cache((int) $id);
+		}
+	}
+
+	$terms = $wpdb->get_col($wpdb->prepare(
+		"SELECT term_id FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s",
+		'glossary_category'
+	));
+	if ($terms) {
+		$wpdb->update(
+			$wpdb->term_taxonomy,
+			['taxonomy' => 'cns_glossary_category'],
+			['taxonomy' => 'glossary_category'],
+			['%s'],
+			['%s']
+		);
+		$moved += count($terms);
+		clean_taxonomy_cache('cns_glossary_category');
+		foreach ($terms as $term_id) {
+			clean_term_cache((int) $term_id, 'cns_glossary_category');
+		}
+	}
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+	if ($moved > 0) {
+		// Rewrite rules were built for the old type names.
+		cns_schedule_rewrite_flush();
+	}
+}
 
 // Lifecycle hools
 function cns_activate(): void {
@@ -137,7 +188,7 @@ register_activation_hook(__FILE__, 'cns_activate');
 
 // Unregister CPTs
 function cns_deactivate(): void {
-	foreach (['wiki', 'glossary', 'maps', 'cns_story', 'cns_substory'] as $post_type) {
+	foreach (['cns_wiki', 'cns_glossary', 'cns_map', 'cns_story', 'cns_substory'] as $post_type) {
 		unregister_post_type($post_type);
 	}
 	flush_rewrite_rules();

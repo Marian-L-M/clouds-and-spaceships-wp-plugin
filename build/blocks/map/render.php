@@ -15,7 +15,7 @@ $map_id = (int) ($attributes['mapId'] ?? 0);
 // No ID means the block is standing in for "whichever map is being viewed" —
 // how the single-maps template uses it. Core seeds postId/postType from the
 // global post, so this only resolves on a map's own page.
-if (! $map_id && ($block->context['postType'] ?? '') === 'maps') {
+if (! $map_id && ($block->context['postType'] ?? '') === 'cns_map') {
 	$map_id = (int) ($block->context['postId'] ?? 0);
 }
 
@@ -25,7 +25,7 @@ if (! $map_id) {
 
 $map = get_post($map_id);
 
-if (! $map || $map->post_type !== 'maps') {
+if (! $map || $map->post_type !== 'cns_map') {
 	return;
 }
 
@@ -126,7 +126,7 @@ $wrapper_attrs = get_block_wrapper_attributes(array_filter([
 	'style'       => $zoom_style,
 ]));
 ?>
-<div <?php echo $wrapper_attrs; ?>>
+<div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
 	<div class="cns-map-canvas-wrap">
 		<canvas
 			class="cns-map-canvas"

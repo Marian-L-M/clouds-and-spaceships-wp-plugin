@@ -1,8 +1,24 @@
 <?php
 defined('ABSPATH') || exit;
 
+/**
+ * Direct database access notice.
+ *
+ * One prepared read against a plugin-owned custom table, for display on this
+ * admin screen only. No WordPress API covers these tables, and an admin screen
+ * must show current rows rather than a cached copy.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+// This screen only reads $_GET to decide what to display — which page, which
+// filters, which page of results. Nothing here changes state, so there is no
+// action to protect and no nonce to verify; WordPress's own list tables read
+// their filters the same way. Every write path in this plugin verifies a nonce
+// or goes through the REST API's permission callbacks.
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 $per_page_options   = [10, 20, 50, 100];
-$requested_per_page = (int) ($_GET['per_page'] ?? 20);
+$requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
 $per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
 $paged              = max(1, absint($_GET['paged'] ?? 1));
 $in_trash           = (sanitize_key($_GET['status'] ?? '') === 'trash');
@@ -130,8 +146,8 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 				<label for="cns-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
 				<select name="per_page" id="cns-per-page" onchange="this.form.submit()">
 					<?php foreach ($per_page_options as $option) : ?>
-						<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
-							<?php echo $option; ?>
+						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
+							<?php echo esc_html($option); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -142,6 +158,7 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 	<?php if ($search !== '') : ?>
 		<p class="cns-settings-toolbar__count">
 			<?php printf(
+				/* translators: %1$s: number of stories, %2$s: search term */
 				esc_html(_n(
 					'%1$s story matching “%2$s”.',
 					'%1$s stories matching “%2$s”.',
@@ -207,7 +224,7 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 			?>
 				<tr>
 					<td class="col-thumb">
-						<a href="<?php echo $edit_url; ?>">
+						<a href="<?php echo esc_url($edit_url); ?>">
 							<?php if ($thumb_url) : ?>
 								<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($story->post_title ?: ''); ?>" />
 							<?php else : ?>
@@ -217,7 +234,7 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 					</td>
 					<td>
 						<strong>
-							<a href="<?php echo $edit_url; ?>">
+							<a href="<?php echo esc_url($edit_url); ?>">
 								<?php echo esc_html($story->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
 							</a>
 						</strong>
@@ -231,15 +248,15 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 					<td><?php echo esc_html(get_the_date('Y-m-d', $story)); ?></td>
 					<td class="cns-row-actions">
 						<?php if ($in_trash) : ?>
-							<a href="<?php echo $action_url('restore'); ?>"><?php esc_html_e('Restore', 'clouds-and-spaceships'); ?></a>
+							<a href="<?php echo esc_url($action_url('restore')); ?>"><?php esc_html_e('Restore', 'clouds-and-spaceships'); ?></a>
 							&nbsp;&middot;&nbsp;
 							<a
-								href="<?php echo $action_url('delete-forever'); ?>"
+								href="<?php echo esc_url($action_url('delete-forever')); ?>"
 								class="cns-delete-link"
 								data-confirm="<?php esc_attr_e('Permanently delete this story and all its nodes, paths and edges? This cannot be undone.', 'clouds-and-spaceships'); ?>"
 							><?php esc_html_e('Delete Permanently', 'clouds-and-spaceships'); ?></a>
 						<?php else : ?>
-							<a href="<?php echo $edit_url; ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
+							<a href="<?php echo esc_url($edit_url); ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
 							<?php if (in_array($story->post_status, ['publish', 'private'], true)) : ?>
 								&nbsp;&middot;&nbsp;
 								<a href="<?php echo esc_url(get_permalink($story->ID)); ?>" target="_blank" rel="noopener">
@@ -248,7 +265,7 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 							<?php endif; ?>
 							&nbsp;&middot;&nbsp;
 							<a
-								href="<?php echo $action_url('delete'); ?>"
+								href="<?php echo esc_url($action_url('delete')); ?>"
 								class="cns-delete-link"
 								data-confirm="<?php esc_attr_e('Move this story to trash?', 'clouds-and-spaceships'); ?>"
 							><?php esc_html_e('Trash', 'clouds-and-spaceships'); ?></a>
@@ -262,14 +279,14 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 	<?php if ($total_pages > 1) : ?>
 		<div class="tablenav bottom">
 			<div class="tablenav-pages">
-				<?php echo paginate_links([
+				<?php echo wp_kses_post(paginate_links([
 					'base'      => add_query_arg('paged', '%#%'),
 					'format'    => '',
 					'current'   => $paged,
 					'total'     => $total_pages,
 					'prev_text' => '&laquo;',
 					'next_text' => '&raquo;',
-				]); ?>
+				])); ?>
 			</div>
 		</div>
 	<?php endif; ?>

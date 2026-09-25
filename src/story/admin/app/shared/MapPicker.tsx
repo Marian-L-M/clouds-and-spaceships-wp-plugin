@@ -32,7 +32,7 @@ export default function MapPicker( { mapId, mapTitle, onChange }: Props ) {
 
 	const { records } = useEntityRecords< MapRecord >(
 		'postType',
-		'maps',
+		'cns_map',
 		{
 			search,
 			per_page: 20,

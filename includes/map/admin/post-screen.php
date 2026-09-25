@@ -14,7 +14,7 @@ defined('ABSPATH') || exit;
  * last core action (View/Preview).
  */
 function cns_map_suite_post_row_actions(array $actions, WP_Post $post): array {
-	if ($post->post_type !== 'maps' || ! current_user_can('manage_maps')) {
+	if ($post->post_type !== 'cns_map' || ! current_user_can('manage_maps')) {
 		return $actions;
 	}
 
@@ -35,7 +35,7 @@ add_filter('post_row_actions', 'cns_map_suite_post_row_actions', 10, 2);
  */
 function cns_map_suite_post_screen_title_action(): void {
 	$screen = get_current_screen();
-	if (! $screen || $screen->base !== 'post' || $screen->post_type !== 'maps') {
+	if (! $screen || $screen->base !== 'post' || $screen->post_type !== 'cns_map') {
 		return;
 	}
 	// post-new.php has an auto-draft only — there is no map element to edit yet.
@@ -43,7 +43,8 @@ function cns_map_suite_post_screen_title_action(): void {
 		return;
 	}
 
-	$post_id = (int) ($_GET['post'] ?? 0);
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- reads the post being viewed to pick a redirect; changes nothing.
+	$post_id = (int) sanitize_text_field(wp_unslash($_GET['post'] ?? 0));
 	if ($post_id <= 0) {
 		return;
 	}

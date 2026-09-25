@@ -31,7 +31,7 @@ const CNS_CACHE_TTL = 12 * HOUR_IN_SECONDS;
  * rest_namespace writes under this REST route start a new generation
  */
 const CNS_CACHE_GROUPS = [
-	'map'   => ['post_type' => 'maps',      'rest_namespace' => '/cns-map-suite/v1/'],
+	'map'   => ['post_type' => 'cns_map',      'rest_namespace' => '/cns-map-suite/v1/'],
 	'story' => ['post_type' => 'cns_story', 'rest_namespace' => '/cns-story-suite/v1/'],
 ];
 

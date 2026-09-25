@@ -1,8 +1,15 @@
 <?php
 defined('ABSPATH') || exit;
 
+// This screen only reads $_GET to decide what to display — which page, which
+// filters, which page of results. Nothing here changes state, so there is no
+// action to protect and no nonce to verify; WordPress's own list tables read
+// their filters the same way. Every write path in this plugin verifies a nonce
+// or goes through the REST API's permission callbacks.
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 $per_page_options   = [10, 20, 50, 100];
-$requested_per_page = (int) ($_GET['per_page'] ?? 20);
+$requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
 $per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
 $paged              = max(1, absint($_GET['paged'] ?? 1));
 $search             = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
@@ -95,8 +102,8 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 				<label for="cns-sub-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
 				<select name="per_page" id="cns-sub-per-page" onchange="this.form.submit()">
 					<?php foreach ($per_page_options as $option) : ?>
-						<option value="<?php echo $option; ?>" <?php selected($per_page, $option); ?>>
-							<?php echo $option; ?>
+						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
+							<?php echo esc_html($option); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -107,6 +114,7 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 	<?php if ($search !== '') : ?>
 		<p class="cns-settings-toolbar__count">
 			<?php printf(
+				/* translators: %1$s: number of substories, %2$s: search term */
 				esc_html(_n(
 					'%1$s substory matching “%2$s”.',
 					'%1$s substories matching “%2$s”.',
@@ -203,14 +211,14 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 	<?php if ($total_pages > 1) : ?>
 		<div class="tablenav bottom">
 			<div class="tablenav-pages">
-				<?php echo paginate_links([
+				<?php echo wp_kses_post(paginate_links([
 					'base'      => add_query_arg('paged', '%#%'),
 					'format'    => '',
 					'current'   => $paged,
 					'total'     => $total_pages,
 					'prev_text' => '&laquo;',
 					'next_text' => '&raquo;',
-				]); ?>
+				])); ?>
 			</div>
 		</div>
 	<?php endif; ?>

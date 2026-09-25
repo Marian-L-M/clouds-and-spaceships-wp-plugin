@@ -224,7 +224,7 @@ function cns_wiki_enqueue_infobox_styles(): void {
 
     $css = '.wp-block-cns-wiki-suite-infobox{' . $rules . '}';
 
-    wp_register_style( 'cns-wiki-infobox-overrides', false );
+    wp_register_style( 'cns-wiki-infobox-overrides', false, [], CNS_VERSION );
     wp_enqueue_style( 'cns-wiki-infobox-overrides' );
     wp_add_inline_style( 'cns-wiki-infobox-overrides', $css );
 }
@@ -238,7 +238,7 @@ function cns_wiki_enqueue_infobox_styles(): void {
 add_action( 'wp_enqueue_scripts', 'cns_wiki_enqueue_archive_grid_styles' );
 
 function cns_wiki_enqueue_archive_grid_styles(): void {
-    if ( ! is_post_type_archive( 'wiki' ) ) {
+    if ( ! is_post_type_archive( 'cns_wiki' ) ) {
         return;
     }
 
@@ -260,7 +260,7 @@ function cns_wiki_enqueue_archive_grid_styles(): void {
         $row_gap
     );
 
-    wp_register_style( 'cns-wiki-archive-grid', false );
+    wp_register_style( 'cns-wiki-archive-grid', false, [], CNS_VERSION );
     wp_enqueue_style( 'cns-wiki-archive-grid' );
     wp_add_inline_style( 'cns-wiki-archive-grid', $css );
 }

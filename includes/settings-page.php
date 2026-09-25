@@ -2,11 +2,6 @@
 /**
  * CNS settings page — the tabbed "Clouds And Spaceships" admin screen.
  *
- * Imported from the Clouds And Spaceships theme, where it used to ship as four
- * identical function_exists-guarded copies (theme + wiki/map/story suites).
- * The suites are one plugin now, so this is the single definition and the
- * guard is gone.
- *
  * Providers add their tabs via the `cns_admin_tabs` filter:
  *
  *   add_filter( 'cns_admin_tabs', function ( array $tabs ): array {
@@ -23,10 +18,6 @@
  * Each tab becomes an admin page with the slug cns-settings-{slug}. The bare
  * parent slug cns-settings also resolves to the lowest-priority tab, so old
  * bookmarks keep working.
- *
- * The theme still ships its own guarded copy and registers a "Theme" tab
- * through the same filter. Plugins load before themes, so this definition
- * wins and the theme's copy is a no-op.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -64,6 +55,7 @@ function cns_admin_page_slug( string $tab_slug ): string {
  */
 function cns_admin_active_tab(): ?string {
     $tabs = cns_admin_get_tabs();
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- routing only; reads which admin page is being rendered.
     $page = sanitize_key( wp_unslash( $_GET['page'] ?? '' ) );
 
     if ( 'cns-settings' === $page ) {

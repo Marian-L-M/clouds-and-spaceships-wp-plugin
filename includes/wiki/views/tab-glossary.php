@@ -12,7 +12,7 @@ $glossary_slug      = cns_get_wiki_setting( 'glossary_slug', 'glossary' );
 $glossary_color     = cns_get_wiki_setting( 'glossary_text_color', '' );
 $glossary_show_menu = (bool) cns_get_wiki_setting( 'glossary_show_menu', true );
 $glossary_delete_on_uninstall = (bool) cns_get_wiki_setting( 'glossary_delete_on_uninstall', false );
-$glossary_url       = $glossary_enabled ? get_post_type_archive_link( 'glossary' ) : false;
+$glossary_url       = $glossary_enabled ? get_post_type_archive_link( 'cns_glossary' ) : false;
 
 // Counts are only meaningful once the post type is registered.
 $published = 0;
@@ -20,11 +20,11 @@ $draft     = 0;
 $cat_count = 0;
 
 if ( $glossary_enabled ) {
-    $counts    = wp_count_posts( 'glossary' );
+    $counts    = wp_count_posts( 'cns_glossary' );
     $published = (int) ( $counts->publish ?? 0 );
     $draft     = (int) ( $counts->draft   ?? 0 );
     $terms     = get_terms( [
-        'taxonomy'   => 'glossary_category',
+        'taxonomy'   => 'cns_glossary_category',
         'hide_empty' => true,
         'fields'     => 'ids',
     ] );

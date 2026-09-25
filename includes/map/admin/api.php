@@ -2,6 +2,23 @@
 
 defined('ABSPATH') || exit;
 
+/**
+ * Direct database access notice.
+ *
+ * Every query in this file runs against the plugin's own custom tables
+ * ({$wpdb->prefix}cns_*), which hold data WordPress has no API for — there is
+ * no post, meta or options equivalent to read instead. All values are passed
+ * through $wpdb->prepare().
+ *
+ * These endpoints are deliberately uncached: they are the editor's read/write
+ * path, permission-gated, and must return exactly what was just written rather
+ * than a cached generation. Frontend reads of the same tables do go through
+ * the render cache in includes/cache.php, and every write here bumps that
+ * cache's generation via the rest_request_after_callbacks filter registered
+ * there, so the public side never serves stale rows.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
 function cns_map_suite_permission_check(): true|WP_Error {
 	if (current_user_can('manage_maps')) {
 		return true;
@@ -324,7 +341,7 @@ function cns_map_suite_rest_save_map(WP_REST_Request $request): WP_REST_Response
 	$title  = $request->get_param('title') ?: __('(no title)', 'clouds-and-spaceships');
 
 	$post_data = [
-		'post_type'    => 'maps',
+		'post_type'    => 'cns_map',
 		'post_title'   => $title,
 		'post_content' => (string) $request->get_param('description'),
 		'post_status'  => $request->get_param('status'),
@@ -332,7 +349,7 @@ function cns_map_suite_rest_save_map(WP_REST_Request $request): WP_REST_Response
 
 	if ($map_id > 0) {
 		$existing = get_post($map_id);
-		if (! $existing || $existing->post_type !== 'maps') {
+		if (! $existing || $existing->post_type !== 'cns_map') {
 			return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 		}
 		$post_data['ID'] = $map_id;
@@ -398,6 +415,11 @@ function cns_map_suite_rest_save_map(WP_REST_Request $request): WP_REST_Response
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
 function cns_map_suite_rest_list_icons(): WP_REST_Response {
+	// A single-clause lookup on an indexed meta_key, capped, and only reachable
+	// by an authenticated admin opening the icon picker. Rewriting it as
+	// meta_key/meta_value trades one warning for two and changes no SQL, and
+	// the flag is what marks an attachment as a library icon, so there is
+	// nothing to denormalise it into.
 	$attachments = get_posts([
 		'post_type'      => 'attachment',
 		'post_mime_type' => 'image/svg+xml',
@@ -405,9 +427,13 @@ function cns_map_suite_rest_list_icons(): WP_REST_Response {
 		// Hard cap so the endpoint stays bounded; add pagination if the
 		// library ever approaches this.
 		'posts_per_page' => 500,
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 		'meta_query'     => [['key' => '_cns_map_icon', 'value' => '1']],
 		'orderby'        => 'title',
 		'order'          => 'ASC',
+		// Nothing here reads terms or pages the results.
+		'no_found_rows'         => true,
+		'update_post_term_cache' => false,
 	]);
 
 	$icons = array_map(fn($att) => [
@@ -743,7 +769,7 @@ function cns_map_suite_rest_list_objects(WP_REST_Request $request): WP_REST_Resp
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -759,7 +785,7 @@ function cns_map_suite_rest_create_object(WP_REST_Request $request): WP_REST_Res
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -963,7 +989,7 @@ function cns_map_suite_rest_list_areas(WP_REST_Request $request): WP_REST_Respon
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -979,7 +1005,7 @@ function cns_map_suite_rest_create_area(WP_REST_Request $request): WP_REST_Respo
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -1242,7 +1268,7 @@ function cns_map_suite_rest_list_labels(WP_REST_Request $request): WP_REST_Respo
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -1258,7 +1284,7 @@ function cns_map_suite_rest_create_label(WP_REST_Request $request): WP_REST_Resp
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -1497,7 +1523,7 @@ function cns_map_suite_rest_list_hierarchy(WP_REST_Request $request): WP_REST_Re
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -1514,10 +1540,10 @@ function cns_map_suite_rest_create_hierarchy_region(WP_REST_Request $request): W
 	$map_id      = (int) $request->get_param('map_id');
 	$child_map_id = (int) $request->get_param('child_map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
-	if (!get_post($child_map_id) || get_post_type($child_map_id) !== 'maps') {
+	if (!get_post($child_map_id) || get_post_type($child_map_id) !== 'cns_map') {
 		return new WP_Error('invalid_child', __('Child map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 	if ($map_id === $child_map_id) {
@@ -1651,7 +1677,7 @@ function cns_map_suite_rest_list_parents(WP_REST_Request $request): WP_REST_Resp
 	global $wpdb;
 	$map_id = (int) $request->get_param('map_id');
 
-	if (!get_post($map_id) || get_post_type($map_id) !== 'maps') {
+	if (!get_post($map_id) || get_post_type($map_id) !== 'cns_map') {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 

@@ -1,12 +1,11 @@
 # Clouds and Spaceships
 
-One plugin for the Clouds and Spaceships platform: wiki articles and a glossary,
-interactive canvas maps, and branching stories.
+One plugin for worldbuilders and mapmakers: wiki articles and a glossary,
+interactive canvas maps, and branching stories laid over those maps.
 
 It replaces three separate plugins — **cns-wiki-suite**, **cns-map-suite** and
-**cns-story-suite** (which was a child of cns-map-suite) — and takes over the
-CNS settings page framework that used to ship with the Clouds And Spaceships
-theme.
+**cns-story-suite** (which was a child of cns-map-suite) — and owns the CNS
+settings page framework they shared.
 
 ---
 
@@ -44,7 +43,7 @@ them with a Danger Zone "delete content on uninstall" setting still enabled.
 ```
 clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle
 includes/
-  settings-page.php            the tabbed CNS settings screen (from the theme)
+  settings-page.php            the tabbed CNS settings screen
   archive.php                  archive settings + query + rewrite flush, all suites
   cache.php                    render-row cache for the map and story tables
   capabilities.php             manage_maps / manage_stories
@@ -59,7 +58,6 @@ src/
   shared/                      code both editors use (see below)
   map-panel/                   the Stories tab inside the map editor
   formats/glossary/            glossary inline rich-text format
-  toast/                       toast notifications (`cns-toast` handle)
 ```
 
 ### What the merge deduplicated
@@ -99,23 +97,15 @@ branches are unreachable, so they are gone:
 
 ---
 
-## Relationship to the theme
+## Theme independence
 
-The Clouds And Spaceships theme is no longer required.
+The plugin is self-contained and makes no assumptions about the active theme.
 
-- The settings page framework now lives here. The theme still ships its own
-  `function_exists`-guarded copy and registers a **Theme** tab through the
-  `cns_admin_tabs` filter. Plugins load before themes, so this copy wins and the
-  theme's is a no-op — the Theme tab keeps working, unchanged.
-- The `cns-toast` script and style, previously registered by the theme, ship
-  here as `src/toast/`. The admin editors declare `cns-toast` as a dependency,
-  so on any other theme they used to fail to enqueue at all.
 - `assets/css/wiki-layout.css` gives the wiki's `cns-col*` columns sensible
-  proportions on themes that do not style them.
-
-The theme's own blocks (`cns-theme/cns-section`, `cns-tab`, …) are **not** part
-of this plugin. `cns_wiki_post_content_template()` still checks for the theme and
-falls back to a plain columns skeleton when it is not the active theme.
+  proportions on any theme, since the classes carry no widths of their own.
+- Block templates (`single-cns_map`, `single-cns_wiki`, `single-cns_story`) are
+  registered by the plugin and sit below theme templates, so a theme can
+  override any of them by shipping a template of the same name.
 
 ---
 

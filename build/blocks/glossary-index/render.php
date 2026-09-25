@@ -23,7 +23,7 @@ if (! function_exists('cns_wiki_glossary_enabled') || ! cns_wiki_glossary_enable
 $group_by = ($attributes['groupBy'] ?? 'alphabetical') === 'category' ? 'category' : 'alphabetical';
 
 $entries = get_posts([
-    'post_type'      => 'glossary',
+    'post_type'      => 'cns_glossary',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
     'orderby'        => 'title',
@@ -32,6 +32,7 @@ $entries = get_posts([
 
 if (empty($entries)) {
     if (! empty($attributes['showEmptyNotice'])) {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wrapper attributes are escaped by core; the notice below is escaped inline.
         echo '<div ' . get_block_wrapper_attributes(['class' => 'cns-glossary-index']) . '><p>'
             . esc_html__('No glossary entries yet.', 'clouds-and-spaceships')
             . '</p></div>';
@@ -46,7 +47,7 @@ $sections = [];
 
 if ('category' === $group_by) {
     $terms = get_terms([
-        'taxonomy'   => 'glossary_category',
+        'taxonomy'   => 'cns_glossary_category',
         'hide_empty' => true,
         'orderby'    => 'name',
         'order'      => 'ASC',
@@ -56,7 +57,7 @@ if ('category' === $group_by) {
     $assigned = [];
     foreach ($terms as $term) {
         foreach ($entries as $entry) {
-            if (has_term($term->term_id, 'glossary_category', $entry)) {
+            if (has_term($term->term_id, 'cns_glossary_category', $entry)) {
                 $sections[$term->name][] = $entry;
                 $assigned[$entry->ID]    = true;
             }
@@ -107,4 +108,5 @@ foreach ($sections as $label => $section_entries) {
     );
 }
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wrapper attributes are escaped by core; every value in $html is escaped where it is built above.
 echo '<div ' . get_block_wrapper_attributes(['class' => 'cns-glossary-index cns-glossary-index--' . $group_by]) . '>' . $html . '</div>';

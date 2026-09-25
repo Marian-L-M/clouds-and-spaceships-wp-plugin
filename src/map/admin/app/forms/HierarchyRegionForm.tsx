@@ -98,7 +98,7 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 				<h3>{ __( 'Child Map', 'clouds-and-spaceships' ) }</h3>
 				<PostSearch
 					label={ __( 'Child Map', 'clouds-and-spaceships' ) }
-					subtype="maps"
+					subtype="cns_map"
 					selectedId={ formData.child_map_id }
 					selectedLabel={ formData.child_map_label }
 					onChange={ ( item ) => onChange( {

@@ -36,7 +36,7 @@ if ( 'newest' === $mode ) {
 	$total = $number_of_posts;
 
 	$query = new WP_Query( [
-		'post_type'      => 'wiki',
+		'post_type'      => 'cns_wiki',
 		'posts_per_page' => $total,
 		'post_status'    => 'publish',
 		'orderby'        => 'date',
@@ -56,8 +56,8 @@ if ( 'newest' === $mode ) {
 	$inner = $content;
 }
 ?>
-<div <?php echo $wrapper_attrs; ?>>
+<div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
 	<div class="wiki-contents__grid">
-		<?php echo $inner; ?>
+		<?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_block() output, or block inner content. ?>
 	</div>
 </div>

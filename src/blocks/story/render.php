@@ -9,6 +9,17 @@
 
 defined('ABSPATH') || exit;
 
+/**
+ * Direct database access notice.
+ *
+ * Reads the plugin's own cns_story_* tables, which have no WordPress API
+ * equivalent, with every value passed through $wpdb->prepare(). The raw rows
+ * are cached through cns_cache_get()/cns_cache_set() in includes/cache.php;
+ * only the per-user serialization below stays live, because it applies
+ * visibility rules that must not be shared between visitors.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
 $story_id = (int) ($attributes['storyId'] ?? 0);
 
 // No ID means "whichever story is being viewed" — how the single-cns_story
@@ -175,7 +186,7 @@ $wrapper_attributes = get_block_wrapper_attributes(array_filter([
 	'style' => $zoom_style,
 ]));
 ?>
-<div <?php echo $wrapper_attributes; ?> data-story-data="<?php echo esc_attr(wp_json_encode($block_data)); ?>">
+<div <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?> data-story-data="<?php echo esc_attr(wp_json_encode($block_data)); ?>">
 	<div class="cns-story-block__canvas-wrap">
 		<canvas class="cns-story-canvas"></canvas>
 	</div>

@@ -2,9 +2,25 @@
 
 defined('ABSPATH') || exit;
 
+/**
+ * Direct database access notice.
+ *
+ * One prepared read against a plugin-owned custom table, for display on this
+ * admin screen only. No WordPress API covers these tables, and an admin screen
+ * must show current rows rather than a cached copy.
+ */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+// This screen only reads $_GET to decide what to display — which page, which
+// filters, which page of results. Nothing here changes state, so there is no
+// action to protect and no nonce to verify; WordPress's own list tables read
+// their filters the same way. Every write path in this plugin verifies a nonce
+// or goes through the REST API's permission callbacks.
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 $map_id    = isset($_GET['map_id']) ? (int) $_GET['map_id'] : 0;
 $map       = $map_id ? get_post($map_id) : null;
-$is_new    = (! $map || $map->post_type !== 'maps');
+$is_new    = (! $map || $map->post_type !== 'cns_map');
 $is_master = $map_id ? (bool) get_post_meta($map_id, '_cns_map_is_master', true) : false;
 
 $meta = $map_id ? [
@@ -58,7 +74,7 @@ if ($map_id && ! $is_new) {
     );
     foreach ($parent_rows as $row) {
         $parent   = get_post((int) $row['parent_map_id']);
-        if (!$parent || $parent->post_type !== 'maps') continue;
+        if (!$parent || $parent->post_type !== 'cns_map') continue;
         $image_id = (int) get_post_meta($parent->ID, '_cns_map_image_id', true);
         $parent_maps[] = [
             'map_id'    => $parent->ID,
@@ -90,7 +106,7 @@ window.cnsMapEditor = {
     bgColor:     <?php echo wp_json_encode($meta['bg_color']); ?>,
     bgImageId:    <?php echo (int) $meta['bg_image_id']; ?>,
     bgImageUrl:   <?php echo wp_json_encode($bg_image_url ?: ''); ?>,
-    thumbnailId:  <?php echo $thumbnail_id; ?>,
+    thumbnailId:  <?php echo wp_json_encode((int) $thumbnail_id); ?>,
     thumbnailUrl: <?php echo wp_json_encode($thumbnail_url); ?>,
     overviewUrl:  <?php echo wp_json_encode($overview_url); ?>,
     viewUrl:     <?php echo wp_json_encode($view_url); ?>,
