@@ -11,17 +11,6 @@
 	gap: 2px;
 }
 
-.cns-back-link {
-	font-size: 13px;
-	text-decoration: none;
-	color: #646970;
-	white-space: nowrap;
-
-	&:hover {
-		color: #1d2327;
-	}
-}
-
 .cns-color-field {
 	&__toggle.components-button {
 		display: inline-flex;
@@ -64,10 +53,6 @@
 			-4px 0;
 		background-color: #fff;
 	}
-}
-
-.cns-hidden {
-	display: none !important;
 }
 
 .cns-row-actions {

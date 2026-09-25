@@ -13,6 +13,8 @@ import {
 	measureObjectMarker,
 	objectUsesIcon,
 } from '../../shared/map-geometry';
+import { escHtml, showDrawer, closeDrawer, isDrawerOpen } from '../../shared/frontend/drawer';
+import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 
 // ── Image loading ─────────────────────────────────────────────────────────────
 
@@ -36,52 +38,11 @@ function loadImg( url, onLoad ) {
 	return img;
 }
 
-// ── Infobox drawer (shared / reuses map drawer element if present) ────────────
-
-function escHtml( str ) {
-	return String( str )
-		.replace( /&/g, '&amp;' ).replace( /</g, '&lt;' )
-		.replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
-}
-
-function getOrCreateDrawer() {
-	let drawer = document.getElementById( 'cns-map-drawer' );
-	if ( ! drawer ) {
-		drawer = document.createElement( 'div' );
-		drawer.id        = 'cns-map-drawer';
-		drawer.className = 'cns-map-drawer';
-		drawer.setAttribute( 'role', 'dialog' );
-		drawer.setAttribute( 'aria-modal', 'true' );
-		drawer.innerHTML =
-			'<div class="cns-map-drawer__backdrop"></div>' +
-			'<div class="cns-map-drawer__panel">' +
-				'<div class="cns-map-drawer__header">' +
-					'<button class="cns-map-drawer__close" aria-label="Close">&times;</button>' +
-				'</div>' +
-				'<div class="cns-map-drawer__body"></div>' +
-			'</div>';
-		document.body.appendChild( drawer );
-		drawer.querySelector( '.cns-map-drawer__backdrop' ).addEventListener( 'click', () => {
-			drawer.classList.remove( 'is-open' );
-			document.body.classList.remove( 'cns-map-drawer-open' );
-		} );
-		drawer.querySelector( '.cns-map-drawer__close' ).addEventListener( 'click', () => {
-			drawer.classList.remove( 'is-open' );
-			document.body.classList.remove( 'cns-map-drawer-open' );
-		} );
-		document.addEventListener( 'keydown', ( e ) => {
-			if ( e.key === 'Escape' && drawer.classList.contains( 'is-open' ) ) {
-				drawer.classList.remove( 'is-open' );
-				document.body.classList.remove( 'cns-map-drawer-open' );
-			}
-		} );
-	}
-	return drawer;
-}
+// ── Infobox drawer ────────────────────────────────────────────────────────────
+// The shell is shared with the map block (src/shared/frontend/drawer.js) — one
+// element serves every CNS block on the page. Only the body HTML differs.
 
 function showInfobox( item ) {
-	const drawer   = getOrCreateDrawer();
-	const body     = drawer.querySelector( '.cns-map-drawer__body' );
 	const resolved = item.infoboxResolved || {};
 	const title    = resolved.title    || item.title || '';
 	const content  = resolved.content  || '';
@@ -92,10 +53,7 @@ function showInfobox( item ) {
 	if ( title   ) html += '<h2 class="cns-map-drawer__title">' + escHtml( title ) + '</h2>';
 	if ( content ) html += '<div class="cns-map-drawer__content">' + content + '</div>';
 	if ( postUrl ) html += '<a class="cns-map-drawer__link" href="' + encodeURI( postUrl ) + '">View full post &rarr;</a>';
-	body.innerHTML = html;
-	drawer.classList.add( 'is-open' );
-	document.body.classList.add( 'cns-map-drawer-open' );
-	drawer.querySelector( '.cns-map-drawer__close' ).focus();
+	showDrawer( html );
 }
 
 // ── Story node dialog ─────────────────────────────────────────────────────────
@@ -811,8 +769,7 @@ function setupZoomControls( canvas ) {
 		// Let Esc close an open dialog/drawer first; the next Esc exits.
 		const dialog = document.getElementById( 'cns-story-dialog' );
 		if ( dialog && dialog.classList.contains( 'is-open' ) ) return;
-		const drawer = document.getElementById( 'cns-map-drawer' );
-		if ( drawer && drawer.classList.contains( 'is-open' ) ) return;
+		if ( isDrawerOpen() ) return;
 		setFullscreen( false );
 	} );
 	renderFsBtn();
@@ -851,52 +808,6 @@ function setupZoomControls( canvas ) {
 	render();
 }
 
-// ── Base-map layer toggles ────────────────────────────────────────────────────
-// Visitor-facing show/hide for the linked map's three layers. The author's
-// saved choice is the starting state; a visitor's change lives for the page
-// view only and is never written back.
-
-const LAYER_LABELS = { areas: 'Areas', objects: 'Objects', labels: 'Labels' };
-
-function setupLayerToggles( canvas, mapData, layers, onChange ) {
-	const wrap = canvas.closest( '.cns-story-block__canvas-wrap' );
-	if ( ! wrap || ! mapData ) return;
-
-	// Only offer a toggle for a layer the map actually has something in.
-	const present = {
-		areas:   ( mapData.areas   ?? [] ).length > 0,
-		objects: ( mapData.objects ?? [] ).length > 0,
-		labels:  ( mapData.labels  ?? [] ).length > 0,
-	};
-	if ( ! present.areas && ! present.objects && ! present.labels ) return;
-
-	const box = document.createElement( 'div' );
-	box.className = 'cns-story-layers';
-	box.setAttribute( 'role', 'group' );
-	box.setAttribute( 'aria-label', 'Map layers' );
-
-	for ( const key of [ 'areas', 'objects', 'labels' ] ) {
-		if ( ! present[ key ] ) continue;
-		const btn = document.createElement( 'button' );
-		btn.type = 'button';
-		btn.className = 'cns-story-layers__btn';
-		btn.textContent = LAYER_LABELS[ key ];
-		const sync = () => {
-			btn.classList.toggle( 'is-off', ! layers[ key ] );
-			btn.setAttribute( 'aria-pressed', layers[ key ] ? 'true' : 'false' );
-		};
-		btn.addEventListener( 'click', () => {
-			layers[ key ] = ! layers[ key ];
-			sync();
-			onChange();
-		} );
-		sync();
-		box.appendChild( btn );
-	}
-
-	wrap.appendChild( box );
-}
-
 function initBlock( blockEl ) {
 	const rawData = blockEl.dataset.storyData;
 	if ( ! rawData ) return;
@@ -932,7 +843,19 @@ function initBlock( blockEl ) {
 		labels:  data.story.showLabels  !== false,
 	};
 
-	setupLayerToggles( canvas, m, layers, () => scheduleRedraw() );
+	// On the canvas wrap, which the zoom controls also sit on — outside the
+	// scroller the canvas is moved into, so the buttons stay put when panning.
+	setupLayerToggles( {
+		container: canvas.closest( '.cns-story-block__canvas-wrap' ),
+		className: 'cns-story-layers',
+		present: {
+			areas:   ( m?.areas   ?? [] ).length > 0,
+			objects: ( m?.objects ?? [] ).length > 0,
+			labels:  ( m?.labels  ?? [] ).length > 0,
+		},
+		layers,
+		onChange: () => scheduleRedraw(),
+	} );
 
 	// Coalesce redraw requests into one paint per frame. Used as the image
 	// onload callback, so the canvas repaints exactly when assets arrive —

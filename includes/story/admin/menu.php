@@ -77,10 +77,7 @@ function cns_story_suite_enqueue_admin_assets(): void {
 		);
 	}
 
-	$asset_file = CNS_DIR . 'build/story-admin/index.asset.php';
-	$asset      = file_exists($asset_file)
-		? require $asset_file
-		: ['dependencies' => [], 'version' => CNS_VERSION];
+	$asset = cns_asset('story-admin/index');
 
 	wp_enqueue_script(
 		'cns-story-admin',
@@ -115,10 +112,7 @@ add_action('admin_enqueue_scripts', 'cns_story_suite_enqueue_admin_assets');
 // two were separate plugins; the map editor now calls this directly.
 
 function cns_story_suite_enqueue_map_panel(): void {
-	$asset_file = CNS_DIR . 'build/map-panel/index.asset.php';
-	$asset      = file_exists($asset_file)
-		? require $asset_file
-		: ['dependencies' => [], 'version' => CNS_VERSION];
+	$asset = cns_asset('map-panel/index');
 
 	wp_enqueue_script(
 		'cns-story-map-panel',

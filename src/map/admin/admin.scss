@@ -320,24 +320,9 @@ $bp-lpc: 1400px;
 
 // Compact swatch-button color control (ColorField).
 
-// ── Badges ────────────────────────────────────────────────────────────────────
-
-// ── Editor layout ─────────────────────────────────────────────────────────────
-
-// to do check or delete
-.cns-editor-layout {
-	display: grid;
-	grid-template-columns: 3fr 1fr;
-	gap: 0;
-	align-items: start;
-	min-height: calc(100vh - 120px);
-}
-
 // ── Map editor header ─────────────────────────────────────────────────────────
 
 // (Save feedback now uses snackbar notices from the wp/notices store.)
-
-// ── Tabs ──────────────────────────────────────────────────────────────────────
 
 // ── Settings two-column layout ────────────────────────────────────────────────
 
@@ -358,49 +343,10 @@ $bp-lpc: 1400px;
 	}
 }
 
-// ── Settings form ─────────────────────────────────────────────────────────────
-
 // ── Image picker ──────────────────────────────────────────────────────────────
 
 // (Range sliders and background toggles now use RangeControl / RadioControl
 // from @wordpress/components — no custom styles needed.)
-
-// ── Placeholder panels ────────────────────────────────────────────────────────
-
-.cns-placeholder {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 60px 24px;
-	text-align: center;
-	color: #646970;
-
-	&__icon {
-		font-size: 36px;
-		width: 36px;
-		height: 36px;
-		margin-bottom: 12px;
-		color: #a7aaad;
-	}
-
-	h3 {
-		font-size: 16px;
-		color: #1d2327;
-		margin: 0 0 8px;
-	}
-
-	p {
-		max-width: 440px;
-		margin: 0 0 8px;
-	}
-
-	&__tag {
-		font-size: 12px;
-		font-style: italic;
-		color: #a7aaad;
-	}
-}
 
 // ── Canvas preview ────────────────────────────────────────────────────────────
 
@@ -419,8 +365,6 @@ $bp-lpc: 1400px;
 	height: auto;
 	display: block;
 }
-
-// ── Danger Zone ───────────────────────────────────────────────────────────────
 
 // ── Objects tab ───────────────────────────────────────────────────────────────
 
@@ -510,84 +454,7 @@ $bp-lpc: 1400px;
 	}
 }
 
-// ── Post search ───────────────────────────────────────────────────────────────
-
-.cns-post-search-wrap {
-	position: relative;
-}
-
-.cns-post-results {
-	position: absolute;
-	top: 100%;
-	left: 0;
-	right: 0;
-	background: #fff;
-	border: 1px solid $color-border;
-	border-top: none;
-	border-radius: 0 0 3px 3px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	z-index: 10;
-	max-height: 200px;
-	overflow-y: auto;
-}
-
-.cns-post-result {
-	all: unset;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	padding: 8px 12px;
-	cursor: pointer;
-	font-size: 13px;
-	box-sizing: border-box;
-	border-bottom: 1px solid #f0f0f1;
-
-	&:last-child {
-		border-bottom: none;
-	}
-
-	&:hover {
-		background: #f0f6fc;
-	}
-
-	&__type {
-		font-size: 11px;
-		color: #646970;
-		background: #f0f0f1;
-		padding: 1px 5px;
-		border-radius: 3px;
-	}
-}
-
-.cns-post-selected {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 6px 10px;
-	background: #f0f6fc;
-	border: 1px solid #c3d9f0;
-	border-radius: 3px;
-	font-size: 13px;
-
-	span {
-		flex: 1;
-	}
-}
-
 // ── Icon library page ─────────────────────────────────────────────────────────
-
-.cns-icon-library-header {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	margin-bottom: 20px;
-
-	h1 {
-		margin: 0;
-		flex: 1;
-	}
-}
 
 .cns-icon-library-grid {
 	display: grid;

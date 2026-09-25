@@ -171,10 +171,7 @@ function cns_admin_enqueue_shared_assets( string $hook ): void {
         return;
     }
 
-    $asset_file = CNS_DIR . 'build/admin-settings/index.asset.php';
-    $asset      = file_exists( $asset_file )
-        ? require $asset_file
-        : [ 'dependencies' => [], 'version' => CNS_VERSION ];
+    $asset = cns_asset( 'admin-settings/index' );
 
     wp_enqueue_style(
         'cns-admin-settings',

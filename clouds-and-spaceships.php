@@ -81,6 +81,23 @@ function cns_register_blocks(): void {
 add_action('init', 'cns_register_blocks');
 
 // Admin settings
+/**
+ * Dependencies and version for a built bundle, from its wp-scripts manifest.
+ *
+ * Falls back to the plugin version with no dependencies when the manifest is
+ * missing, so an unbuilt checkout degrades instead of fataling.
+ *
+ * @param string $handle_path Path under build/, e.g. 'map-admin/index'.
+ * @return array{dependencies: string[], version: string}
+ */
+function cns_asset(string $handle_path): array {
+	$file = CNS_DIR . 'build/' . $handle_path . '.asset.php';
+
+	return file_exists($file)
+		? require $file
+		: ['dependencies' => [], 'version' => CNS_VERSION];
+}
+
 // Database schema
 // Runs dbDelta() on every plugin update so schema changes are applied
 // automatically without requiring a manual deactivate/reactivate cycle.

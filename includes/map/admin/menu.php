@@ -99,10 +99,7 @@ function cns_map_suite_enqueue_admin_assets(): void {
 		CNS_VERSION
 	);
 
-	$admin_asset_file = CNS_DIR . 'build/map-admin/index.asset.php';
-	$admin_asset      = file_exists( $admin_asset_file )
-		? require $admin_asset_file
-		: [ 'dependencies' => [], 'version' => CNS_VERSION ];
+	$admin_asset = cns_asset( 'map-admin/index' );
 
 	wp_enqueue_script(
 		'cns-map-admin',

@@ -28,14 +28,13 @@ if ($glossary_enabled) {
     ];
 }
 
-$news = cns_info_get_news();
 ?>
 <div class="cns-settings-page">
 
 	<div class="cns-settings-page__header">
 		<h1><?php esc_html_e('Clouds and Spaceships', 'clouds-and-spaceships'); ?></h1>
 		<div class="cns-settings-page__actions">
-			<a href="<?php echo esc_url(CNS_INFO_NEWS_URL); ?>" target="_blank" rel="noopener" class="button">
+			<a href="<?php echo esc_url(CNS_PROJECT_URL); ?>" target="_blank" rel="noopener" class="button">
 				<?php esc_html_e('Visit cloudsandspaceships.com ↗', 'clouds-and-spaceships'); ?>
 			</a>
 		</div>
@@ -84,66 +83,6 @@ $news = cns_info_get_news();
 				<td>GPL-2.0-or-later</td>
 			</tr>
 		</table>
-	</div>
-
-	<div class="cns-settings-card">
-		<h2><?php esc_html_e('News from Clouds and Spaceships', 'clouds-and-spaceships') ?></h2>
-
-		<form method="post" class="cns-news-list__form">
-			<?php wp_nonce_field('cns_info_save_news_settings'); ?>
-			<input type="hidden" name="cns_info_action" value="save_news_settings" />
-			<label>
-				<input
-					type="checkbox"
-					name="news_enabled"
-					value="1"
-					<?php checked(cns_info_news_enabled()); ?>
-				/>
-				<?php esc_html_e('Show the latest news post', 'clouds-and-spaceships'); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e('When enabled, this box loads the newest post from cloudsandspaceships.com over the internet. No information about your site is sent, though your server\'s IP address is visible to any site it contacts. Turn it off to stop the request entirely.', 'clouds-and-spaceships'); ?>
-			</p>
-			<?php submit_button(__('Save', 'clouds-and-spaceships'), 'secondary', 'submit', false); ?>
-		</form>
-
-		<?php if (! cns_info_news_enabled()) : ?>
-			<p class="cns-news-list__notice">
-				<?php esc_html_e('News is turned off, so no request is made to cloudsandspaceships.com.', 'clouds-and-spaceships'); ?>
-			</p>
-		<?php elseif ($news['error'] !== '') : ?>
-			<p class="cns-news-list__notice">
-				<?php
-				printf(
-					/* translators: %s: reason the request failed. */
-					esc_html__('Error loading posts %s', 'clouds-and-spaceships'),
-					esc_html($news['error'])
-				);
-				?>
-			</p>
-		<?php elseif (empty($news['items'])) : ?>
-			<p class="cns-news-list__notice">
-				<?php esc_html_e('Currently no news.', 'clouds-and-spaceships'); ?>
-			</p>
-		<?php else : ?>
-			<ul class="cns-news-list">
-				<?php foreach ($news['items'] as $item) : ?>
-					<li>
-						<a class="cns-news-list__title" href="<?php echo esc_url($item['url']); ?>" target="_blank" rel="noopener">
-							<?php echo esc_html($item['title']); ?>
-						</a>
-						<?php if ($item['date'] !== '') : ?>
-							<span class="cns-news-list__meta">
-								<?php echo esc_html(date_i18n(get_option('date_format'), strtotime($item['date']))); ?>
-							</span>
-						<?php endif; ?>
-						<?php if ($item['excerpt'] !== '') : ?>
-							<p class="cns-news-list__excerpt"><?php echo esc_html($item['excerpt']); ?></p>
-						<?php endif; ?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		<?php endif; ?>
 	</div>
 
 </div>

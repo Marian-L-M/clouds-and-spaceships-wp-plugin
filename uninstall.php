@@ -170,12 +170,9 @@ $wpdb->query(
 delete_post_meta_by_key('_cns_map_icon');
 
 // ── Capabilities ──────────────────────────────────────────────────────────────
+// WordPress loads only this file on uninstall, not the plugin bootstrap, so the
+// helper has to be pulled in explicitly. Calling it keeps CNS_CAPABILITIES the
+// single list of capabilities the plugin owns.
 
-foreach (['manage_maps', 'manage_stories'] as $cap) {
-	foreach (array_keys(wp_roles()->roles) as $role_name) {
-		$role = get_role($role_name);
-		if ($role && $role->has_cap($cap)) {
-			$role->remove_cap($cap);
-		}
-	}
-}
+require_once __DIR__ . '/includes/capabilities.php';
+cns_remove_capabilities();

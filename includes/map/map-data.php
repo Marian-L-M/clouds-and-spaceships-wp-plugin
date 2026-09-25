@@ -28,31 +28,6 @@ defined('ABSPATH') || exit;
 // ── Infobox helpers ───────────────────────────────────────────────────────────
 
 /**
- * Renders the first few text-oriented blocks of a post for a clean drawer
- * preview. The map infobox resolver shows the post excerpt instead, but this
- * stays as the shared preview helper the story suite's inline substory reading
- * will use.
- */
-function cns_map_suite_infobox_content(WP_Post $post, int $max_blocks = 3): string {
-	$blocks  = parse_blocks($post->post_content);
-	$output  = '';
-	$count   = 0;
-	$allowed = ['core/paragraph', 'core/heading', 'core/list', 'core/quote'];
-	foreach ($blocks as $block) {
-		if ($count >= $max_blocks) break;
-		$name = $block['blockName'] ?? '';
-		if ($name === '' || in_array($name, $allowed, true)) {
-			$rendered = render_block($block);
-			if (trim(wp_strip_all_tags($rendered))) {
-				$output .= $rendered;
-				$count++;
-			}
-		}
-	}
-	return $output;
-}
-
-/**
  * Renders every Infobox block found in a post's content.
  *
  * Returns an array of rendered HTML strings (one per top-level infobox), or an

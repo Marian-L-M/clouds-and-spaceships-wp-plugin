@@ -12,6 +12,8 @@ import {
 	regionLabelText,
 	areaLabelText,
 } from '../../shared/map-geometry';
+import { escHtml, showDrawer, closeDrawer, isDrawerOpen } from '../../shared/frontend/drawer';
+import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 
 (function () {
 	'use strict';
@@ -165,58 +167,10 @@ import {
 	}
 
 	// ── Infobox drawer ────────────────────────────────────────────────────────
-	// A single side drawer shared across all map instances on the page.
-	// Lives on document.body; class toggle (not hidden attr) controls visibility
-	// so author display:flex/block never fights the UA [hidden] rule.
-
-	function escHtml(str) {
-		return String(str)
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;')
-			.replace(/"/g, '&quot;');
-	}
-
-	function closeDrawer(drawer) {
-		drawer.classList.remove('is-open');
-		document.body.classList.remove('cns-map-drawer-open');
-	}
-
-	function getOrCreateDrawer() {
-		let drawer = document.getElementById('cns-map-drawer');
-		if (!drawer) {
-			drawer = document.createElement('div');
-			drawer.id        = 'cns-map-drawer';
-			drawer.className = 'cns-map-drawer';
-			drawer.setAttribute('role', 'dialog');
-			drawer.setAttribute('aria-modal', 'true');
-			drawer.innerHTML = `
-				<div class="cns-map-drawer__backdrop"></div>
-				<div class="cns-map-drawer__panel">
-					<div class="cns-map-drawer__header">
-						<button class="cns-map-drawer__close" aria-label="Close">&times;</button>
-					</div>
-					<div class="cns-map-drawer__body"></div>
-				</div>`;
-			document.body.appendChild(drawer);
-
-			drawer.querySelector('.cns-map-drawer__backdrop').addEventListener('click', function () {
-				closeDrawer(drawer);
-			});
-			drawer.querySelector('.cns-map-drawer__close').addEventListener('click', function () {
-				closeDrawer(drawer);
-			});
-			drawer.querySelector('.cns-map-drawer__body').addEventListener('click', handleInfoboxToggle);
-			document.addEventListener('keydown', function (e) {
-				if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer(drawer);
-			});
-		}
-		return drawer;
-	}
+	// The shell (one element shared by every CNS block on the page) lives in
+	// src/shared/frontend/drawer.js. Only the body HTML is map-specific.
 
 	function showInfobox(wrap, item) {
-		const drawer    = getOrCreateDrawer();
-		const body      = drawer.querySelector('.cns-map-drawer__body');
 		const resolved  = item.infobox_resolved || {};
 		const title     = resolved.title     || item.title || '';
 		const excerpt   = resolved.excerpt   || '';
@@ -243,18 +197,15 @@ import {
 		});
 		if (postUrl) html += `<a class="cns-map-drawer__link" href="${escHtml(encodeURI(postUrl))}">Read more &rarr;</a>`;
 
-		body.innerHTML = html;
-		expandInfoboxes(body);
-		drawer.classList.add('is-open');
-		document.body.classList.add('cns-map-drawer-open');
-		drawer.querySelector('.cns-map-drawer__close').focus();
+		showDrawer(html, handleInfoboxToggle);
+		expandInfoboxes(document.querySelector('.cns-map-drawer__body'));
 	}
 
 	// The wiki-suite infobox collapse is normally driven by the WP Interactivity
 	// API at page load, which never hydrates markup injected into the drawer at
 	// click time. So we own it: start every infobox/group expanded (the CSS keys
 	// visibility off these classes), and a delegated handler on the drawer body
-	// (wired once in getOrCreateDrawer) toggles them when a title button is hit.
+	// (wired once by the shared drawer) toggles them when a title button is hit.
 	function expandInfoboxes(container) {
 		container.querySelectorAll('.infobox').forEach(function (el) {
 			el.classList.add('is-active');
@@ -279,8 +230,7 @@ import {
 	}
 
 	function hideInfobox() {
-		const drawer = document.getElementById('cns-map-drawer');
-		if (drawer) closeDrawer(drawer);
+		closeDrawer();
 	}
 
 	// ── Hierarchy tooltip ─────────────────────────────────────────────────────
@@ -410,8 +360,7 @@ import {
 		document.addEventListener('keydown', function (e) {
 			if (e.key !== 'Escape' || !fullscreen) return;
 			// Let Esc close an open infobox drawer first; the next Esc exits.
-			const drawer = document.getElementById('cns-map-drawer');
-			if (drawer && drawer.classList.contains('is-open')) return;
+			if (isDrawerOpen()) return;
 			setFullscreen(false);
 		});
 		renderFsBtn();
@@ -451,54 +400,6 @@ import {
 	}
 
 	// ── Map initialiser ───────────────────────────────────────────────────────
-
-	// ── Base layer toggles ────────────────────────────────────────────────────
-	// Visitor-facing show/hide for the map's three layers. The author's saved
-	// choice is the starting state; a visitor's change lives for the page view
-	// only and is never written back.
-
-	const LAYER_LABELS = { areas: 'Areas', objects: 'Objects', labels: 'Labels' };
-
-	function setupLayerToggles(wrapper, data, layers, onChange) {
-		// Sits on the block wrapper, outside .cns-map-canvas-wrap, so the
-		// buttons stay put while a zoomed canvas pans — same as the zoom
-		// controls above.
-		if (!wrapper) return;
-
-		// Only offer a toggle for a layer the map actually has something in.
-		const present = {
-			areas:   (data.areas   || []).length > 0,
-			objects: (data.objects || []).length > 0,
-			labels:  (data.labels  || []).length > 0,
-		};
-		if (!present.areas && !present.objects && !present.labels) return;
-
-		const box = document.createElement('div');
-		box.className = 'cns-map-layers';
-		box.setAttribute('role', 'group');
-		box.setAttribute('aria-label', 'Map layers');
-
-		['areas', 'objects', 'labels'].forEach(function (key) {
-			if (!present[key]) return;
-			const btn = document.createElement('button');
-			btn.type = 'button';
-			btn.className = 'cns-map-layers__btn';
-			btn.textContent = LAYER_LABELS[key];
-			const sync = function () {
-				btn.classList.toggle('is-off', !layers[key]);
-				btn.setAttribute('aria-pressed', layers[key] ? 'true' : 'false');
-			};
-			btn.addEventListener('click', function () {
-				layers[key] = !layers[key];
-				sync();
-				onChange();
-			});
-			sync();
-			box.appendChild(btn);
-		});
-
-		wrapper.appendChild(box);
-	}
 
 	async function initMap(wrapper) {
 		const scriptEl = wrapper.querySelector('script[data-cns-map]');
@@ -563,7 +464,19 @@ import {
 		}
 
 		await paint();
-		setupLayerToggles(wrapper, data, layers, function () { void paint(); });
+		// On the block wrapper, outside .cns-map-canvas-wrap, so the buttons stay
+		// put while a zoomed canvas pans — same as the zoom controls.
+		setupLayerToggles({
+			container: wrapper,
+			className: 'cns-map-layers',
+			present: {
+				areas:   (data.areas   || []).length > 0,
+				objects: (data.objects || []).length > 0,
+				labels:  (data.labels  || []).length > 0,
+			},
+			layers,
+			onChange: function () { void paint(); },
+		});
 
 		// Pre-load all hierarchy region thumbnails for smooth hover.
 		for (const region of (data.hierarchyRegions || [])) {

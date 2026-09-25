@@ -23,9 +23,11 @@ function cns_add_capabilities(): void {
 }
 
 /**
- * Removes the suite's capabilities from all roles.
- * Called only from uninstall.php — not on deactivation, because deactivation
- * is reversible and stripping capabilities would break re-activation.
+ * Removes the suite's capabilities from every role.
+ *
+ * Called from uninstall.php only. Deactivation deliberately leaves them in
+ * place, because it is reversible and stripping capabilities would lock an
+ * administrator out of the plugin's screens on re-activation.
  */
 function cns_remove_capabilities(): void {
 	foreach (array_keys(wp_roles()->roles) as $role_name) {

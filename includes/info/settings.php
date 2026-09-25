@@ -4,176 +4,13 @@
  *
  * The first tab on the settings screen, and therefore the one the bare
  * cns-settings slug and the top-level CNS menu entry resolve to. It owns no
- * settings: it summarises what the plugin has registered and lists news from
- * the project site.
+ * settings: it summarises what the plugin has registered.
  */
 
 defined('ABSPATH') || exit;
 
-/**
- * Where the news items come from.
- *
- * Third-party service notice: the Info tab shows the latest post from
- * cloudsandspaceships.com, the plugin's own project site, read through its
- * public WordPress REST API. The request sends no site data and no personal
- * data — it is an unauthenticated GET for the newest post's title, date,
- * excerpt and link. It runs only while an administrator has the Info tab open,
- * at most once per cache window, and can be switched off entirely with the
- * "Show news" setting on that tab (see cns_info_news_enabled()). This is
- * disclosed in readme.txt under "External services".
- */
-const CNS_INFO_NEWS_URL   = 'https://cloudsandspaceships.com/';
-
-/** Only the newest post is shown. */
-const CNS_INFO_NEWS_COUNT = 1;
-
-/** Option holding the opt-out; unset means "on". */
-const CNS_INFO_NEWS_OPTION = 'cns_info_news_enabled';
-
-/** Whether the Info tab may contact the project site at all. */
-function cns_info_news_enabled(): bool {
-    return get_option(CNS_INFO_NEWS_OPTION, '1') !== '0';
-}
-
-/**
- * Category ID to limit the feed to, or 0 for posts from every category.
- * Slugs are no use here: /wp/v2/posts only filters by term ID.
- */
-const CNS_INFO_NEWS_CATEGORY = 0;
-
-/** How long a fetched list is kept, and how long a failure is remembered. */
-const CNS_INFO_NEWS_TTL       = 6 * HOUR_IN_SECONDS;
-const CNS_INFO_NEWS_ERROR_TTL = 15 * MINUTE_IN_SECONDS;
-const CNS_INFO_NEWS_TRANSIENT = 'cns_info_news';
-
-/** Seconds to wait on cloudsandspaceships.com before giving up. */
-const CNS_INFO_NEWS_TIMEOUT = 8;
-
-/**
- * News items shown on the Info tab.
- *
- * The newest CNS_INFO_NEWS_COUNT posts from CNS_INFO_NEWS_URL, read through its
- * REST API. Both outcomes are cached in a transient — a success for
- * CNS_INFO_NEWS_TTL, a failure for the much shorter CNS_INFO_NEWS_ERROR_TTL —
- * so the settings screen waits on the network at most once per window, and an
- * unreachable site does not slow every page load until it recovers.
- *
- * @return array{
- *     items: array<int,array{title:string,date:string,url:string,excerpt:string}>,
- *     error: string
- * }
- */
-function cns_info_get_news(): array {
-    // Opted out: never touch the network, and never report an error for it.
-    if (! cns_info_news_enabled()) {
-        return ['items' => [], 'error' => ''];
-    }
-
-    $cached = get_transient(CNS_INFO_NEWS_TRANSIENT);
-    if (is_array($cached) && isset($cached['items'], $cached['error'])) {
-        return $cached;
-    }
-
-    $result = cns_info_fetch_news();
-
-    if (is_wp_error($result)) {
-        $news = ['items' => [], 'error' => $result->get_error_message()];
-        set_transient(CNS_INFO_NEWS_TRANSIENT, $news, CNS_INFO_NEWS_ERROR_TTL);
-        return $news;
-    }
-
-    $news = ['items' => $result, 'error' => ''];
-    set_transient(CNS_INFO_NEWS_TRANSIENT, $news, CNS_INFO_NEWS_TTL);
-    return $news;
-}
-
-/**
- * Reads the newest posts from the project site's REST API.
- *
- * Only the four fields the tab renders are requested; _embed and the full
- * rendered content would multiply the payload for nothing.
- *
- * @return array<int,array{title:string,date:string,url:string,excerpt:string}>|WP_Error
- */
-function cns_info_fetch_news() {
-    $query = [
-        'per_page' => CNS_INFO_NEWS_COUNT,
-        'orderby'  => 'date',
-        'order'    => 'desc',
-        '_fields'  => 'title,excerpt,link,date_gmt',
-    ];
-
-    if (CNS_INFO_NEWS_CATEGORY > 0) {
-        $query['categories'] = CNS_INFO_NEWS_CATEGORY;
-    }
-
-    $url = add_query_arg($query, CNS_INFO_NEWS_URL . 'wp-json/wp/v2/posts');
-
-    $response = wp_remote_get($url, [
-        'timeout' => CNS_INFO_NEWS_TIMEOUT,
-        'headers' => ['Accept' => 'application/json'],
-        // WordPress's default user agent is "WordPress/{version}; {site_url}",
-        // which would send this site's address and WordPress version with
-        // every request. The plugin identifies itself instead, so the only
-        // thing the project site can see is the originating IP address that
-        // any HTTP request necessarily carries.
-        'user-agent' => 'Clouds and Spaceships WordPress plugin',
-    ]);
-
-    if (is_wp_error($response)) {
-        return $response;
-    }
-
-    $status = (int) wp_remote_retrieve_response_code($response);
-    if ($status !== 200) {
-        return new WP_Error(
-            'cns_info_news_http',
-            sprintf(
-                /* translators: %d: HTTP status code returned by the project site. */
-                __('cloudsandspaceships.com answered with HTTP %d.', 'clouds-and-spaceships'),
-                $status
-            )
-        );
-    }
-
-    $posts = json_decode(wp_remote_retrieve_body($response), true);
-    if (!is_array($posts)) {
-        return new WP_Error(
-            'cns_info_news_json',
-            __('The response from cloudsandspaceships.com was not readable.', 'clouds-and-spaceships')
-        );
-    }
-
-    $items = [];
-    foreach ($posts as $post) {
-        if (!is_array($post) || empty($post['link'])) {
-            continue;
-        }
-
-        $items[] = [
-            'title'   => cns_info_news_text($post['title']['rendered'] ?? ''),
-            'date'    => (string) ($post['date_gmt'] ?? ''),
-            'url'     => (string) $post['link'],
-            'excerpt' => cns_info_news_text($post['excerpt']['rendered'] ?? ''),
-        ];
-    }
-
-    return $items;
-}
-
-/**
- * Turns a rendered REST field into the plain text the tab prints.
- *
- * Entities are decoded because the view escapes again on output; without this
- * an ampersand in a title would reach the page as &amp;amp;. Collapsing
- * whitespace also folds the non-breaking spaces that decoding leaves behind.
- */
-function cns_info_news_text(string $html): string {
-    $text = html_entity_decode(wp_strip_all_tags($html), ENT_QUOTES, 'UTF-8');
-
-    // preg_replace returns null on malformed UTF-8; keep the raw text then.
-    return trim(preg_replace('/\s+/u', ' ', $text) ?? $text);
-}
+/** Project website, linked from the Info tab. Nothing is fetched from it. */
+const CNS_PROJECT_URL = 'https://cloudsandspaceships.com/';
 
 // ── Admin tab registration ────────────────────────────────────────────────────
 
@@ -186,29 +23,6 @@ add_filter('cns_admin_tabs', function (array $tabs): array {
         'priority'   => 10,
     ];
     return $tabs;
-});
-
-// Handle the Info tab's "Show news" toggle. Nonce is CSRF protection; the
-// capability check is the authorization.
-add_action('admin_init', function (): void {
-    if (
-        ! isset($_POST['cns_info_action']) ||
-        sanitize_key(wp_unslash($_POST['cns_info_action'])) !== 'save_news_settings' ||
-        ! current_user_can('manage_options') ||
-        ! check_admin_referer('cns_info_save_news_settings')
-    ) {
-        return;
-    }
-
-    update_option(CNS_INFO_NEWS_OPTION, isset($_POST['news_enabled']) ? '1' : '0');
-    // Drop any cached payload so switching back on re-fetches immediately.
-    delete_transient(CNS_INFO_NEWS_TRANSIENT);
-
-    wp_safe_redirect(add_query_arg(
-        ['page' => 'cns-settings', 'settings-saved' => '1'],
-        admin_url('admin.php')
-    ));
-    exit;
 });
 
 function cns_info_render_tab(): void {

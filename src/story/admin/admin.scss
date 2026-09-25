@@ -70,18 +70,9 @@ $bp-spc: 1200px;
 
 // Action-button rows inside tables / list items.
 
-
 // Snackbar notices (wp/notices store) — pinned bottom-left like the editor.
 
-
 // Compact swatch-button color control (ColorField).
-
-
-// ── Overview ──────────────────────────────────────────────────────────────────
-
-
-
-// ── Badges ────────────────────────────────────────────────────────────────────
 
 // ── Editor layout ─────────────────────────────────────────────────────────────
 
@@ -144,11 +135,7 @@ $bp-spc: 1200px;
 	}
 }
 
-
 // (Save feedback now uses snackbar notices from the wp/notices store.)
-
-// ── Tabs ──────────────────────────────────────────────────────────────────────
-
 
 // ── Tab panels ────────────────────────────────────────────────────────────────
 
@@ -186,34 +173,11 @@ $bp-spc: 1200px;
 
 // ── Placeholder panels ────────────────────────────────────────────────────────
 
-.cns-placeholder {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 60px 24px;
-	text-align: center;
-	color: #646970;
-
-	h3 {
-		font-size: 16px;
-		color: #1d2327;
-		margin: 0 0 8px;
-	}
-
-	p {
-		max-width: 440px;
-		margin: 0 0 8px;
-	}
-}
-
 .cns-panel-notice {
 	padding: 24px;
 	color: #646970;
 	font-style: italic;
 }
-
-// ── Danger Zone ───────────────────────────────────────────────────────────────
 
 // ── Modal sections ────────────────────────────────────────────────────────────
 // The modal chrome itself comes from @wordpress/components' <Modal>; only the
@@ -264,18 +228,6 @@ $bp-spc: 1200px;
 
 	input[type='number'].small-text {
 		width: 72px;
-	}
-}
-
-.cns-node-icon-swatch {
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	vertical-align: middle;
-
-	&--square {
-		border-radius: 2px;
 	}
 }
 
@@ -581,9 +533,6 @@ body.cns-story-canvas-fullscreen-open {
 	color: #646970;
 	text-align: center;
 }
-
-// ── Utility ───────────────────────────────────────────────────────────────────
-
 
 // ── Canvas toolbar rows ───────────────────────────────────────────────────────
 
