@@ -226,12 +226,6 @@ export interface SubstorySearchResult {
 	editUrl:      string;
 }
 
-export interface MapSearchResult {
-	id:           number;
-	title:        string;
-	thumbnailUrl: string;
-}
-
 // ── Editor state ──────────────────────────────────────────────────────────────
 
 // ── Form payloads ─────────────────────────────────────────────────────────────

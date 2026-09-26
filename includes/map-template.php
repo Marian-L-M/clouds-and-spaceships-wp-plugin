@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
  * Both post types show the same page: title, the interactive canvas, who wrote
  * it, when it last changed, and the description. One layout file,
  * templates/single-map.html, is registered once per post type so each gets the
- * slug WordPress's template hierarchy actually looks for (single-maps,
+ * slug WordPress's template hierarchy actually looks for (single-cns_map,
  * single-cns_story). A theme can still override either by shipping a template
  * of the same name — plugin templates sit below theme templates.
  *

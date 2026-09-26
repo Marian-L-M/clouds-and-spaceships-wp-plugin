@@ -23,11 +23,15 @@ if (! function_exists('cns_wiki_glossary_enabled') || ! cns_wiki_glossary_enable
 $group_by = ($attributes['groupBy'] ?? 'alphabetical') === 'category' ? 'category' : 'alphabetical';
 
 $entries = get_posts([
-    'post_type'      => 'cns_glossary',
-    'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'orderby'        => 'title',
-    'order'          => 'ASC',
+    'post_type'              => 'cns_glossary',
+    'post_status'            => 'publish',
+    'posts_per_page'         => -1,
+    'orderby'                => 'title',
+    'order'                  => 'ASC',
+    // Only titles and permalinks are read below, so skip the postmeta priming
+    // query. The term cache stays on: the category grouping needs it.
+    'no_found_rows'          => true,
+    'update_post_meta_cache' => false,
 ]);
 
 if (empty($entries)) {
@@ -54,10 +58,24 @@ if ('category' === $group_by) {
     ]);
     $terms = is_wp_error($terms) ? [] : $terms;
 
+    // [ entry ID => [ term ID => true ] ], built once. has_term() in the loop
+    // below would re-resolve the entry's terms on every term/entry pair.
+    $entry_terms = [];
+    $object_terms = wp_get_object_terms(
+        wp_list_pluck($entries, 'ID'),
+        'cns_glossary_category',
+        ['fields' => 'all_with_object_id']
+    );
+    if (! is_wp_error($object_terms)) {
+        foreach ($object_terms as $object_term) {
+            $entry_terms[$object_term->object_id][$object_term->term_id] = true;
+        }
+    }
+
     $assigned = [];
     foreach ($terms as $term) {
         foreach ($entries as $entry) {
-            if (has_term($term->term_id, 'cns_glossary_category', $entry)) {
+            if (isset($entry_terms[$entry->ID][$term->term_id])) {
                 $sections[$term->name][] = $entry;
                 $assigned[$entry->ID]    = true;
             }

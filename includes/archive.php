@@ -30,7 +30,7 @@ const CNS_ARCHIVE_DEFAULT_ORDER    = 'date_desc';
  * Archives whose settings live in one option per field.
  *
  * Maps are deliberately absent: the plugin publishes no map archive. Single map
- * pages are public and render through the single-maps template, but a listing
+ * pages are public and render through the single-cns_map template, but a listing
  * of maps is the theme's or the Site Editor's job, so there is no slug,
  * per-page or sort-order setting to own.
  */

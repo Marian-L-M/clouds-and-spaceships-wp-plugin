@@ -482,8 +482,6 @@ export interface ObjectSavePayload {
 	style_text_color: string;
 }
 
-export type AreaSavePayload = AreaFormData & { nodes: string };
-
 // Editor-only fields (image preview URL, post-search label) stay out of the payload.
 export type LabelSavePayload = Omit<
 	LabelFormData,

@@ -183,8 +183,7 @@ body.cns-map-fullscreen-open {
 }
 
 // ── Infobox side drawer ───────────────────────────────────────────────────────
-// Appended to document.body. Visibility is controlled via .is-open class —
-// NOT the hidden attribute — so display rules never fight the UA stylesheet.
+// Appended to document.body.
 
 .cns-map-drawer {
 	display: none;
@@ -205,11 +204,15 @@ body.cns-map-fullscreen-open {
 
 	// Panel anchored to the right edge, full height.
 	&__panel {
+		box-sizing: border-box;
 		position: absolute;
 		top: 0;
 		right: 0;
 		bottom: 0;
-		width: min(440px, 100vw);
+		width: fit-content;
+		min-width: min(100%, 240px);
+		max-width: 100vw;
+
 		display: flex;
 		flex-direction: column;
 		background: #fff;

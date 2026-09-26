@@ -25,7 +25,7 @@ function cns_map_suite_register_post_type(): void {
 		// setting adds the standard WP list screen to the sidebar as well.
 		'show_in_menu'        => (bool) get_option('cns_map_suite_show_maps_menu', false),
 		// No plugin-owned archive: /maps/ is not a listing. Single map pages stay
-		// public and render through the single-maps template, and a site that
+		// public and render through the single-cns_map template, and a site that
 		// wants a listing builds one in the theme or Site Editor with a query
 		// loop. show_in_nav_menus and exclude_from_search are left to default
 		// from 'public', which matches how maps behaved with the archive on.
@@ -85,7 +85,7 @@ add_filter('use_block_editor_for_post_type', 'cns_map_suite_disable_gutenberg', 
 
 
 // ── Standalone map page ───────────────────────────────────────────────────────
-// /maps/slug/ renders through the single-maps block template, which places the
+// /maps/slug/ renders through the single-cns_map block template, which places the
 // canvas, author, modified date and description itself — see
 // includes/map-template.php. post_content holds only the description, so it is
 // left alone here rather than being swapped for a rendered block.
