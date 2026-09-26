@@ -33,15 +33,10 @@ if ($glossary_enabled) {
 
 	<div class="cns-settings-page__header">
 		<h1><?php esc_html_e('Clouds and Spaceships', 'clouds-and-spaceships'); ?></h1>
-		<div class="cns-settings-page__actions">
-			<a href="<?php echo esc_url(CNS_PROJECT_URL); ?>" target="_blank" rel="noopener" class="button">
-				<?php esc_html_e('Visit cloudsandspaceships.com ↗', 'clouds-and-spaceships'); ?>
-			</a>
-		</div>
 	</div>
 
 	<p class="cns-settings-page__intro">
-		<?php esc_html_e('Clouds and Spaceships (CNS) is a suite for Worldbuilders and Mapmakers: Connect your map to your post using interactive canvas maps, wiki articles, glossaries, and story paths.', 'clouds-and-spaceships'); ?>
+		<?php esc_html_e('Clouds and Spaceships (CNS) is a suite for Worldbuilders and Mapmakers: Connect your map to your posts using an interactive canvas maps, wiki articles, glossaries, and story paths.', 'clouds-and-spaceships'); ?>
 	</p>
 
 	<ul class="cns-settings-stats">
@@ -52,6 +47,22 @@ if ($glossary_enabled) {
 			</li>
 		<?php endforeach; ?>
 	</ul>
+
+	<div class="cns-settings-card">
+		<h2><?php esc_html_e('Learn more about CNS', 'clouds-and-spaceships'); ?></h2>
+		<p>
+			<?php esc_html_e('The Clouds and Spaceships project aims to help worldbuilders and storytellers give their vision a form they can share with their community.', 'clouds-and-spaceships'); ?>
+		</p>
+		<p>
+			<?php esc_html_e('A core principle I believe in is that authors should always keep full ownership of their work, and stay free to take it wherever they want. Free plans on proprietary hosting or writing services carry the risk, that sooner or later, your world can be held hostage. Time spent inserting data and building a community will create real barriers for you leaving. Clouds and Spaceships therefore aims to provide a platform that is truly yours. Wherever you want to take it.', 'clouds-and-spaceships'); ?>
+		</p>
+		<p>
+			<?php esc_html_e('If you would like to learn more about the project or support it, please visit the project website:', 'clouds-and-spaceships'); ?>
+		</p>
+		<a href="<?php echo esc_url(CNS_PROJECT_URL); ?>" target="_blank" rel="noopener" class="button">
+			<?php esc_html_e('Visit cloudsandspaceships.com ↗', 'clouds-and-spaceships'); ?>
+		</a>
+	</div>
 
 	<div class="cns-settings-card">
 		<h2><?php esc_html_e('Information', 'clouds-and-spaceships'); ?></h2>

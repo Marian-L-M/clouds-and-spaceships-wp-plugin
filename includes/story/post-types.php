@@ -72,6 +72,31 @@ function cns_story_suite_register_post_types(): void {
 }
 add_action('init', 'cns_story_suite_register_post_types');
 
+/**
+ * Falls back to the configured placeholder image when a story has no featured
+ * image of its own, so an archive listing stays visually even.
+ *
+ * Front end only: the admin list screens render their own empty-thumbnail cell,
+ * and showing the placeholder there would hide which stories still need an
+ * image. Mirrors cns_wiki_placeholder_thumbnail_id().
+ */
+function cns_story_suite_placeholder_thumbnail_id($thumbnail_id, $post)
+{
+	if ($thumbnail_id || is_admin()) {
+		return $thumbnail_id;
+	}
+
+	$post = get_post($post);
+	if (! $post || 'cns_story' !== $post->post_type) {
+		return $thumbnail_id;
+	}
+
+	$placeholder = absint(get_option('cns_story_suite_placeholder_thumb_id', 0));
+
+	return $placeholder && wp_attachment_is_image($placeholder) ? $placeholder : $thumbnail_id;
+}
+add_filter('post_thumbnail_id', 'cns_story_suite_placeholder_thumbnail_id', 10, 2);
+
 // ── Story meta fields ─────────────────────────────────────────────────────────
 
 function cns_story_suite_register_post_meta(): void {

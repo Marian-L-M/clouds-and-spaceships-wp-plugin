@@ -45,7 +45,6 @@ if (
 	current_user_can('manage_maps') &&
 	check_admin_referer('cns_map_save_settings')
 ) {
-	update_option('cns_map_suite_delete_on_uninstall', isset($_POST['delete_on_uninstall']) ? 1 : 0, false);
 	update_option('cns_map_suite_show_maps_menu',      isset($_POST['show_maps_menu']) ? 1 : 0);
 
 	// Zoom control colors. A cleared field posts nothing (the input is disabled

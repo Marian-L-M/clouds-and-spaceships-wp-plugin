@@ -52,38 +52,50 @@ foreach ($tables as $table) {
 	$wpdb->query("DROP TABLE IF EXISTS {$table}");
 }
 
-// ── Content, only where the user opted in ─────────────────────────────────────
+// ── Content ───────────────────────────────────────────────────────────────────
 
 // The wiki and glossary flags live inside the shared cns_wiki_settings array
 // rather than in options of their own; read it before the options loop below
 // deletes it.
 $wiki_settings = (array) get_option('cns_wiki_settings', []);
 
-$opt_in = [
-	['enabled' => (bool) get_option('cns_map_suite_delete_on_uninstall'),   'post_types' => ['cns_map']],
-	['enabled' => (bool) get_option('cns_story_suite_delete_on_uninstall'), 'post_types' => ['cns_story', 'cns_substory']],
-	['enabled' => ! empty($wiki_settings['wiki_delete_on_uninstall']),      'post_types' => ['cns_wiki']],
-	['enabled' => ! empty($wiki_settings['glossary_delete_on_uninstall']),  'post_types' => ['cns_glossary']],
-];
+// Maps and stories are always deleted. Their substance lives entirely in the
+// cns_map_* / cns_story_* tables dropped above — a map is its objects, areas and
+// labels; a story is its nodes, paths and edges — so the surviving post would be
+// an entry nothing can render or edit. A map's description and a story's do go
+// with it; that text is a caption for geometry that no longer exists.
+//
+// Everything else is authored writing that still reads without the plugin, so it
+// stays opt-in: wiki articles and glossary entries are ordinary post content,
+// and a substory is an article in its own right that happens to be shown at a
+// story node.
+$delete_post_types = ['cns_map', 'cns_story'];
 
-foreach ($opt_in as $group) {
-	if (! $group['enabled']) {
-		continue;
-	}
-	foreach ($group['post_types'] as $post_type) {
-		// The plugin is not loaded here, so these post types are unregistered.
-		// WP_Query builds the post_type/post_status clauses straight from the
-		// arguments and guards its post-type-object lookups, so the query is
-		// unaffected by that.
-		$ids = get_posts([
-			'post_type'      => $post_type,
-			'posts_per_page' => -1,
-			'post_status'    => 'any',
-			'fields'         => 'ids',
-		]);
-		foreach ($ids as $id) {
-			wp_delete_post((int) $id, true);
-		}
+if ((bool) get_option('cns_story_suite_delete_substories_on_uninstall')) {
+	$delete_post_types[] = 'cns_substory';
+}
+if (! empty($wiki_settings['wiki_delete_on_uninstall'])) {
+	$delete_post_types[] = 'cns_wiki';
+}
+if (! empty($wiki_settings['glossary_delete_on_uninstall'])) {
+	$delete_post_types[] = 'cns_glossary';
+}
+
+foreach ($delete_post_types as $post_type) {
+	// The plugin is not loaded here, so these post types are unregistered.
+	// WP_Query builds the post_type/post_status clauses straight from the
+	// arguments and guards its post-type-object lookups, so the query is
+	// unaffected by that.
+	$ids = get_posts([
+		'post_type'      => $post_type,
+		'posts_per_page' => -1,
+		'post_status'    => 'any',
+		'fields'         => 'ids',
+	]);
+	foreach ($ids as $id) {
+		// wp_delete_post() re-parents attachments rather than deleting them, so
+		// a map's featured image and background stay in the media library.
+		wp_delete_post((int) $id, true);
 	}
 }
 
@@ -116,6 +128,8 @@ $options = [
 	'cns_db_version',
 	'cns_needs_rewrite_flush',
 	// Maps
+	// Retired: maps are now always deleted, so this setting is gone. Still
+	// listed so it is cleaned off installs that saved it.
 	'cns_map_suite_delete_on_uninstall',
 	'cns_map_suite_delete_icons_on_uninstall',
 	'cns_map_suite_show_maps_menu',
@@ -123,11 +137,18 @@ $options = [
 	'cns_map_suite_zoom_accent_color',
 	'cns_map_suite_cache_ver',
 	// Stories
+	'cns_story_suite_delete_substories_on_uninstall',
+	// Retired: stories are now always deleted, and substories moved to the
+	// setting above. Still listed so it is cleaned off installs that saved it.
 	'cns_story_suite_delete_on_uninstall',
 	'cns_story_suite_show_stories_menu',
 	'cns_story_suite_show_substories_menu',
 	'cns_story_suite_archive_enabled',
 	'cns_story_suite_archive_slug',
+	'cns_story_suite_placeholder_thumb_id',
+	// Retired: the story archive is rendered by the theme, so paging and sort
+	// order are no longer owned here. Still listed so they are cleaned off
+	// installs that saved them.
 	'cns_story_suite_archive_per_page',
 	'cns_story_suite_archive_order',
 	'cns_story_suite_cache_ver',

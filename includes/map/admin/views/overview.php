@@ -24,7 +24,6 @@ $maps        = cns_map_suite_get_all_maps($per_page, ($paged - 1) * $per_page, $
 
 $return_page         = sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS);
 $editor_url          = cns_map_suite_editor_url();
-$delete_on_uninstall = (bool) get_option('cns_map_suite_delete_on_uninstall', false);
 $show_maps_menu      = (bool) get_option('cns_map_suite_show_maps_menu', false);
 $zoom_main_color     = (string) get_option('cns_map_suite_zoom_main_color', '');
 $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', '');
@@ -293,19 +292,13 @@ $zoom_accent_color   = (string) get_option('cns_map_suite_zoom_accent_color', ''
 			<h2><?php esc_html_e('Danger Zone', 'clouds-and-spaceships'); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><?php esc_html_e('Uninstall behavior', 'clouds-and-spaceships'); ?></th>
+					<th scope="row"><?php esc_html_e('Caution', 'clouds-and-spaceships'); ?></th>
 					<td>
-						<label class="text-danger">
-							<input
-								type="checkbox"
-								name="delete_on_uninstall"
-								value="1"
-								<?php checked($delete_on_uninstall); ?>
-							/>
-							<?php esc_html_e('Delete all map posts and their data when the plugin is uninstalled', 'clouds-and-spaceships'); ?>
-						</label>
+						<p class="text-danger">
+							<?php esc_html_e('Deleting this plugin will delete every map permanently.', 'clouds-and-spaceships'); ?>
+						</p>
 						<p class="description">
-							<?php esc_html_e('When unchecked (default), maps are kept after uninstall. Deactivating the plugin does not delete. Custom DB tables are always removed.', 'clouds-and-spaceships'); ?>
+							<?php esc_html_e('This plugin uses custom database tables, which are always removed on uninstall. Therefore maps cannot be preserved. Simple plugin deactivating will however not delete maps.', 'clouds-and-spaceships'); ?>
 						</p>
 					</td>
 				</tr>

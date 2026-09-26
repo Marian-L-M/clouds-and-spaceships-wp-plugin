@@ -39,15 +39,14 @@ $stories            = cns_story_suite_get_all_stories($per_page, ($paged - 1) * 
 
 $return_page = sanitize_key($_GET['page'] ?? CNS_STORY_PAGE_SETTINGS);
 $editor_url  = add_query_arg(['page' => CNS_STORY_PAGE_EDITOR], admin_url('admin.php'));
-$delete_on_uninstall  = (bool) get_option('cns_story_suite_delete_on_uninstall', false);
+$delete_substories    = (bool) get_option('cns_story_suite_delete_substories_on_uninstall', false);
 $show_stories_menu    = (bool) get_option('cns_story_suite_show_stories_menu', false);
 $show_substories_menu = (bool) get_option('cns_story_suite_show_substories_menu', false);
 $archive_enabled      = cns_archive_enabled('cns_story');
 $archive_slug         = cns_archive_slug('cns_story');
-$archive_per_page     = cns_archive_per_page('cns_story');
-$archive_order        = cns_archive_order('cns_story');
-$archive_order_opts   = cns_archive_order_options();
 $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story') : '';
+$placeholder_id       = absint(get_option('cns_story_suite_placeholder_thumb_id', 0));
+$placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placeholder_id, 'medium') : '';
 ?>
 <div class="cns-settings-page">
 
@@ -291,83 +290,18 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 		</div>
 	<?php endif; ?>
 
-	<div class="cns-danger-zone">
-		<h2><?php esc_html_e('Plugin Settings', 'clouds-and-spaceships'); ?></h2>
-		<form method="post">
-			<?php wp_nonce_field('cns_story_save_settings'); ?>
-			<input type="hidden" name="cns_story_action" value="save_settings" />
+	<!-- ── Plugin settings ──────────────────────────────────────────────────── -->
+	<form method="post">
+		<?php wp_nonce_field('cns_story_save_settings'); ?>
+		<input type="hidden" name="cns_story_action" value="save_settings" />
+
+		<!-- ── Story ────────────────────────────────────────────────── -->
+		<div class="cns-settings-card">
+			<h2><?php esc_html_e('Story', 'clouds-and-spaceships'); ?></h2>
+			<p class="description">
+				<?php esc_html_e('Stories laid over a map element, managed via the CNS story editor tab. Stories are displayed in branching path demarked by notes for each substory - event inside a story.', 'clouds-and-spaceships'); ?>
+			</p>
 			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row">
-						<?php esc_html_e('Story archive', 'clouds-and-spaceships'); ?>
-						<?php if ($archive_url) : ?>
-							<a href="<?php echo esc_url($archive_url); ?>" target="_blank"
-							   style="display:block;font-size:12px;font-weight:normal;">
-								<?php esc_html_e('View archive ↗', 'clouds-and-spaceships'); ?>
-							</a>
-						<?php endif; ?>
-					</th>
-					<td>
-						<label>
-							<input type="checkbox" name="archive_enabled" value="1" <?php checked($archive_enabled); ?> />
-							<?php esc_html_e('Enable the public story archive', 'clouds-and-spaceships'); ?>
-						</label>
-						<p class="description">
-							<?php esc_html_e('Publishes a listing of all stories at the slug below. Off by default. Substories have no archive of their own.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_story_archive_slug"><?php esc_html_e('URL slug', 'clouds-and-spaceships'); ?></label>
-					</th>
-					<td>
-						<input
-							type="text"
-							id="cns_story_archive_slug"
-							name="archive_slug"
-							value="<?php echo esc_attr($archive_slug); ?>"
-							class="regular-text"
-							pattern="[a-z0-9\-]+"
-							placeholder="<?php echo esc_attr('stories'); ?>"
-						/>
-						<p class="description">
-							<?php esc_html_e('Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single story URL — existing links will break.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_story_archive_per_page"><?php esc_html_e('Stories per page', 'clouds-and-spaceships'); ?></label>
-					</th>
-					<td>
-						<input
-							type="number"
-							id="cns_story_archive_per_page"
-							name="archive_per_page"
-							value="<?php echo esc_attr($archive_per_page); ?>"
-							min="1" step="1"
-							class="small-text"
-						/>
-						<p class="description">
-							<?php esc_html_e('Overrides the global Reading Settings value for the story archive only.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="cns_story_archive_order"><?php esc_html_e('Default sort order', 'clouds-and-spaceships'); ?></label>
-					</th>
-					<td>
-						<select id="cns_story_archive_order" name="archive_order">
-							<?php foreach ($archive_order_opts as $value => $label) : ?>
-								<option value="<?php echo esc_attr($value); ?>" <?php selected($archive_order, $value); ?>>
-									<?php echo esc_html($label); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</td>
-				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e('Admin menu visibility', 'clouds-and-spaceships'); ?></th>
 					<td>
@@ -381,25 +315,130 @@ $archive_url          = $archive_enabled ? get_post_type_archive_link('cns_story
 							<?php esc_html_e('Show Substories in the WordPress admin sidebar', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e('Adds the standard WordPress list screens for stories and substories to the sidebar. The CNS editor pages here stay the primary management UI.', 'clouds-and-spaceships'); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e('Uninstall behaviour', 'clouds-and-spaceships'); ?></th>
-					<td>
-						<label>
-							<input type="checkbox" name="delete_on_uninstall" value="1" <?php checked($delete_on_uninstall); ?> />
-							<?php esc_html_e('Delete all story and substory posts when this plugin is uninstalled', 'clouds-and-spaceships'); ?>
-						</label>
-						<p class="description">
-							<?php esc_html_e('When unchecked (default), posts are kept after uninstall. Custom DB tables are always removed.', 'clouds-and-spaceships'); ?>
+							<?php esc_html_e('Adds the standard WordPress list screens for stories and substories to the sidebar. The CNS story editor tab here stay the primary management interface.', 'clouds-and-spaceships'); ?>
 						</p>
 					</td>
 				</tr>
 			</table>
-			<?php submit_button(__('Save Settings', 'clouds-and-spaceships'), 'secondary'); ?>
-		</form>
-	</div>
+		</div>
+
+		<!-- ── Archive ──────────────────────────────────────────────── -->
+		<div class="cns-settings-card">
+			<h2><?php esc_html_e('Archive', 'clouds-and-spaceships'); ?></h2>
+			<p class="description">
+				<?php esc_html_e('Public list for all stories.', 'clouds-and-spaceships'); ?>
+			</p>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">
+						<label for="cns_story_archive_slug"><?php esc_html_e('URL slug', 'clouds-and-spaceships'); ?></label>
+						<?php if ($archive_url) : ?>
+							<a href="<?php echo esc_url($archive_url); ?>" target="_blank" rel="noopener" class="cns-settings-link">
+								<?php esc_html_e('View archive ↗', 'clouds-and-spaceships'); ?>
+							</a>
+						<?php endif; ?>
+					</th>
+					<td>
+						<input
+							type="text"
+							id="cns_story_archive_slug"
+							name="archive_slug"
+							value="<?php echo esc_attr($archive_slug); ?>"
+							class="regular-text"
+							pattern="[a-z0-9\-]+"
+							placeholder="stories"
+						/>
+						<p class="description">
+							<?php esc_html_e('Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single story URL.', 'clouds-and-spaceships'); ?>
+						</p>
+						<p class="text-danger">
+							<?php esc_html_e('CAUTION! On change existing links will break.', 'clouds-and-spaceships'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e('Enable archive', 'clouds-and-spaceships'); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="archive_enabled" value="1" <?php checked($archive_enabled); ?> />
+							<?php esc_html_e('Publish a public listing of all stories', 'clouds-and-spaceships'); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e('Off by default. Will enable a post type archive for stories.', 'clouds-and-spaceships'); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label><?php esc_html_e('Default thumbnail', 'clouds-and-spaceships'); ?></label>
+					</th>
+					<td>
+						<input
+							type="hidden"
+							id="cns_story_placeholder_id"
+							name="placeholder_thumb_id"
+							value="<?php echo esc_attr($placeholder_id ?: ''); ?>"
+						/>
+						<img
+							id="cns_story_placeholder_preview"
+							src="<?php echo $placeholder_url ? esc_url($placeholder_url) : ''; ?>"
+							style="max-height:80px;display:<?php echo $placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
+							alt=""
+						/>
+						<button
+							type="button"
+							id="cns_story_placeholder_btn"
+							class="button cns-media-btn"
+							data-input="cns_story_placeholder_id"
+							data-preview="cns_story_placeholder_preview"
+							data-remove="cns_story_placeholder_remove"
+							data-title="<?php esc_attr_e('Select default story thumbnail', 'clouds-and-spaceships'); ?>"
+							data-select-label="<?php esc_attr_e('Select image', 'clouds-and-spaceships'); ?>"
+							data-change-label="<?php esc_attr_e('Change image', 'clouds-and-spaceships'); ?>"
+						><?php echo $placeholder_id ? esc_html__('Change image', 'clouds-and-spaceships') : esc_html__('Select image', 'clouds-and-spaceships'); ?></button>
+						<button
+							type="button"
+							id="cns_story_placeholder_remove"
+							class="button cns-media-remove-btn"
+							data-input="cns_story_placeholder_id"
+							data-preview="cns_story_placeholder_preview"
+							data-picker="cns_story_placeholder_btn"
+							style="display:<?php echo $placeholder_id ? 'inline-block' : 'none'; ?>;"
+						><?php esc_html_e('Remove', 'clouds-and-spaceships'); ?></button>
+						<p class="description">
+							<?php esc_html_e('Stands in for stories that have no featured image of their own. Leave empty to show no image.', 'clouds-and-spaceships'); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- ── Danger Zone ──────────────────────────────────────────── -->
+		<div class="cns-danger-zone">
+			<h2><?php esc_html_e('Danger Zone', 'clouds-and-spaceships'); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e('Uninstall behaviour', 'clouds-and-spaceships'); ?></th>
+					<td>
+						<p class="text-danger">
+							<?php esc_html_e('Deleting this plugin deletes every story, permanently.', 'clouds-and-spaceships'); ?>
+						</p>
+						<p class="description">
+							<?php esc_html_e('This plugin uses custom database tables to store story nodes, which are always removed on uninstall. Therefore stories cannot be preserved on uninstall. Simple plugin deactivation will however not delete stories.', 'clouds-and-spaceships'); ?>
+						</p>
+						<label class="text-danger">
+							<input type="checkbox" name="delete_substories_on_uninstall" value="1" <?php checked($delete_substories); ?> />
+							<?php esc_html_e('Delete substory articles as well', 'clouds-and-spaceships'); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e('Substories are articles/posts in their own right, and can be preserved for after deletion. Note that as substories do not have a native archive screen, you will need to do a migration or setup of an archive youself. Check here to delete all substories on plugin unistall.', 'clouds-and-spaceships'); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<?php submit_button(__('Save Settings', 'clouds-and-spaceships'), 'secondary'); ?>
+	</form>
 
 </div>

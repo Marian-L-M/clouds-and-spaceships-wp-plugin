@@ -91,6 +91,30 @@ export function moveAreaNode( area: ShapedNodes, idx: number, newX: number, newY
 	return updated;
 }
 
+/**
+ * Inserts a node after the focused one, or at the end when no node is focused.
+ *
+ * Appending is the wrong default while editing a large shape: the new node
+ * lands between the last and first node, far from where the user is working.
+ * The returned index is where the node ended up, so callers can move the focus
+ * onto it and keep repeated adds walking forward instead of stacking.
+ */
+export function insertAreaNode(
+	nodes: Node[],
+	focusedIdx: number | null,
+	node: Node
+): { nodes: Node[]; index: number } {
+	const at =
+		focusedIdx === null || focusedIdx < 0 || focusedIdx >= nodes.length
+			? nodes.length
+			: focusedIdx + 1;
+
+	return {
+		nodes: [ ...nodes.slice( 0, at ), node, ...nodes.slice( at ) ],
+		index: at,
+	};
+}
+
 /** Whether a node can be removed from the shape (fixed-node shapes can't shrink). */
 export function canRemoveAreaNode( area: ShapedNodes ): boolean {
 	const st = area.shape_type || 'POLYGON';

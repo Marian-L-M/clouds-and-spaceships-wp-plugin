@@ -69,6 +69,8 @@ function ContextPanel({
   onAreaDuplicate,
   onAreaLocalUpdate,
   onAreaNodesUpdate,
+  focusedAreaNodeIdx,
+  onAreaNodeFocusChange,
   onAreaShapeTypeChange,
   onRegionSave,
   onRegionDelete,
@@ -395,7 +397,9 @@ function ContextPanel({
           }
         }), selectedArea && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_NodeList__WEBPACK_IMPORTED_MODULE_11__["default"], {
           area: selectedArea,
-          onNodesChange: nodes => onAreaNodesUpdate?.(selectedArea.id, nodes)
+          onNodesChange: nodes => onAreaNodesUpdate?.(selectedArea.id, nodes),
+          focusedNodeIdx: focusedAreaNodeIdx,
+          onNodeFocusChange: onAreaNodeFocusChange
         })]
       }), selection.kind === 'region' && regionFormData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_HierarchyRegionForm__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -679,6 +683,11 @@ function MapEditorApp() {
   const [areasList, setAreasList] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [selectedObjectId, setSelectedObjectId] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [selectedAreaId, setSelectedAreaId] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  // The focused node of the selected area. It lives here because the Areas
+  // canvas and the context panel's node list both read and set it, and they
+  // are siblings: the canvas highlights it and inserts after it, and the
+  // panel's Add Node button inserts after it too.
+  const [focusedAreaNodeIdx, setFocusedAreaNodeIdx] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [labelsList, setLabelsList] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [selectedLabelId, setSelectedLabelId] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [selectedRegionId, setSelectedRegionId] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
@@ -1139,7 +1148,9 @@ function MapEditorApp() {
             onDeselect: () => setSelectedAreaId(null),
             onNodesUpdate: handleAreaNodesUpdate,
             onDuplicate: handleAreaDuplicate,
-            onDelete: handleAreaDeleteById
+            onDelete: handleAreaDeleteById,
+            focusedNodeIdx: focusedAreaNodeIdx,
+            onNodeFocusChange: setFocusedAreaNodeIdx
           }), activeTab === 'labels' && !settings.isMaster && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_panels_LabelsPanel__WEBPACK_IMPORTED_MODULE_12__["default"], {
             mapId: mapId,
             settings: settings,
@@ -1198,6 +1209,8 @@ function MapEditorApp() {
         onAreaDuplicate: () => handleAreaDuplicate(selectedAreaId),
         onAreaLocalUpdate: handleAreaLocalUpdate,
         onAreaNodesUpdate: handleAreaNodesUpdate,
+        focusedAreaNodeIdx: focusedAreaNodeIdx,
+        onAreaNodeFocusChange: setFocusedAreaNodeIdx,
         onAreaShapeTypeChange: handleAreaShapeTypeChange,
         onRegionSave: handleRegionSave,
         onRegionShapeTypeChange: handleRegionShapeTypeChange,
@@ -1420,10 +1433,17 @@ function AreasCanvas({
     if (selArea) {
       const st = selArea.shape_type || 'POLYGON';
       if (st !== 'RECTANGLE' && st !== 'CIRCLE') {
-        onNodesChange?.(selectedAreaId, [...selArea.nodes, {
+        const {
+          nodes: next,
+          index
+        } = (0,_areas__WEBPACK_IMPORTED_MODULE_1__.insertAreaNode)(selArea.nodes || [], focusedNodeIdx, {
           x: x / W,
           y: y / H
-        }]);
+        });
+        onNodesChange?.(selectedAreaId, next);
+        // Follow the new node, so clicking out a run of points
+        // continues from the last one placed.
+        onNodeFocusChange?.(index);
       }
       return;
     }
@@ -3028,7 +3048,9 @@ const NODE_LABELS = {
 };
 function NodeList({
   area,
-  onNodesChange
+  onNodesChange,
+  focusedNodeIdx,
+  onNodeFocusChange
 }) {
   const nodes = area.nodes || [];
   const shapeType = area.shape_type || 'POLYGON';
@@ -3063,10 +3085,16 @@ function NodeList({
     onNodesChange(updated);
   }
   function addNode() {
-    onNodesChange([...nodes, {
+    const {
+      nodes: next,
+      index
+    } = (0,_areas__WEBPACK_IMPORTED_MODULE_4__.insertAreaNode)(nodes, focusedNodeIdx, {
       x: 0.5,
       y: 0.5
-    }]);
+    });
+    onNodesChange(next);
+    // Follow the new node so a run of adds walks forward along the shape.
+    onNodeFocusChange(index);
   }
   function deleteNode(idx) {
     onNodesChange(nodes.filter((_, i) => i !== idx));
@@ -3652,7 +3680,7 @@ function InfoboxSection({
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_shared_PostSearch__WEBPACK_IMPORTED_MODULE_3__["default"], {
           selectedId: formData.linked_post_id,
           selectedLabel: formData.linked_post_label,
-          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Optional — a connected post adds a “Read more” link to the infobox.', 'clouds-and-spaceships'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Optional — links infobox to post.', 'clouds-and-spaceships'),
           onChange: item => onChange({
             ...formData,
             linked_post_id: item ? item.id : 0,
@@ -3662,22 +3690,21 @@ function InfoboxSection({
       }), formData.linked_post_id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "cns-grid__group cns-grid__span-full",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-          __nextHasNoMarginBottom: true,
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display infobox', 'clouds-and-spaceships'),
-          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show the connected post’s infobox blocks in the drawer — works even when the description is written manually.', 'clouds-and-spaceships'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Display connected post infobox contents in sidebar drawer.', 'clouds-and-spaceships'),
           checked: formData.display_infobox,
           onChange: v => set('display_infobox', v)
         })
       }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "cns-grid__group cns-grid__span-full",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content source', 'clouds-and-spaceships'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Sidebar Content source', 'clouds-and-spaceships'),
           selected: isManualIb ? 'manual' : 'post',
           options: [{
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Write content manually', 'clouds-and-spaceships'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Manual input', 'clouds-and-spaceships'),
             value: 'manual'
           }, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Use the connected post’s content', 'clouds-and-spaceships'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Connected post', 'clouds-and-spaceships'),
             value: 'post'
           }],
           onChange: value => set('infobox_source', value)
@@ -3687,7 +3714,6 @@ function InfoboxSection({
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextControl, {
             __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Infobox Title', 'clouds-and-spaceships'),
             value: formData.infobox_title,
             onChange: v => set('infobox_title', v)
@@ -3695,7 +3721,6 @@ function InfoboxSection({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextareaControl, {
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Description', 'clouds-and-spaceships'),
             rows: 4,
             value: formData.infobox_description,
@@ -3718,28 +3743,25 @@ function InfoboxSection({
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
           className: "description cns-grid__span-full",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title, excerpt and thumbnail are pulled from the connected post. Untick to hide any of them.', 'clouds-and-spaceships')
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title, excerpt, thumbnail. Uncheck to hide.', 'clouds-and-spaceships')
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-            __nextHasNoMarginBottom: true,
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show title', 'clouds-and-spaceships'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'clouds-and-spaceships'),
             checked: formData.show_title,
             onChange: v => set('show_title', v)
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-            __nextHasNoMarginBottom: true,
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show excerpt', 'clouds-and-spaceships'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Excerpt', 'clouds-and-spaceships'),
             checked: formData.show_excerpt,
             onChange: v => set('show_excerpt', v)
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-            __nextHasNoMarginBottom: true,
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show thumbnail', 'clouds-and-spaceships'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Thumbnail', 'clouds-and-spaceships'),
             checked: formData.show_thumbnail,
             onChange: v => set('show_thumbnail', v)
           })
@@ -4214,7 +4236,9 @@ function AreasPanel({
   onDeselect,
   onNodesUpdate,
   onDuplicate,
-  onDelete
+  onDelete,
+  focusedNodeIdx,
+  onNodeFocusChange
 }) {
   (0,_useMapResource__WEBPACK_IMPORTED_MODULE_13__.useMapResource)(mapId, 'areas', onAreasLoaded);
   const {
@@ -4227,19 +4251,19 @@ function AreasPanel({
   const canvasW = settings.width || 1000;
   const canvasH = canvasW / (settings.aspectRatio || 1);
 
-  // Keyboard-focused node of the selected area (Tab cycles it): arrows then
-  // nudge that node instead of the whole area, Delete removes it, Esc clears
-  // the focus (handled in the canvas, before deselecting).
-  const [focusedNodeIdx, setFocusedNodeIdx] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  // The keyboard-focused node of the selected area (Tab cycles it): arrows
+  // then nudge that node instead of the whole area, Delete removes it, Esc
+  // clears the focus (handled in the canvas, before deselecting), and new
+  // nodes are inserted after it.
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    setFocusedNodeIdx(null);
+    onNodeFocusChange(null);
   }, [selectedAreaId]);
 
   // Node-list edits can shrink the node set — keep the focus index valid.
   const nodeCount = selectedArea ? (selectedArea.nodes || []).length : 0;
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (focusedNodeIdx !== null && focusedNodeIdx >= nodeCount) {
-      setFocusedNodeIdx(nodeCount ? nodeCount - 1 : null);
+      onNodeFocusChange(nodeCount ? nodeCount - 1 : null);
     }
   }, [nodeCount]);
   async function pasteArea() {
@@ -4297,7 +4321,7 @@ function AreasPanel({
           onNodesUpdate(selectedArea.id, nodes);
           // The clamp effect keeps the index valid; move focus to
           // the previous node so repeated Deletes walk backwards.
-          setFocusedNodeIdx(focusedNodeIdx > 0 ? focusedNodeIdx - 1 : 0);
+          onNodeFocusChange(focusedNodeIdx > 0 ? focusedNodeIdx - 1 : 0);
         }
         return true; // claim the key even when the shape can't shrink
       }
@@ -4327,10 +4351,11 @@ function AreasPanel({
     // Tab / Shift+Tab cycle through the selected area's nodes.
     tab: backwards => {
       if (!selectedArea || !nodeCount) return false;
-      setFocusedNodeIdx(prev => {
-        if (prev === null) return backwards ? nodeCount - 1 : 0;
-        return (prev + (backwards ? -1 : 1) + nodeCount) % nodeCount;
-      });
+      if (focusedNodeIdx === null) {
+        onNodeFocusChange(backwards ? nodeCount - 1 : 0);
+      } else {
+        onNodeFocusChange((focusedNodeIdx + (backwards ? -1 : 1) + nodeCount) % nodeCount);
+      }
       return true;
     }
   });
@@ -4432,7 +4457,7 @@ function AreasPanel({
         onSelect: onSelect,
         onDeselect: onDeselect,
         onNodesChange: onNodesUpdate,
-        onNodeFocusChange: setFocusedNodeIdx
+        onNodeFocusChange: onNodeFocusChange
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_lists_AreasList__WEBPACK_IMPORTED_MODULE_7__["default"], {
         areas: areas,
         onSelect: onSelect,
@@ -5997,6 +6022,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   findNodeAtPoint: () => (/* binding */ findNodeAtPoint),
 /* harmony export */   getDefaultNodes: () => (/* binding */ getDefaultNodes),
 /* harmony export */   getLiveNodes: () => (/* binding */ getLiveNodes),
+/* harmony export */   insertAreaNode: () => (/* binding */ insertAreaNode),
 /* harmony export */   moveAreaNode: () => (/* binding */ moveAreaNode),
 /* harmony export */   normalizeNodesForShapeType: () => (/* binding */ normalizeNodesForShapeType)
 /* harmony export */ });
@@ -6117,6 +6143,22 @@ function moveAreaNode(area, idx, newX, newY) {
     };
   }
   return updated;
+}
+
+/**
+ * Inserts a node after the focused one, or at the end when no node is focused.
+ *
+ * Appending is the wrong default while editing a large shape: the new node
+ * lands between the last and first node, far from where the user is working.
+ * The returned index is where the node ended up, so callers can move the focus
+ * onto it and keep repeated adds walking forward instead of stacking.
+ */
+function insertAreaNode(nodes, focusedIdx, node) {
+  const at = focusedIdx === null || focusedIdx < 0 || focusedIdx >= nodes.length ? nodes.length : focusedIdx + 1;
+  return {
+    nodes: [...nodes.slice(0, at), node, ...nodes.slice(at)],
+    index: at
+  };
 }
 
 /** Whether a node can be removed from the shape (fixed-node shapes can't shrink). */

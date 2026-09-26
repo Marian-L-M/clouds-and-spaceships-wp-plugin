@@ -40,7 +40,7 @@ $delete_icons_on_uninstall = (bool) get_option('cns_map_suite_delete_icons_on_un
 				<tr>
 					<th scope="row"><?php esc_html_e('Icon files', 'clouds-and-spaceships'); ?></th>
 					<td>
-						<label>
+						<label class="text-danger">
 							<input
 								type="checkbox"
 								name="delete_icons_on_uninstall"

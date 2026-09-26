@@ -1,7 +1,7 @@
 import { Button, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { plus, closeSmall } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { applyRectangleConstraint } from '../../areas';
+import { applyRectangleConstraint, insertAreaNode } from '../../areas';
 import type { MapArea, Node, ShapeType } from '../../../types';
 
 const NODE_LABELS: Partial<Record<ShapeType, string[]>> = {
@@ -12,9 +12,16 @@ const NODE_LABELS: Partial<Record<ShapeType, string[]>> = {
 interface Props {
 	area: MapArea;
 	onNodesChange: ( nodes: Node[] ) => void;
+	focusedNodeIdx: number | null;
+	onNodeFocusChange: ( idx: number | null ) => void;
 }
 
-export default function NodeList( { area, onNodesChange }: Props ) {
+export default function NodeList( {
+	area,
+	onNodesChange,
+	focusedNodeIdx,
+	onNodeFocusChange,
+}: Props ) {
 	const nodes     = area.nodes || [];
 	const shapeType = area.shape_type || 'POLYGON';
 	const isFixed   = shapeType === 'RECTANGLE' || shapeType === 'CIRCLE';
@@ -41,7 +48,13 @@ export default function NodeList( { area, onNodesChange }: Props ) {
 	}
 
 	function addNode() {
-		onNodesChange( [ ...nodes, { x: 0.5, y: 0.5 } ] );
+		const { nodes: next, index } = insertAreaNode( nodes, focusedNodeIdx, {
+			x: 0.5,
+			y: 0.5,
+		} );
+		onNodesChange( next );
+		// Follow the new node so a run of adds walks forward along the shape.
+		onNodeFocusChange( index );
 	}
 
 	function deleteNode( idx: number ) {

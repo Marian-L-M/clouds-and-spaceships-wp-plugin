@@ -37,6 +37,10 @@ interface Props {
 	onNodesUpdate: ( areaId: number, nodes: Node[] ) => void;
 	onDuplicate: ( id: number ) => Promise< void >;
 	onDelete: ( id: number ) => Promise< void >;
+	// Owned by MapEditorApp: the Add Node button lives in the context panel,
+	// which is a sibling of this one, so both need the same focused index.
+	focusedNodeIdx: number | null;
+	onNodeFocusChange: ( idx: number | null ) => void;
 }
 
 export default function AreasPanel( {
@@ -50,6 +54,8 @@ export default function AreasPanel( {
 	onNodesUpdate,
 	onDuplicate,
 	onDelete,
+	focusedNodeIdx,
+	onNodeFocusChange,
 }: Props ) {
 	useMapResource< MapArea >( mapId, 'areas', onAreasLoaded );
 	const { createErrorNotice } = useDispatch( noticesStore );
@@ -60,22 +66,19 @@ export default function AreasPanel( {
 	const canvasW = settings.width || 1000;
 	const canvasH = canvasW / ( settings.aspectRatio || 1 );
 
-	// Keyboard-focused node of the selected area (Tab cycles it): arrows then
-	// nudge that node instead of the whole area, Delete removes it, Esc clears
-	// the focus (handled in the canvas, before deselecting).
-	const [ focusedNodeIdx, setFocusedNodeIdx ] = useState< number | null >(
-		null
-	);
-
+	// The keyboard-focused node of the selected area (Tab cycles it): arrows
+	// then nudge that node instead of the whole area, Delete removes it, Esc
+	// clears the focus (handled in the canvas, before deselecting), and new
+	// nodes are inserted after it.
 	useEffect( () => {
-		setFocusedNodeIdx( null );
+		onNodeFocusChange( null );
 	}, [ selectedAreaId ] );
 
 	// Node-list edits can shrink the node set — keep the focus index valid.
 	const nodeCount = selectedArea ? ( selectedArea.nodes || [] ).length : 0;
 	useEffect( () => {
 		if ( focusedNodeIdx !== null && focusedNodeIdx >= nodeCount ) {
-			setFocusedNodeIdx( nodeCount ? nodeCount - 1 : null );
+			onNodeFocusChange( nodeCount ? nodeCount - 1 : null );
 		}
 	}, [ nodeCount ] );
 
@@ -138,7 +141,7 @@ export default function AreasPanel( {
 					onNodesUpdate( selectedArea.id, nodes );
 					// The clamp effect keeps the index valid; move focus to
 					// the previous node so repeated Deletes walk backwards.
-					setFocusedNodeIdx(
+					onNodeFocusChange(
 						focusedNodeIdx > 0 ? focusedNodeIdx - 1 : 0
 					);
 				}
@@ -183,12 +186,14 @@ export default function AreasPanel( {
 		// Tab / Shift+Tab cycle through the selected area's nodes.
 		tab: ( backwards ) => {
 			if ( ! selectedArea || ! nodeCount ) return false;
-			setFocusedNodeIdx( ( prev ) => {
-				if ( prev === null ) return backwards ? nodeCount - 1 : 0;
-				return (
-					( prev + ( backwards ? -1 : 1 ) + nodeCount ) % nodeCount
+			if ( focusedNodeIdx === null ) {
+				onNodeFocusChange( backwards ? nodeCount - 1 : 0 );
+			} else {
+				onNodeFocusChange(
+					( focusedNodeIdx + ( backwards ? -1 : 1 ) + nodeCount ) %
+						nodeCount
 				);
-			} );
+			}
 			return true;
 		},
 	} );
@@ -335,7 +340,7 @@ export default function AreasPanel( {
 					onSelect={ onSelect }
 					onDeselect={ onDeselect }
 					onNodesChange={ onNodesUpdate }
-					onNodeFocusChange={ setFocusedNodeIdx }
+					onNodeFocusChange={ onNodeFocusChange }
 				/>
 				<AreasList
 					areas={ areas }

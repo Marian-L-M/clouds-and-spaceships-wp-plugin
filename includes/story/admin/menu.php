@@ -153,7 +153,7 @@ add_action('admin_init', function (): void {
 		check_admin_referer('cns_story_save_settings') &&
 		current_user_can('manage_stories')
 	) {
-		update_option('cns_story_suite_delete_on_uninstall',   ! empty($_POST['delete_on_uninstall']));
+		update_option('cns_story_suite_delete_substories_on_uninstall', ! empty($_POST['delete_substories_on_uninstall']));
 		update_option('cns_story_suite_show_stories_menu',     ! empty($_POST['show_stories_menu']));
 		update_option('cns_story_suite_show_substories_menu',  ! empty($_POST['show_substories_menu']));
 
@@ -164,16 +164,17 @@ add_action('admin_init', function (): void {
 		$slug = preg_replace('/[^a-z0-9\-]/', '', strtolower(sanitize_text_field(wp_unslash($_POST['archive_slug'] ?? ''))));
 		update_option('cns_story_suite_archive_slug', $slug ?: 'stories');
 
+		// Paging and sort order are not owned here: the plugin registers no
+		// story archive template, so the theme and Reading Settings decide.
+
+		// Stands in for stories with no featured image of their own. Anything
+		// that is not an image attachment is stored as 0 (no placeholder).
+		$placeholder = absint($_POST['placeholder_thumb_id'] ?? 0);
 		update_option(
-			'cns_story_suite_archive_per_page',
-			max(1, (int) sanitize_text_field(wp_unslash($_POST['archive_per_page'] ?? CNS_ARCHIVE_DEFAULT_PER_PAGE)))
+			'cns_story_suite_placeholder_thumb_id',
+			$placeholder && wp_attachment_is_image($placeholder) ? $placeholder : 0
 		);
 
-		$order = sanitize_key((string) ($_POST['archive_order'] ?? ''));
-		update_option(
-			'cns_story_suite_archive_order',
-			array_key_exists($order, cns_archive_order_options()) ? $order : CNS_ARCHIVE_DEFAULT_ORDER
-		);
 		$return_page = sanitize_key($_GET['page'] ?? CNS_STORY_PAGE_SETTINGS);
 		wp_safe_redirect(add_query_arg(['page' => $return_page, 'settings-saved' => '1'], admin_url('admin.php')));
 		exit;

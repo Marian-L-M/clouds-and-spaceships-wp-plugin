@@ -182,7 +182,7 @@ if ( $glossary_enabled ) {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Uninstall behavior', 'clouds-and-spaceships' ); ?></th>
 					<td>
-						<label>
+						<label class="text-danger">
 							<input
 								type="checkbox"
 								name="cns_wiki_settings[glossary_delete_on_uninstall]"

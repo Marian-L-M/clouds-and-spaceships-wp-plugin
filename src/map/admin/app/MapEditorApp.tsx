@@ -87,6 +87,13 @@ export default function MapEditorApp() {
 	const [ selectedAreaId, setSelectedAreaId ] = useState< number | null >(
 		null
 	);
+	// The focused node of the selected area. It lives here because the Areas
+	// canvas and the context panel's node list both read and set it, and they
+	// are siblings: the canvas highlights it and inserts after it, and the
+	// panel's Add Node button inserts after it too.
+	const [ focusedAreaNodeIdx, setFocusedAreaNodeIdx ] = useState<
+		number | null
+	>( null );
 	const [ labelsList, setLabelsList ] = useState< MapLabel[] >( [] );
 	const [ selectedLabelId, setSelectedLabelId ] = useState< number | null >(
 		null
@@ -685,6 +692,8 @@ export default function MapEditorApp() {
 								onNodesUpdate={ handleAreaNodesUpdate }
 								onDuplicate={ handleAreaDuplicate }
 								onDelete={ handleAreaDeleteById }
+								focusedNodeIdx={ focusedAreaNodeIdx }
+								onNodeFocusChange={ setFocusedAreaNodeIdx }
 							/>
 						) }
 						{ activeTab === 'labels' && ! settings.isMaster && (
@@ -772,6 +781,8 @@ export default function MapEditorApp() {
 					}
 					onAreaLocalUpdate={ handleAreaLocalUpdate }
 					onAreaNodesUpdate={ handleAreaNodesUpdate }
+					focusedAreaNodeIdx={ focusedAreaNodeIdx }
+					onAreaNodeFocusChange={ setFocusedAreaNodeIdx }
 					onAreaShapeTypeChange={ handleAreaShapeTypeChange }
 					onRegionSave={ handleRegionSave }
 					onRegionShapeTypeChange={ handleRegionShapeTypeChange }

@@ -69,6 +69,10 @@ interface Props {
 	onAreaDuplicate: () => void;
 	onAreaLocalUpdate: ( id: number, patch: Partial< MapArea > ) => void;
 	onAreaNodesUpdate: ( areaId: number, nodes: Node[] ) => void;
+	// Shared with the Areas tab canvas so Add Node inserts after the node the
+	// user last touched there, rather than at the end of the shape.
+	focusedAreaNodeIdx: number | null;
+	onAreaNodeFocusChange: ( idx: number | null ) => void;
 	onAreaShapeTypeChange: ( areaId: number, shapeType: ShapeType ) => void;
 	onRegionSave: (
 		formData: HierarchyFormData
@@ -105,6 +109,8 @@ export default function ContextPanel( {
 	onAreaDuplicate,
 	onAreaLocalUpdate,
 	onAreaNodesUpdate,
+	focusedAreaNodeIdx,
+	onAreaNodeFocusChange,
 	onAreaShapeTypeChange,
 	onRegionSave,
 	onRegionDelete,
@@ -511,6 +517,8 @@ export default function ContextPanel( {
 										nodes
 									)
 								}
+								focusedNodeIdx={ focusedAreaNodeIdx }
+								onNodeFocusChange={ onAreaNodeFocusChange }
 							/>
 						) }
 					</>

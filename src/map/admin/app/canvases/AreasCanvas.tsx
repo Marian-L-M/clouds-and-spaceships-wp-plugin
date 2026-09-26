@@ -3,6 +3,7 @@ import {
 	drawAreasOnCanvas,
 	findAreaAtPoint,
 	findNodeAtPoint,
+	insertAreaNode,
 	moveAreaNode,
 } from '../../areas';
 import { getCanvasCoords } from '../../canvas';
@@ -165,10 +166,15 @@ export default function AreasCanvas( {
 		if ( selArea ) {
 			const st = selArea.shape_type || 'POLYGON';
 			if ( st !== 'RECTANGLE' && st !== 'CIRCLE' ) {
-				onNodesChange?.( selectedAreaId!, [
-					...selArea.nodes,
-					{ x: x / W, y: y / H },
-				] );
+				const { nodes: next, index } = insertAreaNode(
+					selArea.nodes || [],
+					focusedNodeIdx,
+					{ x: x / W, y: y / H }
+				);
+				onNodesChange?.( selectedAreaId!, next );
+				// Follow the new node, so clicking out a run of points
+				// continues from the last one placed.
+				onNodeFocusChange?.( index );
 			}
 			return;
 		}
