@@ -4,12 +4,12 @@ import { useEntityRecords } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 interface MapRecord {
-	id:    number;
+	id: number;
 	title: { rendered: string };
 }
 
 interface Props {
-	mapId:    number | null;
+	mapId: number | null;
 	mapTitle: string;
 	onChange: ( id: number | null, title: string ) => void;
 }
@@ -43,11 +43,19 @@ export default function MapPicker( { mapId, mapTitle, onChange }: Props ) {
 
 	const options = [
 		...( mapId
-			? [ { value: String( mapId ), label: mapTitle || `Map #${ mapId }` } ]
+			? [
+					{
+						value: String( mapId ),
+						label: mapTitle || `Map #${ mapId }`,
+					},
+			  ]
 			: [] ),
 		...( records ?? [] )
 			.filter( ( r ) => r.id !== mapId )
-			.map( ( r ) => ( { value: String( r.id ), label: r.title.rendered } ) ),
+			.map( ( r ) => ( {
+				value: String( r.id ),
+				label: r.title.rendered,
+			} ) ),
 	];
 
 	// Debounce the store query so we don't resolve every keystroke.
@@ -58,8 +66,6 @@ export default function MapPicker( { mapId, mapTitle, onChange }: Props ) {
 
 	return (
 		<ComboboxControl
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 			label={ __( 'Map', 'clouds-and-spaceships' ) }
 			hideLabelFromVision
 			placeholder={ __( 'Search maps…', 'clouds-and-spaceships' ) }

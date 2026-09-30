@@ -5,29 +5,34 @@ import MarkerControls from '../shared/MarkerControls';
 import type { StoryPath, PathFormData } from '../../../types';
 
 interface Props {
-	path:    StoryPath | null; // null = new path
-	onSave:  ( data: PathFormData ) => Promise< void >;
+	path: StoryPath | null; // null = new path
+	onSave: ( data: PathFormData ) => Promise< void >;
 	onClose: () => void;
 }
 
 function buildInitial( path: StoryPath | null ): PathFormData {
 	return {
-		label:             path?.label             ?? '',
-		markerColor:       path?.markerColor       ?? '#00aaff',
-		markerSize:        path?.markerSize        ?? 5,
-		markerType:        path?.markerType        ?? 'ring',
-		markerIconId:      path?.markerIconId      ?? null,
-		markerIconUrl:     path?.markerIconUrl     ?? '',
+		label: path?.label ?? '',
+		markerColor: path?.markerColor ?? '#00aaff',
+		markerSize: path?.markerSize ?? 5,
+		markerType: path?.markerType ?? 'ring',
+		markerIconId: path?.markerIconId ?? null,
+		markerIconUrl: path?.markerIconUrl ?? '',
 		markerIconOffsetX: path?.markerIconOffsetX ?? 0,
 		markerIconOffsetY: path?.markerIconOffsetY ?? -30,
 	};
 }
 
 export default function PathModal( { path, onSave, onClose }: Props ) {
-	const [ form,   setForm   ] = useState< PathFormData >( () => buildInitial( path ) );
+	const [ form, setForm ] = useState< PathFormData >( () =>
+		buildInitial( path )
+	);
 	const [ saving, setSaving ] = useState( false );
 
-	function set< K extends keyof PathFormData >( key: K, value: PathFormData[ K ] ) {
+	function set< K extends keyof PathFormData >(
+		key: K,
+		value: PathFormData[ K ]
+	) {
 		setForm( ( p ) => ( { ...p, [ key ]: value } ) );
 	}
 
@@ -41,7 +46,11 @@ export default function PathModal( { path, onSave, onClose }: Props ) {
 
 	return (
 		<Modal
-			title={ isNew ? __( 'Add Path', 'clouds-and-spaceships' ) : __( 'Edit Path', 'clouds-and-spaceships' ) }
+			title={
+				isNew
+					? __( 'Add Path', 'clouds-and-spaceships' )
+					: __( 'Edit Path', 'clouds-and-spaceships' )
+			}
 			onRequestClose={ onClose }
 			size="medium"
 		>
@@ -49,10 +58,12 @@ export default function PathModal( { path, onSave, onClose }: Props ) {
 				<h3>{ __( 'Path Label', 'clouds-and-spaceships' ) }</h3>
 				<TextControl
 					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					label={ __( 'Label', 'clouds-and-spaceships' ) }
 					hideLabelFromVision
-					placeholder={ __( 'e.g. Main storyline', 'clouds-and-spaceships' ) }
+					placeholder={ __(
+						'e.g. Main storyline',
+						'clouds-and-spaceships'
+					) }
 					value={ form.label }
 					onChange={ ( v ) => set( 'label', v ) }
 				/>
@@ -74,7 +85,9 @@ export default function PathModal( { path, onSave, onClose }: Props ) {
 					markerIconUrl={ form.markerIconUrl }
 					markerIconOffsetX={ form.markerIconOffsetX }
 					markerIconOffsetY={ form.markerIconOffsetY }
-					onChange={ ( updates ) => setForm( ( p ) => ( { ...p, ...updates } ) ) }
+					onChange={ ( updates ) =>
+						setForm( ( p ) => ( { ...p, ...updates } ) )
+					}
 				/>
 			</div>
 

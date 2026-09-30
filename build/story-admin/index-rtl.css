@@ -269,6 +269,21 @@
   color: #646970;
 }
 
+.cns-node-modal .components-modal__content {
+  padding-bottom: 0;
+}
+.cns-node-modal__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 0;
+  border-top: 1px solid #dbdbdb;
+  background: #fff;
+}
+
 .cns-nodes-table {
   width: 100%;
   border-collapse: collapse;

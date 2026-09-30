@@ -6,13 +6,20 @@ import SubstoryPicker from '../shared/SubstoryPicker';
 import type { StoryNode, StoryEdge, StoryPath } from '../../../types';
 
 interface Props {
-	path:  StoryPath;
+	path: StoryPath;
 	nodes: StoryNode[];
 	edges: StoryEdge[];
 	/** Creates a node (canvas centre) for a substory, already assigned to the path. */
-	onQuickNodeCreate: ( substoryId: number, pathId: number ) => Promise< StoryNode | undefined >;
+	onQuickNodeCreate: (
+		substoryId: number,
+		pathId: number
+	) => Promise< StoryNode | undefined >;
 	/** Applies membership + linear connection order. */
-	onApply: ( pathId: number, orderedNodeIds: number[], removedNodeIds: number[] ) => Promise< void >;
+	onApply: (
+		pathId: number,
+		orderedNodeIds: number[],
+		removedNodeIds: number[]
+	) => Promise< void >;
 	onClose: () => void;
 }
 
@@ -27,7 +34,7 @@ function getDisplayTitle( node: StoryNode ): string {
  */
 function deriveOrder( members: StoryNode[], edges: StoryEdge[] ): number[] {
 	const memberIds = new Set( members.map( ( m ) => m.id ) );
-	const inDegree  = new Map( members.map( ( m ) => [ m.id, 0 ] ) );
+	const inDegree = new Map( members.map( ( m ) => [ m.id, 0 ] ) );
 	for ( const e of edges ) {
 		if ( memberIds.has( e.fromNodeId ) && memberIds.has( e.toNodeId ) ) {
 			inDegree.set( e.toNodeId, ( inDegree.get( e.toNodeId ) ?? 0 ) + 1 );
@@ -41,7 +48,9 @@ function deriveOrder( members: StoryNode[], edges: StoryEdge[] ): number[] {
 		visited.add( id );
 		order.push( id );
 		edges
-			.filter( ( e ) => e.fromNodeId === id && memberIds.has( e.toNodeId ) )
+			.filter(
+				( e ) => e.fromNodeId === id && memberIds.has( e.toNodeId )
+			)
 			.sort( ( a, b ) => a.sortOrder - b.sortOrder || a.id - b.id )
 			.forEach( ( e ) => visit( e.toNodeId ) );
 	}
@@ -54,9 +63,19 @@ function deriveOrder( members: StoryNode[], edges: StoryEdge[] ): number[] {
 	return order;
 }
 
-export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate, onApply, onClose }: Props ) {
+export default function PathNodesModal( {
+	path,
+	nodes,
+	edges,
+	onQuickNodeCreate,
+	onApply,
+	onClose,
+}: Props ) {
 	const [ orderedIds, setOrderedIds ] = useState< number[] >( () =>
-		deriveOrder( nodes.filter( ( n ) => n.pathId === path.id ), edges )
+		deriveOrder(
+			nodes.filter( ( n ) => n.pathId === path.id ),
+			edges
+		)
 	);
 	const [ initialIds ] = useState< number[] >( () => [ ...orderedIds ] );
 	const [ applying, setApplying ] = useState( false );
@@ -69,7 +88,10 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 		if ( target < 0 || target >= orderedIds.length ) return;
 		setOrderedIds( ( p ) => {
 			const next = [ ...p ];
-			[ next[ index ], next[ target ] ] = [ next[ target ], next[ index ] ];
+			[ next[ index ], next[ target ] ] = [
+				next[ target ],
+				next[ index ],
+			];
 			return next;
 		} );
 	}
@@ -87,7 +109,9 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 
 	async function handleApply() {
 		setApplying( true );
-		const removed = initialIds.filter( ( id ) => ! orderedIds.includes( id ) );
+		const removed = initialIds.filter(
+			( id ) => ! orderedIds.includes( id )
+		);
 		await onApply( path.id, orderedIds, removed );
 		setApplying( false );
 		onClose();
@@ -112,35 +136,61 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 
 			<div className="cns-path-nodes-list">
 				{ orderedIds.length === 0 && (
-					<p className="description">{ __( 'No nodes in this path yet.', 'clouds-and-spaceships' ) }</p>
+					<p className="description">
+						{ __(
+							'No nodes in this path yet.',
+							'clouds-and-spaceships'
+						) }
+					</p>
 				) }
 				{ orderedIds.map( ( id, index ) => {
 					const node = nodeMap.get( id );
 					if ( ! node ) return null;
 					return (
 						<div key={ id } className="cns-path-nodes-list__item">
-							<span className="cns-path-nodes-list__index">{ index + 1 }.</span>
+							<span className="cns-path-nodes-list__index">
+								{ index + 1 }.
+							</span>
 							<span
 								className="cns-node-swatch"
 								style={ {
-									background:   node.iconType === 'thumbnail' || node.iconType === 'icon' ? 'transparent' : node.iconColor,
-									borderRadius: node.iconType === 'square' || node.iconType === 'diamond' ? 2 : '50%',
-									transform:    node.iconType === 'diamond' ? 'rotate(45deg)' : undefined,
+									background:
+										node.iconType === 'thumbnail' ||
+										node.iconType === 'icon'
+											? 'transparent'
+											: node.iconColor,
+									borderRadius:
+										node.iconType === 'square' ||
+										node.iconType === 'diamond'
+											? 2
+											: '50%',
+									transform:
+										node.iconType === 'diamond'
+											? 'rotate(45deg)'
+											: undefined,
 									border: '1px solid rgba(0,0,0,0.3)',
 								} }
 							/>
-							<span className="cns-path-nodes-list__title">{ getDisplayTitle( node ) }</span>
+							<span className="cns-path-nodes-list__title">
+								{ getDisplayTitle( node ) }
+							</span>
 							<Button
 								size="small"
 								icon={ arrowUp }
-								label={ __( 'Move up', 'clouds-and-spaceships' ) }
+								label={ __(
+									'Move up',
+									'clouds-and-spaceships'
+								) }
 								disabled={ index === 0 }
 								onClick={ () => move( index, -1 ) }
 							/>
 							<Button
 								size="small"
 								icon={ arrowDown }
-								label={ __( 'Move down', 'clouds-and-spaceships' ) }
+								label={ __(
+									'Move down',
+									'clouds-and-spaceships'
+								) }
 								disabled={ index === orderedIds.length - 1 }
 								onClick={ () => move( index, 1 ) }
 							/>
@@ -148,8 +198,15 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 								size="small"
 								icon={ closeSmall }
 								isDestructive
-								label={ __( 'Remove from this path', 'clouds-and-spaceships' ) }
-								onClick={ () => setOrderedIds( ( p ) => p.filter( ( x ) => x !== id ) ) }
+								label={ __(
+									'Remove from this path',
+									'clouds-and-spaceships'
+								) }
+								onClick={ () =>
+									setOrderedIds( ( p ) =>
+										p.filter( ( x ) => x !== id )
+									)
+								}
 							/>
 						</div>
 					);
@@ -159,16 +216,20 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 			<div className="cns-modal-section">
 				<h3>{ __( 'Add existing node', 'clouds-and-spaceships' ) }</h3>
 				<ComboboxControl
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					label={ __( 'Add existing node', 'clouds-and-spaceships' ) }
 					hideLabelFromVision
-					placeholder={ __( 'Search this story’s nodes…', 'clouds-and-spaceships' ) }
+					placeholder={ __(
+						'Search this story’s nodes…',
+						'clouds-and-spaceships'
+					) }
 					value={ null }
 					options={ available.map( ( n ) => ( {
 						value: String( n.id ),
 						label: n.pathId
-							? `${ getDisplayTitle( n ) } (${ __( 'currently in another path', 'clouds-and-spaceships' ) })`
+							? `${ getDisplayTitle( n ) } (${ __(
+									'currently in another path',
+									'clouds-and-spaceships'
+							  ) })`
 							: getDisplayTitle( n ),
 					} ) ) }
 					onChange={ ( value ) => {
@@ -179,16 +240,28 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 			</div>
 
 			<div className="cns-modal-section">
-				<h3>{ __( 'Add substory as new node', 'clouds-and-spaceships' ) }</h3>
+				<h3>
+					{ __(
+						'Add substory as new node',
+						'clouds-and-spaceships'
+					) }
+				</h3>
 				<p className="description" style={ { marginBottom: 6 } }>
-					{ __( 'Creates a node at the canvas centre linked to the chosen substory — move it into place on the Canvas tab afterwards.', 'clouds-and-spaceships' ) }
+					{ __(
+						'Creates a node at the canvas centre linked to the chosen substory — move it into place on the Canvas tab afterwards.',
+						'clouds-and-spaceships'
+					) }
 				</p>
 				<SubstoryPicker
 					substoryId={ null }
 					substoryLabel=""
 					onChange={ ( id ) => handleAddSubstory( id ) }
 				/>
-				{ addingSubstory && <p className="description">{ __( 'Adding…', 'clouds-and-spaceships' ) }</p> }
+				{ addingSubstory && (
+					<p className="description">
+						{ __( 'Adding…', 'clouds-and-spaceships' ) }
+					</p>
+				) }
 			</div>
 
 			<Flex justify="flex-end" gap={ 2 } style={ { marginTop: 16 } }>
@@ -203,7 +276,10 @@ export default function PathNodesModal( { path, nodes, edges, onQuickNodeCreate,
 				>
 					{ applying
 						? __( 'Applying…', 'clouds-and-spaceships' )
-						: __( 'Apply Order & Connections', 'clouds-and-spaceships' ) }
+						: __(
+								'Apply Order & Connections',
+								'clouds-and-spaceships'
+						  ) }
 				</Button>
 			</Flex>
 		</Modal>

@@ -308,7 +308,7 @@ function drawArrowhead(
 
 // ── Layer: story nodes ────────────────────────────────────────────────────────
 
-const NODE_BASE_RADIUS = 14;
+export const NODE_BASE_RADIUS = 14;
 
 function drawNodes( ctx: CanvasRenderingContext2D, W: number, H: number, state: DrawState ): void {
 	for ( const node of state.nodes ) {

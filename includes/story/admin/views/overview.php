@@ -123,14 +123,14 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 
 			<span class="cns-settings-toolbar__group">
 				<label class="screen-reader-text" for="cns-story-search">
-					<?php esc_html_e('Search stories by name', 'clouds-and-spaceships'); ?>
+					<?php esc_html_e('Search stories', 'clouds-and-spaceships'); ?>
 				</label>
 				<input
 					type="search"
 					id="cns-story-search"
 					name="s"
 					value="<?php echo esc_attr($search); ?>"
-					placeholder="<?php esc_attr_e('Search stories by name…', 'clouds-and-spaceships'); ?>"
+					placeholder="<?php esc_attr_e('Search stories', 'clouds-and-spaceships'); ?>"
 				/>
 				<button type="submit" class="button"><?php esc_html_e('Search', 'clouds-and-spaceships'); ?></button>
 				<?php if ($search !== '') : ?>
@@ -299,7 +299,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e('Story', 'clouds-and-spaceships'); ?></h2>
 			<p class="description">
-				<?php esc_html_e('Stories laid over a map element, managed via the CNS story editor tab. Stories are displayed in branching path demarked by notes for each substory - event inside a story.', 'clouds-and-spaceships'); ?>
+				<?php esc_html_e('Stories are collections of story path laid over a map element, managed via the CNS story editor tab. Each note in a story path being a substory that can be made an indipendent post/article', 'clouds-and-spaceships'); ?>
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>

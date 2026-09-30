@@ -48,7 +48,6 @@ export default function ColorField( {
 
 	return (
 		<BaseControl
-			__nextHasNoMarginBottom
 			id={ id.current }
 			label={ label }
 			className="cns-color-field"

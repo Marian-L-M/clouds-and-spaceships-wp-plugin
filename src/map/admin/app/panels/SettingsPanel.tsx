@@ -388,7 +388,6 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 							style={ { marginBottom: '8px' } }
 						>
 							<BaseControl
-								__nextHasNoMarginBottom
 								id="cns-map-layers"
 								label={ __(
 									'Frontend layers',
@@ -400,20 +399,28 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 								) }
 							>
 								<CheckboxControl
-									__nextHasNoMarginBottom
-									label={ __( 'Show areas', 'clouds-and-spaceships' ) }
+									label={ __(
+										'Show areas',
+										'clouds-and-spaceships'
+									) }
 									checked={ settings.showAreas }
 									onChange={ ( v ) => set( 'showAreas', v ) }
 								/>
 								<CheckboxControl
-									__nextHasNoMarginBottom
-									label={ __( 'Show objects', 'clouds-and-spaceships' ) }
+									label={ __(
+										'Show objects',
+										'clouds-and-spaceships'
+									) }
 									checked={ settings.showObjects }
-									onChange={ ( v ) => set( 'showObjects', v ) }
+									onChange={ ( v ) =>
+										set( 'showObjects', v )
+									}
 								/>
 								<CheckboxControl
-									__nextHasNoMarginBottom
-									label={ __( 'Show labels', 'clouds-and-spaceships' ) }
+									label={ __(
+										'Show labels',
+										'clouds-and-spaceships'
+									) }
 									checked={ settings.showLabels }
 									onChange={ ( v ) => set( 'showLabels', v ) }
 								/>

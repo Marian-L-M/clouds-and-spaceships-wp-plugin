@@ -2414,7 +2414,6 @@ function AreaForm({
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextControl, {
             __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'clouds-and-spaceships'),
             value: formData.title,
             onChange: v => set('title', v)
@@ -2463,7 +2462,6 @@ function AreaForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Stroke Width (px)', 'clouds-and-spaceships'),
             min: 1,
             max: 10,
@@ -2482,7 +2480,6 @@ function AreaForm({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ToggleControl, {
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hide label on canvas', 'clouds-and-spaceships'),
             checked: formData.style_label_hidden,
             onChange: v => set('style_label_hidden', v)
@@ -2490,8 +2487,6 @@ function AreaForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-            __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Family', 'clouds-and-spaceships'),
             value: formData.style_label_font_family,
             options: _shared_labelFonts__WEBPACK_IMPORTED_MODULE_3__.LABEL_FONTS,
@@ -2500,7 +2495,6 @@ function AreaForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Size (px)', 'clouds-and-spaceships'),
             min: 6,
             max: 96,
@@ -2641,8 +2635,6 @@ function HierarchyRegionForm({
           child_map_label: item ? item.title : ''
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-        __next40pxDefaultSize: true,
-        __nextHasNoMarginBottom: true,
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Shape', 'clouds-and-spaceships'),
         value: formData.shape_type,
         options: _choices__WEBPACK_IMPORTED_MODULE_5__.SHAPE_TYPES,
@@ -2661,7 +2653,6 @@ function HierarchyRegionForm({
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextControl, {
             __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'clouds-and-spaceships'),
             value: formData.title_override,
             placeholder: formData.child_map_label || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Child map title', 'clouds-and-spaceships'),
@@ -2670,7 +2661,6 @@ function HierarchyRegionForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextareaControl, {
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Description', 'clouds-and-spaceships'),
             rows: 3,
             value: formData.description_override,
@@ -2702,7 +2692,6 @@ function HierarchyRegionForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Stroke Width (px)', 'clouds-and-spaceships'),
             min: 1,
             max: 10,
@@ -2721,7 +2710,6 @@ function HierarchyRegionForm({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ToggleControl, {
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hide label on canvas', 'clouds-and-spaceships'),
             checked: formData.style_label_hidden,
             onChange: v => set('style_label_hidden', v)
@@ -2729,8 +2717,6 @@ function HierarchyRegionForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-            __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Family', 'clouds-and-spaceships'),
             value: formData.style_label_font_family,
             options: _shared_labelFonts__WEBPACK_IMPORTED_MODULE_4__.LABEL_FONTS,
@@ -2739,7 +2725,6 @@ function HierarchyRegionForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Size (px)', 'clouds-and-spaceships'),
             min: 6,
             max: 96,
@@ -2861,7 +2846,6 @@ function LabelForm({
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.TextControl, {
             __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text', 'clouds-and-spaceships'),
             value: formData.text,
             onChange: v => set('text', v)
@@ -2869,7 +2853,6 @@ function LabelForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Label Time', 'clouds-and-spaceships'),
             value: formData.object_time,
             step: 1,
@@ -2901,7 +2884,6 @@ function LabelForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('X (px)', 'clouds-and-spaceships'),
             value: formData.x,
             step: 1,
@@ -2910,7 +2892,6 @@ function LabelForm({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-            __next40pxDefaultSize: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Y (px)', 'clouds-and-spaceships'),
             value: formData.y,
             step: 1,
@@ -2920,7 +2901,6 @@ function LabelForm({
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "cns-grid__group",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-              __next40pxDefaultSize: true,
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Label Offset X (px)', 'clouds-and-spaceships'),
               value: formData.offset_x,
               step: 1,
@@ -2929,7 +2909,6 @@ function LabelForm({
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "cns-grid__group",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-              __next40pxDefaultSize: true,
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Label Offset Y (px)', 'clouds-and-spaceships'),
               value: formData.offset_y,
               step: 1,
@@ -2956,8 +2935,6 @@ function LabelForm({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "cns-grid__group cns-grid__span-full",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RangeControl, {
-            __next40pxDefaultSize: true,
-            __nextHasNoMarginBottom: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Size (px)', 'clouds-and-spaceships'),
             min: 8,
             max: 64,
@@ -5511,22 +5488,18 @@ function SettingsPanel({
               marginBottom: '8px'
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.BaseControl, {
-              __nextHasNoMarginBottom: true,
               id: "cns-map-layers",
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Frontend layers', 'clouds-and-spaceships'),
               help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Which layers the map shows to visitors. Visitors can toggle them again on the map itself; this sets where they start.', 'clouds-and-spaceships'),
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
-                __nextHasNoMarginBottom: true,
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show areas', 'clouds-and-spaceships'),
                 checked: settings.showAreas,
                 onChange: v => set('showAreas', v)
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
-                __nextHasNoMarginBottom: true,
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show objects', 'clouds-and-spaceships'),
                 checked: settings.showObjects,
                 onChange: v => set('showObjects', v)
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
-                __nextHasNoMarginBottom: true,
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show labels', 'clouds-and-spaceships'),
                 checked: settings.showLabels,
                 onChange: v => set('showLabels', v)
@@ -5758,8 +5731,6 @@ function PostSearch({
     }, 350);
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ComboboxControl, {
-    __next40pxDefaultSize: true,
-    __nextHasNoMarginBottom: true,
     label: label,
     help: help,
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Type to search…', 'clouds-and-spaceships'),
@@ -6713,7 +6684,6 @@ function ColorField({
   const alphaPct = alphaByte < 255 ? Math.round(alphaByte / 255 * 100) : null;
   const rgbText = isHex8 ? value.slice(0, 7) : value;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
-    __nextHasNoMarginBottom: true,
     id: id.current,
     label: label,
     className: "cns-color-field",
@@ -6820,8 +6790,6 @@ function EditorHeader({
         target: "_blank",
         children: viewLabel
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-        __next40pxDefaultSize: true,
-        __nextHasNoMarginBottom: true,
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Post status', 'clouds-and-spaceships'),
         hideLabelFromVision: true,
         value: status,

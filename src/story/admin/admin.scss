@@ -201,6 +201,38 @@ $bp-spc: 1200px;
 	}
 }
 
+// ── Node modal: pinned action bar ────────────────────────────────────────────
+// Cancel/Save stay visible while the form scrolls.
+// .components-modal__content is already the scroll box <Modal> set up, so the
+// footer just sticks to the bottom of it. Deliberately nothing here changes
+// that box's display, overflow or height: rebuilding it as a flex/grid column
+// broke the editor once, and sticky leaves WordPress's own layout intact, so
+// the worst case is a footer that scrolls rather than a modal that misbehaves.
+// padding-bottom is the single override, so the bar sits flush on the bottom
+// edge instead of floating above the box's own bottom padding.
+
+.cns-node-modal {
+
+	.components-modal__content {
+		padding-bottom: 0;
+	}
+
+	// Group 1 — the form. No rules needed; it scrolls with the box above.
+
+	// Group 2 — the buttons.
+	&__footer {
+		position: sticky;
+		bottom: 0;
+		z-index: 1;
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+		padding: 16px 0;
+		border-top: 1px solid #dbdbdb;
+		background: #fff;
+	}
+}
+
 // (Radio toggles, icon grids, and post-search dropdowns now come from
 // @wordpress/components — RadioControl / ComboboxControl.)
 

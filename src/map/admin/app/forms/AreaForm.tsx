@@ -53,7 +53,6 @@ export default function AreaForm( {
 					<div className="cns-grid__group cns-grid__span-full">
 						<TextControl
 							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 							label={ __( 'Title', 'clouds-and-spaceships' ) }
 							value={ formData.title }
 							onChange={ ( v ) => set( 'title', v ) }
@@ -122,7 +121,6 @@ export default function AreaForm( {
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
 							label={ __(
 								'Stroke Width (px)',
 								'clouds-and-spaceships'
@@ -151,7 +149,6 @@ export default function AreaForm( {
 				<div className="cns-grid cns-grid__12">
 					<div className="cns-grid__group cns-grid__span-full">
 						<ToggleControl
-							__nextHasNoMarginBottom
 							label={ __(
 								'Hide label on canvas',
 								'clouds-and-spaceships'
@@ -162,8 +159,6 @@ export default function AreaForm( {
 					</div>
 					<div className="cns-grid__group">
 						<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 							label={ __(
 								'Font Family',
 								'clouds-and-spaceships'
@@ -177,7 +172,6 @@ export default function AreaForm( {
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
 							label={ __(
 								'Font Size (px)',
 								'clouds-and-spaceships'

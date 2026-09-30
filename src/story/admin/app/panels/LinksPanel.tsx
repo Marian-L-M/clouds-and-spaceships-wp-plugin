@@ -6,28 +6,33 @@ import { mapApiFetch } from '../../utils';
 import type { StoryLink, LinkType } from '../../../types';
 
 interface LinkableItem {
-	id:    number;
+	id: number;
 	title: string;
-	type:  LinkType;
+	type: LinkType;
 }
 
 interface Props {
-	storyId:      number;
-	links:        StoryLink[];
-	onLinkAdd:    ( linkType: string, linkId: number ) => void;
+	storyId: number;
+	links: StoryLink[];
+	onLinkAdd: ( linkType: string, linkId: number ) => void;
 	onLinkDelete: ( linkId: number ) => void;
 }
 
 const LINK_TYPE_LABELS: Record< LinkType, string > = {
 	map_object: 'Map Object',
-	map_area:   'Map Area',
-	hierarchy:  'Hierarchy Region',
+	map_area: 'Map Area',
+	hierarchy: 'Hierarchy Region',
 };
 
-export default function LinksPanel( { storyId: _storyId, links, onLinkAdd, onLinkDelete }: Props ) {
-	const [ search,   setSearch   ] = useState( '' );
-	const [ results,  setResults  ] = useState< LinkableItem[] >( [] );
-	const [ loading,  setLoading  ] = useState( false );
+export default function LinksPanel( {
+	storyId: _storyId,
+	links,
+	onLinkAdd,
+	onLinkDelete,
+}: Props ) {
+	const [ search, setSearch ] = useState( '' );
+	const [ results, setResults ] = useState< LinkableItem[] >( [] );
+	const [ loading, setLoading ] = useState( false );
 	const [ linkType, setLinkType ] = useState< LinkType >( 'map_object' );
 
 	async function handleSearch() {
@@ -36,14 +41,27 @@ export default function LinksPanel( { storyId: _storyId, links, onLinkAdd, onLin
 			// Query map-suite's REST API for linkable entities.
 			let path = '';
 			if ( linkType === 'map_object' ) {
-				path = '/objects?per_page=50&search=' + encodeURIComponent( search );
+				path =
+					'/objects?per_page=50&search=' +
+					encodeURIComponent( search );
 			} else if ( linkType === 'map_area' ) {
-				path = '/areas?per_page=50&search=' + encodeURIComponent( search );
+				path =
+					'/areas?per_page=50&search=' + encodeURIComponent( search );
 			} else {
-				path = '/hierarchy?per_page=50&search=' + encodeURIComponent( search );
+				path =
+					'/hierarchy?per_page=50&search=' +
+					encodeURIComponent( search );
 			}
-			const data = await mapApiFetch< Array< { id: number; title: string } > >( 'GET', path );
-			setResults( data.map( ( item ) => ( { id: item.id, title: item.title, type: linkType } ) ) );
+			const data = await mapApiFetch<
+				Array< { id: number; title: string } >
+			>( 'GET', path );
+			setResults(
+				data.map( ( item ) => ( {
+					id: item.id,
+					title: item.title,
+					type: linkType,
+				} ) )
+			);
 		} catch {
 			/* search failures leave the results empty, as before */
 		} finally {
@@ -51,7 +69,11 @@ export default function LinksPanel( { storyId: _storyId, links, onLinkAdd, onLin
 		}
 	}
 
-	const linkedIds = new Set( links.filter( ( l ) => l.linkType === linkType ).map( ( l ) => l.linkId ) );
+	const linkedIds = new Set(
+		links
+			.filter( ( l ) => l.linkType === linkType )
+			.map( ( l ) => l.linkId )
+	);
 
 	return (
 		<div className="cns-panel cns-links-panel">
@@ -65,28 +87,52 @@ export default function LinksPanel( { storyId: _storyId, links, onLinkAdd, onLin
 
 			{ links.length > 0 && (
 				<>
-					<h3>{ __( 'Linked Entities', 'clouds-and-spaceships' ) }</h3>
+					<h3>
+						{ __( 'Linked Entities', 'clouds-and-spaceships' ) }
+					</h3>
 					<table className="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
-								<th>{ __( 'Type', 'clouds-and-spaceships' ) }</th>
-								<th>{ __( 'Entity', 'clouds-and-spaceships' ) }</th>
-								<th>{ __( 'Actions', 'clouds-and-spaceships' ) }</th>
+								<th>
+									{ __( 'Type', 'clouds-and-spaceships' ) }
+								</th>
+								<th>
+									{ __( 'Entity', 'clouds-and-spaceships' ) }
+								</th>
+								<th>
+									{ __( 'Actions', 'clouds-and-spaceships' ) }
+								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{ links.map( ( storyLink ) => (
 								<tr key={ storyLink.id }>
-									<td><span className="cns-badge">{ LINK_TYPE_LABELS[ storyLink.linkType ] }</span></td>
-									<td>{ storyLink.linkTitle || `#${ storyLink.linkId }` }</td>
+									<td>
+										<span className="cns-badge">
+											{
+												LINK_TYPE_LABELS[
+													storyLink.linkType
+												]
+											}
+										</span>
+									</td>
+									<td>
+										{ storyLink.linkTitle ||
+											`#${ storyLink.linkId }` }
+									</td>
 									<td>
 										<Button
 											size="small"
 											icon={ linkOff }
 											isDestructive
-											onClick={ () => onLinkDelete( storyLink.id ) }
+											onClick={ () =>
+												onLinkDelete( storyLink.id )
+											}
 										>
-											{ __( 'Unlink', 'clouds-and-spaceships' ) }
+											{ __(
+												'Unlink',
+												'clouds-and-spaceships'
+											) }
 										</Button>
 									</td>
 								</tr>
@@ -96,20 +142,35 @@ export default function LinksPanel( { storyId: _storyId, links, onLinkAdd, onLin
 				</>
 			) }
 
-			<h3 style={ { marginTop: 24 } }>{ __( 'Add Link', 'clouds-and-spaceships' ) }</h3>
+			<h3 style={ { marginTop: 24 } }>
+				{ __( 'Add Link', 'clouds-and-spaceships' ) }
+			</h3>
 			<div className="cns-row-group">
 				<SelectControl
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					label={ __( 'Entity type', 'clouds-and-spaceships' ) }
 					hideLabelFromVision
 					value={ linkType }
 					options={ [
-						{ value: 'map_object', label: __( 'Map Object', 'clouds-and-spaceships' ) },
-						{ value: 'map_area',   label: __( 'Map Area', 'clouds-and-spaceships' ) },
-						{ value: 'hierarchy',  label: __( 'Hierarchy Region', 'clouds-and-spaceships' ) },
+						{
+							value: 'map_object',
+							label: __( 'Map Object', 'clouds-and-spaceships' ),
+						},
+						{
+							value: 'map_area',
+							label: __( 'Map Area', 'clouds-and-spaceships' ),
+						},
+						{
+							value: 'hierarchy',
+							label: __(
+								'Hierarchy Region',
+								'clouds-and-spaceships'
+							),
+						},
 					] }
-					onChange={ ( v ) => { setLinkType( v as LinkType ); setResults( [] ); } }
+					onChange={ ( v ) => {
+						setLinkType( v as LinkType );
+						setResults( [] );
+					} }
 				/>
 				<SearchControl
 					__nextHasNoMarginBottom
@@ -140,13 +201,17 @@ export default function LinksPanel( { storyId: _storyId, links, onLinkAdd, onLin
 						<li key={ item.id } className="cns-link-result">
 							<span>{ item.title || `#${ item.id }` }</span>
 							{ linkedIds.has( item.id ) ? (
-								<span className="cns-badge">{ __( 'Linked', 'clouds-and-spaceships' ) }</span>
+								<span className="cns-badge">
+									{ __( 'Linked', 'clouds-and-spaceships' ) }
+								</span>
 							) : (
 								<Button
 									size="small"
 									variant="primary"
 									icon={ link }
-									onClick={ () => onLinkAdd( linkType, item.id ) }
+									onClick={ () =>
+										onLinkAdd( linkType, item.id )
+									}
 								>
 									{ __( 'Link', 'clouds-and-spaceships' ) }
 								</Button>

@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 export type PostStatus = 'draft' | 'publish' | 'private';
 
 const STATUS_OPTIONS: { value: PostStatus; label: string }[] = [
-	{ value: 'draft',   label: 'Draft' },
+	{ value: 'draft', label: 'Draft' },
 	{ value: 'publish', label: 'Published' },
 	{ value: 'private', label: 'Private' },
 ];
@@ -61,8 +61,6 @@ export default function EditorHeader( {
 					</Button>
 				) }
 				<SelectControl
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					label={ __( 'Post status', 'clouds-and-spaceships' ) }
 					hideLabelFromVision
 					value={ status }

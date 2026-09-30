@@ -26,7 +26,7 @@ A canvas map editor with its own admin screen. Place objects, draw areas, add la
 
 **Wiki**
 
-A hierarchical wiki post type, so a child article's permalink carries its parent path.
+Wiki articles nest inside one another, so a child article's URL carries its parent's path.
 
 * **Infobox**, **Infobox Group** and **Infobox Row** blocks build a structured sidebar box. Its display mode either collapses groups on mobile or keeps everything expanded, and each group can override that.
 * **Wiki Card** and **Wiki Contents** render a responsive card grid, filled by hand or automatically from your newest articles.
@@ -40,9 +40,9 @@ A canvas editor for branching stories laid over one of your maps.
 * The linked map renders underneath in full — its areas, objects, labels and infoboxes all stay interactive — while story elements draw on top and take click priority.
 * The same zoom, fullscreen and layer toggles as the map block, inheriting the linked map's control colours.
 
-**No external services**
+**Your world stays on your site**
 
-The plugin makes no outbound HTTP requests. Nothing is sent anywhere, no remote APIs are called, no analytics or telemetry are collected, and no external scripts or fonts are loaded. Everything runs on your own site.
+Clouds and Spaceships never sends anything anywhere. There is no account to create and no service to connect, no tracking and no analytics, and nothing is loaded from another server. It uses no external services at all: everything you write and draw stays in your own WordPress site.
 
 == Installation ==
 
@@ -50,13 +50,13 @@ The plugin makes no outbound HTTP requests. Nothing is sent anywhere, no remote 
 2. Activate it through the Plugins screen.
 3. Configure everything under the **CNS** menu: Wiki, Glossary, Maps, Icons, Stories, Substories and Info.
 
-If you previously ran the separate CNS Wiki Suite, CNS Map Suite or CNS Story Suite plugins, deactivate all three before activating this one — they define the same functions and post types. Your existing content carries over: block names, REST routes, options, capabilities and database tables are unchanged. The wiki, glossary and map post types are renamed on activation (to `cns_wiki`, `cns_glossary` and `cns_map`) so they carry the plugin's own prefix; your published URLs stay the same. Back up before upgrading, as with any database change.
+If you ever ran the earlier CNS Wiki Suite, CNS Map Suite or CNS Story Suite plugins, deactivate all three before activating this one.
 
 == Frequently Asked Questions ==
 
 = Do I have to use all three toolsets? =
 
-You can ignore any of them — nothing appears on your site until you create a map, a story or a wiki article. The wiki also has an explicit enable toggle on its settings tab, which unregisters its post type and archive when switched off; existing articles stay in the database and come back when you switch it on again. The glossary is a separate toggle and starts off.
+You can ignore any of them — nothing appears on your site until you create a map, a story or a wiki article. The wiki also has an on/off switch on its settings tab: turning it off hides wiki articles and their listing from your site, while the articles themselves stay put and reappear when you switch it back on. The glossary is a separate switch, and it starts off.
 
 = Does a story need a map? =
 
@@ -68,7 +68,7 @@ Yes. The single templates for maps, wiki articles and stories are registered by 
 
 = Does the plugin send any data anywhere? =
 
-No. It makes no outbound HTTP requests at all.
+No. Nothing you create is sent off your site, and the plugin contacts no outside service of any kind.
 
 = What happens to my content if I uninstall? =
 
@@ -96,8 +96,4 @@ First release. If you use CNS Wiki Suite, CNS Map Suite or CNS Story Suite, deac
 == Changelog ==
 
 = 0.1.0 =
-* Initial release, merging CNS Wiki Suite, CNS Map Suite and CNS Story Suite into one plugin.
-* Post types now carry the plugin's own prefix (`cns_wiki`, `cns_glossary`, `cns_map`), migrated automatically on activation with existing URLs preserved.
-* Map objects gained display modes (circle, square, diamond, icon, text) plus border colour and thickness.
-* Stories now render their linked map in full on the front end, with story elements on top and taking click priority.
-* Map and story blocks gained visitor toggles for areas, objects and labels.
+* Initial release.

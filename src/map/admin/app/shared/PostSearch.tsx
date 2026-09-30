@@ -79,8 +79,6 @@ export default function PostSearch( {
 
 	return (
 		<ComboboxControl
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 			label={ label }
 			help={ help }
 			placeholder={ __( 'Type to search…', 'clouds-and-spaceships' ) }

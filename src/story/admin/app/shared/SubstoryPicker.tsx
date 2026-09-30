@@ -5,16 +5,20 @@ import { apiFetch } from '../../utils';
 import type { SubstorySearchResult } from '../../../types';
 
 interface Props {
-	substoryId:    number | null;
+	substoryId: number | null;
 	substoryLabel: string;
-	onChange:      ( id: number | null, label: string ) => void;
+	onChange: ( id: number | null, label: string ) => void;
 }
 
 /**
  * Async substory picker on top of ComboboxControl: typing queries the
  * plugin's /substories endpoint (debounced); clearing resets the link.
  */
-export default function SubstoryPicker( { substoryId, substoryLabel, onChange }: Props ) {
+export default function SubstoryPicker( {
+	substoryId,
+	substoryLabel,
+	onChange,
+}: Props ) {
 	const [ results, setResults ] = useState< SubstorySearchResult[] >( [] );
 	const timer = useRef< number | null >( null );
 
@@ -51,7 +55,9 @@ export default function SubstoryPicker( { substoryId, substoryLabel, onChange }:
 			try {
 				const data = await apiFetch< SubstorySearchResult[] >(
 					'GET',
-					`/substories?search=${ encodeURIComponent( input ) }&per_page=20`
+					`/substories?search=${ encodeURIComponent(
+						input
+					) }&per_page=20`
 				);
 				if ( Array.isArray( data ) ) setResults( data );
 			} catch {
@@ -62,8 +68,6 @@ export default function SubstoryPicker( { substoryId, substoryLabel, onChange }:
 
 	return (
 		<ComboboxControl
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 			label={ __( 'Substory post', 'clouds-and-spaceships' ) }
 			hideLabelFromVision
 			placeholder={ __( 'Search substories…', 'clouds-and-spaceships' ) }

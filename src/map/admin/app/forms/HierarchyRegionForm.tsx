@@ -10,7 +10,11 @@ import ColorField from '../../../../shared/admin/ColorField';
 import PostSearch from '../shared/PostSearch';
 import { LABEL_FONTS } from '../shared/labelFonts';
 import { SHAPE_TYPES, SHAPE_TYPE_DEFAULT } from '../../../choices';
-import type { HierarchyFormData, HierarchyRegion, ShapeType } from '../../../types';
+import type {
+	HierarchyFormData,
+	HierarchyRegion,
+	ShapeType,
+} from '../../../types';
 
 interface Props {
 	formData: HierarchyFormData;
@@ -81,8 +85,16 @@ function HoverCardPreview( {
 	);
 }
 
-export default function HierarchyRegionForm( { formData, onChange, onShapeTypeChange, region }: Props ) {
-	function set<K extends keyof HierarchyFormData>( key: K, val: HierarchyFormData[ K ] ) {
+export default function HierarchyRegionForm( {
+	formData,
+	onChange,
+	onShapeTypeChange,
+	region,
+}: Props ) {
+	function set< K extends keyof HierarchyFormData >(
+		key: K,
+		val: HierarchyFormData[ K ]
+	) {
 		onChange( { ...formData, [ key ]: val } );
 	}
 
@@ -101,15 +113,15 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 					subtype="cns_map"
 					selectedId={ formData.child_map_id }
 					selectedLabel={ formData.child_map_label }
-					onChange={ ( item ) => onChange( {
-						...formData,
-						child_map_id:    item ? item.id   : 0,
-						child_map_label: item ? item.title : '',
-					} ) }
+					onChange={ ( item ) =>
+						onChange( {
+							...formData,
+							child_map_id: item ? item.id : 0,
+							child_map_label: item ? item.title : '',
+						} )
+					}
 				/>
 				<SelectControl
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					label={ __( 'Shape', 'clouds-and-spaceships' ) }
 					value={ formData.shape_type }
 					options={ SHAPE_TYPES }
@@ -129,7 +141,6 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 					<div className="cns-grid__group cns-grid__span-full">
 						<TextControl
 							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 							label={ __( 'Title', 'clouds-and-spaceships' ) }
 							value={ formData.title_override }
 							placeholder={
@@ -141,12 +152,19 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 					</div>
 					<div className="cns-grid__group cns-grid__span-full">
 						<TextareaControl
-							__nextHasNoMarginBottom
-							label={ __( 'Description', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Description',
+								'clouds-and-spaceships'
+							) }
 							rows={ 3 }
 							value={ formData.description_override }
-							placeholder={ __( 'Child map excerpt', 'clouds-and-spaceships' ) }
-							onChange={ ( v ) => set( 'description_override', v ) }
+							placeholder={ __(
+								'Child map excerpt',
+								'clouds-and-spaceships'
+							) }
+							onChange={ ( v ) =>
+								set( 'description_override', v )
+							}
 						/>
 					</div>
 				</div>
@@ -157,28 +175,39 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 				<div className="cns-grid cns-grid__12">
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Fill Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Fill Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_fill }
 							onChange={ ( v ) => set( 'style_fill', v ) }
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Stroke Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Stroke Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_stroke }
 							onChange={ ( v ) => set( 'style_stroke', v ) }
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
-							label={ __( 'Stroke Width (px)', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Stroke Width (px)',
+								'clouds-and-spaceships'
+							) }
 							min={ 1 }
 							max={ 10 }
 							step={ 1 }
 							value={ formData.style_stroke_width }
 							onChange={ ( v ) =>
-								set( 'style_stroke_width', parseInt( v ?? '', 10 ) || 2 )
+								set(
+									'style_stroke_width',
+									parseInt( v ?? '', 10 ) || 2
+								)
 							}
 						/>
 					</div>
@@ -194,38 +223,51 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 				<div className="cns-grid cns-grid__12">
 					<div className="cns-grid__group cns-grid__span-full">
 						<ToggleControl
-							__nextHasNoMarginBottom
-							label={ __( 'Hide label on canvas', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Hide label on canvas',
+								'clouds-and-spaceships'
+							) }
 							checked={ formData.style_label_hidden }
 							onChange={ ( v ) => set( 'style_label_hidden', v ) }
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							label={ __( 'Font Family', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Font Family',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_label_font_family }
 							options={ LABEL_FONTS }
-							onChange={ ( v ) => set( 'style_label_font_family', v ) }
+							onChange={ ( v ) =>
+								set( 'style_label_font_family', v )
+							}
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
-							label={ __( 'Font Size (px)', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Font Size (px)',
+								'clouds-and-spaceships'
+							) }
 							min={ 6 }
 							max={ 96 }
 							step={ 1 }
 							value={ formData.style_label_font_size }
 							onChange={ ( v ) =>
-								set( 'style_label_font_size', parseInt( v ?? '', 10 ) || 12 )
+								set(
+									'style_label_font_size',
+									parseInt( v ?? '', 10 ) || 12
+								)
 							}
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Font Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Font Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_label_color }
 							onChange={ ( v ) => set( 'style_label_color', v ) }
 						/>
@@ -242,21 +284,30 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 				<div className="cns-grid cns-grid__12">
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Background Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Background Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_tip_bg }
 							onChange={ ( v ) => set( 'style_tip_bg', v ) }
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Border Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Border Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_tip_border }
 							onChange={ ( v ) => set( 'style_tip_border', v ) }
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<ColorField
-							label={ __( 'Text Color', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Text Color',
+								'clouds-and-spaceships'
+							) }
 							value={ formData.style_tip_text }
 							onChange={ ( v ) => set( 'style_tip_text', v ) }
 						/>
@@ -268,23 +319,25 @@ export default function HierarchyRegionForm( { formData, onChange, onShapeTypeCh
 	);
 }
 
-export function defaultHierarchyFormData( region?: HierarchyRegion ): HierarchyFormData {
+export function defaultHierarchyFormData(
+	region?: HierarchyRegion
+): HierarchyFormData {
 	const styles = region?.canvas_styles || {};
 	return {
-		child_map_id:         region?.child_map_id         || 0,
-		child_map_label:      region?.child_map_title       || '',
-		shape_type:           region?.shape_type            || SHAPE_TYPE_DEFAULT,
-		title_override:       region?.title_override        || '',
-		description_override: region?.description_override  || '',
-		style_fill:              styles.fill            || '#e8a02040',
-		style_stroke:            styles.stroke          || '#e8a020',
-		style_stroke_width:      styles.strokeWidth     || 2,
-		style_label_hidden:      styles.labelHidden     ?? false,
+		child_map_id: region?.child_map_id || 0,
+		child_map_label: region?.child_map_title || '',
+		shape_type: region?.shape_type || SHAPE_TYPE_DEFAULT,
+		title_override: region?.title_override || '',
+		description_override: region?.description_override || '',
+		style_fill: styles.fill || '#e8a02040',
+		style_stroke: styles.stroke || '#e8a020',
+		style_stroke_width: styles.strokeWidth || 2,
+		style_label_hidden: styles.labelHidden ?? false,
 		style_label_font_family: styles.labelFontFamily || 'sans-serif',
-		style_label_font_size:   styles.labelFontSize   || 12,
-		style_label_color:       styles.labelColor      || '#ffffff',
-		style_tip_bg:            styles.tipBgColor      || '#000000d1',
-		style_tip_border:        styles.tipBorderColor  || '#ffffff26',
-		style_tip_text:          styles.tipTextColor    || '#ffffff',
+		style_label_font_size: styles.labelFontSize || 12,
+		style_label_color: styles.labelColor || '#ffffff',
+		style_tip_bg: styles.tipBgColor || '#000000d1',
+		style_tip_border: styles.tipBorderColor || '#ffffff26',
+		style_tip_text: styles.tipTextColor || '#ffffff',
 	};
 }

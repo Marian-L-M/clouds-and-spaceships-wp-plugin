@@ -12,11 +12,11 @@ import MediaSelectButton from './MediaSelectButton';
 import type { MarkerType } from '../../../types';
 
 interface MarkerValues {
-	markerType:        MarkerType;
-	markerColor:       string;
-	markerSize:        number;
-	markerIconId:      number | null;
-	markerIconUrl:     string;
+	markerType: MarkerType;
+	markerColor: string;
+	markerSize: number;
+	markerIconId: number | null;
+	markerIconUrl: string;
 	markerIconOffsetX: number;
 	markerIconOffsetY: number;
 }
@@ -26,17 +26,21 @@ interface Props extends MarkerValues {
 }
 
 const PRESETS = [
-	{ label: 'Top',    x: 0,   y: -30 },
-	{ label: 'Bottom', x: 0,   y:  30 },
-	{ label: 'Left',   x: -30, y:   0 },
-	{ label: 'Right',  x:  30, y:   0 },
-	{ label: 'Center', x: 0,   y:   0 },
+	{ label: 'Top', x: 0, y: -30 },
+	{ label: 'Bottom', x: 0, y: 30 },
+	{ label: 'Left', x: -30, y: 0 },
+	{ label: 'Right', x: 30, y: 0 },
+	{ label: 'Center', x: 0, y: 0 },
 ] as const;
 
 export default function MarkerControls( {
-	markerType, markerColor, markerSize,
-	markerIconId, markerIconUrl,
-	markerIconOffsetX, markerIconOffsetY,
+	markerType,
+	markerColor,
+	markerSize,
+	markerIconId,
+	markerIconUrl,
+	markerIconOffsetX,
+	markerIconOffsetY,
 	onChange,
 }: Props ) {
 	return (
@@ -46,10 +50,21 @@ export default function MarkerControls( {
 					label={ __( 'Type', 'clouds-and-spaceships' ) }
 					selected={ markerType }
 					options={ [
-						{ label: __( 'Ring outline', 'clouds-and-spaceships' ), value: 'ring' },
-						{ label: __( 'Icon image', 'clouds-and-spaceships' ), value: 'icon' },
+						{
+							label: __(
+								'Ring outline',
+								'clouds-and-spaceships'
+							),
+							value: 'ring',
+						},
+						{
+							label: __( 'Icon image', 'clouds-and-spaceships' ),
+							value: 'icon',
+						},
 					] }
-					onChange={ ( v ) => onChange( { markerType: v as MarkerType } ) }
+					onChange={ ( v ) =>
+						onChange( { markerType: v as MarkerType } )
+					}
 				/>
 			</div>
 
@@ -62,14 +77,14 @@ export default function MarkerControls( {
 			</div>
 			<div className="cns-grid__group">
 				<RangeControl
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					label={
 						markerType === 'ring'
 							? __( 'Ring size (px)', 'clouds-and-spaceships' )
 							: __( 'Icon size (px)', 'clouds-and-spaceships' )
 					}
-					min={ 1 } max={ 30 } step={ 1 }
+					min={ 1 }
+					max={ 30 }
+					step={ 1 }
 					withInputField
 					value={ markerSize }
 					onChange={ ( v ) => onChange( { markerSize: v ?? 5 } ) }
@@ -80,38 +95,66 @@ export default function MarkerControls( {
 				<>
 					<div className="cns-grid__group cns-grid__span-full">
 						<BaseControl
-							__nextHasNoMarginBottom
 							id="cns-marker-icon"
-							label={ __( 'Icon image', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Icon image',
+								'clouds-and-spaceships'
+							) }
 						>
 							<div className="cns-actions-row">
 								{ markerIconUrl && (
 									<img
 										src={ markerIconUrl }
 										alt=""
-										style={ { width: 32, height: 32, objectFit: 'contain', border: '1px solid #ddd', borderRadius: 4 } }
+										style={ {
+											width: 32,
+											height: 32,
+											objectFit: 'contain',
+											border: '1px solid #ddd',
+											borderRadius: 4,
+										} }
 									/>
 								) }
 								<MediaSelectButton
-									title={ __( 'Select Marker Icon', 'clouds-and-spaceships' ) }
+									title={ __(
+										'Select Marker Icon',
+										'clouds-and-spaceships'
+									) }
 									value={ markerIconId }
 									allowedTypes={ [ 'image' ] }
 									icon={ imageIcon }
 									onSelect={ ( att ) =>
-										onChange( { markerIconId: att.id, markerIconUrl: att.url } )
+										onChange( {
+											markerIconId: att.id,
+											markerIconUrl: att.url,
+										} )
 									}
 								>
 									{ markerIconId
-										? __( 'Change icon', 'clouds-and-spaceships' )
-										: __( 'Select icon', 'clouds-and-spaceships' ) }
+										? __(
+												'Change icon',
+												'clouds-and-spaceships'
+										  )
+										: __(
+												'Select icon',
+												'clouds-and-spaceships'
+										  ) }
 								</MediaSelectButton>
 								{ markerIconId && (
 									<Button
 										variant="tertiary"
 										isDestructive
 										icon={ trash }
-										label={ __( 'Remove icon', 'clouds-and-spaceships' ) }
-										onClick={ () => onChange( { markerIconId: null, markerIconUrl: '' } ) }
+										label={ __(
+											'Remove icon',
+											'clouds-and-spaceships'
+										) }
+										onClick={ () =>
+											onChange( {
+												markerIconId: null,
+												markerIconUrl: '',
+											} )
+										}
 									/>
 								) }
 							</div>
@@ -120,9 +163,11 @@ export default function MarkerControls( {
 
 					<div className="cns-grid__group cns-grid__span-full">
 						<BaseControl
-							__nextHasNoMarginBottom
 							id="cns-marker-presets"
-							label={ __( 'Position preset', 'clouds-and-spaceships' ) }
+							label={ __(
+								'Position preset',
+								'clouds-and-spaceships'
+							) }
 						>
 							<div className="cns-actions-row">
 								{ PRESETS.map( ( preset ) => (
@@ -150,23 +195,37 @@ export default function MarkerControls( {
 
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
-							label={ __( 'Offset X (px)', 'clouds-and-spaceships' ) }
-							min={ -100 } max={ 100 } step={ 1 }
+							label={ __(
+								'Offset X (px)',
+								'clouds-and-spaceships'
+							) }
+							min={ -100 }
+							max={ 100 }
+							step={ 1 }
 							value={ markerIconOffsetX }
 							onChange={ ( v ) =>
-								onChange( { markerIconOffsetX: parseFloat( v ?? '' ) || 0 } )
+								onChange( {
+									markerIconOffsetX:
+										parseFloat( v ?? '' ) || 0,
+								} )
 							}
 						/>
 					</div>
 					<div className="cns-grid__group">
 						<NumberControl
-							__next40pxDefaultSize
-							label={ __( 'Offset Y (px)', 'clouds-and-spaceships' ) }
-							min={ -100 } max={ 100 } step={ 1 }
+							label={ __(
+								'Offset Y (px)',
+								'clouds-and-spaceships'
+							) }
+							min={ -100 }
+							max={ 100 }
+							step={ 1 }
 							value={ markerIconOffsetY }
 							onChange={ ( v ) =>
-								onChange( { markerIconOffsetY: parseFloat( v ?? '' ) || 0 } )
+								onChange( {
+									markerIconOffsetY:
+										parseFloat( v ?? '' ) || 0,
+								} )
 							}
 						/>
 					</div>
