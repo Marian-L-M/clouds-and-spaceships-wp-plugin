@@ -104,18 +104,6 @@ function cns_story_suite_create_tables(): void {
 		$wpdb->query("ALTER TABLE `{$edges}` DROP COLUMN `line_opacity`");
 	}
 
-	// Story links: relationship between a story and map-suite entities.
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_story_links (
-		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-		story_id BIGINT UNSIGNED NOT NULL,
-		link_type VARCHAR(20) NOT NULL,
-		link_id BIGINT UNSIGNED NOT NULL,
-		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		PRIMARY KEY (id),
-		UNIQUE KEY uq_story_link (story_id, link_type, link_id),
-		KEY idx_story_id (story_id),
-		KEY idx_link (link_type, link_id)
-	) $charset_collate;");
 }
 
 // ── Row cleanup on permanent post deletion ────────────────────────────────────
@@ -143,7 +131,6 @@ function cns_story_suite_purge_story_rows(int $story_id): void {
 	}
 	$wpdb->delete($wpdb->prefix . 'cns_story_edges', ['story_id' => $story_id], ['%d']);
 	$wpdb->delete($wpdb->prefix . 'cns_story_nodes', ['story_id' => $story_id], ['%d']);
-	$wpdb->delete($wpdb->prefix . 'cns_story_links', ['story_id' => $story_id], ['%d']);
 	$wpdb->delete($wpdb->prefix . 'cns_story_paths', ['story_id' => $story_id], ['%d']);
 }
 

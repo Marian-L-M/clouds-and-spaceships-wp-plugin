@@ -112,25 +112,6 @@ function cns_story_suite_register_routes(): void {
 		],
 	]);
 
-	register_rest_route($ns, '/stories/(?P<id>\d+)/links', [
-		[
-			'methods'             => 'GET',
-			'callback'            => 'cns_story_suite_api_get_links',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
-		],
-		[
-			'methods'             => 'POST',
-			'callback'            => 'cns_story_suite_api_create_link',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
-		],
-	]);
-
-	register_rest_route($ns, '/links/(?P<id>\d+)', [
-		'methods'             => 'DELETE',
-		'callback'            => 'cns_story_suite_api_delete_link',
-		'permission_callback' => 'cns_story_suite_api_can_manage',
-	]);
-
 	register_rest_route($ns, '/stories/(?P<id>\d+)/paths', [
 		[
 			'methods'             => 'GET',
@@ -1063,116 +1044,6 @@ function cns_story_suite_api_create_substory(WP_REST_Request $req): WP_REST_Resp
 	], 201);
 }
 
-// ── Link endpoints ────────────────────────────────────────────────────────────
-
-function cns_story_suite_api_get_links(WP_REST_Request $req): WP_REST_Response|WP_Error {
-	global $wpdb;
-
-	$story_id = (int) $req['id'];
-	$story    = get_post($story_id);
-	if (! $story || $story->post_type !== 'cns_story') {
-		return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
-	}
-
-	$rows = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT * FROM {$wpdb->prefix}cns_story_links WHERE story_id = %d ORDER BY id ASC",
-			$story_id
-		),
-		ARRAY_A
-	) ?: [];
-
-	$result = array_map(fn(array $row): array => [
-		'id'        => (int) $row['id'],
-		'storyId'   => (int) $row['story_id'],
-		'linkType'  => $row['link_type'],
-		'linkId'    => (int) $row['link_id'],
-		'linkTitle' => cns_story_suite_resolve_link_title($row['link_type'], (int) $row['link_id']),
-	], $rows);
-
-	return new WP_REST_Response($result, 200);
-}
-
-function cns_story_suite_api_create_link(WP_REST_Request $req): WP_REST_Response|WP_Error {
-	global $wpdb;
-
-	$story_id  = (int)    $req['id'];
-	$link_type = (string) ($req->get_param('link_type') ?? '');
-	$link_id   = (int)    ($req->get_param('link_id')   ?? 0);
-
-	$allowed_types = ['map_object', 'map_area', 'hierarchy'];
-	if (! in_array($link_type, $allowed_types, true)) {
-		return new WP_Error('invalid_type', __('link_type must be map_object, map_area, or hierarchy.', 'clouds-and-spaceships'), ['status' => 400]);
-	}
-
-	if (! $link_id) {
-		return new WP_Error('missing_link_id', __('link_id is required.', 'clouds-and-spaceships'), ['status' => 400]);
-	}
-
-	$story = get_post($story_id);
-	if (! $story || $story->post_type !== 'cns_story') {
-		return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
-	}
-
-	$inserted = $wpdb->insert(
-		$wpdb->prefix . 'cns_story_links',
-		['story_id' => $story_id, 'link_type' => $link_type, 'link_id' => $link_id],
-		['%d', '%s', '%d']
-	);
-
-	if ($inserted === false) {
-		return new WP_Error('db_error', __('Could not create link.', 'clouds-and-spaceships'), ['status' => 500]);
-	}
-
-	$insert_id = (int) $wpdb->insert_id;
-
-	if (! $insert_id) {
-		// Duplicate unique key — fetch existing row.
-		$existing = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}cns_story_links WHERE story_id = %d AND link_type = %s AND link_id = %d",
-				$story_id, $link_type, $link_id
-			),
-			ARRAY_A
-		);
-		if (! $existing) {
-			return new WP_Error('db_error', __('Could not create link.', 'clouds-and-spaceships'), ['status' => 500]);
-		}
-		return new WP_REST_Response([
-			'id'        => (int) $existing['id'],
-			'storyId'   => $story_id,
-			'linkType'  => $link_type,
-			'linkId'    => $link_id,
-			'linkTitle' => cns_story_suite_resolve_link_title($link_type, $link_id),
-		], 200);
-	}
-
-	return new WP_REST_Response([
-		'id'        => $insert_id,
-		'storyId'   => $story_id,
-		'linkType'  => $link_type,
-		'linkId'    => $link_id,
-		'linkTitle' => cns_story_suite_resolve_link_title($link_type, $link_id),
-	], 201);
-}
-
-function cns_story_suite_api_delete_link(WP_REST_Request $req): WP_REST_Response|WP_Error {
-	global $wpdb;
-
-	$link_id = (int) $req['id'];
-	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}cns_story_links WHERE id = %d", $link_id)
-	);
-
-	if (! $row) {
-		return new WP_Error('not_found', __('Link not found.', 'clouds-and-spaceships'), ['status' => 404]);
-	}
-
-	$wpdb->delete($wpdb->prefix . 'cns_story_links', ['id' => $link_id], ['%d']);
-
-	return new WP_REST_Response(['deleted' => true, 'id' => $link_id], 200);
-}
-
 // ── Path endpoints ────────────────────────────────────────────────────────────
 
 function cns_story_suite_api_get_paths(WP_REST_Request $req): WP_REST_Response|WP_Error {
@@ -1320,33 +1191,3 @@ function cns_story_suite_api_delete_path(WP_REST_Request $req): WP_REST_Response
 	return new WP_REST_Response(['deleted' => true, 'id' => $path_id], 200);
 }
 
-function cns_story_suite_resolve_link_title(string $link_type, int $link_id): string {
-	global $wpdb;
-	switch ($link_type) {
-		case 'map_object':
-			$row = $wpdb->get_row(
-				$wpdb->prepare("SELECT title FROM {$wpdb->prefix}cns_map_objects WHERE id = %d", $link_id)
-			);
-			return $row ? $row->title : '';
-
-		case 'map_area':
-			$row = $wpdb->get_row(
-				$wpdb->prepare("SELECT title FROM {$wpdb->prefix}cns_map_areas WHERE id = %d", $link_id)
-			);
-			return $row ? $row->title : '';
-
-		case 'hierarchy':
-			$row = $wpdb->get_row(
-				$wpdb->prepare(
-					"SELECT p.post_title FROM {$wpdb->prefix}cns_map_hierarchy h
-					 LEFT JOIN {$wpdb->posts} p ON p.ID = h.child_map_id
-					 WHERE h.id = %d",
-					$link_id
-				)
-			);
-			return $row ? $row->post_title : '';
-
-		default:
-			return '';
-	}
-}

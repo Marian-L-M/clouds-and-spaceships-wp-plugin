@@ -1,10 +1,12 @@
-import { Button } from '@wordpress/components';
+import { Button, Flex } from '@wordpress/components';
 import {
 	arrowDown,
 	arrowUp,
 	brush,
+	color,
 	linkOff,
 	pencil,
+	plus,
 	plusCircle,
 	starFilled,
 	trash,
@@ -374,9 +376,15 @@ export default function CanvasNodeList( {
 
 						<div className="cns-canvas-node-list__actions">
 							{ incomingEdge && (
-								<>
+								<Flex
+									direction="row"
+									align="center"
+									justify="end"
+									gap={ 0 }
+								>
 									<Button
-										size="small"
+										size="compact"
+										variant="secondary"
 										icon={ arrowUp }
 										label={ __(
 											'Move up in sequence',
@@ -386,7 +394,8 @@ export default function CanvasNodeList( {
 										onClick={ () => handleMoveUp( item ) }
 									/>
 									<Button
-										size="small"
+										size="compact"
+										variant="secondary"
 										icon={ arrowDown }
 										label={ __(
 											'Move down in sequence',
@@ -396,8 +405,9 @@ export default function CanvasNodeList( {
 										onClick={ () => handleMoveDown( item ) }
 									/>
 									<Button
-										size="small"
-										icon={ brush }
+										size="compact"
+										variant="secondary"
+										icon={ color }
 										label={ __(
 											'Style this connection',
 											'clouds-and-spaceships'
@@ -407,7 +417,8 @@ export default function CanvasNodeList( {
 										}
 									/>
 									<Button
-										size="small"
+										size="compact"
+										variant="secondary"
 										icon={ linkOff }
 										label={ __(
 											'Remove this branch',
@@ -424,8 +435,9 @@ export default function CanvasNodeList( {
 										} }
 									/>
 									<Button
-										size="small"
-										icon={ plusCircle }
+										size="compact"
+										variant="secondary"
+										icon={ plus }
 										label={ __(
 											'Split route: add a parallel branch from the same parent',
 											'clouds-and-spaceships'
@@ -436,11 +448,12 @@ export default function CanvasNodeList( {
 											)
 										}
 									/>
-								</>
+								</Flex>
 							) }
 							{ ! incomingEdge && ! isStart && (
 								<Button
-									size="small"
+									size="compact"
+									variant="secondary"
 									icon={ starFilled }
 									label={ __(
 										'Set as story start node',
@@ -450,8 +463,13 @@ export default function CanvasNodeList( {
 								/>
 							) }
 							<Button
-								size="small"
+								size="compact"
+								variant="secondary"
 								icon={ pencil }
+								style={ {
+									color: 'grey',
+									borderColor: 'grey',
+								} }
 								label={ __(
 									'Edit node',
 									'clouds-and-spaceships'
@@ -459,7 +477,8 @@ export default function CanvasNodeList( {
 								onClick={ () => onEdit( node.id ) }
 							/>
 							<Button
-								size="small"
+								size="compact"
+								variant="secondary"
 								icon={ trash }
 								isDestructive
 								label={ __(

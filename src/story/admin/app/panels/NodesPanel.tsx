@@ -1,15 +1,15 @@
-import { Button } from '@wordpress/components';
 import {
-	arrowDown,
-	arrowUp,
-	brush,
-	closeSmall,
-	pencil,
-	starEmpty,
-	trash,
-} from '@wordpress/icons';
+	Flex,
+	Button,
+	Notice,
+	Popover,
+	FlexItem,
+	FlexBlock,
+} from '@wordpress/components';
+import { arrowDown, arrowUp, pencil, starEmpty, trash } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import type { StoryNode, StoryEdge, StoryPath } from '../../../types';
+import { useState, useEffect } from '@wordpress/element';
 
 interface Props {
 	nodes: StoryNode[];
@@ -44,17 +44,19 @@ export default function NodesPanel( {
 	if ( ! nodes.length ) {
 		return (
 			<div className="cns-panel">
-				<p>
-					No nodes yet. Switch to the Canvas tab and click to add your
-					first node.
-				</p>
+				<p>No nodes yet.</p>
 			</div>
 		);
 	}
 
-	// Moves an outgoing edge one slot up/down among its siblings and rewrites
-	// every sibling's sort order to its list index, so ties (fresh edges all
-	// default to 0) become an explicit, visible order.
+	// Help information
+	const [ isVisibleHelpInformation, setIsVisibleHelpInformation ] =
+		useState( false );
+	const toggleVisibleHelpInformation = () => {
+		setIsVisibleHelpInformation( ( state: boolean ) => ! state );
+	};
+
+	// Moves an outgoing edge one slot up/down among its siblings and rewrites every sibling's sort order
 	function moveEdge( outEdges: StoryEdge[], index: number, dir: -1 | 1 ) {
 		const target = index + dir;
 		if ( target < 0 || target >= outEdges.length ) return;
@@ -69,269 +71,393 @@ export default function NodesPanel( {
 	}
 
 	return (
-		<div className="cns-panel cns-nodes-panel">
-			<h2>Story Nodes</h2>
-			<p className="description">
-				Click "Set Start" to mark the first node visitors will see.
-				Connections are managed via the Canvas tab. The order of a
-				node's outgoing connections decides branch numbering (1.1, 1.2,
-				…) and which branch "Next" follows first on the frontend.
-			</p>
-
-			<table className="wp-list-table widefat fixed striped">
-				<thead>
-					<tr>
-						<th style={ { width: 32 } }></th>
-						<th>Node</th>
-						<th>Substory</th>
-						<th>Outgoing connections</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{ nodes.map( ( node ) => {
-						const outEdges = edges
-							.filter( ( e ) => e.fromNodeId === node.id )
-							.sort(
-								( a, b ) =>
-									a.sortOrder - b.sortOrder || a.id - b.id
-							);
-
-						return (
-							<tr key={ node.id }>
-								<td>
-									<span
-										className="cns-node-swatch"
+		<Flex
+			gap={ 2 }
+			direction="column"
+			align="center"
+			className="cns-panel cns-nodes-panel"
+		>
+			<FlexBlock style={ { width: '100%' } }>
+				<Flex gap={ 4 } align="center" justify="start">
+					<FlexItem>
+						<h2>Story Nodes</h2>
+					</FlexItem>
+					<FlexItem>
+						<Button
+							variant="secondary"
+							onClick={ toggleVisibleHelpInformation }
+						>
+							Help Information
+							{ isVisibleHelpInformation && (
+								<Popover
+									headerTitle="Help Information"
+									expandOnMobile
+								>
+									<ol
 										style={ {
-											background:
-												node.iconType === 'thumbnail' ||
-												node.iconType === 'icon'
-													? 'transparent'
-													: node.iconColor,
-											width: 18,
-											height: 18,
-											display: 'inline-block',
-											borderRadius:
-												node.iconType === 'square' ||
-												node.iconType === 'diamond'
-													? 2
-													: '50%',
-											transform:
-												node.iconType === 'diamond'
-													? 'rotate(45deg)'
-													: undefined,
-											border: '1px solid rgba(0,0,0,0.3)',
+											width: 320,
+											maxWidth: '100%',
 										} }
-									/>
-								</td>
-								<td>
-									<strong>{ getDisplayTitle( node ) }</strong>
-									{ node.id === startNodeId && (
+									>
+										<li>
+											Set Start - marks the initial node
+											and path for the story element.
+										</li>
+										<li>
+											Style Path - style setting for path
+											between this node and the next in
+											path.
+										</li>
+										<li>
+											Branch Order - If a story path
+											splits into multiple nodes, set the
+											branch order to determine the
+											primary path and the menu order.
+										</li>
+									</ol>
+								</Popover>
+							) }
+						</Button>
+					</FlexItem>
+				</Flex>
+			</FlexBlock>
+			<FlexItem>
+				<table className="wp-list-table widefat fixed striped">
+					<thead>
+						<tr>
+							<th style={ { width: 32 } }></th>
+							<th>Node</th>
+							<th>Substory</th>
+							<th>Outgoing Paths</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{ nodes.map( ( node ) => {
+							const outEdges = edges
+								.filter( ( e ) => e.fromNodeId === node.id )
+								.sort(
+									( a, b ) =>
+										a.sortOrder - b.sortOrder || a.id - b.id
+								);
+
+							return (
+								<tr key={ node.id }>
+									{ /* Icon */ }
+									<td>
 										<span
-											className="cns-badge cns-badge--featured"
-											style={ { marginLeft: 6 } }
-										>
-											Start
-										</span>
-									) }
-									{ node.pathId &&
-										pathMap.has( node.pathId ) && (
+											className="cns-node-swatch"
+											style={ {
+												background:
+													node.iconType ===
+														'thumbnail' ||
+													node.iconType === 'icon'
+														? 'transparent'
+														: node.iconColor,
+												width: 18,
+												height: 18,
+												display: 'inline-block',
+												borderRadius:
+													node.iconType ===
+														'square' ||
+													node.iconType === 'diamond'
+														? 2
+														: '50%',
+												transform:
+													node.iconType === 'diamond'
+														? 'rotate(45deg)'
+														: undefined,
+												border: '1px solid rgba(0,0,0,0.3)',
+											} }
+										/>
+									</td>
+									{ /* Node */ }
+									<td>
+										<strong>
+											{ getDisplayTitle( node ) }
+										</strong>
+										{ node.id === startNodeId && (
 											<span
-												className="cns-badge"
-												style={ {
-													marginLeft: 6,
-													background: pathMap.get(
-														node.pathId
-													)!.markerColor,
-													color: '#fff',
-													fontSize: 10,
-													padding: '1px 5px',
-													borderRadius: 10,
-												} }
+												className="cns-badge cns-badge--featured"
+												style={ { marginLeft: 6 } }
 											>
-												{ pathMap.get( node.pathId )!
-													.label ||
-													`Path #${ node.pathId }` }
+												Start
 											</span>
 										) }
-								</td>
-								<td>
-									{ node.substoryId ? (
-										node.substoryEditUrl ? (
-											<a
-												href={ node.substoryEditUrl }
-												target="_blank"
-												rel="noopener"
-											>
-												{ node.substoryTitle ||
-													`Substory #${ node.substoryId }` }{ ' ' }
-												↗
-											</a>
-										) : (
-											<span>
-												{ node.substoryTitle ||
-													`Substory #${ node.substoryId }` }
-											</span>
-										)
-									) : (
-										<span className="description">—</span>
-									) }
-								</td>
-								<td>
-									{ outEdges.length === 0 && (
-										<span className="description">
-											None
-										</span>
-									) }
-									{ outEdges.map( ( edge, index ) => {
-										const toNode = nodes.find(
-											( n ) => n.id === edge.toNodeId
-										);
-										return (
-											<div
-												key={ edge.id }
-												className="cns-edge-row"
-											>
-												{ outEdges.length > 1 && (
-													<>
-														<Button
-															size="small"
-															icon={ arrowUp }
-															label={ __(
-																'Move branch up',
-																'clouds-and-spaceships'
-															) }
-															disabled={
-																index === 0
-															}
-															onClick={ () =>
-																moveEdge(
-																	outEdges,
-																	index,
-																	-1
-																)
-															}
-														/>
-														<Button
-															size="small"
-															icon={ arrowDown }
-															label={ __(
-																'Move branch down',
-																'clouds-and-spaceships'
-															) }
-															disabled={
-																index ===
-																outEdges.length -
-																	1
-															}
-															onClick={ () =>
-																moveEdge(
-																	outEdges,
-																	index,
-																	1
-																)
-															}
-														/>
-													</>
-												) }
-												<span>
-													→{ ' ' }
-													{ toNode
-														? getDisplayTitle(
-																toNode
-														  )
-														: `#${ edge.toNodeId }` }
+										{ node.pathId &&
+											pathMap.has( node.pathId ) && (
+												<span
+													className="cns-badge"
+													style={ {
+														marginLeft: 6,
+														background: pathMap.get(
+															node.pathId
+														)!.markerColor,
+														color: '#fff',
+														fontSize: 10,
+														padding: '1px 5px',
+														borderRadius: 10,
+													} }
+												>
+													{ pathMap.get(
+														node.pathId
+													)!.label ||
+														`Path #${ node.pathId }` }
 												</span>
+											) }
+									</td>
+									{ /* Substory */ }
+									<td>
+										{ node.substoryId ? (
+											node.substoryEditUrl ? (
+												<a
+													href={
+														node.substoryEditUrl
+													}
+													target="_blank"
+													rel="noopener"
+												>
+													{ node.substoryTitle ||
+														`Substory #${ node.substoryId }` }{ ' ' }
+													↗
+												</a>
+											) : (
+												<span>
+													{ node.substoryTitle ||
+														`Substory #${ node.substoryId }` }
+												</span>
+											)
+										) : (
+											<span className="description">
+												—
+											</span>
+										) }
+									</td>
+									{ /* Paths */ }
+									<td>
+										{ outEdges.length === 0 && (
+											<span className="description">
+												None
+											</span>
+										) }
+										{ outEdges.map( ( edge, index ) => {
+											const toNode = nodes.find(
+												( n ) => n.id === edge.toNodeId
+											);
+											return (
+												<Flex
+													direction="row"
+													align="center"
+													justify="space-between"
+													gap={ 2 }
+													key={ edge.id }
+													className="cns-edge-row"
+												>
+													<FlexItem>
+														→{ ' ' }
+														{ toNode
+															? getDisplayTitle(
+																	toNode
+															  )
+															: `#${ edge.toNodeId }` }
+													</FlexItem>
+													<FlexBlock>
+														<Flex
+															direction="row"
+															align="center"
+															justify="end"
+															gap={ 1 }
+														>
+															{ outEdges.length >
+																1 && (
+																<FlexItem>
+																	<Flex
+																		direction="row"
+																		align="center"
+																		justify="start"
+																		gap={
+																			0
+																		}
+																	>
+																		<Button
+																			size="compact"
+																			variant="secondary"
+																			icon={
+																				arrowUp
+																			}
+																			label={ __(
+																				'Move branch up',
+																				'clouds-and-spaceships'
+																			) }
+																			disabled={
+																				index ===
+																				0
+																			}
+																			onClick={ () =>
+																				moveEdge(
+																					outEdges,
+																					index,
+																					-1
+																				)
+																			}
+																		/>
+																		<Button
+																			size="compact"
+																			variant="secondary"
+																			icon={
+																				arrowDown
+																			}
+																			label={ __(
+																				'Move branch down',
+																				'clouds-and-spaceships'
+																			) }
+																			disabled={
+																				index ===
+																				outEdges.length -
+																					1
+																			}
+																			onClick={ () =>
+																				moveEdge(
+																					outEdges,
+																					index,
+																					1
+																				)
+																			}
+																		/>
+																	</Flex>
+																</FlexItem>
+															) }
+															<FlexItem>
+																<Flex
+																	direction="row"
+																	align="center"
+																	justify="start"
+																	gap={ 0 }
+																>
+																	<Button
+																		size="compact"
+																		variant="secondary"
+																		icon={
+																			pencil
+																		}
+																		style={ {
+																			color: 'grey',
+																			borderColor:
+																				'grey',
+																		} }
+																		label={ __(
+																			'Style path',
+																			'clouds-and-spaceships'
+																		) }
+																		onClick={ () =>
+																			onEditEdge(
+																				edge.id
+																			)
+																		}
+																	/>
+																	<Button
+																		size="compact"
+																		variant="secondary"
+																		icon={
+																			trash
+																		}
+																		isDestructive
+																		label={ __(
+																			'Delete connection',
+																			'clouds-and-spaceships'
+																		) }
+																		onClick={ () => {
+																			if (
+																				window.confirm(
+																					'Are you sure you want to delete this connection?'
+																				)
+																			)
+																				onEdgeDelete(
+																					edge.id
+																				);
+																		} }
+																	/>
+																</Flex>
+															</FlexItem>
+														</Flex>
+													</FlexBlock>
+												</Flex>
+											);
+										} ) }
+									</td>
+									{ /* Actions */ }
+									<td className="cns-row-actions">
+										<Flex
+											direction="row"
+											align="center"
+											justify="end"
+											gap={ 0 }
+											className="cns-actions-row"
+										>
+											{ node.id !== startNodeId && (
 												<Button
-													size="small"
-													icon={ brush }
+													size="compact"
+													variant="secondary"
+													icon={ starEmpty }
 													label={ __(
-														'Style this connection',
+														'Set as story start node',
 														'clouds-and-spaceships'
 													) }
 													onClick={ () =>
-														onEditEdge( edge.id )
+														onSetStartNode(
+															node.id
+														)
 													}
-												/>
-												<Button
-													size="small"
-													icon={ closeSmall }
-													isDestructive
-													label={ __(
-														'Delete connection',
+												>
+													{ __(
+														'Set Start',
 														'clouds-and-spaceships'
 													) }
-													onClick={ () => {
-														if (
-															window.confirm(
-																'Delete this connection?'
-															)
-														)
-															onEdgeDelete(
-																edge.id
-															);
-													} }
-												/>
-											</div>
-										);
-									} ) }
-								</td>
-								<td className="cns-row-actions">
-									<div className="cns-actions-row">
-										{ node.id !== startNodeId && (
+												</Button>
+											) }
 											<Button
-												size="small"
-												icon={ starEmpty }
+												size="compact"
+												variant="secondary"
+												icon={ pencil }
+												style={ {
+													color: 'grey',
+													borderColor: 'grey',
+												} }
 												label={ __(
-													'Set as story start node',
+													'Edit',
 													'clouds-and-spaceships'
 												) }
 												onClick={ () =>
-													onSetStartNode( node.id )
+													onEditNode( node.id )
 												}
-											>
-												{ __(
-													'Set Start',
+											/>
+											<Button
+												size="compact"
+												variant="secondary"
+												icon={ trash }
+												isDestructive
+												label={ __(
+													'Delete',
 													'clouds-and-spaceships'
 												) }
-											</Button>
-										) }
-										<Button
-											size="small"
-											icon={ pencil }
-											label={ __(
-												'Edit',
-												'clouds-and-spaceships'
-											) }
-											onClick={ () =>
-												onEditNode( node.id )
-											}
-										/>
-										<Button
-											size="small"
-											icon={ trash }
-											isDestructive
-											label={ __(
-												'Delete',
-												'clouds-and-spaceships'
-											) }
-											onClick={ () => {
-												if (
-													window.confirm(
-														'Delete this node and all its connections?'
-													)
-												) {
-													onDeleteNode( node.id );
-												}
-											} }
-										/>
-									</div>
-								</td>
-							</tr>
-						);
-					} ) }
-				</tbody>
-			</table>
-		</div>
+												onClick={ () => {
+													if (
+														window.confirm(
+															'Delete this node and all of its connections?'
+														)
+													) {
+														onDeleteNode( node.id );
+													}
+												} }
+											/>
+										</Flex>
+									</td>
+								</tr>
+							);
+						} ) }
+					</tbody>
+				</table>
+			</FlexItem>
+		</Flex>
 	);
 }

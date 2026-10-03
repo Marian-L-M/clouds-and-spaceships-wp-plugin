@@ -94,8 +94,8 @@ export default function MarkerControls<
 				<RangeControl
 					label={
 						markerType === 'ring'
-							? __( 'Ring size (px)', 'clouds-and-spaceships' )
-							: __( 'Icon size (px)', 'clouds-and-spaceships' )
+							? __( 'Marker ring size', 'clouds-and-spaceships' )
+							: __( 'Marker icon size', 'clouds-and-spaceships' )
 					}
 					min={ 1 }
 					max={ 30 }

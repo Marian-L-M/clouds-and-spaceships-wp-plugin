@@ -11,8 +11,7 @@ export type LineStyle    = 'solid' | 'dashed' | 'dotted';
 export type MarkerType   = 'ring' | 'icon';
 export type NodeMarkerType = 'inherit' | 'ring' | 'icon';
 export type CanvasMode   = 'select' | 'add' | 'connect';
-export type StoryTab     = 'settings' | 'canvas' | 'nodes' | 'paths' | 'links';
-export type LinkType     = 'map_object' | 'map_area' | 'hierarchy';
+export type StoryTab     = 'settings' | 'canvas' | 'nodes' | 'paths';
 
 // ── Window globals ────────────────────────────────────────────────────────────
 
@@ -116,16 +115,6 @@ export interface StoryEdge {
 	lineColor:   string | null;
 	lineWidth:   number | null;
 	lineStyle:   LineStyle | null;
-}
-
-// ── Domain: StoryLink ─────────────────────────────────────────────────────────
-
-export interface StoryLink {
-	id:        number;
-	storyId:   number;
-	linkType:  LinkType;
-	linkId:    number;
-	linkTitle: string;
 }
 
 // ── Domain: StorySettings ─────────────────────────────────────────────────────

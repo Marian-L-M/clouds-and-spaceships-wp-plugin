@@ -39,7 +39,6 @@ $tables = [
 	$wpdb->prefix . 'cns_map_labels',
 	$wpdb->prefix . 'cns_map_areas',
 	$wpdb->prefix . 'cns_map_objects',
-	$wpdb->prefix . 'cns_story_links',
 	$wpdb->prefix . 'cns_story_edges',
 	$wpdb->prefix . 'cns_story_nodes',
 	$wpdb->prefix . 'cns_story_paths',
@@ -128,9 +127,6 @@ $options = [
 	'cns_db_version',
 	'cns_needs_rewrite_flush',
 	// Maps
-	// Retired: maps are now always deleted, so this setting is gone. Still
-	// listed so it is cleaned off installs that saved it.
-	'cns_map_suite_delete_on_uninstall',
 	'cns_map_suite_delete_icons_on_uninstall',
 	'cns_map_suite_show_maps_menu',
 	'cns_map_suite_zoom_main_color',
@@ -138,28 +134,16 @@ $options = [
 	'cns_map_suite_cache_ver',
 	// Stories
 	'cns_story_suite_delete_substories_on_uninstall',
-	// Retired: stories are now always deleted, and substories moved to the
-	// setting above. Still listed so it is cleaned off installs that saved it.
-	'cns_story_suite_delete_on_uninstall',
 	'cns_story_suite_show_stories_menu',
 	'cns_story_suite_show_substories_menu',
 	'cns_story_suite_archive_enabled',
 	'cns_story_suite_archive_slug',
 	'cns_story_suite_placeholder_thumb_id',
-	// Retired: the story archive is rendered by the theme, so paging and sort
-	// order are no longer owned here. Still listed so they are cleaned off
-	// installs that saved them.
-	'cns_story_suite_archive_per_page',
-	'cns_story_suite_archive_order',
 	'cns_story_suite_cache_ver',
 	// Wiki
 	'cns_wiki_settings',
 	'cns_wiki_cpt_structure_version',
-	// Retired settings — the plugin no longer publishes a map archive.
-	'cns_map_suite_archive_enabled',
-	'cns_map_suite_archive_slug',
-	'cns_map_suite_archive_per_page',
-	'cns_map_suite_archive_order',
+	'cns_wiki_layout_units_version',
 	// Left behind by the three plugins this one replaces.
 	'cns_map_suite_db_version',
 	'cns_map_suite_needs_flush',

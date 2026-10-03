@@ -160,7 +160,7 @@ export default function StoryCanvasPanel( {
 						</ToggleGroupControl>
 					) }
 					<Button
-						variant="tertiary"
+						variant="secondary"
 						onClick={ toggleVisibleHelpInformation }
 					>
 						Help Information
@@ -243,13 +243,13 @@ export default function StoryCanvasPanel( {
 				) }
 
 				<div className="cns-story-canvas-toolbar__row cns-story-canvas-toolbar__line-style">
-					<Flex gap={ 2 } direction="column" align="start">
+					<Flex gap={ 2 } direction="row" justify="start" align="end">
 						<FlexItem>
 							<h3 className="cns-story-canvas-toolbar__label">
-								{ __( 'Lines:', 'clouds-and-spaceships' ) }
+								{ __( 'Path Lines:', 'clouds-and-spaceships' ) }
 							</h3>
 						</FlexItem>
-						<FlexBlock>
+						<FlexItem>
 							<Flex gap={ 2 } direction="row" align="end">
 								<ColorField
 									label={ __(
@@ -260,7 +260,7 @@ export default function StoryCanvasPanel( {
 									onChange={ ( v ) => set( 'lineColor', v ) }
 								/>
 								<NumberControl
-									size="small"
+									size="default"
 									label={ __(
 										'Width',
 										'clouds-and-spaceships'
@@ -279,7 +279,7 @@ export default function StoryCanvasPanel( {
 									style={ { width: 70 } }
 								/>
 								<SelectControl
-									size="small"
+									size="default"
 									label={ __(
 										'Style',
 										'clouds-and-spaceships'
@@ -313,37 +313,49 @@ export default function StoryCanvasPanel( {
 									}
 								/>
 							</Flex>
-						</FlexBlock>
+						</FlexItem>
 					</Flex>
 				</div>
 
 				{ settings.mapId && (
 					<div className="cns-story-canvas-toolbar__row">
-						<span className="cns-story-canvas-toolbar__label">
-							{ __( 'Map layers:', 'clouds-and-spaceships' ) }
-						</span>
-						<Flex direction={ 'column' } gap={ 2 }>
-							<CheckboxControl
-								label={ __( 'Areas', 'clouds-and-spaceships' ) }
-								checked={ settings.showAreas }
-								onChange={ ( v ) => set( 'showAreas', v ) }
-							/>
-							<CheckboxControl
-								label={ __(
-									'Objects',
-									'clouds-and-spaceships'
-								) }
-								checked={ settings.showObjects }
-								onChange={ ( v ) => set( 'showObjects', v ) }
-							/>
-							<CheckboxControl
-								label={ __(
-									'Labels',
-									'clouds-and-spaceships'
-								) }
-								checked={ settings.showLabels }
-								onChange={ ( v ) => set( 'showLabels', v ) }
-							/>
+						<Flex
+							direction={ 'row' }
+							align="center"
+							justify="start"
+							gap={ 2 }
+						>
+							<span className="cns-story-canvas-toolbar__label">
+								{ __( 'Map layers:', 'clouds-and-spaceships' ) }
+							</span>
+							<Flex direction={ 'row' } justify="start" gap={ 2 }>
+								<CheckboxControl
+									label={ __(
+										'Areas',
+										'clouds-and-spaceships'
+									) }
+									checked={ settings.showAreas }
+									onChange={ ( v ) => set( 'showAreas', v ) }
+								/>
+								<CheckboxControl
+									label={ __(
+										'Objects',
+										'clouds-and-spaceships'
+									) }
+									checked={ settings.showObjects }
+									onChange={ ( v ) =>
+										set( 'showObjects', v )
+									}
+								/>
+								<CheckboxControl
+									label={ __(
+										'Labels',
+										'clouds-and-spaceships'
+									) }
+									checked={ settings.showLabels }
+									onChange={ ( v ) => set( 'showLabels', v ) }
+								/>
+							</Flex>
 						</Flex>
 					</div>
 				) }

@@ -1,31 +1,51 @@
 import { useState } from '@wordpress/element';
-import { Button } from '@wordpress/components';
+import { Button, Flex } from '@wordpress/components';
 import { listView, pencil, plus, trash } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import PathModal from '../forms/PathModal';
 import PathNodesModal from '../forms/PathNodesModal';
-import type { StoryNode, StoryEdge, StoryPath, PathFormData } from '../../../types';
+import type {
+	StoryNode,
+	StoryEdge,
+	StoryPath,
+	PathFormData,
+} from '../../../types';
 
 interface Props {
-	paths:        StoryPath[];
-	nodes:        StoryNode[];
-	edges:        StoryEdge[];
+	paths: StoryPath[];
+	nodes: StoryNode[];
+	edges: StoryEdge[];
 	onCreatePath: ( data: PathFormData ) => Promise< void >;
 	onUpdatePath: ( pathId: number, data: PathFormData ) => Promise< void >;
 	onDeletePath: ( pathId: number ) => void;
-	onQuickNodeCreate: ( substoryId: number, pathId: number ) => Promise< StoryNode | undefined >;
-	onPathNodesApply:  ( pathId: number, orderedNodeIds: number[], removedNodeIds: number[] ) => Promise< void >;
+	onQuickNodeCreate: (
+		substoryId: number,
+		pathId: number
+	) => Promise< StoryNode | undefined >;
+	onPathNodesApply: (
+		pathId: number,
+		orderedNodeIds: number[],
+		removedNodeIds: number[]
+	) => Promise< void >;
 }
 
 export default function PathsPanel( {
-	paths, nodes, edges,
-	onCreatePath, onUpdatePath, onDeletePath,
-	onQuickNodeCreate, onPathNodesApply,
+	paths,
+	nodes,
+	edges,
+	onCreatePath,
+	onUpdatePath,
+	onDeletePath,
+	onQuickNodeCreate,
+	onPathNodesApply,
 }: Props ) {
-	const [ modal, setModal ] = useState< { open: boolean; path: StoryPath | null } >(
-		{ open: false, path: null }
+	const [ modal, setModal ] = useState< {
+		open: boolean;
+		path: StoryPath | null;
+	} >( { open: false, path: null } );
+	const [ nodesModalPath, setNodesModalPath ] = useState< StoryPath | null >(
+		null
 	);
-	const [ nodesModalPath, setNodesModalPath ] = useState< StoryPath | null >( null );
 
 	async function handleSave( data: PathFormData ) {
 		if ( modal.path ) {
@@ -41,7 +61,7 @@ export default function PathsPanel( {
 			<h2>{ __( 'Story Paths', 'clouds-and-spaceships' ) }</h2>
 			<p className="description">
 				{ __(
-					'Paths group nodes so you can apply shared marker settings. Use "Manage nodes" to order and connect a path’s nodes without the canvas. Priority order: individual node settings > path settings > global settings.',
+					'Paths are chronological arrangements of substory nodes.',
 					'clouds-and-spaceships'
 				) }
 			</p>
@@ -57,7 +77,9 @@ export default function PathsPanel( {
 			</div>
 
 			{ paths.length === 0 && (
-				<p className="description">{ __( 'No paths yet.', 'clouds-and-spaceships' ) }</p>
+				<p className="description">
+					{ __( 'No paths yet.', 'clouds-and-spaceships' ) }
+				</p>
 			) }
 
 			{ paths.length > 0 && (
@@ -66,58 +88,123 @@ export default function PathsPanel( {
 						<tr>
 							<th style={ { width: 24 } }></th>
 							<th>{ __( 'Label', 'clouds-and-spaceships' ) }</th>
-							<th style={ { width: 80 } }>{ __( 'Marker', 'clouds-and-spaceships' ) }</th>
-							<th style={ { width: 60 } }>{ __( 'Nodes', 'clouds-and-spaceships' ) }</th>
-							<th style={ { width: 200 } }>{ __( 'Actions', 'clouds-and-spaceships' ) }</th>
+							<th style={ { width: 80 } }>
+								{ __( 'Marker', 'clouds-and-spaceships' ) }
+							</th>
+							<th style={ { width: 60 } }>
+								{ __( 'Nodes', 'clouds-and-spaceships' ) }
+							</th>
+							<th style={ { width: 200 } }>
+								{ __( 'Actions', 'clouds-and-spaceships' ) }
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{ paths.map( ( path ) => (
 							<tr key={ path.id }>
 								<td>
-									<span style={ {
-										display: 'inline-block',
-										width: 14, height: 14,
-										borderRadius: path.markerType === 'ring' ? '50%' : 3,
-										background: path.markerType === 'ring' ? 'transparent' : path.markerColor,
-										border: `3px solid ${ path.markerColor }`,
-										verticalAlign: 'middle',
-									} } />
+									<span
+										style={ {
+											display: 'inline-block',
+											width: 14,
+											height: 14,
+											borderRadius:
+												path.markerType === 'ring'
+													? '50%'
+													: 3,
+											background:
+												path.markerType === 'ring'
+													? 'transparent'
+													: path.markerColor,
+											border: `3px solid ${ path.markerColor }`,
+											verticalAlign: 'middle',
+										} }
+									/>
 								</td>
-								<td><strong>{ path.label || `Path #${ path.id }` }</strong></td>
+								<td>
+									<strong>
+										{ path.label || `Path #${ path.id }` }
+									</strong>
+								</td>
 								<td style={ { fontSize: 12, color: '#666' } }>
 									{ path.markerType === 'ring'
 										? __( 'Ring', 'clouds-and-spaceships' )
-										: __( 'Icon', 'clouds-and-spaceships' ) }
+										: __(
+												'Icon',
+												'clouds-and-spaceships'
+										  ) }
 								</td>
-								<td>{ nodes.filter( ( n ) => n.pathId === path.id ).length }</td>
+								<td>
+									{
+										nodes.filter(
+											( n ) => n.pathId === path.id
+										).length
+									}
+								</td>
 								<td>
 									<div className="cns-actions-row">
-										<Button
-											size="small"
-											icon={ listView }
-											label={ __( 'Manage nodes: order, connect, add or remove', 'clouds-and-spaceships' ) }
-											onClick={ () => setNodesModalPath( path ) }
+										<Flex
+											direction="row"
+											align="center"
+											justify="end"
+											gap={ 0 }
 										>
-											{ __( 'Manage nodes', 'clouds-and-spaceships' ) }
-										</Button>
-										<Button
-											size="small"
-											icon={ pencil }
-											label={ __( 'Edit', 'clouds-and-spaceships' ) }
-											onClick={ () => setModal( { open: true, path } ) }
-										/>
-										<Button
-											size="small"
-											icon={ trash }
-											isDestructive
-											label={ __( 'Delete', 'clouds-and-spaceships' ) }
-											onClick={ () => {
-												if ( window.confirm( `Delete path "${ path.label }"? Nodes will become unassigned.` ) ) {
-													onDeletePath( path.id );
+											<Button
+												size="compact"
+												variant="secondary"
+												icon={ listView }
+												label={ __(
+													'Manage nodes: order, connect, add or remove',
+													'clouds-and-spaceships'
+												) }
+												onClick={ () =>
+													setNodesModalPath( path )
 												}
-											} }
-										/>
+											>
+												{ __(
+													'Manage nodes',
+													'clouds-and-spaceships'
+												) }
+											</Button>
+											<Button
+												size="compact"
+												variant="secondary"
+												icon={ pencil }
+												label={ __(
+													'Edit',
+													'clouds-and-spaceships'
+												) }
+												style={ {
+													color: 'grey',
+													borderColor: 'grey',
+												} }
+												onClick={ () =>
+													setModal( {
+														open: true,
+														path,
+													} )
+												}
+											/>
+											<Button
+												size="compact"
+												variant="secondary"
+												icon={ trash }
+												isDestructive
+												label={ __(
+													'Delete',
+													'clouds-and-spaceships'
+												) }
+												onClick={ () => {
+													if (
+														window.confirm(
+															`Delete path "${ path.label }"? Nodes will become unassigned.`
+														)
+													) {
+														onDeletePath( path.id );
+													}
+												} }
+											/>
+										</Flex>
 									</div>
 								</td>
 							</tr>

@@ -68,13 +68,55 @@ function cns_single_map_template_variants(): array {
 			'title'       => __('Single Story', 'clouds-and-spaceships'),
 			'description' => __('Template for single story pages.', 'clouds-and-spaceships'),
 			'canvas'      => '<!-- wp:cns-story-suite/story /-->',
+			// Both blocks ship; cns_story_pick_description_block() below drops
+			// whichever one does not apply to the post being viewed.
+			//
 			// excerptLength is capped at 55 words by default and always applied,
 			// so it is raised here: the story description is a written field, not
 			// an auto-generated summary, and must not be silently truncated.
-			'body'        => '<!-- wp:post-excerpt {"excerptLength":1000} /-->',
+			'body'        => '<!-- wp:post-content /-->'
+				. '<!-- wp:post-excerpt {"excerptLength":1000} /-->',
 		],
 	];
 }
+
+/**
+ * Shows a story's written description, whichever field holds it.
+ *
+ * A story is edited on the CNS canvas page, where the Description field writes
+ * to post_excerpt — so the template rendered the excerpt. But cns_story also
+ * supports 'editor', so anything typed into the post's own content box went to
+ * post_content and never appeared on the page.
+ *
+ * The template now carries both blocks and this keeps exactly one: post_content
+ * when the author put something there, the excerpt otherwise.
+ *
+ * Scoped to the story being viewed — a query loop listing stories elsewhere
+ * keeps rendering whichever block it asked for.
+ */
+function cns_story_pick_description_block(string $block_content, array $block, WP_Block $instance): string {
+	$name = $block['blockName'] ?? '';
+	if ('core/post-content' !== $name && 'core/post-excerpt' !== $name) {
+		return $block_content;
+	}
+
+	$post_id = (int) ($instance->context['postId'] ?? 0);
+	if (! $post_id || 'cns_story' !== get_post_type($post_id) || ! is_singular('cns_story')) {
+		return $block_content;
+	}
+
+	// The raw field, not the rendered output: post-content renders before
+	// post-excerpt, so there is nothing to inspect by the time this runs for
+	// the excerpt. An author who leaves an empty block behind counts as having
+	// content, which matches what they see in the editor.
+	$has_content = '' !== trim((string) get_post_field('post_content', $post_id));
+
+	if ('core/post-content' === $name) {
+		return $has_content ? $block_content : '';
+	}
+	return $has_content ? '' : $block_content;
+}
+add_filter('render_block', 'cns_story_pick_description_block', 10, 3);
 
 function cns_register_single_map_template(): void {
 	$layout_file = CNS_DIR . 'templates/single-map.html';

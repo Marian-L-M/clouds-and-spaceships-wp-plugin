@@ -93,7 +93,7 @@ export default function SettingsPanel( {
 									'clouds-and-spaceships'
 								) }
 								help={ __(
-									'Which layers of the linked map this story shows. Readers can toggle them again on the frontend; this sets where they start.',
+									'Default display toggle settings for map elements on story for the reader.',
 									'clouds-and-spaceships'
 								) }
 							>
@@ -141,7 +141,7 @@ export default function SettingsPanel( {
 								'clouds-and-spaceships'
 							) }
 							help={ __(
-								'Story settinggs for public reader. Off by default.',
+								'Story settings for public reader. Off by default.',
 								'clouds-and-spaceships'
 							) }
 						>
@@ -201,7 +201,7 @@ export default function SettingsPanel( {
 								/>
 							</div>
 						) }
-						<div className="cns-actions-row">
+						<Flex gap={ 1 } align="center" justify="start">
 							<MediaSelectButton
 								title={ __(
 									'Select Story Thumbnail',
@@ -230,7 +230,7 @@ export default function SettingsPanel( {
 							</MediaSelectButton>
 							{ settings.thumbnailId && (
 								<Button
-									variant="tertiary"
+									variant="secondary"
 									isDestructive
 									icon={ trash }
 									label={ __(
@@ -246,7 +246,7 @@ export default function SettingsPanel( {
 									}
 								/>
 							) }
-						</div>
+						</Flex>
 					</BaseControl>
 				</div>
 				<div className="cns-grid__group cns-grid__span-2">
@@ -257,7 +257,7 @@ export default function SettingsPanel( {
 							'clouds-and-spaceships'
 						) }
 						help={ __(
-							'Global default. Overridden per-path and per-node.',
+							'Global defaults. Can be overridden on per-path and per-node level.',
 							'clouds-and-spaceships'
 						) }
 					>

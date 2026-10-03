@@ -7,7 +7,6 @@ const TABS: { id: StoryTab; label: string }[] = [
 	{ id: 'canvas',   label: 'Canvas'   },
 	{ id: 'nodes',    label: 'Nodes'    },
 	{ id: 'paths',    label: 'Paths'    },
-	{ id: 'links',    label: 'Links'    },
 ];
 
 interface Props {

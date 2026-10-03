@@ -299,7 +299,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 		<div class="cns-settings-card">
 			<h2><?php esc_html_e('Story', 'clouds-and-spaceships'); ?></h2>
 			<p class="description">
-				<?php esc_html_e('Stories are collections of story path laid over a map element, managed via the CNS story editor tab. Each note in a story path being a substory that can be made an indipendent post/article', 'clouds-and-spaceships'); ?>
+				<?php esc_html_e('Stories are collections of story paths laid over a map element, managed via the CNS story editor tab. Each note in a story path being a substory that can be made an indipendent post/article.', 'clouds-and-spaceships'); ?>
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>

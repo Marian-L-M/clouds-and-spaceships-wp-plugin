@@ -212,7 +212,6 @@ $bp-spc: 1200px;
 // edge instead of floating above the box's own bottom padding.
 
 .cns-node-modal {
-
 	.components-modal__content {
 		padding-bottom: 0;
 	}
@@ -258,7 +257,7 @@ $bp-spc: 1200px;
 		background: #f6f7f7;
 	}
 
-	input[type='number'].small-text {
+	input[type="number"].small-text {
 		width: 72px;
 	}
 }
@@ -398,7 +397,7 @@ body.cns-story-canvas-fullscreen-open {
 	background: #f6f7f7;
 
 	&::before {
-		content: '←';
+		content: "←";
 		font-size: 11px;
 		color: #646970;
 		margin-right: 4px;
@@ -410,7 +409,7 @@ body.cns-story-canvas-fullscreen-open {
 	border-top: 1px solid #f0f0f1;
 
 	&::before {
-		content: '→';
+		content: "→";
 		font-size: 11px;
 		color: #646970;
 		margin-right: 4px;
@@ -479,8 +478,12 @@ body.cns-story-canvas-fullscreen-open {
 	justify-content: center;
 }
 
-.cns-story-window__nav--prev { align-items: flex-start; }
-.cns-story-window__nav--next { align-items: flex-end; }
+.cns-story-window__nav--prev {
+	align-items: flex-start;
+}
+.cns-story-window__nav--next {
+	align-items: flex-end;
+}
 
 .cns-story-window__nav-btn {
 	background: none;
@@ -494,7 +497,9 @@ body.cns-story-canvas-fullscreen-open {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 
-	&:hover { background: rgba(0, 0, 0, 0.05); }
+	&:hover {
+		background: rgba(0, 0, 0, 0.05);
+	}
 }
 
 .cns-story-window__end-label {

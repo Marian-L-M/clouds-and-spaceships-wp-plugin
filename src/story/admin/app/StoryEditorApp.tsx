@@ -8,7 +8,6 @@ import TabBar from './TabBar';
 import { apiFetch } from '../utils';
 import EdgeStyleModal from './forms/EdgeStyleModal';
 import NodeModal from './forms/NodeModal';
-import LinksPanel from './panels/LinksPanel';
 import NodesPanel from './panels/NodesPanel';
 import PathsPanel from './panels/PathsPanel';
 import SettingsPanel from './panels/SettingsPanel';
@@ -16,7 +15,7 @@ import StoryCanvasPanel from './panels/StoryCanvasPanel';
 import Notices from '../../../shared/admin/Notices';
 
 import type {
-	StorySettings, StoryNode, StoryEdge, StoryLink, StoryPath,
+	StorySettings, StoryNode, StoryEdge, StoryPath,
 	MapRenderData, MapObjectRef, MapAreaRef,
 	PostStatus, StoryTab, NodeFormData, EdgeFormData, PathFormData, CanvasMode,
 } from '../../types';
@@ -72,7 +71,6 @@ export default function StoryEditorApp() {
 	const [ nodes,           setNodes           ] = useState< StoryNode[] >( [] );
 	const [ edges,           setEdges           ] = useState< StoryEdge[] >( [] );
 	const [ paths,           setPaths           ] = useState< StoryPath[] >( [] );
-	const [ links,           setLinks           ] = useState< StoryLink[] >( [] );
 	const [ mapData,         setMapData         ] = useState< MapRenderData | null >( null );
 	const [ mapObjects,      setMapObjects      ] = useState< MapObjectRef[] >( [] );
 	const [ mapAreas,        setMapAreas        ] = useState< MapAreaRef[] >( [] );
@@ -112,7 +110,6 @@ export default function StoryEditorApp() {
 				/* load failures leave the editor empty, as before */
 			}
 			try {
-				setLinks( await apiFetch< StoryLink[] >( 'GET', `/stories/${ storyId }/links` ) );
 			} catch {
 				/* ignore */
 			}
@@ -442,32 +439,6 @@ export default function StoryEditorApp() {
 		}
 	}
 
-	// ── Link operations ───────────────────────────────────────────────────────
-
-	async function handleLinkAdd( linkType: string, linkId: number ) {
-		try {
-			const storyLink = await apiFetch< StoryLink >(
-				'POST',
-				`/stories/${ storyId }/links`,
-				{ link_type: linkType, link_id: linkId }
-			);
-			setLinks( ( p ) => {
-				const filtered = p.filter( ( l ) => l.id !== storyLink.id );
-				return [ ...filtered, storyLink ];
-			} );
-		} catch {
-			/* create failures are silent, as before */
-		}
-	}
-
-	async function handleLinkDelete( linkId: number ) {
-		try {
-			await apiFetch( 'DELETE', `/links/${ linkId }` );
-			setLinks( ( p ) => p.filter( ( l ) => l.id !== linkId ) );
-		} catch {
-			/* delete failures are silent, as before */
-		}
-	}
 
 	// ── Edge reorder ─────────────────────────────────────────────────────────
 
@@ -730,18 +701,6 @@ export default function StoryEditorApp() {
 							/>
 						) }
 
-						{ activeTab === 'links' && ! isNew && (
-							<LinksPanel
-								storyId={ storyId }
-								links={ links }
-								onLinkAdd={ handleLinkAdd }
-								onLinkDelete={ handleLinkDelete }
-							/>
-						) }
-
-						{ activeTab === 'links' && isNew && (
-							<div className="cns-panel-notice">Save the story first to manage links.</div>
-						) }
 					</div>
 				</div>
 			</div>

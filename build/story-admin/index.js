@@ -730,10 +730,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/arrow-down.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/arrow-up.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/brush.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/color.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/link-off.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/plus-circle.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/plus.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/star-filled.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.mjs");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
@@ -995,26 +995,34 @@ function CanvasNodeList({
           children: getDisplayTitle(node)
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "cns-canvas-node-list__actions",
-          children: [incomingEdge && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+          children: [incomingEdge && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+            direction: "row",
+            align: "center",
+            justify: "end",
+            gap: 0,
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-              size: "small",
+              size: "compact",
+              variant: "secondary",
               icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Move up in sequence', 'clouds-and-spaceships'),
               disabled: !canUp,
               onClick: () => handleMoveUp(item)
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-              size: "small",
+              size: "compact",
+              variant: "secondary",
               icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_1__["default"],
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Move down in sequence', 'clouds-and-spaceships'),
               disabled: !canDown,
               onClick: () => handleMoveDown(item)
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-              size: "small",
+              size: "compact",
+              variant: "secondary",
               icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Style this connection', 'clouds-and-spaceships'),
               onClick: () => onEditEdge(incomingEdge.id)
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-              size: "small",
+              size: "compact",
+              variant: "secondary",
               icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Remove this branch', 'clouds-and-spaceships'),
               onClick: () => {
@@ -1023,23 +1031,31 @@ function CanvasNodeList({
                 }
               }
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-              size: "small",
+              size: "compact",
+              variant: "secondary",
               icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Split route: add a parallel branch from the same parent', 'clouds-and-spaceships'),
               onClick: () => onStartEdgeFrom(incomingEdge.fromNodeId)
             })]
           }), !incomingEdge && !isStart && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-            size: "small",
+            size: "compact",
+            variant: "secondary",
             icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Set as story start node', 'clouds-and-spaceships'),
             onClick: () => onSetStartNode(node.id)
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-            size: "small",
+            size: "compact",
+            variant: "secondary",
             icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+            style: {
+              color: 'grey',
+              borderColor: 'grey'
+            },
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Edit node', 'clouds-and-spaceships'),
             onClick: () => onEdit(node.id)
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-            size: "small",
+            size: "compact",
+            variant: "secondary",
             icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__["default"],
             isDestructive: true,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Delete node', 'clouds-and-spaceships'),
@@ -1080,15 +1096,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils */ "./src/story/admin/utils.ts");
 /* harmony import */ var _forms_EdgeStyleModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./forms/EdgeStyleModal */ "./src/story/admin/app/forms/EdgeStyleModal.tsx");
 /* harmony import */ var _forms_NodeModal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./forms/NodeModal */ "./src/story/admin/app/forms/NodeModal.tsx");
-/* harmony import */ var _panels_LinksPanel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./panels/LinksPanel */ "./src/story/admin/app/panels/LinksPanel.tsx");
-/* harmony import */ var _panels_NodesPanel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./panels/NodesPanel */ "./src/story/admin/app/panels/NodesPanel.tsx");
-/* harmony import */ var _panels_PathsPanel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./panels/PathsPanel */ "./src/story/admin/app/panels/PathsPanel.tsx");
-/* harmony import */ var _panels_SettingsPanel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./panels/SettingsPanel */ "./src/story/admin/app/panels/SettingsPanel.tsx");
-/* harmony import */ var _panels_StoryCanvasPanel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./panels/StoryCanvasPanel */ "./src/story/admin/app/panels/StoryCanvasPanel.tsx");
-/* harmony import */ var _shared_admin_Notices__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../shared/admin/Notices */ "./src/shared/admin/Notices.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__);
-
+/* harmony import */ var _panels_NodesPanel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./panels/NodesPanel */ "./src/story/admin/app/panels/NodesPanel.tsx");
+/* harmony import */ var _panels_PathsPanel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./panels/PathsPanel */ "./src/story/admin/app/panels/PathsPanel.tsx");
+/* harmony import */ var _panels_SettingsPanel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./panels/SettingsPanel */ "./src/story/admin/app/panels/SettingsPanel.tsx");
+/* harmony import */ var _panels_StoryCanvasPanel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./panels/StoryCanvasPanel */ "./src/story/admin/app/panels/StoryCanvasPanel.tsx");
+/* harmony import */ var _shared_admin_Notices__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../shared/admin/Notices */ "./src/shared/admin/Notices.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__);
 
 
 
@@ -1144,7 +1158,6 @@ function StoryEditorApp() {
   const [nodes, setNodes] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [edges, setEdges] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [paths, setPaths] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [links, setLinks] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [mapData, setMapData] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [mapObjects, setMapObjects] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [mapAreas, setMapAreas] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -1188,9 +1201,7 @@ function StoryEditorApp() {
       } catch {
         /* load failures leave the editor empty, as before */
       }
-      try {
-        setLinks(await (0,_utils__WEBPACK_IMPORTED_MODULE_6__.apiFetch)('GET', `/stories/${storyId}/links`));
-      } catch {
+      try {} catch {
         /* ignore */
       }
       setLoading(false);
@@ -1522,31 +1533,6 @@ function StoryEditorApp() {
     }
   }
 
-  // ── Link operations ───────────────────────────────────────────────────────
-
-  async function handleLinkAdd(linkType, linkId) {
-    try {
-      const storyLink = await (0,_utils__WEBPACK_IMPORTED_MODULE_6__.apiFetch)('POST', `/stories/${storyId}/links`, {
-        link_type: linkType,
-        link_id: linkId
-      });
-      setLinks(p => {
-        const filtered = p.filter(l => l.id !== storyLink.id);
-        return [...filtered, storyLink];
-      });
-    } catch {
-      /* create failures are silent, as before */
-    }
-  }
-  async function handleLinkDelete(linkId) {
-    try {
-      await (0,_utils__WEBPACK_IMPORTED_MODULE_6__.apiFetch)('DELETE', `/links/${linkId}`);
-      setLinks(p => p.filter(l => l.id !== linkId));
-    } catch {
-      /* delete failures are silent, as before */
-    }
-  }
-
   // ── Edge reorder ─────────────────────────────────────────────────────────
 
   async function handleEdgeReorder(edgeId, sortOrder) {
@@ -1726,17 +1712,17 @@ function StoryEditorApp() {
   const pageTitle = isNew ? 'New Story' : `Edit: ${settings.title || '(no title)'}`;
   const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
   if (loading) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
       className: "cns-story-editor",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "cns-loading",
         children: "Loading\u2026"
       })
     });
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
     className: "cns-story-editor cns-map-editor",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_shared_admin_EditorHeader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_shared_admin_EditorHeader__WEBPACK_IMPORTED_MODULE_4__["default"], {
       pageTitle: pageTitle,
       overviewUrl: d.overviewUrl || '#',
       viewUrl: !isNew ? settings.viewUrl : '',
@@ -1750,20 +1736,20 @@ function StoryEditorApp() {
       backLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('All Stories', 'clouds-and-spaceships'),
       viewLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('View Story', 'clouds-and-spaceships'),
       saveLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save Story', 'clouds-and-spaceships')
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
       className: "cns-map-editor__main",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
         className: "cns-map-editor__body",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_TabBar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_TabBar__WEBPACK_IMPORTED_MODULE_5__["default"], {
           activeTab: activeTab,
           onChange: handleTabChange
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
           className: "cns-map-editor__content",
-          children: [activeTab === 'settings' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_panels_SettingsPanel__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: [activeTab === 'settings' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_panels_SettingsPanel__WEBPACK_IMPORTED_MODULE_11__["default"], {
             settings: settings,
             onChange: setSettings,
             onMapChange: handleMapChange
-          }), activeTab === 'canvas' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_panels_StoryCanvasPanel__WEBPACK_IMPORTED_MODULE_13__["default"], {
+          }), activeTab === 'canvas' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_panels_StoryCanvasPanel__WEBPACK_IMPORTED_MODULE_12__["default"], {
             isNew: isNew,
             settings: settings,
             nodes: nodes,
@@ -1804,7 +1790,7 @@ function StoryEditorApp() {
               edgeId
             }),
             onSequenceSwap: handleSequenceSwap
-          }), activeTab === 'nodes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_panels_NodesPanel__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          }), activeTab === 'nodes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_panels_NodesPanel__WEBPACK_IMPORTED_MODULE_9__["default"], {
             nodes: nodes,
             edges: edges,
             paths: paths,
@@ -1829,7 +1815,7 @@ function StoryEditorApp() {
               open: true,
               edgeId: id
             })
-          }), activeTab === 'paths' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_panels_PathsPanel__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          }), activeTab === 'paths' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_panels_PathsPanel__WEBPACK_IMPORTED_MODULE_10__["default"], {
             paths: paths,
             nodes: nodes,
             edges: edges,
@@ -1838,18 +1824,10 @@ function StoryEditorApp() {
             onDeletePath: handlePathDelete,
             onQuickNodeCreate: handleQuickNodeCreate,
             onPathNodesApply: handlePathNodesApply
-          }), activeTab === 'links' && !isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_panels_LinksPanel__WEBPACK_IMPORTED_MODULE_9__["default"], {
-            storyId: storyId,
-            links: links,
-            onLinkAdd: handleLinkAdd,
-            onLinkDelete: handleLinkDelete
-          }), activeTab === 'links' && isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-            className: "cns-panel-notice",
-            children: "Save the story first to manage links."
           })]
         })]
       })
-    }), nodeModal.open && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_forms_NodeModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), nodeModal.open && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_NodeModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
       nodeId: nodeModal.nodeId
       // Looked up from the modal's own nodeId, not from the
       // selection: entering Add mode leaves any previously
@@ -1872,7 +1850,7 @@ function StoryEditorApp() {
       }
     }), edgeModal.open && (() => {
       const edge = edges.find(e => e.id === edgeModal.edgeId);
-      return edge ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_forms_EdgeStyleModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      return edge ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_forms_EdgeStyleModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
         edge: edge,
         storyColor: settings.lineColor,
         storyWidth: settings.lineWidth,
@@ -1884,7 +1862,7 @@ function StoryEditorApp() {
           edgeId: null
         })
       }) : null;
-    })(), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_shared_admin_Notices__WEBPACK_IMPORTED_MODULE_14__["default"], {})]
+    })(), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_shared_admin_Notices__WEBPACK_IMPORTED_MODULE_13__["default"], {})]
   });
 }
 
@@ -1920,9 +1898,6 @@ const TABS = [{
 }, {
   id: 'paths',
   label: 'Paths'
-}, {
-  id: 'links',
-  label: 'Links'
 }];
 function TabBar({
   activeTab,
@@ -2986,181 +2961,6 @@ function PathNodesModal({
 
 /***/ },
 
-/***/ "./src/story/admin/app/panels/LinksPanel.tsx"
-/*!***************************************************!*\
-  !*** ./src/story/admin/app/panels/LinksPanel.tsx ***!
-  \***************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ LinksPanel)
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/link-off.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/link.mjs");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils */ "./src/story/admin/utils.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
-
-
-
-
-
-
-const LINK_TYPE_LABELS = {
-  map_object: 'Map Object',
-  map_area: 'Map Area',
-  hierarchy: 'Hierarchy Region'
-};
-function LinksPanel({
-  storyId: _storyId,
-  links,
-  onLinkAdd,
-  onLinkDelete
-}) {
-  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const [results, setResults] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [loading, setLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [linkType, setLinkType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('map_object');
-  async function handleSearch() {
-    setLoading(true);
-    try {
-      // Query map-suite's REST API for linkable entities.
-      let path = '';
-      if (linkType === 'map_object') {
-        path = '/objects?per_page=50&search=' + encodeURIComponent(search);
-      } else if (linkType === 'map_area') {
-        path = '/areas?per_page=50&search=' + encodeURIComponent(search);
-      } else {
-        path = '/hierarchy?per_page=50&search=' + encodeURIComponent(search);
-      }
-      const data = await (0,_utils__WEBPACK_IMPORTED_MODULE_5__.mapApiFetch)('GET', path);
-      setResults(data.map(item => ({
-        id: item.id,
-        title: item.title,
-        type: linkType
-      })));
-    } catch {
-      /* search failures leave the results empty, as before */
-    } finally {
-      setLoading(false);
-    }
-  }
-  const linkedIds = new Set(links.filter(l => l.linkType === linkType).map(l => l.linkId));
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-    className: "cns-panel cns-links-panel",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Map Suite Links', 'clouds-and-spaceships')
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-      className: "description",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Link this story to specific map objects, areas, or hierarchy regions. These relationships are used for cross-referencing in the map editor.', 'clouds-and-spaceships')
-    }), links.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h3", {
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Linked Entities', 'clouds-and-spaceships')
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
-        className: "wp-list-table widefat fixed striped",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Type', 'clouds-and-spaceships')
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Entity', 'clouds-and-spaceships')
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Actions', 'clouds-and-spaceships')
-            })]
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
-          children: links.map(storyLink => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                className: "cns-badge",
-                children: LINK_TYPE_LABELS[storyLink.linkType]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-              children: storyLink.linkTitle || `#${storyLink.linkId}`
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-                size: "small",
-                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
-                isDestructive: true,
-                onClick: () => onLinkDelete(storyLink.id),
-                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Unlink', 'clouds-and-spaceships')
-              })
-            })]
-          }, storyLink.id))
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h3", {
-      style: {
-        marginTop: 24
-      },
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Add Link', 'clouds-and-spaceships')
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "cns-row-group",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Entity type', 'clouds-and-spaceships'),
-        hideLabelFromVision: true,
-        value: linkType,
-        options: [{
-          value: 'map_object',
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Map Object', 'clouds-and-spaceships')
-        }, {
-          value: 'map_area',
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Map Area', 'clouds-and-spaceships')
-        }, {
-          value: 'hierarchy',
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Hierarchy Region', 'clouds-and-spaceships')
-        }],
-        onChange: v => {
-          setLinkType(v);
-          setResults([]);
-        }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SearchControl, {
-        __nextHasNoMarginBottom: true,
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Search entities', 'clouds-and-spaceships'),
-        hideLabelFromVision: true,
-        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Search…', 'clouds-and-spaceships'),
-        value: search,
-        onChange: setSearch,
-        onKeyDown: e => {
-          if (e.key === 'Enter') handleSearch();
-        }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-        variant: "secondary",
-        isBusy: loading,
-        disabled: loading,
-        onClick: handleSearch,
-        children: loading ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Searching…', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Search', 'clouds-and-spaceships')
-      })]
-    }), results.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("ul", {
-      className: "cns-link-results",
-      children: results.map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("li", {
-        className: "cns-link-result",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: item.title || `#${item.id}`
-        }), linkedIds.has(item.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          className: "cns-badge",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Linked', 'clouds-and-spaceships')
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-          size: "small",
-          variant: "primary",
-          icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
-          onClick: () => onLinkAdd(linkType, item.id),
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Link', 'clouds-and-spaceships')
-        })]
-      }, item.id))
-    })]
-  });
-}
-
-/***/ },
-
 /***/ "./src/story/admin/app/panels/NodesPanel.tsx"
 /*!***************************************************!*\
   !*** ./src/story/admin/app/panels/NodesPanel.tsx ***!
@@ -3175,15 +2975,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/arrow-down.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/arrow-up.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/brush.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close-small.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/star-empty.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.mjs");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/star-empty.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.mjs");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+
 
 
 
@@ -3205,17 +3006,21 @@ function NodesPanel({
 }) {
   const pathMap = new Map(paths.map(p => [p.id, p]));
   if (!nodes.length) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
       className: "cns-panel",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
-        children: "No nodes yet. Switch to the Canvas tab and click to add your first node."
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+        children: "No nodes yet."
       })
     });
   }
 
-  // Moves an outgoing edge one slot up/down among its siblings and rewrites
-  // every sibling's sort order to its list index, so ties (fresh edges all
-  // default to 0) become an explicit, visible order.
+  // Help information
+  const [isVisibleHelpInformation, setIsVisibleHelpInformation] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(false);
+  const toggleVisibleHelpInformation = () => {
+    setIsVisibleHelpInformation(state => !state);
+  };
+
+  // Moves an outgoing edge one slot up/down among its siblings and rewrites every sibling's sort order
   function moveEdge(outEdges, index, dir) {
     const target = index + dir;
     if (target < 0 || target >= outEdges.length) return;
@@ -3225,152 +3030,233 @@ function NodesPanel({
       if (edge.sortOrder !== i) onEdgeReorder(edge.id, i);
     });
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+    gap: 2,
+    direction: "column",
+    align: "center",
     className: "cns-panel cns-nodes-panel",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h2", {
-      children: "Story Nodes"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
-      className: "description",
-      children: "Click \"Set Start\" to mark the first node visitors will see. Connections are managed via the Canvas tab. The order of a node's outgoing connections decides branch numbering (1.1, 1.2, \u2026) and which branch \"Next\" follows first on the frontend."
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("table", {
-      className: "wp-list-table widefat fixed striped",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("thead", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("tr", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("th", {
-            style: {
-              width: 32
-            }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("th", {
-            children: "Node"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("th", {
-            children: "Substory"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("th", {
-            children: "Outgoing connections"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("th", {
-            children: "Actions"
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("tbody", {
-        children: nodes.map(node => {
-          const outEdges = edges.filter(e => e.fromNodeId === node.id).sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                className: "cns-node-swatch",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexBlock, {
+      style: {
+        width: '100%'
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+        gap: 4,
+        align: "center",
+        justify: "start",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+            children: "Story Nodes"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+            variant: "secondary",
+            onClick: toggleVisibleHelpInformation,
+            children: ["Help Information", isVisibleHelpInformation && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Popover, {
+              headerTitle: "Help Information",
+              expandOnMobile: true,
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ol", {
                 style: {
-                  background: node.iconType === 'thumbnail' || node.iconType === 'icon' ? 'transparent' : node.iconColor,
-                  width: 18,
-                  height: 18,
-                  display: 'inline-block',
-                  borderRadius: node.iconType === 'square' || node.iconType === 'diamond' ? 2 : '50%',
-                  transform: node.iconType === 'diamond' ? 'rotate(45deg)' : undefined,
-                  border: '1px solid rgba(0,0,0,0.3)'
-                }
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("td", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
-                children: getDisplayTitle(node)
-              }), node.id === startNodeId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                className: "cns-badge cns-badge--featured",
-                style: {
-                  marginLeft: 6
+                  width: 320,
+                  maxWidth: '100%'
                 },
-                children: "Start"
-              }), node.pathId && pathMap.has(node.pathId) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                className: "cns-badge",
-                style: {
-                  marginLeft: 6,
-                  background: pathMap.get(node.pathId).markerColor,
-                  color: '#fff',
-                  fontSize: 10,
-                  padding: '1px 5px',
-                  borderRadius: 10
-                },
-                children: pathMap.get(node.pathId).label || `Path #${node.pathId}`
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
-              children: node.substoryId ? node.substoryEditUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("a", {
-                href: node.substoryEditUrl,
-                target: "_blank",
-                rel: "noopener",
-                children: [node.substoryTitle || `Substory #${node.substoryId}`, ' ', "\u2197"]
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                children: node.substoryTitle || `Substory #${node.substoryId}`
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                className: "description",
-                children: "\u2014"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("td", {
-              children: [outEdges.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                className: "description",
-                children: "None"
-              }), outEdges.map((edge, index) => {
-                const toNode = nodes.find(n => n.id === edge.toNodeId);
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-                  className: "cns-edge-row",
-                  children: [outEdges.length > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                      size: "small",
-                      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
-                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Move branch up', 'clouds-and-spaceships'),
-                      disabled: index === 0,
-                      onClick: () => moveEdge(outEdges, index, -1)
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                      size: "small",
-                      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_1__["default"],
-                      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Move branch down', 'clouds-and-spaceships'),
-                      disabled: index === outEdges.length - 1,
-                      onClick: () => moveEdge(outEdges, index, 1)
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: ["\u2192", ' ', toNode ? getDisplayTitle(toNode) : `#${edge.toNodeId}`]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                    size: "small",
-                    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
-                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Style this connection', 'clouds-and-spaceships'),
-                    onClick: () => onEditEdge(edge.id)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                    size: "small",
-                    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
-                    isDestructive: true,
-                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Delete connection', 'clouds-and-spaceships'),
-                    onClick: () => {
-                      if (window.confirm('Delete this connection?')) onEdgeDelete(edge.id);
-                    }
-                  })]
-                }, edge.id);
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
-              className: "cns-row-actions",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-                className: "cns-actions-row",
-                children: [node.id !== startNodeId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                  size: "small",
-                  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
-                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Set as story start node', 'clouds-and-spaceships'),
-                  onClick: () => onSetStartNode(node.id),
-                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Set Start', 'clouds-and-spaceships')
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                  size: "small",
-                  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
-                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Edit', 'clouds-and-spaceships'),
-                  onClick: () => onEditNode(node.id)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-                  size: "small",
-                  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
-                  isDestructive: true,
-                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Delete', 'clouds-and-spaceships'),
-                  onClick: () => {
-                    if (window.confirm('Delete this node and all its connections?')) {
-                      onDeleteNode(node.id);
-                    }
-                  }
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+                  children: "Set Start - marks the initial node and path for the story element."
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+                  children: "Style Path - style setting for path between this node and the next in path."
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+                  children: "Branch Order - If a story path splits into multiple nodes, set the branch order to determine the primary path and the menu order."
                 })]
               })
             })]
-          }, node.id);
-        })
-      })]
+          })
+        })]
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("table", {
+        className: "wp-list-table widefat fixed striped",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
+              style: {
+                width: 32
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
+              children: "Node"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
+              children: "Substory"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
+              children: "Outgoing Paths"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
+              children: "Actions"
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tbody", {
+          children: nodes.map(node => {
+            const outEdges = edges.filter(e => e.fromNodeId === node.id).sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  className: "cns-node-swatch",
+                  style: {
+                    background: node.iconType === 'thumbnail' || node.iconType === 'icon' ? 'transparent' : node.iconColor,
+                    width: 18,
+                    height: 18,
+                    display: 'inline-block',
+                    borderRadius: node.iconType === 'square' || node.iconType === 'diamond' ? 2 : '50%',
+                    transform: node.iconType === 'diamond' ? 'rotate(45deg)' : undefined,
+                    border: '1px solid rgba(0,0,0,0.3)'
+                  }
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("td", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
+                  children: getDisplayTitle(node)
+                }), node.id === startNodeId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  className: "cns-badge cns-badge--featured",
+                  style: {
+                    marginLeft: 6
+                  },
+                  children: "Start"
+                }), node.pathId && pathMap.has(node.pathId) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  className: "cns-badge",
+                  style: {
+                    marginLeft: 6,
+                    background: pathMap.get(node.pathId).markerColor,
+                    color: '#fff',
+                    fontSize: 10,
+                    padding: '1px 5px',
+                    borderRadius: 10
+                  },
+                  children: pathMap.get(node.pathId).label || `Path #${node.pathId}`
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
+                children: node.substoryId ? node.substoryEditUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("a", {
+                  href: node.substoryEditUrl,
+                  target: "_blank",
+                  rel: "noopener",
+                  children: [node.substoryTitle || `Substory #${node.substoryId}`, ' ', "\u2197"]
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  children: node.substoryTitle || `Substory #${node.substoryId}`
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  className: "description",
+                  children: "\u2014"
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("td", {
+                children: [outEdges.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  className: "description",
+                  children: "None"
+                }), outEdges.map((edge, index) => {
+                  const toNode = nodes.find(n => n.id === edge.toNodeId);
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+                    direction: "row",
+                    align: "center",
+                    justify: "space-between",
+                    gap: 2,
+                    className: "cns-edge-row",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+                      children: ["\u2192", ' ', toNode ? getDisplayTitle(toNode) : `#${edge.toNodeId}`]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexBlock, {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+                        direction: "row",
+                        align: "center",
+                        justify: "end",
+                        gap: 1,
+                        children: [outEdges.length > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+                            direction: "row",
+                            align: "center",
+                            justify: "start",
+                            gap: 0,
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                              size: "compact",
+                              variant: "secondary",
+                              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
+                              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Move branch up', 'clouds-and-spaceships'),
+                              disabled: index === 0,
+                              onClick: () => moveEdge(outEdges, index, -1)
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                              size: "compact",
+                              variant: "secondary",
+                              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_1__["default"],
+                              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Move branch down', 'clouds-and-spaceships'),
+                              disabled: index === outEdges.length - 1,
+                              onClick: () => moveEdge(outEdges, index, 1)
+                            })]
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+                            direction: "row",
+                            align: "center",
+                            justify: "start",
+                            gap: 0,
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                              size: "compact",
+                              variant: "secondary",
+                              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
+                              style: {
+                                color: 'grey',
+                                borderColor: 'grey'
+                              },
+                              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Style path', 'clouds-and-spaceships'),
+                              onClick: () => onEditEdge(edge.id)
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                              size: "compact",
+                              variant: "secondary",
+                              icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+                              isDestructive: true,
+                              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Delete connection', 'clouds-and-spaceships'),
+                              onClick: () => {
+                                if (window.confirm('Are you sure you want to delete this connection?')) onEdgeDelete(edge.id);
+                              }
+                            })]
+                          })
+                        })]
+                      })
+                    })]
+                  }, edge.id);
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
+                className: "cns-row-actions",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+                  direction: "row",
+                  align: "center",
+                  justify: "end",
+                  gap: 0,
+                  className: "cns-actions-row",
+                  children: [node.id !== startNodeId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                    size: "compact",
+                    variant: "secondary",
+                    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Set as story start node', 'clouds-and-spaceships'),
+                    onClick: () => onSetStartNode(node.id),
+                    children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Set Start', 'clouds-and-spaceships')
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                    size: "compact",
+                    variant: "secondary",
+                    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
+                    style: {
+                      color: 'grey',
+                      borderColor: 'grey'
+                    },
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Edit', 'clouds-and-spaceships'),
+                    onClick: () => onEditNode(node.id)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                    size: "compact",
+                    variant: "secondary",
+                    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+                    isDestructive: true,
+                    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Delete', 'clouds-and-spaceships'),
+                    onClick: () => {
+                      if (window.confirm('Delete this node and all of its connections?')) {
+                        onDeleteNode(node.id);
+                      }
+                    }
+                  })]
+                })
+              })]
+            }, node.id);
+          })
+        })]
+      })
     })]
   });
 }
@@ -3440,7 +3326,7 @@ function PathsPanel({
       children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Story Paths', 'clouds-and-spaceships')
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
       className: "description",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Paths group nodes so you can apply shared marker settings. Use "Manage nodes" to order and connect a path’s nodes without the canvas. Priority order: individual node settings > path settings > global settings.', 'clouds-and-spaceships')
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Paths are chronological arrangements of substory nodes.', 'clouds-and-spaceships')
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       style: {
         marginBottom: 12
@@ -3511,33 +3397,46 @@ function PathsPanel({
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
             children: nodes.filter(n => n.pathId === path.id).length
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "cns-actions-row",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-                size: "small",
-                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Manage nodes: order, connect, add or remove', 'clouds-and-spaceships'),
-                onClick: () => setNodesModalPath(path),
-                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Manage nodes', 'clouds-and-spaceships')
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-                size: "small",
-                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Edit', 'clouds-and-spaceships'),
-                onClick: () => setModal({
-                  open: true,
-                  path
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-                size: "small",
-                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
-                isDestructive: true,
-                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Delete', 'clouds-and-spaceships'),
-                onClick: () => {
-                  if (window.confirm(`Delete path "${path.label}"? Nodes will become unassigned.`)) {
-                    onDeletePath(path.id);
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
+                direction: "row",
+                align: "center",
+                justify: "end",
+                gap: 0,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+                  size: "compact",
+                  variant: "secondary",
+                  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Manage nodes: order, connect, add or remove', 'clouds-and-spaceships'),
+                  onClick: () => setNodesModalPath(path),
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Manage nodes', 'clouds-and-spaceships')
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+                  size: "compact",
+                  variant: "secondary",
+                  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Edit', 'clouds-and-spaceships'),
+                  style: {
+                    color: 'grey',
+                    borderColor: 'grey'
+                  },
+                  onClick: () => setModal({
+                    open: true,
+                    path
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+                  size: "compact",
+                  variant: "secondary",
+                  icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
+                  isDestructive: true,
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Delete', 'clouds-and-spaceships'),
+                  onClick: () => {
+                    if (window.confirm(`Delete path "${path.label}"? Nodes will become unassigned.`)) {
+                      onDeletePath(path.id);
+                    }
                   }
-                }
-              })]
+                })]
+              })
             })
           })]
         }, path.id))
@@ -3641,7 +3540,7 @@ function SettingsPanel({
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
             id: "cns-story-layers",
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map layers', 'clouds-and-spaceships'),
-            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Which layers of the linked map this story shows. Readers can toggle them again on the frontend; this sets where they start.', 'clouds-and-spaceships'),
+            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Default display toggle settings for map elements on story for the reader.', 'clouds-and-spaceships'),
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
               direction: 'column',
               gap: 2,
@@ -3664,7 +3563,7 @@ function SettingsPanel({
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
             id: "cns-story-frontend",
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Reader Settings', 'clouds-and-spaceships'),
-            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Story settinggs for public reader. Off by default.', 'clouds-and-spaceships'),
+            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Story settings for public reader. Off by default.', 'clouds-and-spaceships'),
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disable Area/Object/Label click', 'clouds-and-spaceships'),
@@ -3701,8 +3600,10 @@ function SettingsPanel({
                 border: '1px solid #ddd'
               }
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            className: "cns-actions-row",
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+            gap: 1,
+            align: "center",
+            justify: "start",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_MediaSelectButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
               title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select Story Thumbnail', 'clouds-and-spaceships'),
               value: settings.thumbnailId,
@@ -3715,7 +3616,7 @@ function SettingsPanel({
               }),
               children: settings.thumbnailId ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Change thumbnail', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Set thumbnail', 'clouds-and-spaceships')
             }), settings.thumbnailId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-              variant: "tertiary",
+              variant: "secondary",
               isDestructive: true,
               icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove thumbnail', 'clouds-and-spaceships'),
@@ -3732,7 +3633,7 @@ function SettingsPanel({
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
           id: "cns-story-marker",
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Active node marker', 'clouds-and-spaceships'),
-          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Global default. Overridden per-path and per-node.', 'clouds-and-spaceships'),
+          help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Global defaults. Can be overridden on per-path and per-node level.', 'clouds-and-spaceships'),
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_shared_MarkerControls__WEBPACK_IMPORTED_MODULE_5__["default"], {
             markerType: settings.markerType,
             markerColor: settings.markerColor,
@@ -3863,7 +3764,7 @@ function StoryCanvasPanel({
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Connect', 'clouds-and-spaceships')
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-          variant: "tertiary",
+          variant: "secondary",
           onClick: toggleVisibleHelpInformation,
           children: ["Help Information", isVisibleHelpInformation && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Popover, {
             headerTitle: "Help Information",
@@ -3915,14 +3816,15 @@ function StoryCanvasPanel({
         className: "cns-story-canvas-toolbar__row cns-story-canvas-toolbar__line-style",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
           gap: 2,
-          direction: "column",
-          align: "start",
+          direction: "row",
+          justify: "start",
+          align: "end",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
               className: "cns-story-canvas-toolbar__label",
-              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Lines:', 'clouds-and-spaceships')
+              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Path Lines:', 'clouds-and-spaceships')
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexBlock, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
               gap: 2,
               direction: "row",
@@ -3932,7 +3834,7 @@ function StoryCanvasPanel({
                 value: settings.lineColor,
                 onChange: v => set('lineColor', v)
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-                size: "small",
+                size: "default",
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Width', 'clouds-and-spaceships'),
                 min: 0.5,
                 max: 20,
@@ -3943,7 +3845,7 @@ function StoryCanvasPanel({
                   width: 70
                 }
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-                size: "small",
+                size: "default",
                 label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Style', 'clouds-and-spaceships'),
                 value: settings.lineStyle,
                 options: [{
@@ -3961,28 +3863,35 @@ function StoryCanvasPanel({
             })
           })]
         })
-      }), settings.mapId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      }), settings.mapId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "cns-story-canvas-toolbar__row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
-          className: "cns-story-canvas-toolbar__label",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map layers:', 'clouds-and-spaceships')
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
-          direction: 'column',
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+          direction: 'row',
+          align: "center",
+          justify: "start",
           gap: 2,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Areas', 'clouds-and-spaceships'),
-            checked: settings.showAreas,
-            onChange: v => set('showAreas', v)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Objects', 'clouds-and-spaceships'),
-            checked: settings.showObjects,
-            onChange: v => set('showObjects', v)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Labels', 'clouds-and-spaceships'),
-            checked: settings.showLabels,
-            onChange: v => set('showLabels', v)
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            className: "cns-story-canvas-toolbar__label",
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map layers:', 'clouds-and-spaceships')
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+            direction: 'row',
+            justify: "start",
+            gap: 2,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Areas', 'clouds-and-spaceships'),
+              checked: settings.showAreas,
+              onChange: v => set('showAreas', v)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Objects', 'clouds-and-spaceships'),
+              checked: settings.showObjects,
+              onChange: v => set('showObjects', v)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Labels', 'clouds-and-spaceships'),
+              checked: settings.showLabels,
+              onChange: v => set('showLabels', v)
+            })]
           })]
-        })]
+        })
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "cns-story-canvas-layout",
@@ -4224,7 +4133,7 @@ function MarkerControls({
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
       className: "cns-grid__group",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RangeControl, {
-        label: markerType === 'ring' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Ring size (px)', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Icon size (px)', 'clouds-and-spaceships'),
+        label: markerType === 'ring' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Marker ring size', 'clouds-and-spaceships') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Marker icon size', 'clouds-and-spaceships'),
         min: 1,
         max: 30,
         step: 1,
@@ -5220,17 +5129,13 @@ function drawPendingEdge(ctx, W, H, fromNode, mouseX, mouseY, color) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   apiFetch: () => (/* binding */ apiFetch),
-/* harmony export */   mapApiFetch: () => (/* binding */ mapApiFetch)
+/* harmony export */   apiFetch: () => (/* binding */ apiFetch)
 /* harmony export */ });
 /* harmony import */ var _shared_admin_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/admin/api */ "./src/shared/admin/api.ts");
 
 
 /** Story-suite REST namespace. */
 const apiFetch = (0,_shared_admin_api__WEBPACK_IMPORTED_MODULE_0__.createApiFetch)('/cns-story-suite/v1');
-
-/** Map-suite REST namespace — the story editor reads map data through it. */
-const mapApiFetch = (0,_shared_admin_api__WEBPACK_IMPORTED_MODULE_0__.createApiFetch)('/cns-map-suite/v1');
 
 /***/ },
 
@@ -5412,28 +5317,6 @@ var arrow_up_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MO
 
 /***/ },
 
-/***/ "./node_modules/@wordpress/icons/build-module/library/brush.mjs"
-/*!**********************************************************************!*\
-  !*** ./node_modules/@wordpress/icons/build-module/library/brush.mjs ***!
-  \**********************************************************************/
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ brush_default)
-/* harmony export */ });
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-// packages/icons/src/library/brush.tsx
-
-
-var brush_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M4 20h8v-1.5H4V20zM18.9 3.5c-.6-.6-1.5-.6-2.1 0l-7.2 7.2c-.4-.1-.7 0-1.1.1-.5.2-1.5.7-1.9 2.2-.4 1.7-.8 2.2-1.1 2.7-.1.1-.2.3-.3.4l-.6 1.1H6c2 0 3.4-.4 4.7-1.4.8-.6 1.2-1.4 1.3-2.3 0-.3 0-.5-.1-.7L19 5.7c.5-.6.5-1.6-.1-2.2zM9.7 14.7c-.7.5-1.5.8-2.4 1 .2-.5.5-1.2.8-2.3.2-.6.4-1 .8-1.1.5-.1 1 .1 1.3.3.2.2.3.5.2.8 0 .3-.1.9-.7 1.3z" }) });
-
-//# sourceMappingURL=brush.mjs.map
-
-
-/***/ },
-
 /***/ "./node_modules/@wordpress/icons/build-module/library/close-small.mjs"
 /*!****************************************************************************!*\
   !*** ./node_modules/@wordpress/icons/build-module/library/close-small.mjs ***!
@@ -5474,6 +5357,28 @@ __webpack_require__.r(__webpack_exports__);
 var close_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
 
 //# sourceMappingURL=close.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/color.mjs"
+/*!**********************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/color.mjs ***!
+  \**********************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ color_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/color.tsx
+
+
+var color_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M17.2 10.9c-.5-1-1.2-2.1-2.1-3.2-.6-.9-1.3-1.7-2.1-2.6L12 4l-1 1.1c-.6.9-1.3 1.7-2 2.6-.8 1.2-1.5 2.3-2 3.2-.6 1.2-1 2.2-1 3 0 3.4 2.7 6.1 6.1 6.1s6.1-2.7 6.1-6.1c0-.8-.3-1.8-1-3zm-5.1 7.6c-2.5 0-4.6-2.1-4.6-4.6 0-.3.1-1 .8-2.3.5-.9 1.1-1.9 2-3.1.7-.9 1.3-1.7 1.8-2.3.7.8 1.3 1.6 1.8 2.3.8 1.1 1.5 2.2 2 3.1.7 1.3.8 2 .8 2.3 0 2.5-2.1 4.6-4.6 4.6z" }) });
+
+//# sourceMappingURL=color.mjs.map
 
 
 /***/ },
@@ -5566,28 +5471,6 @@ var link_off_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MO
 
 /***/ },
 
-/***/ "./node_modules/@wordpress/icons/build-module/library/link.mjs"
-/*!*********************************************************************!*\
-  !*** ./node_modules/@wordpress/icons/build-module/library/link.mjs ***!
-  \*********************************************************************/
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ link_default)
-/* harmony export */ });
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-// packages/icons/src/library/link.tsx
-
-
-var link_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z" }) });
-
-//# sourceMappingURL=link.mjs.map
-
-
-/***/ },
-
 /***/ "./node_modules/@wordpress/icons/build-module/library/list-view.mjs"
 /*!**************************************************************************!*\
   !*** ./node_modules/@wordpress/icons/build-module/library/list-view.mjs ***!
@@ -5628,28 +5511,6 @@ __webpack_require__.r(__webpack_exports__);
 var pencil_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z" }) });
 
 //# sourceMappingURL=pencil.mjs.map
-
-
-/***/ },
-
-/***/ "./node_modules/@wordpress/icons/build-module/library/plus-circle.mjs"
-/*!****************************************************************************!*\
-  !*** ./node_modules/@wordpress/icons/build-module/library/plus-circle.mjs ***!
-  \****************************************************************************/
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ plus_circle_default)
-/* harmony export */ });
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-// packages/icons/src/library/plus-circle.tsx
-
-
-var plus_circle_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M7.404 16.596a6.5 6.5 0 1 0 9.192-9.192 6.5 6.5 0 0 0-9.192 9.192ZM6.344 6.343a8 8 0 1 0 11.313 11.314A8 8 0 0 0 6.343 6.343Zm4.906 9.407v-3h-3v-1.5h3v-3h1.5v3h3v1.5h-3v3h-1.5Z" }) });
-
-//# sourceMappingURL=plus-circle.mjs.map
 
 
 /***/ },
