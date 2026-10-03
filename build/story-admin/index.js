@@ -3638,23 +3638,27 @@ function SettingsPanel({
             })
           })
         }), settings.mapId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
             id: "cns-story-layers",
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map layers', 'clouds-and-spaceships'),
             help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Which layers of the linked map this story shows. Readers can toggle them again on the frontend; this sets where they start.', 'clouds-and-spaceships'),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show areas', 'clouds-and-spaceships'),
-              checked: settings.showAreas,
-              onChange: v => set('showAreas', v)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show objects', 'clouds-and-spaceships'),
-              checked: settings.showObjects,
-              onChange: v => set('showObjects', v)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show labels', 'clouds-and-spaceships'),
-              checked: settings.showLabels,
-              onChange: v => set('showLabels', v)
-            })]
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+              direction: 'column',
+              gap: 2,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show areas', 'clouds-and-spaceships'),
+                checked: settings.showAreas,
+                onChange: v => set('showAreas', v)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show objects', 'clouds-and-spaceships'),
+                checked: settings.showObjects,
+                onChange: v => set('showObjects', v)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show labels', 'clouds-and-spaceships'),
+                checked: settings.showLabels,
+                onChange: v => set('showLabels', v)
+              })]
+            })
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
@@ -3962,18 +3966,22 @@ function StoryCanvasPanel({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
           className: "cns-story-canvas-toolbar__label",
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map layers:', 'clouds-and-spaceships')
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Areas', 'clouds-and-spaceships'),
-          checked: settings.showAreas,
-          onChange: v => set('showAreas', v)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Objects', 'clouds-and-spaceships'),
-          checked: settings.showObjects,
-          onChange: v => set('showObjects', v)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Labels', 'clouds-and-spaceships'),
-          checked: settings.showLabels,
-          onChange: v => set('showLabels', v)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+          direction: 'column',
+          gap: 2,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Areas', 'clouds-and-spaceships'),
+            checked: settings.showAreas,
+            onChange: v => set('showAreas', v)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Objects', 'clouds-and-spaceships'),
+            checked: settings.showObjects,
+            onChange: v => set('showObjects', v)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Labels', 'clouds-and-spaceships'),
+            checked: settings.showLabels,
+            onChange: v => set('showLabels', v)
+          })]
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {

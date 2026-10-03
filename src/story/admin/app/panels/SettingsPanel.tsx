@@ -97,32 +97,38 @@ export default function SettingsPanel( {
 									'clouds-and-spaceships'
 								) }
 							>
-								<CheckboxControl
-									label={ __(
-										'Show areas',
-										'clouds-and-spaceships'
-									) }
-									checked={ settings.showAreas }
-									onChange={ ( v ) => set( 'showAreas', v ) }
-								/>
-								<CheckboxControl
-									label={ __(
-										'Show objects',
-										'clouds-and-spaceships'
-									) }
-									checked={ settings.showObjects }
-									onChange={ ( v ) =>
-										set( 'showObjects', v )
-									}
-								/>
-								<CheckboxControl
-									label={ __(
-										'Show labels',
-										'clouds-and-spaceships'
-									) }
-									checked={ settings.showLabels }
-									onChange={ ( v ) => set( 'showLabels', v ) }
-								/>
+								<Flex direction={ 'column' } gap={ 2 }>
+									<CheckboxControl
+										label={ __(
+											'Show areas',
+											'clouds-and-spaceships'
+										) }
+										checked={ settings.showAreas }
+										onChange={ ( v ) =>
+											set( 'showAreas', v )
+										}
+									/>
+									<CheckboxControl
+										label={ __(
+											'Show objects',
+											'clouds-and-spaceships'
+										) }
+										checked={ settings.showObjects }
+										onChange={ ( v ) =>
+											set( 'showObjects', v )
+										}
+									/>
+									<CheckboxControl
+										label={ __(
+											'Show labels',
+											'clouds-and-spaceships'
+										) }
+										checked={ settings.showLabels }
+										onChange={ ( v ) =>
+											set( 'showLabels', v )
+										}
+									/>
+								</Flex>
 							</BaseControl>
 						</FlexItem>
 					) }

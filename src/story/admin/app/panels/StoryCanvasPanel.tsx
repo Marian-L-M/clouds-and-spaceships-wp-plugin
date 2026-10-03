@@ -322,21 +322,29 @@ export default function StoryCanvasPanel( {
 						<span className="cns-story-canvas-toolbar__label">
 							{ __( 'Map layers:', 'clouds-and-spaceships' ) }
 						</span>
-						<CheckboxControl
-							label={ __( 'Areas', 'clouds-and-spaceships' ) }
-							checked={ settings.showAreas }
-							onChange={ ( v ) => set( 'showAreas', v ) }
-						/>
-						<CheckboxControl
-							label={ __( 'Objects', 'clouds-and-spaceships' ) }
-							checked={ settings.showObjects }
-							onChange={ ( v ) => set( 'showObjects', v ) }
-						/>
-						<CheckboxControl
-							label={ __( 'Labels', 'clouds-and-spaceships' ) }
-							checked={ settings.showLabels }
-							onChange={ ( v ) => set( 'showLabels', v ) }
-						/>
+						<Flex direction={ 'column' } gap={ 2 }>
+							<CheckboxControl
+								label={ __( 'Areas', 'clouds-and-spaceships' ) }
+								checked={ settings.showAreas }
+								onChange={ ( v ) => set( 'showAreas', v ) }
+							/>
+							<CheckboxControl
+								label={ __(
+									'Objects',
+									'clouds-and-spaceships'
+								) }
+								checked={ settings.showObjects }
+								onChange={ ( v ) => set( 'showObjects', v ) }
+							/>
+							<CheckboxControl
+								label={ __(
+									'Labels',
+									'clouds-and-spaceships'
+								) }
+								checked={ settings.showLabels }
+								onChange={ ( v ) => set( 'showLabels', v ) }
+							/>
+						</Flex>
 					</div>
 				) }
 			</div>
