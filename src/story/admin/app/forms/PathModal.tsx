@@ -15,7 +15,7 @@ function buildInitial( path: StoryPath | null ): PathFormData {
 		label: path?.label ?? '',
 		markerColor: path?.markerColor ?? '#00aaff',
 		markerSize: path?.markerSize ?? 5,
-		markerType: path?.markerType ?? 'ring',
+		markerType: path?.markerType ?? 'inherit',
 		markerIconId: path?.markerIconId ?? null,
 		markerIconUrl: path?.markerIconUrl ?? '',
 		markerIconOffsetX: path?.markerIconOffsetX ?? 0,
@@ -73,11 +73,12 @@ export default function PathModal( { path, onSave, onClose }: Props ) {
 				<h3>{ __( 'Marker Settings', 'clouds-and-spaceships' ) }</h3>
 				<p className="description" style={ { marginBottom: 10 } }>
 					{ __(
-						'These override the global marker for all nodes in this path (unless overridden per-node).',
+						'Path level node design settings. Priority: Individual node settings > Path node settings > Global node settings.',
 						'clouds-and-spaceships'
 					) }
 				</p>
 				<MarkerControls
+					allowInherit
 					markerType={ form.markerType }
 					markerColor={ form.markerColor }
 					markerSize={ form.markerSize }

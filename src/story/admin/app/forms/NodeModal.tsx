@@ -484,7 +484,7 @@ export default function NodeModal( {
 						<div className="cns-grid__group">
 							<RangeControl
 								label={ __(
-									'Border width (px)',
+									'Border width',
 									'clouds-and-spaceships'
 								) }
 								min={ 0 }

@@ -333,8 +333,11 @@ function drawNode(
 	const borderColor = node.iconBorderColor || '#000000';
 	const borderWidth = node.iconBorderWidth ?? 2;
 
-	// Resolve marker settings: node > path > global
-	const path        = node.pathId ? state.paths.find( ( p ) => p.id === node.pathId ) ?? null : null;
+	// Resolve marker settings: node > path > global.
+	// A path set to "inherit" drops out of the cascade so the story's marker
+	// reaches the node — matching the frontend in src/blocks/story/view.js.
+	const onPath      = node.pathId ? state.paths.find( ( p ) => p.id === node.pathId ) ?? null : null;
+	const path        = onPath && onPath.markerType !== 'inherit' ? onPath : null;
 	const markerColor = node.markerColor     ?? path?.markerColor     ?? state.markerColor;
 	const markerSize  = node.markerSize      ?? path?.markerSize      ?? state.markerSize;
 	const mOffX       = node.markerIconOffsetX ?? path?.markerIconOffsetX ?? state.markerIconOffsetX;

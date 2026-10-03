@@ -1,6 +1,136 @@
 /*!****************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/story/style.scss ***!
   \****************************************************************************************************************************************************************************************************************************************************/
+.cns-map-drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+}
+.cns-map-drawer.is-open {
+  display: block;
+}
+.cns-map-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+.cns-map-drawer__panel {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: fit-content;
+  min-width: min(100%, 240px);
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: -4px 0 32px rgba(0, 0, 0, 0.18);
+}
+.cns-map-drawer__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+.cns-map-drawer__close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #555;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid currentColor;
+}
+.cns-map-drawer__close:hover {
+  color: #000;
+}
+.cns-map-drawer__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+.cns-map-drawer__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+}
+.cns-map-drawer__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.cns-map-drawer__content {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+}
+.cns-map-drawer__content > * + * {
+  margin-top: 1em;
+}
+.cns-map-drawer__content h1,
+.cns-map-drawer__content h2,
+.cns-map-drawer__content h3,
+.cns-map-drawer__content h4,
+.cns-map-drawer__content h5,
+.cns-map-drawer__content h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.cns-map-drawer__content p {
+  margin: 0 0 1em;
+}
+.cns-map-drawer__content ul,
+.cns-map-drawer__content ol {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.cns-map-drawer__content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+.cns-map-drawer__content a {
+  color: currentColor;
+}
+.cns-map-drawer__content figure {
+  margin: 0 0 1em;
+}
+.cns-map-drawer__content figcaption {
+  font-size: 0.875em;
+  color: #666;
+  margin-top: 0.4em;
+}
+.cns-map-drawer__excerpt {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+}
+.cns-map-drawer__infobox {
+  margin: 0 0 1.25rem 0 0;
+}
+.cns-map-drawer__link {
+  display: inline-block;
+  padding-right: 1rem;
+  align-self: flex-end;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: inherit;
+}
+
 .cns-story-block {
   display: grid;
   grid-template-columns: 3fr minmax(220px, 1fr);
@@ -10,6 +140,9 @@
   .cns-story-block {
     grid-template-columns: 1fr;
   }
+}
+.cns-story-block--no-window {
+  grid-template-columns: 1fr;
 }
 
 .cns-story-block__canvas-wrap {
@@ -223,19 +356,19 @@ body.cns-story-fullscreen-open {
   white-space: nowrap;
 }
 
-.cns-sw-item__path {
-  flex-shrink: 0;
-  max-width: 90px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 10px;
+.cns-sw-path {
+  margin: 14px 0 4px;
+  padding: 2px 0 2px 8px;
+  border-left: 3px solid #00aaff;
+  font-size: 11px;
+  font-weight: 600;
   line-height: 1.4;
-  color: #fff;
-  padding: 1px 7px;
-  border-radius: 10px;
-  margin-right: 6px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #50575e;
+}
+.cns-sw-path:first-child {
+  margin-top: 4px;
 }
 
 .cns-sw-item__detail {

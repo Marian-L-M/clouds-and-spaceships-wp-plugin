@@ -6,7 +6,10 @@ import {
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	Flex,
 	Button,
+	Notice,
 	Popover,
+	FlexItem,
+	FlexBlock,
 } from '@wordpress/components';
 import { fullscreen as fullscreenIcon, close } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
@@ -221,53 +224,97 @@ export default function StoryCanvasPanel( {
 					</Button>
 				</div>
 
+				{ /* Connect mode chains onward from the selected node, so with
+				     none chosen every click just leaves the mode again. Say
+				     so instead of failing silently. */ }
+				{ canvasMode === 'connect' && edgeStartNodeId === null && (
+					<div className="cns-story-canvas-toolbar__row">
+						<Notice
+							status="warning"
+							isDismissible={ false }
+							className="cns-story-canvas-toolbar__notice"
+						>
+							{ __(
+								'Please select a node before connecting',
+								'clouds-and-spaceships'
+							) }
+						</Notice>
+					</div>
+				) }
+
 				<div className="cns-story-canvas-toolbar__row cns-story-canvas-toolbar__line-style">
-					<span className="cns-story-canvas-toolbar__label">
-						{ __( 'Lines:', 'clouds-and-spaceships' ) }
-					</span>
-					<ColorField
-						label={ __(
-							'Color & opacity',
-							'clouds-and-spaceships'
-						) }
-						value={ settings.lineColor }
-						onChange={ ( v ) => set( 'lineColor', v ) }
-					/>
-					<NumberControl
-						size="small"
-						label={ __( 'Width (px)', 'clouds-and-spaceships' ) }
-						min={ 0.5 }
-						max={ 20 }
-						step={ 0.5 }
-						value={ settings.lineWidth }
-						onChange={ ( v ) =>
-							set(
-								'lineWidth',
-								parseFloat( v ?? '' ) || settings.lineWidth
-							)
-						}
-						style={ { width: 70 } }
-					/>
-					<SelectControl
-						size="small"
-						label={ __( 'Style', 'clouds-and-spaceships' ) }
-						value={ settings.lineStyle }
-						options={ [
-							{
-								value: 'solid',
-								label: __( 'Solid', 'clouds-and-spaceships' ),
-							},
-							{
-								value: 'dashed',
-								label: __( 'Dashed', 'clouds-and-spaceships' ),
-							},
-							{
-								value: 'dotted',
-								label: __( 'Dotted', 'clouds-and-spaceships' ),
-							},
-						] }
-						onChange={ ( v ) => set( 'lineStyle', v as LineStyle ) }
-					/>
+					<Flex gap={ 2 } direction="column" align="start">
+						<FlexItem>
+							<h3 className="cns-story-canvas-toolbar__label">
+								{ __( 'Lines:', 'clouds-and-spaceships' ) }
+							</h3>
+						</FlexItem>
+						<FlexBlock>
+							<Flex gap={ 2 } direction="row" align="end">
+								<ColorField
+									label={ __(
+										'Color',
+										'clouds-and-spaceships'
+									) }
+									value={ settings.lineColor }
+									onChange={ ( v ) => set( 'lineColor', v ) }
+								/>
+								<NumberControl
+									size="small"
+									label={ __(
+										'Width',
+										'clouds-and-spaceships'
+									) }
+									min={ 0.5 }
+									max={ 20 }
+									step={ 0.5 }
+									value={ settings.lineWidth }
+									onChange={ ( v ) =>
+										set(
+											'lineWidth',
+											parseFloat( v ?? '' ) ||
+												settings.lineWidth
+										)
+									}
+									style={ { width: 70 } }
+								/>
+								<SelectControl
+									size="small"
+									label={ __(
+										'Style',
+										'clouds-and-spaceships'
+									) }
+									value={ settings.lineStyle }
+									options={ [
+										{
+											value: 'solid',
+											label: __(
+												'Solid',
+												'clouds-and-spaceships'
+											),
+										},
+										{
+											value: 'dashed',
+											label: __(
+												'Dashed',
+												'clouds-and-spaceships'
+											),
+										},
+										{
+											value: 'dotted',
+											label: __(
+												'Dotted',
+												'clouds-and-spaceships'
+											),
+										},
+									] }
+									onChange={ ( v ) =>
+										set( 'lineStyle', v as LineStyle )
+									}
+								/>
+							</Flex>
+						</FlexBlock>
+					</Flex>
 				</div>
 
 				{ settings.mapId && (

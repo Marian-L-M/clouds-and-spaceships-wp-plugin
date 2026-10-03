@@ -126,6 +126,49 @@ export default function SettingsPanel( {
 							</BaseControl>
 						</FlexItem>
 					) }
+
+					<FlexItem>
+						<BaseControl
+							id="cns-story-frontend"
+							label={ __(
+								'Reader Settings',
+								'clouds-and-spaceships'
+							) }
+							help={ __(
+								'Story settinggs for public reader. Off by default.',
+								'clouds-and-spaceships'
+							) }
+						>
+							<Flex>
+								<CheckboxControl
+									label={ __(
+										'Disable Area/Object/Label click',
+										'clouds-and-spaceships'
+									) }
+									help={ __(
+										'Disable linked map elements opening the infobox on click. Clicking story nodes will still open the story modal.',
+										'clouds-and-spaceships'
+									) }
+									checked={ settings.disableMapClick }
+									onChange={ ( v ) =>
+										set( 'disableMapClick', v )
+									}
+								/>
+								<CheckboxControl
+									label={ __(
+										'Hide the sub-story sidewindow',
+										'clouds-and-spaceships'
+									) }
+									help={ __(
+										'Removes the list of substories to the side of the map.Clicking story nodes will still open the story modal.',
+										'clouds-and-spaceships'
+									) }
+									checked={ settings.hideWindow }
+									onChange={ ( v ) => set( 'hideWindow', v ) }
+								/>
+							</Flex>
+						</BaseControl>
+					</FlexItem>
 				</Flex>
 
 				<div className="cns-grid__group cns-grid__span-1">

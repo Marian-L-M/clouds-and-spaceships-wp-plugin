@@ -9,10 +9,10 @@ import { image as imageIcon, trash } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import ColorField from '../../../../shared/admin/ColorField';
 import MediaSelectButton from './MediaSelectButton';
-import type { MarkerType } from '../../../types';
+import type { MarkerType, NodeMarkerType } from '../../../types';
 
-interface MarkerValues {
-	markerType: MarkerType;
+interface MarkerValues< T extends MarkerType | NodeMarkerType = MarkerType > {
+	markerType: T;
 	markerColor: string;
 	markerSize: number;
 	markerIconId: number | null;
@@ -21,8 +21,11 @@ interface MarkerValues {
 	markerIconOffsetY: number;
 }
 
-interface Props extends MarkerValues {
-	onChange: ( updates: Partial< MarkerValues > ) => void;
+interface Props< T extends MarkerType | NodeMarkerType >
+	extends MarkerValues< T > {
+	/** Adds an "inherit" choice — used by paths, which defer to the story. */
+	allowInherit?: boolean;
+	onChange: ( updates: Partial< MarkerValues< T > > ) => void;
 }
 
 const PRESETS = [
@@ -33,7 +36,9 @@ const PRESETS = [
 	{ label: 'Center', x: 0, y: 0 },
 ] as const;
 
-export default function MarkerControls( {
+export default function MarkerControls<
+	T extends MarkerType | NodeMarkerType = MarkerType,
+>( {
 	markerType,
 	markerColor,
 	markerSize,
@@ -41,8 +46,9 @@ export default function MarkerControls( {
 	markerIconUrl,
 	markerIconOffsetX,
 	markerIconOffsetY,
+	allowInherit = false,
 	onChange,
-}: Props ) {
+}: Props< T > ) {
 	return (
 		<div className="cns-marker-controls cns-grid cns-grid__12">
 			<div className="cns-grid__group cns-grid__span-full">
@@ -50,6 +56,17 @@ export default function MarkerControls( {
 					label={ __( 'Type', 'clouds-and-spaceships' ) }
 					selected={ markerType }
 					options={ [
+						...( allowInherit
+							? [
+									{
+										label: __(
+											'Inherit from story',
+											'clouds-and-spaceships'
+										),
+										value: 'inherit',
+									},
+							  ]
+							: [] ),
 						{
 							label: __(
 								'Ring outline',
@@ -62,9 +79,7 @@ export default function MarkerControls( {
 							value: 'icon',
 						},
 					] }
-					onChange={ ( v ) =>
-						onChange( { markerType: v as MarkerType } )
-					}
+					onChange={ ( v ) => onChange( { markerType: v as T } ) }
 				/>
 			</div>
 

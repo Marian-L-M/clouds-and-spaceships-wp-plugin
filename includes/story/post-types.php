@@ -117,6 +117,10 @@ function cns_story_suite_register_post_meta(): void {
 		'_cns_story_show_areas'    => 'boolean',
 		'_cns_story_show_objects'  => 'boolean',
 		'_cns_story_show_labels'   => 'boolean',
+		// Front-end behaviour. Both default off (absent means "no"), so
+		// existing stories keep the clickable map and the story window.
+		'_cns_story_disable_map_click' => 'boolean',
+		'_cns_story_hide_window'       => 'boolean',
 	];
 
 	foreach ($story_fields as $key => $type) {

@@ -88,7 +88,7 @@ export default function EdgeStyleModal( {
 						<div style={ { flex: 1 } }>
 							<ColorField
 								label={ `${ __(
-									'Color & opacity',
+									'Color',
 									'clouds-and-spaceships'
 								) } ${
 									defaultHint( form.lineColor === null ) ?? ''
@@ -117,9 +117,8 @@ export default function EdgeStyleModal( {
 					<Flex gap={ 1 } align="flex-end">
 						<div style={ { flex: 1 } }>
 							<NumberControl
-								__next40pxDefaultSize
 								label={ `${ __(
-									'Width (px)',
+									'Width',
 									'clouds-and-spaceships'
 								) } ${
 									defaultHint( form.lineWidth === null ) ?? ''

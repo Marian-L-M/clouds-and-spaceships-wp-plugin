@@ -151,7 +151,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						<div className="cns-grid__group cns-grid__span-1">
 							<NumberControl
 								label={ __(
-									'Max Width (px)',
+									'Max Width',
 									'clouds-and-spaceships'
 								) }
 								min={ 100 }

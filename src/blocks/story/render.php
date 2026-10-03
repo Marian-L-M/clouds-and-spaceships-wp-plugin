@@ -149,6 +149,10 @@ if ($map_id && function_exists('cns_story_suite_get_map_render_data')) {
 	}
 }
 
+// Hides the story window, leaving the node dialog as the only way to read a
+// node. Read before $block_data so the markup below can drop the element.
+$hide_window = (bool) get_post_meta($story_id, '_cns_story_hide_window', true);
+
 $block_data = [
 	'story' => [
 		'id'                => $story_id,
@@ -157,6 +161,9 @@ $block_data = [
 		'showAreas'         => cns_story_suite_layer_visible($story_id, '_cns_story_show_areas'),
 		'showObjects'       => cns_story_suite_layer_visible($story_id, '_cns_story_show_objects'),
 		'showLabels'        => cns_story_suite_layer_visible($story_id, '_cns_story_show_labels'),
+		// Opt-in front-end behaviour; both default off.
+		'disableMapClick'   => (bool) get_post_meta($story_id, '_cns_story_disable_map_click', true),
+		'hideWindow'        => $hide_window,
 		'lineColor'         => $line_color,
 		'lineWidth'         => $line_width,
 		'lineStyle'         => $line_style,
@@ -182,7 +189,7 @@ $zoom_style = ($map_id && function_exists('cns_map_suite_zoom_color_style'))
 	: '';
 
 $wrapper_attributes = get_block_wrapper_attributes(array_filter([
-	'class' => 'cns-story-block',
+	'class' => 'cns-story-block' . ($hide_window ? ' cns-story-block--no-window' : ''),
 	'style' => $zoom_style,
 ]));
 ?>
@@ -190,5 +197,7 @@ $wrapper_attributes = get_block_wrapper_attributes(array_filter([
 	<div class="cns-story-block__canvas-wrap">
 		<canvas class="cns-story-canvas"></canvas>
 	</div>
-	<div class="cns-story-window"></div>
+	<?php if (! $hide_window) : ?>
+		<div class="cns-story-window"></div>
+	<?php endif; ?>
 </div>

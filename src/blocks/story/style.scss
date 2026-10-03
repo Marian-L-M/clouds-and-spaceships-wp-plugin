@@ -1,3 +1,5 @@
+@use "../../shared/scss/drawer";
+
 // ── Block layout: canvas left, node list right ────────────────────────────────
 
 .cns-story-block {
@@ -6,6 +8,12 @@
 	align-items: start;
 
 	@media ( max-width: 640px ) {
+		grid-template-columns: 1fr;
+	}
+
+	// Story window hidden: the canvas takes the whole block, otherwise the
+	// second track stays and leaves an empty column beside it.
+	&--no-window {
 		grid-template-columns: 1fr;
 	}
 }
@@ -270,20 +278,22 @@ body.cns-story-fullscreen-open {
 	white-space: nowrap;
 }
 
-// Path label pill, tinted with the path's marker color.
-.cns-sw-item__path {
-	flex-shrink: 0;
-	max-width: 90px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	font-size: 10px;
+// Path name, once above the run of nodes that belong to it, with a rule in the
+// path's own marker colour rather than a pill on every row.
+.cns-sw-path {
+	margin: 14px 0 4px;
+	padding: 2px 0 2px 8px;
+	border-left: 3px solid #00aaff;
+	font-size: 11px;
+	font-weight: 600;
 	line-height: 1.4;
-	color: #fff;
-	padding: 1px 7px;
-	border-radius: 10px;
-	margin-right: 6px;
-	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #50575e;
+
+	&:first-child {
+		margin-top: 4px;
+	}
 }
 
 // ── Expandable detail ─────────────────────────────────────────────────────────

@@ -508,7 +508,12 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 			// Cascade: node > path > global
 			const story   = data.story;
 			const pathMap = data._pathMap;
-			const path    = node.pathId ? pathMap.get( node.pathId ) : null;
+			const onPath  = node.pathId ? pathMap.get( node.pathId ) : null;
+			// A path set to "inherit" steps out of the cascade entirely, so the
+			// story's marker reaches the node. Its marker columns are NOT NULL
+			// and used to default to 'ring', which silently overrode a
+			// story-level icon for every node on the path.
+			const path = onPath && onPath.markerType !== 'inherit' ? onPath : null;
 
 			const mColor = node.markerColor     ?? path?.markerColor     ?? story.markerColor ?? '#00aaff';
 			const mSize  = node.markerSize      ?? path?.markerSize      ?? story.markerSize  ?? 5;
@@ -639,10 +644,12 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 // ── Story window (accordion list) ─────────────────────────────────────────────
 
 function renderWindow( windowEl, data, activeNodeId, expandedIds ) {
-	// Auto-expand the active node.
-	if ( activeNodeId !== null ) expandedIds.add( activeNodeId );
-
 	const items = buildOrderedNodes( data.nodes, data.edges, data.story.startNodeId );
+
+	// The path label is a heading over its run of nodes rather than a pill on
+	// every row. undefined (not null) to start, so a first item with no path
+	// does not count as a change.
+	let lastPathId;
 
 	const rows = items.map( ( { node, depth, stepNumber } ) => {
 		const title    = node.titleOverride || node.substoryTitle || '';
@@ -658,13 +665,20 @@ function renderWindow( windowEl, data, activeNodeId, expandedIds ) {
 		const dotBorderR   = node.iconType === 'round' || node.iconType === 'thumbnail' || node.iconType === 'icon' ? '50%' : dotR;
 		const hasDetail = excerpt || node.substoryUrl;
 
+		let heading = '';
+		if ( node.pathId !== lastPathId ) {
+			lastPathId = node.pathId;
+			if ( path && path.label ) {
+				heading = `<h3 class="cns-sw-path" style="border-left-color:${ esc( path.markerColor ) }">${ esc( path.label ) }</h3>`;
+			}
+		}
+
 		// return `<div class="cns-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }" style="padding-left:${ indent }px">
-		return `<div class="cns-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }">
-			<button class="cns-sw-item__head" type="button">
+		return heading + `<div class="cns-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }">
+			<button class="cns-sw-item__head" type="button" aria-expanded="${ isOpen ? 'true' : 'false' }">
 				<span class="cns-sw-item__num">${ esc( numStr ) }</span>
 				<span class="cns-sw-item__dot" style="background:${ esc( node.iconColor ) };border-radius:${ dotBorderR };transform:${ dotTransform }"></span>
 				<span class="cns-sw-item__title">${ esc( title ) }</span>
-				${ path && path.label ? `<span class="cns-sw-item__path" style="background:${ esc( path.markerColor ) }">${ esc( path.label ) }</span>` : '' }
 			</button>
 			${ hasDetail ? `<div class="cns-sw-item__detail">
 				${ excerpt ? `<p class="cns-sw-item__excerpt">${ esc( excerpt ) }</p>` : '' }
@@ -685,11 +699,11 @@ function renderWindow( windowEl, data, activeNodeId, expandedIds ) {
 			const item   = btn.closest( '.cns-sw-item' );
 			const nodeId = parseInt( item.dataset.node, 10 );
 
-			if ( expandedIds.has( nodeId ) ) {
-				expandedIds.delete( nodeId );
-			} else {
-				expandedIds.add( nodeId );
-			}
+			// Accordion: opening one closes whatever else was open, and
+			// clicking the open one closes it.
+			const wasOpen = expandedIds.has( nodeId );
+			expandedIds.clear();
+			if ( ! wasOpen ) expandedIds.add( nodeId );
 
 			item.dispatchEvent( new CustomEvent( 'cns-navigate', { bubbles: true, detail: { nodeId } } ) );
 		} );
@@ -840,9 +854,11 @@ function initBlock( blockEl ) {
 	let data;
 	try { data = JSON.parse( rawData ); } catch { return; }
 
-	const canvas   = blockEl.querySelector( '.cns-story-canvas' );
+	const canvas = blockEl.querySelector( '.cns-story-canvas' );
+	if ( ! canvas ) return;
+	// Absent when the author hid the story window: the node dialog is then the
+	// only way to read a node, and everything else here still has to work.
 	const windowEl = blockEl.querySelector( '.cns-story-window' );
-	if ( ! canvas || ! windowEl ) return;
 
 	const m    = data.mapData;
 	const canW = m?.width ?? 900;
@@ -896,11 +912,20 @@ function initBlock( blockEl ) {
 	}
 
 	function redraw()   { drawStory( canvas, data, activeNodeId, scheduleRedraw, layers ); }
-	function rerender() { renderWindow( windowEl, data, activeNodeId, expandedIds ); redraw(); }
+	function rerender() {
+		if ( windowEl ) {
+			renderWindow( windowEl, data, activeNodeId, expandedIds );
+		}
+		redraw();
+	}
 
 	// Opens (or re-targets) the node dialog and keeps canvas + list in sync.
 	function openNodeDialog( nodeId ) {
 		activeNodeId = nodeId;
+		// Selecting a node on the canvas opens that node's detail in the
+		// window, and only that one.
+		expandedIds.clear();
+		expandedIds.add( nodeId );
 		rerender();
 		renderStoryDialog( data, nodeId, openNodeDialog );
 	}
@@ -940,6 +965,10 @@ function initBlock( blockEl ) {
 				return;
 			}
 		}
+
+		// Story nodes above always respond; the base map's own elements only
+		// when the author has not switched them off.
+		if ( data.story.disableMapClick ) return;
 
 		const ctx2  = canvas.getContext( '2d' );
 		const scale = mapScale( m, canvas.width );

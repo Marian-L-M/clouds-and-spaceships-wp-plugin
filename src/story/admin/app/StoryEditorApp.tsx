@@ -42,6 +42,10 @@ function buildInitialSettings(): StorySettings {
 		showAreas:       true,
 		showObjects:     true,
 		showLabels:      true,
+		// Both opt-in: the map stays clickable and the window stays visible
+		// until the author turns them off.
+		disableMapClick: false,
+		hideWindow:      false,
 		startNodeId:     null,
 		viewUrl:         d.viewUrl  ?? '',
 		thumbnailId:     null,
@@ -145,6 +149,8 @@ export default function StoryEditorApp() {
 				show_areas:            settings.showAreas,
 				show_objects:          settings.showObjects,
 				show_labels:           settings.showLabels,
+				disable_map_click:     settings.disableMapClick,
+				hide_window:           settings.hideWindow,
 			} );
 			if ( data.created && data.editUrl ) {
 				window.location.href = data.editUrl;
@@ -743,7 +749,17 @@ export default function StoryEditorApp() {
 			{ nodeModal.open && (
 				<NodeModal
 					nodeId={ nodeModal.nodeId }
-					existingNode={ selectedNode }
+					// Looked up from the modal's own nodeId, not from the
+					// selection: entering Add mode leaves any previously
+					// selected node selected, and passing that here filled the
+					// new-node form with the old node's settings.
+					existingNode={
+						nodeModal.nodeId !== null
+							? nodes.find(
+									( n ) => n.id === nodeModal.nodeId
+							  ) ?? null
+							: null
+					}
 					initialX={ nodeModal.x }
 					initialY={ nodeModal.y }
 					paths={ paths }

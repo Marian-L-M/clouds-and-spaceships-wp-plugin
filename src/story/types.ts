@@ -51,7 +51,8 @@ export interface StoryPath {
 	sortOrder:         number;
 	markerColor:       string;
 	markerSize:        number;
-	markerType:        MarkerType;
+	/** 'inherit' defers the whole marker to the story's own settings. */
+	markerType:        NodeMarkerType;
 	markerIconId:      number | null;
 	markerIconUrl:     string;
 	markerIconOffsetX: number;
@@ -62,7 +63,7 @@ export interface PathFormData {
 	label:             string;
 	markerColor:       string;
 	markerSize:        number;
-	markerType:        MarkerType;
+	markerType:        NodeMarkerType;
 	markerIconId:      number | null;
 	markerIconUrl:     string;
 	markerIconOffsetX: number;
@@ -153,6 +154,9 @@ export interface StorySettings {
 	showAreas:         boolean;
 	showObjects:       boolean;
 	showLabels:        boolean;
+	/** Front-end behaviour; both opt-in, so both default to false. */
+	disableMapClick:   boolean;
+	hideWindow:        boolean;
 }
 
 // ── Domain: Map render data (from API) ────────────────────────────────────────

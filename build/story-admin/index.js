@@ -1031,7 +1031,7 @@ function CanvasNodeList({
           }), !incomingEdge && !isStart && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
             size: "small",
             icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Set as start node', 'clouds-and-spaceships'),
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Set as story start node', 'clouds-and-spaceships'),
             onClick: () => onSetStartNode(node.id)
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
             size: "small",
@@ -1118,6 +1118,10 @@ function buildInitialSettings() {
     showAreas: true,
     showObjects: true,
     showLabels: true,
+    // Both opt-in: the map stays clickable and the window stays visible
+    // until the author turns them off.
+    disableMapClick: false,
+    hideWindow: false,
     startNodeId: null,
     viewUrl: d.viewUrl ?? '',
     thumbnailId: null,
@@ -1217,7 +1221,9 @@ function StoryEditorApp() {
         marker_icon_offset_y: settings.markerIconOffsetY,
         show_areas: settings.showAreas,
         show_objects: settings.showObjects,
-        show_labels: settings.showLabels
+        show_labels: settings.showLabels,
+        disable_map_click: settings.disableMapClick,
+        hide_window: settings.hideWindow
       });
       if (data.created && data.editUrl) {
         window.location.href = data.editUrl;
@@ -1844,8 +1850,13 @@ function StoryEditorApp() {
         })]
       })
     }), nodeModal.open && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_forms_NodeModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      nodeId: nodeModal.nodeId,
-      existingNode: selectedNode,
+      nodeId: nodeModal.nodeId
+      // Looked up from the modal's own nodeId, not from the
+      // selection: entering Add mode leaves any previously
+      // selected node selected, and passing that here filled the
+      // new-node form with the old node's settings.
+      ,
+      existingNode: nodeModal.nodeId !== null ? nodes.find(n => n.id === nodeModal.nodeId) ?? null : null,
       initialX: nodeModal.x,
       initialY: nodeModal.y,
       paths: paths,
@@ -2008,7 +2019,7 @@ function EdgeStyleModal({
               flex: 1
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_5__["default"], {
-              label: `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Color & opacity', 'clouds-and-spaceships')} ${defaultHint(form.lineColor === null) ?? ''}`,
+              label: `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Color', 'clouds-and-spaceships')} ${defaultHint(form.lineColor === null) ?? ''}`,
               value: effectiveColor,
               onChange: v => setForm(p => ({
                 ...p,
@@ -2033,8 +2044,7 @@ function EdgeStyleModal({
               flex: 1
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
-              __next40pxDefaultSize: true,
-              label: `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Width (px)', 'clouds-and-spaceships')} ${defaultHint(form.lineWidth === null) ?? ''}`,
+              label: `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Width', 'clouds-and-spaceships')} ${defaultHint(form.lineWidth === null) ?? ''}`,
               min: 0.5,
               max: 20,
               step: 0.5,
@@ -2471,7 +2481,7 @@ function NodeModal({
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
             className: "cns-grid__group",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Border width (px)', 'clouds-and-spaceships'),
+              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Border width', 'clouds-and-spaceships'),
               min: 0,
               max: 10,
               step: 0.5,
@@ -2673,7 +2683,7 @@ function buildInitial(path) {
     label: path?.label ?? '',
     markerColor: path?.markerColor ?? '#00aaff',
     markerSize: path?.markerSize ?? 5,
-    markerType: path?.markerType ?? 'ring',
+    markerType: path?.markerType ?? 'inherit',
     markerIconId: path?.markerIconId ?? null,
     markerIconUrl: path?.markerIconUrl ?? '',
     markerIconOffsetX: path?.markerIconOffsetX ?? 0,
@@ -2724,8 +2734,9 @@ function PathModal({
         style: {
           marginBottom: 10
         },
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('These override the global marker for all nodes in this path (unless overridden per-node).', 'clouds-and-spaceships')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Path level node design settings. Priority: Individual node settings > Path node settings > Global node settings.', 'clouds-and-spaceships')
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_shared_MarkerControls__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        allowInherit: true,
         markerType: form.markerType,
         markerColor: form.markerColor,
         markerSize: form.markerSize,
@@ -3282,7 +3293,7 @@ function NodesPanel({
                 href: node.substoryEditUrl,
                 target: "_blank",
                 rel: "noopener",
-                children: [node.substoryTitle || `Substory #${node.substoryId}`, " \u2197"]
+                children: [node.substoryTitle || `Substory #${node.substoryId}`, ' ', "\u2197"]
               }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 children: node.substoryTitle || `Substory #${node.substoryId}`
               }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
@@ -3312,7 +3323,7 @@ function NodesPanel({
                       onClick: () => moveEdge(outEdges, index, 1)
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: ["\u2192 ", toNode ? getDisplayTitle(toNode) : `#${edge.toNodeId}`]
+                    children: ["\u2192", ' ', toNode ? getDisplayTitle(toNode) : `#${edge.toNodeId}`]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
                     size: "small",
                     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -3336,7 +3347,7 @@ function NodesPanel({
                 children: [node.id !== startNodeId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
                   size: "small",
                   icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
-                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Set as start node', 'clouds-and-spaceships'),
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Set as story start node', 'clouds-and-spaceships'),
                   onClick: () => onSetStartNode(node.id),
                   children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Set Start', 'clouds-and-spaceships')
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
@@ -3645,6 +3656,25 @@ function SettingsPanel({
               onChange: v => set('showLabels', v)
             })]
           })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.BaseControl, {
+            id: "cns-story-frontend",
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Reader Settings', 'clouds-and-spaceships'),
+            help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Story settinggs for public reader. Off by default.', 'clouds-and-spaceships'),
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disable Area/Object/Label click', 'clouds-and-spaceships'),
+                help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Disable linked map elements opening the infobox on click. Clicking story nodes will still open the story modal.', 'clouds-and-spaceships'),
+                checked: settings.disableMapClick,
+                onChange: v => set('disableMapClick', v)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.CheckboxControl, {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide the sub-story sidewindow', 'clouds-and-spaceships'),
+                help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Removes the list of substories to the side of the map.Clicking story nodes will still open the story modal.', 'clouds-and-spaceships'),
+                checked: settings.hideWindow,
+                onChange: v => set('hideWindow', v)
+              })]
+            })
+          })
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
         className: "cns-grid__group cns-grid__span-1",
@@ -3869,42 +3899,64 @@ function StoryCanvasPanel({
             })
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      }), canvasMode === 'connect' && edgeStartNodeId === null && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        className: "cns-story-canvas-toolbar__row",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Notice, {
+          status: "warning",
+          isDismissible: false,
+          className: "cns-story-canvas-toolbar__notice",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select a node before connecting', 'clouds-and-spaceships')
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "cns-story-canvas-toolbar__row cns-story-canvas-toolbar__line-style",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
-          className: "cns-story-canvas-toolbar__label",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Lines:', 'clouds-and-spaceships')
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_6__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Color & opacity', 'clouds-and-spaceships'),
-          value: settings.lineColor,
-          onChange: v => set('lineColor', v)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
-          size: "small",
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Width (px)', 'clouds-and-spaceships'),
-          min: 0.5,
-          max: 20,
-          step: 0.5,
-          value: settings.lineWidth,
-          onChange: v => set('lineWidth', parseFloat(v ?? '') || settings.lineWidth),
-          style: {
-            width: 70
-          }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
-          size: "small",
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Style', 'clouds-and-spaceships'),
-          value: settings.lineStyle,
-          options: [{
-            value: 'solid',
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Solid', 'clouds-and-spaceships')
-          }, {
-            value: 'dashed',
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dashed', 'clouds-and-spaceships')
-          }, {
-            value: 'dotted',
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dotted', 'clouds-and-spaceships')
-          }],
-          onChange: v => set('lineStyle', v)
-        })]
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+          gap: 2,
+          direction: "column",
+          align: "start",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexItem, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
+              className: "cns-story-canvas-toolbar__label",
+              children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Lines:', 'clouds-and-spaceships')
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.FlexBlock, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Flex, {
+              gap: 2,
+              direction: "row",
+              align: "end",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_shared_admin_ColorField__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Color', 'clouds-and-spaceships'),
+                value: settings.lineColor,
+                onChange: v => set('lineColor', v)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.__experimentalNumberControl, {
+                size: "small",
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Width', 'clouds-and-spaceships'),
+                min: 0.5,
+                max: 20,
+                step: 0.5,
+                value: settings.lineWidth,
+                onChange: v => set('lineWidth', parseFloat(v ?? '') || settings.lineWidth),
+                style: {
+                  width: 70
+                }
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
+                size: "small",
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Style', 'clouds-and-spaceships'),
+                value: settings.lineStyle,
+                options: [{
+                  value: 'solid',
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Solid', 'clouds-and-spaceships')
+                }, {
+                  value: 'dashed',
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dashed', 'clouds-and-spaceships')
+                }, {
+                  value: 'dotted',
+                  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Dotted', 'clouds-and-spaceships')
+                }],
+                onChange: v => set('lineStyle', v)
+              })]
+            })
+          })]
+        })
       }), settings.mapId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "cns-story-canvas-toolbar__row",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
@@ -4128,6 +4180,7 @@ function MarkerControls({
   markerIconUrl,
   markerIconOffsetX,
   markerIconOffsetY,
+  allowInherit = false,
   onChange
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -4137,7 +4190,10 @@ function MarkerControls({
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.RadioControl, {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Type', 'clouds-and-spaceships'),
         selected: markerType,
-        options: [{
+        options: [...(allowInherit ? [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Inherit from story', 'clouds-and-spaceships'),
+          value: 'inherit'
+        }] : []), {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Ring outline', 'clouds-and-spaceships'),
           value: 'ring'
         }, {
@@ -4928,8 +4984,11 @@ function drawNode(ctx, cx, cy, node, isSelected, isEdgeSrc, state) {
   const borderColor = node.iconBorderColor || '#000000';
   const borderWidth = node.iconBorderWidth ?? 2;
 
-  // Resolve marker settings: node > path > global
-  const path = node.pathId ? state.paths.find(p => p.id === node.pathId) ?? null : null;
+  // Resolve marker settings: node > path > global.
+  // A path set to "inherit" drops out of the cascade so the story's marker
+  // reaches the node — matching the frontend in src/blocks/story/view.js.
+  const onPath = node.pathId ? state.paths.find(p => p.id === node.pathId) ?? null : null;
+  const path = onPath && onPath.markerType !== 'inherit' ? onPath : null;
   const markerColor = node.markerColor ?? path?.markerColor ?? state.markerColor;
   const markerSize = node.markerSize ?? path?.markerSize ?? state.markerSize;
   const mOffX = node.markerIconOffsetX ?? path?.markerIconOffsetX ?? state.markerIconOffsetX;

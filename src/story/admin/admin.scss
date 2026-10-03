@@ -592,6 +592,13 @@ body.cns-story-canvas-fullscreen-open {
 		font-weight: 600;
 	}
 
+	// Connect-mode warning. The row is a flex container, so without this the
+	// notice shrinks to its text instead of spanning the toolbar.
+	&__notice {
+		flex: 1;
+		margin: 0;
+	}
+
 	// Compact inline WP controls: label sits beside the input.
 	&__line-style {
 		align-items: flex-end;

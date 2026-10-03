@@ -615,6 +615,10 @@ body.cns-story-canvas-fullscreen-open {
   color: #646970;
   font-weight: 600;
 }
+.cns-story-canvas-toolbar__notice {
+  flex: 1;
+  margin: 0;
+}
 .cns-story-canvas-toolbar__line-style {
   align-items: flex-end;
 }

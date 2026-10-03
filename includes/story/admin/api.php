@@ -345,6 +345,11 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	$show_objects = $req->has_param('show_objects') ? rest_sanitize_boolean($req->get_param('show_objects')) : true;
 	$show_labels  = $req->has_param('show_labels')  ? rest_sanitize_boolean($req->get_param('show_labels'))  : true;
 
+	// Front-end behaviour, both opt-in: absent means "no", so a client that
+	// doesn't send them leaves the map clickable and the story window shown.
+	$disable_map_click = rest_sanitize_boolean($req->get_param('disable_map_click'));
+	$hide_window       = rest_sanitize_boolean($req->get_param('hide_window'));
+
 	$allowed_statuses = ['publish', 'draft', 'private'];
 	if (! in_array($status, $allowed_statuses, true)) {
 		$status = 'draft';
@@ -401,6 +406,8 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	update_post_meta($story_id, '_cns_story_show_areas',            $show_areas   ? 1 : 0);
 	update_post_meta($story_id, '_cns_story_show_objects',          $show_objects ? 1 : 0);
 	update_post_meta($story_id, '_cns_story_show_labels',           $show_labels  ? 1 : 0);
+	update_post_meta($story_id, '_cns_story_disable_map_click',     $disable_map_click ? 1 : 0);
+	update_post_meta($story_id, '_cns_story_hide_window',           $hide_window       ? 1 : 0);
 
 	if ($start_node !== null) {
 		update_post_meta($story_id, '_cns_story_start_node_id', (int) $start_node);
@@ -451,6 +458,10 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 	$show_areas         = cns_story_suite_layer_visible($story_id, '_cns_story_show_areas');
 	$show_objects       = cns_story_suite_layer_visible($story_id, '_cns_story_show_objects');
 	$show_labels        = cns_story_suite_layer_visible($story_id, '_cns_story_show_labels');
+	// These two default off, so a plain truthiness check is right here — the
+	// layer_visible() helper above defaults the other way on purpose.
+	$disable_map_click  = (bool) get_post_meta($story_id, '_cns_story_disable_map_click', true);
+	$hide_window        = (bool) get_post_meta($story_id, '_cns_story_hide_window', true);
 	$marker_color      = (string) (get_post_meta($story_id, '_cns_story_marker_color', true)          ?: '#00aaff');
 	$marker_size       = (float)  (get_post_meta($story_id, '_cns_story_marker_size', true)           ?: 5.0);
 	$marker_type       = (string) (get_post_meta($story_id, '_cns_story_marker_type', true)           ?: 'ring');
@@ -522,6 +533,8 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 			'showAreas'        => $show_areas,
 			'showObjects'      => $show_objects,
 			'showLabels'       => $show_labels,
+			'disableMapClick'  => $disable_map_click,
+			'hideWindow'       => $hide_window,
 			'markerColor'       => $marker_color,
 			'markerSize'        => $marker_size,
 			'markerType'        => $marker_type,
@@ -1190,7 +1203,10 @@ function cns_story_suite_api_create_path(WP_REST_Request $req): WP_REST_Response
 	$label    = sanitize_text_field($req->get_param('label') ?? '');
 	$m_color  = cns_story_suite_sanitize_color($req->get_param('marker_color'), '#00aaff');
 	$m_size   = max(0.0, min(30.0, (float) ($req->get_param('marker_size') ?? 5.0)));
-	$m_type   = $req->get_param('marker_type') ?? 'ring';
+	// 'inherit' (the default for a new path) defers the whole marker to the
+	// story's own settings, the same way a node defers to its path.
+	$m_type   = $req->get_param('marker_type') ?? 'inherit';
+	if (! in_array($m_type, ['inherit', 'ring', 'icon'], true)) $m_type = 'inherit';
 	$m_icon   = (int) ($req->get_param('marker_icon_id') ?? 0);
 	$m_off_x  = (float) ($req->get_param('marker_icon_offset_x') ?? 0.0);
 	$m_off_y  = (float) ($req->get_param('marker_icon_offset_y') ?? -30.0);
@@ -1251,7 +1267,7 @@ function cns_story_suite_api_update_path(WP_REST_Request $req): WP_REST_Response
 		$formats[] = '%f';
 	}
 	if (($v = $req->get_param('marker_type')) !== null) {
-		$updates['marker_type'] = in_array($v, ['ring', 'icon'], true) ? $v : 'ring';
+		$updates['marker_type'] = in_array($v, ['inherit', 'ring', 'icon'], true) ? $v : 'inherit';
 		$formats[] = '%s';
 	}
 	if (($v = $req->get_param('marker_icon_id')) !== null) {

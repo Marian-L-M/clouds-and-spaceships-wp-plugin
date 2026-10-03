@@ -196,7 +196,7 @@ export default function HierarchyRegionForm( {
 					<div className="cns-grid__group">
 						<NumberControl
 							label={ __(
-								'Stroke Width (px)',
+								'Stroke Width',
 								'clouds-and-spaceships'
 							) }
 							min={ 1 }
