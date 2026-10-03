@@ -14,7 +14,6 @@
 	},
 	"attributes": {
 		"group_title": { "type": "string" },
-		"is_group_open": { "type": "boolean", "default": true },
 		"bg_color": { "type": "string" },
 		"text_color": { "type": "string" },
 		"contrast_color": { "type": "string" },

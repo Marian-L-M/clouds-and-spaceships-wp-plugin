@@ -299,7 +299,7 @@ module.exports = window["wp"]["i18n"];
   \*********************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"cns-wiki-suite/infobox-group","parent":["cns-wiki-suite/infobox"],"version":"0.1.0","title":"Infobox Group","category":"widgets","icon":"feedback","description":"Group block to be used inside of a CNS infobox","example":{},"supports":{"html":false},"attributes":{"group_title":{"type":"string"},"is_group_open":{"type":"boolean","default":true},"bg_color":{"type":"string"},"text_color":{"type":"string"},"contrast_color":{"type":"string"},"display_mode":{"type":"string","default":"inherit"}},"textdomain":"clouds-and-spaceships","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScriptModule":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"cns-wiki-suite/infobox-group","parent":["cns-wiki-suite/infobox"],"version":"0.1.0","title":"Infobox Group","category":"widgets","icon":"feedback","description":"Group block to be used inside of a CNS infobox","example":{},"supports":{"html":false},"attributes":{"group_title":{"type":"string"},"bg_color":{"type":"string"},"text_color":{"type":"string"},"contrast_color":{"type":"string"},"display_mode":{"type":"string","default":"inherit"}},"textdomain":"clouds-and-spaceships","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScriptModule":"file:./view.js"}');
 
 /***/ }
 

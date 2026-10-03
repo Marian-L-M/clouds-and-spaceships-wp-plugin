@@ -18,10 +18,6 @@
     "group_title": {
       "type": "string"
     },
-    "is_group_open": {
-      "type": "boolean",
-      "default": true
-    },
     "bg_color": {
       "type": "string"
     },

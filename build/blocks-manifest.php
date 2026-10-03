@@ -126,10 +126,6 @@ return array(
 			'group_title' => array(
 				'type' => 'string'
 			),
-			'is_group_open' => array(
-				'type' => 'boolean',
-				'default' => true
-			),
 			'bg_color' => array(
 				'type' => 'string'
 			),
