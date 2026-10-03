@@ -73,13 +73,14 @@ $entries = get_posts([
 
 if (empty($entries)) {
     if (! empty($attributes['showEmptyNotice'])) {
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wrapper attributes are escaped by core; the notice below is escaped inline.
-        echo '<div ' . get_block_wrapper_attributes([
+        $wrapper = get_block_wrapper_attributes([
             'class' => 'cns-glossary-index',
             'style' => $style_vars,
-        ]) . '><p>'
-            . esc_html__('No glossary entries yet.', 'clouds-and-spaceships')
-            . '</p></div>';
+        ]);
+        $notice  = esc_html__('No glossary entries yet.', 'clouds-and-spaceships');
+
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output; $notice is escaped above.
+        echo '<div ' . $wrapper . '><p>' . $notice . '</p></div>';
     }
     return;
 }
@@ -166,8 +167,12 @@ foreach ($sections as $label => $section_entries) {
     );
 }
 
-// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wrapper attributes are escaped by core; every value in $html is escaped where it is built above.
-echo '<div ' . get_block_wrapper_attributes([
+$wrapper = get_block_wrapper_attributes([
     'class' => 'cns-glossary-index cns-glossary-index--' . $group_by,
     'style' => $style_vars,
-]) . '>' . $html . '</div>';
+]);
+
+// The ignore covers only the line that follows it, so the whole statement has
+// to sit on one line — splitting the echo is what let $html escape its scope.
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output; every value in $html is escaped where it is built above.
+echo '<div ' . $wrapper . '>' . $html . '</div>';

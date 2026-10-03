@@ -73,10 +73,10 @@ if ( $wiki_enabled ) {
 						<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 					</a>
 				<?php endif; ?>
-				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=wiki' ) ); ?>" class="button">
+				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=cns_wiki' ) ); ?>" class="button">
 					<?php esc_html_e( 'All wikis', 'clouds-and-spaceships' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=wiki' ) ); ?>" class="button button-primary">
+				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=cns_wiki' ) ); ?>" class="button button-primary">
 					<?php esc_html_e( '+ New Wiki', 'clouds-and-spaceships' ); ?>
 				</a>
 			</div>

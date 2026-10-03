@@ -54,7 +54,7 @@ if ($glossary_enabled) {
 			<?php esc_html_e('The Clouds and Spaceships project aims to help worldbuilders and storytellers give their vision a form they can share with their community.', 'clouds-and-spaceships'); ?>
 		</p>
 		<p>
-			<?php esc_html_e('A core principle I believe in is that authors should always keep full ownership of their work, and stay free to take it wherever they want. Free plans on proprietary hosting or writing services carry the risk, that sooner or later, your world can be held hostage. Time spent inserting data and building a community will create real barriers for you leaving. Clouds and Spaceships therefore aims to provide a platform that is truly yours. Wherever you want to take it.', 'clouds-and-spaceships'); ?>
+			<?php esc_html_e('A core principle I believe in is that authors should always keep full ownership of their work, and stay free to take it wherever they want. Free plans on proprietary hosting or writing services carry the risk, that sooner or later, your world can be held hostage. Time spent inserting data and building a community will create a barrier for leaving. Clouds and Spaceships aims to provide a platform that is truly yours. Wherever you want to take it.', 'clouds-and-spaceships'); ?>
 		</p>
 		<p>
 			<?php esc_html_e('If you would like to learn more about the project or support it, please visit the project website:', 'clouds-and-spaceships'); ?>
