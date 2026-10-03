@@ -7,18 +7,29 @@
 .cns-glossary-index__title {
   margin-bottom: 0.5rem;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid currentcolor;
+  font-size: var(--cns-glossary-title-size, inherit);
+  color: var(--cns-glossary-title-color, inherit);
 }
 .cns-glossary-index__list {
   margin: 0;
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: var(--cns-glossary-columns, repeat(auto-fill, minmax(200px, 1fr)));
   gap: 0.25rem 1.5rem;
+}
+@media (max-width: 600px) {
+  .cns-glossary-index__list {
+    grid-template-columns: var(--cns-glossary-columns-mobile, repeat(auto-fill, minmax(200px, 1fr)));
+  }
+}
+.cns-glossary-index__item {
+  font-size: var(--cns-glossary-item-size, inherit);
 }
 .cns-glossary-index__item a {
   text-decoration: none;
+  color: var(--cns-glossary-item-color, inherit);
 }
 .cns-glossary-index__item a:hover, .cns-glossary-index__item a:focus-visible {
   text-decoration: underline;

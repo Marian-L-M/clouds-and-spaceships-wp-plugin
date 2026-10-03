@@ -36,6 +36,21 @@ return array(
 			'showEmptyNotice' => array(
 				'type' => 'boolean',
 				'default' => true
+			),
+			'titleFontSize' => array(
+				'type' => 'number'
+			),
+			'titleColor' => array(
+				'type' => 'string'
+			),
+			'itemFontSize' => array(
+				'type' => 'number'
+			),
+			'itemColor' => array(
+				'type' => 'string'
+			),
+			'columns' => array(
+				'type' => 'number'
 			)
 		),
 		'textdomain' => 'clouds-and-spaceships',

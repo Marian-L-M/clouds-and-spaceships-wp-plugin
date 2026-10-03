@@ -31,6 +31,21 @@
     "showEmptyNotice": {
       "type": "boolean",
       "default": true
+    },
+    "titleFontSize": {
+      "type": "number"
+    },
+    "titleColor": {
+      "type": "string"
+    },
+    "itemFontSize": {
+      "type": "number"
+    },
+    "itemColor": {
+      "type": "string"
+    },
+    "columns": {
+      "type": "number"
     }
   },
   "textdomain": "clouds-and-spaceships",
