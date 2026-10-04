@@ -122,46 +122,6 @@ function cns_sanitize_wiki_glossary_section( array $input ): array {
     return $output;
 }
 
-// ── Layout units migration ───────────────────────────────────────────────────
-//
-// The two layout widths were stored as unitless rem and are now unitless px, so
-// a value saved before the change would be read as 34px rather than 34rem.
-// Converts once at 16px to the rem, the browser default the old values assumed.
-
-const CNS_WIKI_LAYOUT_UNITS_VERSION = 1;
-
-add_action( 'admin_init', 'cns_wiki_migrate_layout_units' );
-
-function cns_wiki_migrate_layout_units(): void {
-    if ( (int) get_option( 'cns_wiki_layout_units_version' ) === CNS_WIKI_LAYOUT_UNITS_VERSION ) {
-        return;
-    }
-
-    $settings = (array) get_option( 'cns_wiki_settings', [] );
-    $changed  = false;
-
-    foreach ( [ 'infobox_width', 'content_width' ] as $key ) {
-        $value = $settings[ $key ] ?? '';
-        if ( '' !== trim( (string) $value ) && is_numeric( $value ) ) {
-            $settings[ $key ] = (string) (int) round( (float) $value * 16 );
-            $changed          = true;
-        }
-    }
-
-    if ( $changed ) {
-        // Write past the Settings API. update_option() runs the registered
-        // sanitize_option_cns_wiki_settings callback, which rebuilds a whole
-        // section from its input — and every checkbox absent from that array
-        // would be read as unticked, silently switching the wiki off on any
-        // install whose stored option predates those keys.
-        remove_filter( 'sanitize_option_cns_wiki_settings', 'cns_sanitize_wiki_settings' );
-        update_option( 'cns_wiki_settings', $settings );
-        add_filter( 'sanitize_option_cns_wiki_settings', 'cns_sanitize_wiki_settings' );
-    }
-
-    update_option( 'cns_wiki_layout_units_version', CNS_WIKI_LAYOUT_UNITS_VERSION, false );
-}
-
 // ── Flush rewrites when a slug changes ───────────────────────────────────────
 //
 // The flag itself and the init-priority-99 flush live in includes/archive.php,

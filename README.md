@@ -3,69 +3,13 @@
 One plugin for worldbuilders and mapmakers: wiki articles and a glossary,
 interactive canvas maps, and branching stories laid over those maps.
 
-It replaces three separate plugins — **cns-wiki-suite**, **cns-map-suite** and
-**cns-story-suite** (which was a child of cns-map-suite) — and owns the CNS
-settings page framework they shared.
+It grew out of three separate plugins — cns-wiki-suite, cns-map-suite and
+cns-story-suite — merged into one. Nothing of that split survives in the code;
+the tables below record what the merge collapsed, because it explains why the
+shared directories look the way they do.
 
 > This file is for developers. The user-facing text that wordpress.org parses
 > lives in `readme.txt`; wp.org ignores this one entirely.
-
----
-
-## Installing over the old plugins
-
-The merged plugin defines the same functions and blocks as the three it
-replaces, so **they cannot be active at the same time** — activating this one
-alongside them is a fatal error.
-
-1. Deactivate `CNS Wiki Suite`, `CNS Map Suite` and `CNS Story Suite`.
-2. Activate `Clouds and Spaceships`.
-3. Visit **Settings → Permalinks** once if any archive slug looks stale.
-
-Most identifiers are unchanged, so existing wikis, maps and stories keep
-working:
-
-| Kind | Value |
-|---|---|
-| Blocks | `cns-wiki-suite/infobox`, `cns-map-suite/map`, `cns-story-suite/story`, … |
-| REST | `/cns-map-suite/v1`, `/cns-story-suite/v1` |
-| Options | `cns_wiki_settings`, `cns_map_suite_*`, `cns_story_suite_*` |
-| Tables | `{prefix}cns_map_*`, `{prefix}cns_story_*` |
-| Capabilities | `manage_maps`, `manage_stories` |
-
-The block names keep their original `cns-*-suite/` namespaces deliberately.
-Renaming them would invalidate every saved block in existing content, so they
-stay as they are even though all eight now ship from one plugin.
-
-### Post types are the exception: they get migrated
-
-Three post types were registered under unprefixed names, which wp.org treats as
-squatting on generic slugs. They are renamed on activation:
-
-| Was | Now |
-|---|---|
-| `maps` | `cns_map` |
-| `wiki` | `cns_wiki` |
-| `glossary` | `cns_glossary` |
-| `glossary_category` (taxonomy) | `cns_glossary_category` |
-
-`cns_story` and `cns_substory` were already prefixed and are untouched.
-
-`cns_migrate_post_type_prefixes()` in `clouds-and-spaceships.php` does the
-rewrite, gated on `cns_db_version` against `CNS_DB_VERSION` (currently `1.1.0`),
-so it runs once. It updates `wp_posts.post_type` and the taxonomy's term
-relationships, then clears the affected post and term caches.
-
-Public URLs are unaffected: every one of these post types declared an explicit
-`rewrite.slug`, so `/maps/…`, the wiki archive slug and the glossary slug all
-still resolve. Block template slugs did change with the post types, to
-`single-cns_map`, `single-cns_wiki` and `single-cns_story`.
-
-**Test this on a copy first.** It rewrites rows in `wp_posts`.
-
-Deleting the three old plugins afterwards is safe: their `uninstall.php` only
-removes options, and this plugin re-creates the ones it needs. Do **not** delete
-them with a Danger Zone "delete content on uninstall" setting still enabled.
 
 ---
 
@@ -76,7 +20,7 @@ clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle
 uninstall.php                  drops tables + options always, posts only on opt-in
 includes/
   settings-page.php            the tabbed CNS settings screen (cns_admin_tabs filter)
-  archive.php                  archive settings + query + rewrite flush, all suites
+  archive.php                  archive on/off + slug + rewrite flush, all suites
   cache.php                    render-row cache for the map and story tables
   capabilities.php             manage_maps / manage_stories
   map-template.php             single-cns_map + single-cns_story block templates
@@ -105,7 +49,8 @@ Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
 | `map-geometry.ts` | map + story canvases, editor and frontend |
 | `frontend/drawer.js` | infobox drawer for the map and story blocks |
 | `frontend/layer-toggles.js` | areas/objects/labels toggles for both blocks |
-| `scss/` | tokens, shared admin rules, badges |
+| `scss/_drawer.scss` | infobox drawer styling, for whichever block is on the page |
+| `scss/` (rest) | tokens, shared admin rules, badges |
 
 ### What the merge deduplicated
 
@@ -122,6 +67,7 @@ Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
 | 2 `apiFetch` wrappers | `src/shared/admin/api.ts` |
 | ~120 lines of byte-identical admin CSS | `src/shared/scss/_admin.scss` |
 | infobox drawer + layer toggles duplicated in the map and story `view.js` | `src/shared/frontend/` |
+| drawer CSS that only shipped with the map block, leaving a story-only page with an unstyled drawer | `src/shared/scss/_drawer.scss`, used by both |
 
 Rules the two editors genuinely styled differently — panel padding, badge
 variants, the settings grid — stayed in their own sheets, so neither editor
@@ -164,7 +110,7 @@ The plugin is self-contained and makes no assumptions about the active theme.
 
 ## Uninstall
 
-`uninstall.php` always drops the eight `cns_map_*` / `cns_story_*` tables and
+`uninstall.php` always drops the seven `cns_map_*` / `cns_story_*` tables and
 deletes every option. On top of that:
 
 | Post type | Deleted |

@@ -143,13 +143,6 @@ $options = [
 	// Wiki
 	'cns_wiki_settings',
 	'cns_wiki_cpt_structure_version',
-	'cns_wiki_layout_units_version',
-	// Left behind by the three plugins this one replaces.
-	'cns_map_suite_db_version',
-	'cns_map_suite_needs_flush',
-	'cns_story_suite_db_version',
-	'cns_story_suite_needs_flush',
-	'cns_wiki_needs_flush',
 ];
 
 foreach ($options as $option) {

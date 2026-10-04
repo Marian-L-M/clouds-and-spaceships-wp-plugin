@@ -30,7 +30,7 @@ Wiki articles nest inside one another, so a child article's URL carries its pare
 
 * **Infobox**, **Infobox Group** and **Infobox Row** blocks build a structured sidebar box. Its display mode either collapses groups on mobile or keeps everything expanded, and each group can override that.
 * **Wiki Card** and **Wiki Contents** render a responsive card grid, filled by hand or automatically from your newest articles.
-* An optional glossary (off by default) adds inline terms with hover definitions, plus a **Glossary Index** block that lists every entry grouped alphabetically or by category. Definitions and links are resolved when the page renders, so they never go stale.
+* An optional glossary (off by default) adds inline terms with hover definitions, plus a **Glossary Index** block that lists every entry grouped alphabetically or by category, with its own heading and entry colours, sizes and column count. Definitions and links are resolved when the page renders, so they never go stale.
 
 **Stories**
 
@@ -39,6 +39,7 @@ A canvas editor for branching stories laid over one of your maps.
 * Nodes, paths and directed edges, with substories holding the content shown at each node.
 * The linked map renders underneath in full — its areas, objects, labels and infoboxes all stay interactive — while story elements draw on top and take click priority.
 * The same zoom, fullscreen and layer toggles as the map block, inheriting the linked map's control colours.
+* Readers open a node from the canvas or from the list beside it. You can set a default thumbnail for stories without their own image, hide the list so nodes open only in a dialog, and stop the underlying map's own elements responding to clicks if you want the story nodes to be the only thing readable.
 
 **Your world stays on your site**
 
@@ -49,8 +50,6 @@ Clouds and Spaceships never sends anything anywhere. There is no account to crea
 1. Upload the plugin folder to `/wp-content/plugins/`, or install it from the Plugins screen.
 2. Activate it through the Plugins screen.
 3. Configure everything under the **CNS** menu: Wiki, Glossary, Maps, Icons, Stories, Substories and Info.
-
-If you ever ran the earlier CNS Wiki Suite, CNS Map Suite or CNS Story Suite plugins, deactivate all three before activating this one.
 
 == Frequently Asked Questions ==
 
@@ -87,11 +86,6 @@ The plugin's settings are always removed. If you intend to come back, back up fi
 3. A map rendered on the front end, with an object's infobox drawer open.
 4. A wiki article with an infobox block and inline glossary terms.
 5. The CNS settings screen.
-
-== Upgrade Notice ==
-
-= 0.1.0 =
-First release. If you use CNS Wiki Suite, CNS Map Suite or CNS Story Suite, deactivate all three before activating this plugin.
 
 == Changelog ==
 
