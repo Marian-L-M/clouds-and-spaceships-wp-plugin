@@ -11,8 +11,7 @@
  * theme, and its paging and sort order follow the theme and the site's Reading
  * Settings rather than a plugin setting.
  *
- * Storage still differs per suite and is deliberately left alone, so no
- * existing setting has to be migrated:
+ * The two use different storage, which this reads over:
  *
  *   cns_story   one option per field, prefixed cns_story_suite_
  *   cns_wiki    archive_slug inside the cns_wiki_settings option array

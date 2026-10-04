@@ -448,12 +448,10 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 	$marker_type       = (string) (get_post_meta($story_id, '_cns_story_marker_type', true)           ?: 'ring');
 	$marker_icon_id_v  = (int)    get_post_meta($story_id, '_cns_story_marker_icon_id', true);
 	$marker_icon_url   = $marker_icon_id_v ? (wp_get_attachment_url($marker_icon_id_v) ?: '') : '';
-	// X/Y offsets — fall back to legacy single-axis key for backward compat.
-	$legacy_off        = (float) (get_post_meta($story_id, '_cns_story_marker_icon_offset', true) ?: 0.0);
 	$marker_off_x_raw  = get_post_meta($story_id, '_cns_story_marker_icon_offset_x', true);
 	$marker_off_y_raw  = get_post_meta($story_id, '_cns_story_marker_icon_offset_y', true);
 	$marker_icon_off_x = $marker_off_x_raw !== '' && $marker_off_x_raw !== false ? (float) $marker_off_x_raw : 0.0;
-	$marker_icon_off_y = $marker_off_y_raw !== '' && $marker_off_y_raw !== false ? (float) $marker_off_y_raw : ($legacy_off ?: -30.0);
+	$marker_icon_off_y = $marker_off_y_raw !== '' && $marker_off_y_raw !== false ? (float) $marker_off_y_raw : -30.0;
 
 	$raw_nodes = $wpdb->get_results(
 		$wpdb->prepare(

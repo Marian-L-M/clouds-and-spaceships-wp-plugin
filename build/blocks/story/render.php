@@ -59,11 +59,10 @@ $marker_size      = (float)  (get_post_meta($story_id, '_cns_story_marker_size',
 $marker_type      = (string) (get_post_meta($story_id, '_cns_story_marker_type', true)           ?: 'ring');
 $marker_icon_id   = (int)    get_post_meta($story_id, '_cns_story_marker_icon_id', true);
 $marker_icon_url  = $marker_icon_id ? (wp_get_attachment_url($marker_icon_id) ?: '') : '';
-$legacy_off       = (float)  (get_post_meta($story_id, '_cns_story_marker_icon_offset', true) ?: 0.0);
 $off_x_raw        = get_post_meta($story_id, '_cns_story_marker_icon_offset_x', true);
 $off_y_raw        = get_post_meta($story_id, '_cns_story_marker_icon_offset_y', true);
 $marker_off_x     = ($off_x_raw !== '' && $off_x_raw !== false) ? (float) $off_x_raw : 0.0;
-$marker_off_y     = ($off_y_raw !== '' && $off_y_raw !== false) ? (float) $off_y_raw : ($legacy_off ?: -30.0);
+$marker_off_y     = ($off_y_raw !== '' && $off_y_raw !== false) ? (float) $off_y_raw : -30.0;
 
 // Raw cns_story_* rows come from the render cache (includes/cache.php);
 // serialization below stays live because it applies per-user visibility rules.
