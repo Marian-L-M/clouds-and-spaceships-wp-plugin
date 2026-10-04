@@ -127,7 +127,7 @@ export default function NodeModal( {
 			set( 'substoryLabel', data.title );
 			setNewTitle( '' );
 		} catch {
-			/* create failures are silent, as before */
+			/* create failures are silent */
 		} finally {
 			setCreating( false );
 		}

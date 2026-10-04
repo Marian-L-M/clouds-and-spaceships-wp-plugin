@@ -650,8 +650,7 @@ function cns_map_suite_normalize_row(array $row, array $json_cols, array $int_co
 
 function cns_map_suite_object_rest_args(): array {
 	return array_merge(cns_map_suite_infobox_rest_args(), [
-		// Rows saved before display modes existed carry none, and those were
-		// icons — so 'icon' is both the default here and the reader's fallback.
+		// 'icon' is both the default here and the reader's fallback.
 		'display_mode' => [
 			'type'    => 'string',
 			'default' => 'icon',

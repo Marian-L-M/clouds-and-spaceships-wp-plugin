@@ -12,11 +12,8 @@ defined('ABSPATH') || exit;
  * single-cns_story). A theme can still override either by shipping a template
  * of the same name — plugin templates sit below theme templates.
  *
- * This replaces the `the_content` injection both suites used to do. That filter
- * swapped the post content for a rendered block, which meant the page layout
- * lived in the block's markup and could not be edited or overridden. Rendering
- * the canvas from a template also lets the block drop its own description and
- * date, since the template supplies them next to the author.
+ * Rendering the canvas from a template lets the block drop its own description
+ * and date, since the template supplies them next to the author.
  *
  * Two slots differ per post type:
  *

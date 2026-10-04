@@ -510,9 +510,8 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 			const pathMap = data._pathMap;
 			const onPath  = node.pathId ? pathMap.get( node.pathId ) : null;
 			// A path set to "inherit" steps out of the cascade entirely, so the
-			// story's marker reaches the node. Its marker columns are NOT NULL
-			// and used to default to 'ring', which silently overrode a
-			// story-level icon for every node on the path.
+			// story's marker reaches the node. Its marker columns are NOT NULL,
+			// so without this a path would always override the story.
 			const path = onPath && onPath.markerType !== 'inherit' ? onPath : null;
 
 			const mColor = node.markerColor     ?? path?.markerColor     ?? story.markerColor ?? '#00aaff';

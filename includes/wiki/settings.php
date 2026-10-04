@@ -72,7 +72,7 @@ function cns_sanitize_wiki_section( array $input ): array {
         : '';
 
     // Layout — outer content width in px. Empty means the wiki templates stay
-    // full width, which is how they rendered before this setting existed.
+    // full width.
     $content_width = trim( (string) ( $input['content_width'] ?? '' ) );
     $output['content_width'] = is_numeric( $content_width )
         ? (string) (int) min( 3200, max( 640, round( (float) $content_width ) ) )
@@ -158,8 +158,7 @@ add_action( 'add_option_cns_wiki_settings', 'cns_schedule_rewrite_flush' );
 // through the very same property. A private name can only be read by the
 // infobox blocks' own attribute defaults, which is the whole point.
 //
-// Those defaults each fall back to the preset they used to name, so an unset
-// setting still follows the theme exactly as before.
+// Each default falls back to a preset, so an unset setting follows the theme.
 
 // enqueue_block_assets fires on both the frontend and in the editor.
 add_action( 'enqueue_block_assets', 'cns_wiki_enqueue_infobox_styles' );

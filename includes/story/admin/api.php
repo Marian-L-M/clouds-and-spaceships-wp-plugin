@@ -172,9 +172,8 @@ function cns_story_suite_format_edge(array $row): array {
 /**
  * Whether a story shows one of the linked map's layers.
  *
- * Unset meta reads as '', which must mean "visible": stories saved before the
- * layer flags existed rendered the whole map, and upgrading the plugin must
- * not blank their base map. Only an explicit '0' hides a layer.
+ * Unset meta reads as '', which means "visible". Only an explicit '0' hides
+ * a layer.
  */
 function cns_story_suite_layer_visible(int $story_id, string $meta_key): bool {
 	return (string) get_post_meta($story_id, $meta_key, true) !== '0';
@@ -321,7 +320,7 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	$marker_icon_off_x = (float)  ($req->get_param('marker_icon_offset_x') ?? 0.0);
 	$marker_icon_off_y = (float)  ($req->get_param('marker_icon_offset_y') ?? -30.0);
 	// Base-map layers. Absent means "on", so a client that doesn't send them
-	// (or a story saved before they existed) keeps the whole map visible.
+	// keeps the whole map visible.
 	$show_areas   = $req->has_param('show_areas')   ? rest_sanitize_boolean($req->get_param('show_areas'))   : true;
 	$show_objects = $req->has_param('show_objects') ? rest_sanitize_boolean($req->get_param('show_objects')) : true;
 	$show_labels  = $req->has_param('show_labels')  ? rest_sanitize_boolean($req->get_param('show_labels'))  : true;
@@ -434,8 +433,8 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 	$line_width         = (float)  (get_post_meta($story_id, '_cns_story_line_width', true)         ?: 3.0);
 	$line_style         = (string) (get_post_meta($story_id, '_cns_story_line_style', true)         ?: 'solid');
 	$start_node         = (int)    get_post_meta($story_id, '_cns_story_start_node_id', true);
-	// Unset meta reads as '', which must mean "on" — only an explicit '0' hides
-	// a layer, so stories saved before these flags existed show the whole map.
+	// Unset meta reads as '', which means "on" — only an explicit '0' hides
+	// a layer.
 	$show_areas         = cns_story_suite_layer_visible($story_id, '_cns_story_show_areas');
 	$show_objects       = cns_story_suite_layer_visible($story_id, '_cns_story_show_objects');
 	$show_labels        = cns_story_suite_layer_visible($story_id, '_cns_story_show_labels');

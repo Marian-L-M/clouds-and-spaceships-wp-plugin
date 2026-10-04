@@ -373,7 +373,7 @@ export interface ObjectMarker {
 	styles?: ObjectCanvasStyles | null;
 }
 
-/** Rows saved before display modes existed carry none, and those were icons. */
+/** Falls back to 'icon' when the styles carry no display mode. */
 export function objectDisplayMode(
 	styles: ObjectCanvasStyles | null | undefined,
 ): ObjectDisplayMode {

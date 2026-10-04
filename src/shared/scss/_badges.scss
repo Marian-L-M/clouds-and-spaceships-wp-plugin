@@ -1,11 +1,7 @@
 @use "tokens" as *;
 
-// Status pills, shared by the settings screens and both editors.
-// The base rule used to be declared twice and the modifiers were split by
-// suite — map's sheet held --featured/--map/--master/--type, story's held
-// --draft/--publish/--private. Because a bundle only loads on its own pages,
-// the story editor's "Start" badge (which asks for --featured) rendered
-// unstyled. One set, imported everywhere, is what fixes that.
+// Status pills, shared by the settings screens and both editors. One set,
+// imported everywhere, so a badge renders the same on any page.
 
 .cns-badge {
 	display: inline-block;

@@ -107,7 +107,7 @@ export default function StoryEditorApp() {
 					setMapAreas( data.mapData.areas );
 				}
 			} catch {
-				/* load failures leave the editor empty, as before */
+				/* load failures leave the editor empty */
 			}
 			try {
 			} catch {
@@ -223,7 +223,7 @@ export default function StoryEditorApp() {
 			setNodes( ( p ) => [ ...p, node ] );
 			return node;
 		} catch {
-			/* create failures are silent, as before */
+			/* create failures are silent */
 		}
 	}
 
@@ -253,7 +253,7 @@ export default function StoryEditorApp() {
 			} );
 			setNodes( ( p ) => p.map( ( n ) => ( n.id === nodeId ? updated : n ) ) );
 		} catch {
-			/* update failures are silent, as before */
+			/* update failures are silent */
 		}
 	}
 
@@ -264,7 +264,7 @@ export default function StoryEditorApp() {
 			setEdges( ( p ) => p.filter( ( e ) => e.fromNodeId !== nodeId && e.toNodeId !== nodeId ) );
 			if ( selectedNodeId === nodeId )  setSelectedNodeId( null );
 		} catch {
-			/* delete failures are silent, as before */
+			/* delete failures are silent */
 		}
 	}
 
@@ -273,7 +273,7 @@ export default function StoryEditorApp() {
 			const updated = await apiFetch< StoryNode >( 'PATCH', `/nodes/${ nodeId }`, { x, y } );
 			setNodes( ( p ) => p.map( ( n ) => ( n.id === nodeId ? updated : n ) ) );
 		} catch {
-			/* position patches fail silently, as before */
+			/* position patches fail silently */
 		}
 	}
 
@@ -292,7 +292,7 @@ export default function StoryEditorApp() {
 				return [ ...filtered, edge ];
 			} );
 		} catch {
-			/* create failures are silent, as before */
+			/* create failures are silent */
 		}
 	}
 
@@ -301,7 +301,7 @@ export default function StoryEditorApp() {
 			await apiFetch( 'DELETE', `/edges/${ edgeId }` );
 			setEdges( ( p ) => p.filter( ( e ) => e.id !== edgeId ) );
 		} catch {
-			/* delete failures are silent, as before */
+			/* delete failures are silent */
 		}
 	}
 
@@ -314,7 +314,7 @@ export default function StoryEditorApp() {
 			} );
 			setEdges( ( p ) => p.map( ( e ) => ( e.id === edgeId ? updated : e ) ) );
 		} catch {
-			/* update failures are silent, as before */
+			/* update failures are silent */
 		}
 	}
 
@@ -333,7 +333,7 @@ export default function StoryEditorApp() {
 			} );
 			setPaths( ( p ) => [ ...p, path ] );
 		} catch {
-			/* create failures are silent, as before */
+			/* create failures are silent */
 		}
 	}
 
@@ -350,7 +350,7 @@ export default function StoryEditorApp() {
 			} );
 			setPaths( ( p ) => p.map( ( path ) => ( path.id === pathId ? updated : path ) ) );
 		} catch {
-			/* update failures are silent, as before */
+			/* update failures are silent */
 		}
 	}
 
@@ -361,7 +361,7 @@ export default function StoryEditorApp() {
 			// Clear pathId on nodes that belonged to this path.
 			setNodes( ( ns ) => ns.map( ( n ) => n.pathId === pathId ? { ...n, pathId: null } : n ) );
 		} catch {
-			/* delete failures are silent, as before */
+			/* delete failures are silent */
 		}
 	}
 
@@ -447,7 +447,7 @@ export default function StoryEditorApp() {
 			const updated = await apiFetch< StoryEdge >( 'PATCH', `/edges/${ edgeId }`, { sort_order: sortOrder } );
 			setEdges( ( p ) => p.map( ( e ) => ( e.id === edgeId ? updated : e ) ) );
 		} catch {
-			/* reorder failures are silent, as before */
+			/* reorder failures are silent */
 		}
 	}
 

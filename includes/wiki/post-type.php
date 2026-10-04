@@ -114,8 +114,7 @@ function cns_wiki_register_post_type()
         'publicly_queryable' => true,
         'show_ui'            => true,
         // Sidebar entry is opt-out on the Wiki tab, matching the glossary, maps
-        // and stories toggles. Defaults to true, which is how the wiki behaved
-        // before the setting existed.
+        // and stories toggles.
         'show_in_menu'       => (bool) cns_get_wiki_setting( 'wiki_show_menu', true ),
         'query_var'          => true,
         // 'hierarchical' => true so a child wiki's permalink carries its ancestor

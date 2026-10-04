@@ -19,9 +19,8 @@ __webpack_require__.r(__webpack_exports__);
  * The infobox side drawer, shared by the map block and the story block.
  *
  * One element (`#cns-map-drawer`) serves every block on the page, whichever
- * block created it — both suites already relied on that, each with its own copy
- * of the builder. The shell lives here; each block still composes its own body
- * HTML, because a map item and a story's map item resolve different fields.
+ * block created it. The shell lives here; each block still composes its own
+ * body HTML, because a map item and a story's map item resolve different fields.
  *
  * Visibility is a class toggle rather than the `hidden` attribute, so an
  * author's `display: flex/block` never fights the UA's `[hidden]` rule.
@@ -477,7 +476,7 @@ const TEXT_PAD_MIN = 6;
 
 /** The fields the marker drawing needs, in either row shape. */
 
-/** Rows saved before display modes existed carry none, and those were icons. */
+/** Falls back to 'icon' when the styles carry no display mode. */
 function objectDisplayMode(styles) {
   return styles?.displayMode || 'icon';
 }
@@ -1133,9 +1132,8 @@ function drawStory(canvas, data, activeNodeId, onImgLoad, layers) {
       const pathMap = data._pathMap;
       const onPath = node.pathId ? pathMap.get(node.pathId) : null;
       // A path set to "inherit" steps out of the cascade entirely, so the
-      // story's marker reaches the node. Its marker columns are NOT NULL
-      // and used to default to 'ring', which silently overrode a
-      // story-level icon for every node on the path.
+      // story's marker reaches the node. Its marker columns are NOT NULL,
+      // so without this a path would always override the story.
       const path = onPath && onPath.markerType !== 'inherit' ? onPath : null;
       const mColor = node.markerColor ?? path?.markerColor ?? story.markerColor ?? '#00aaff';
       const mSize = node.markerSize ?? path?.markerSize ?? story.markerSize ?? 5;

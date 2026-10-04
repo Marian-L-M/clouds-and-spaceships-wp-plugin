@@ -104,7 +104,7 @@ export default function AreasPanel( {
 			onAreasLoaded( [ ...areas, data ] );
 			onSelect( data.id );
 		} catch {
-			/* paste failures are silent, as before */
+			/* paste failures are silent */
 		}
 	}
 

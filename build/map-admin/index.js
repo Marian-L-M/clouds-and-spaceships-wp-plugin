@@ -819,7 +819,7 @@ function MapEditorApp() {
       });
       setObjectsList(prev => prev.map(o => o.id === id ? data : o));
     } catch {
-      /* position patches fail silently, as before */
+      /* position patches fail silently */
     }
   }
 
@@ -859,7 +859,7 @@ function MapEditorApp() {
       const data = await (0,_utils__WEBPACK_IMPORTED_MODULE_15__.apiFetch)('PATCH', `/labels/${id}/position`, geometry);
       setLabelsList(prev => prev.map(l => l.id === id ? data : l));
     } catch {
-      /* position patches fail silently, as before */
+      /* position patches fail silently */
     }
   }
 
@@ -908,7 +908,7 @@ function MapEditorApp() {
         shape_type: area.shape_type || 'POLYGON'
       });
     } catch {
-      /* geometry patches fail silently, as before */
+      /* geometry patches fail silently */
     }
   }
   function scheduleAreaGeometrySave(areaId) {
@@ -4264,7 +4264,7 @@ function AreasPanel({
       onAreasLoaded([...areas, data]);
       onSelect(data.id);
     } catch {
-      /* paste failures are silent, as before */
+      /* paste failures are silent */
     }
   }
   ;(0,_useCanvasKeyboard__WEBPACK_IMPORTED_MODULE_12__.useCanvasKeyboard)({
@@ -6616,8 +6616,6 @@ const OBJECT_DISPLAY_MODE_CHOICES = [{
   label: 'Text'
 }];
 const OBJECT_DISPLAY_MODES = [...OBJECT_DISPLAY_MODE_CHOICES];
-
-/** Rows saved before display modes existed were icons, so icon is the default. */
 const OBJECT_DISPLAY_MODE_DEFAULT = 'icon';
 
 // ── Shape types ───────────────────────────────────────────────────────────────
@@ -7230,7 +7228,7 @@ const TEXT_PAD_MIN = 6;
 
 /** The fields the marker drawing needs, in either row shape. */
 
-/** Rows saved before display modes existed carry none, and those were icons. */
+/** Falls back to 'icon' when the styles carry no display mode. */
 function objectDisplayMode(styles) {
   return styles?.displayMode || 'icon';
 }

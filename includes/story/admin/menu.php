@@ -107,9 +107,8 @@ add_action('admin_enqueue_scripts', 'cns_story_suite_enqueue_admin_assets');
 
 // ── Map editor integration ────────────────────────────────────────────────────
 //
-// The map editor's Stories tab mounts this bundle. It used to reach the map
-// suite through the `cns_map_suite_editor_enqueue_assets` action because the
-// two were separate plugins; the map editor now calls this directly.
+// The map editor's Stories tab mounts this bundle; the map editor calls this
+// directly.
 
 function cns_story_suite_enqueue_map_panel(): void {
 	$asset = cns_asset('map-panel/index');

@@ -1,8 +1,7 @@
 // ── Infobox side drawer ───────────────────────────────────────────────────────
 // Appended to document.body by src/shared/frontend/drawer.js, which the map
 // block and the story block both use. The markup is created in JS, so whichever
-// block is on the page must also carry these styles — a story block on a page
-// with no map block used to open an entirely unstyled drawer.
+// block is on the page must also carry these styles.
 
 .cns-map-drawer {
 	display: none;

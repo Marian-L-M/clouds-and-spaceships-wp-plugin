@@ -590,7 +590,7 @@ const TEXT_PAD_MIN = 6;
 
 /** The fields the marker drawing needs, in either row shape. */
 
-/** Rows saved before display modes existed carry none, and those were icons. */
+/** Falls back to 'icon' when the styles carry no display mode. */
 function objectDisplayMode(styles) {
   return styles?.displayMode || 'icon';
 }
@@ -1199,7 +1199,7 @@ function StoryEditorApp() {
           setMapAreas(data.mapData.areas);
         }
       } catch {
-        /* load failures leave the editor empty, as before */
+        /* load failures leave the editor empty */
       }
       try {} catch {
         /* ignore */
@@ -1316,7 +1316,7 @@ function StoryEditorApp() {
       setNodes(p => [...p, node]);
       return node;
     } catch {
-      /* create failures are silent, as before */
+      /* create failures are silent */
     }
   }
   async function handleNodeUpdate(nodeId, formData) {
@@ -1345,7 +1345,7 @@ function StoryEditorApp() {
       });
       setNodes(p => p.map(n => n.id === nodeId ? updated : n));
     } catch {
-      /* update failures are silent, as before */
+      /* update failures are silent */
     }
   }
   async function handleNodeDelete(nodeId) {
@@ -1355,7 +1355,7 @@ function StoryEditorApp() {
       setEdges(p => p.filter(e => e.fromNodeId !== nodeId && e.toNodeId !== nodeId));
       if (selectedNodeId === nodeId) setSelectedNodeId(null);
     } catch {
-      /* delete failures are silent, as before */
+      /* delete failures are silent */
     }
   }
   async function handleNodeDragEnd(nodeId, x, y) {
@@ -1366,7 +1366,7 @@ function StoryEditorApp() {
       });
       setNodes(p => p.map(n => n.id === nodeId ? updated : n));
     } catch {
-      /* position patches fail silently, as before */
+      /* position patches fail silently */
     }
   }
 
@@ -1385,7 +1385,7 @@ function StoryEditorApp() {
         return [...filtered, edge];
       });
     } catch {
-      /* create failures are silent, as before */
+      /* create failures are silent */
     }
   }
   async function handleEdgeDelete(edgeId) {
@@ -1393,7 +1393,7 @@ function StoryEditorApp() {
       await (0,_utils__WEBPACK_IMPORTED_MODULE_6__.apiFetch)('DELETE', `/edges/${edgeId}`);
       setEdges(p => p.filter(e => e.id !== edgeId));
     } catch {
-      /* delete failures are silent, as before */
+      /* delete failures are silent */
     }
   }
   async function handleEdgeUpdate(edgeId, formData) {
@@ -1405,7 +1405,7 @@ function StoryEditorApp() {
       });
       setEdges(p => p.map(e => e.id === edgeId ? updated : e));
     } catch {
-      /* update failures are silent, as before */
+      /* update failures are silent */
     }
   }
 
@@ -1424,7 +1424,7 @@ function StoryEditorApp() {
       });
       setPaths(p => [...p, path]);
     } catch {
-      /* create failures are silent, as before */
+      /* create failures are silent */
     }
   }
   async function handlePathUpdate(pathId, data) {
@@ -1440,7 +1440,7 @@ function StoryEditorApp() {
       });
       setPaths(p => p.map(path => path.id === pathId ? updated : path));
     } catch {
-      /* update failures are silent, as before */
+      /* update failures are silent */
     }
   }
   async function handlePathDelete(pathId) {
@@ -1453,7 +1453,7 @@ function StoryEditorApp() {
         pathId: null
       } : n));
     } catch {
-      /* delete failures are silent, as before */
+      /* delete failures are silent */
     }
   }
 
@@ -1542,7 +1542,7 @@ function StoryEditorApp() {
       });
       setEdges(p => p.map(e => e.id === edgeId ? updated : e));
     } catch {
-      /* reorder failures are silent, as before */
+      /* reorder failures are silent */
     }
   }
 
@@ -2242,7 +2242,7 @@ function NodeModal({
       set('substoryLabel', data.title);
       setNewTitle('');
     } catch {
-      /* create failures are silent, as before */
+      /* create failures are silent */
     } finally {
       setCreating(false);
     }

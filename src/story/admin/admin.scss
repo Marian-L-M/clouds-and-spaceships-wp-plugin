@@ -182,12 +182,10 @@ $bp-spc: 1200px;
 // ── Node modal: pinned action bar ────────────────────────────────────────────
 // Cancel/Save stay visible while the form scrolls.
 // .components-modal__content is already the scroll box <Modal> set up, so the
-// footer just sticks to the bottom of it. Deliberately nothing here changes
-// that box's display, overflow or height: rebuilding it as a flex/grid column
-// broke the editor once, and sticky leaves WordPress's own layout intact, so
-// the worst case is a footer that scrolls rather than a modal that misbehaves.
-// padding-bottom is the single override, so the bar sits flush on the bottom
-// edge instead of floating above the box's own bottom padding.
+// footer sticks to the bottom of it. Nothing here changes that box's display,
+// overflow or height, so the worst case is a footer that scrolls rather than a
+// modal that misbehaves. padding-bottom is the single override, so the bar sits
+// flush on the bottom edge instead of floating above the box's own padding.
 
 .cns-node-modal {
 	.components-modal__content {

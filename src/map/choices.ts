@@ -71,7 +71,6 @@ export const OBJECT_DISPLAY_MODES: {
 	label: string;
 }[] = [ ...OBJECT_DISPLAY_MODE_CHOICES ];
 
-/** Rows saved before display modes existed were icons, so icon is the default. */
 export const OBJECT_DISPLAY_MODE_DEFAULT: ObjectDisplayMode = 'icon';
 
 // ── Shape types ───────────────────────────────────────────────────────────────

@@ -2,9 +2,8 @@
  * The infobox side drawer, shared by the map block and the story block.
  *
  * One element (`#cns-map-drawer`) serves every block on the page, whichever
- * block created it — both suites already relied on that, each with its own copy
- * of the builder. The shell lives here; each block still composes its own body
- * HTML, because a map item and a story's map item resolve different fields.
+ * block created it. The shell lives here; each block still composes its own
+ * body HTML, because a map item and a story's map item resolve different fields.
  *
  * Visibility is a class toggle rather than the `hidden` attribute, so an
  * author's `display: flex/block` never fights the UA's `[hidden]` rule.

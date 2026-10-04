@@ -159,10 +159,8 @@ function cns_admin_render_page(): void {
 // destructive links.
 //
 // That bundle is deliberately separate from the map and story editor bundles.
-// The list tabs used to pull a whole editor's stylesheet (~16 KB of canvas and
-// panel rules) to draw a table, and the two editors each kept their own drifted
-// copy of the shared pieces. Tabs that need an editor's React app — Icons — add
-// that bundle on top; nothing else does.
+// Tabs that need an editor's React app — Icons — add that bundle on top;
+// nothing else does.
 
 add_action( 'admin_enqueue_scripts', 'cns_admin_enqueue_shared_assets' );
 

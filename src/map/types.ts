@@ -154,8 +154,7 @@ export interface Node {
  * only; `bgColor` paints the shape body (round/square/diamond), the round
  * backdrop behind an icon, and the rectangular backdrop behind text.
  *
- * `displayMode` is absent on rows saved before display modes existed — those
- * are icons, which is why OBJECT_DISPLAY_MODE_DEFAULT is 'icon'.
+ * `displayMode` is optional; absent falls back to OBJECT_DISPLAY_MODE_DEFAULT.
  */
 export interface ObjectCanvasStyles {
 	displayMode?: ObjectDisplayMode;

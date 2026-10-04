@@ -256,7 +256,7 @@ export default function MapEditorApp() {
 				prev.map( ( o ) => ( o.id === id ? data : o ) )
 			);
 		} catch {
-			/* position patches fail silently, as before */
+			/* position patches fail silently */
 		}
 	}
 
@@ -331,7 +331,7 @@ export default function MapEditorApp() {
 				prev.map( ( l ) => ( l.id === id ? data : l ) )
 			);
 		} catch {
-			/* position patches fail silently, as before */
+			/* position patches fail silently */
 		}
 	}
 
@@ -387,7 +387,7 @@ export default function MapEditorApp() {
 				shape_type: area.shape_type || 'POLYGON',
 			} );
 		} catch {
-			/* geometry patches fail silently, as before */
+			/* geometry patches fail silently */
 		}
 	}
 

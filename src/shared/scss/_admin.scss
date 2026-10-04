@@ -1,9 +1,7 @@
 // Admin styles shared by the map and story editors.
 //
-// Only rules that were byte-identical in both suites live here. Everything the
-// two editors style differently (panel padding, badge variants, the settings
-// grid) stays in the suite's own sheet, so merging the plugins did not change
-// how either editor looks.
+// Rules the two editors style differently (panel padding, badge variants, the
+// settings grid) stay in each editor's own sheet.
 
 .cns-actions-row {
 	display: flex;

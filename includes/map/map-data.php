@@ -81,7 +81,7 @@ function cns_map_suite_resolve_infobox(array $item): array {
 		$ib = [];
 	}
 
-	// Display flags default on when absent (rows saved before the flags existed).
+	// Display flags default on when absent.
 	$flag = static function (string $key) use ($ib): bool {
 		return ! array_key_exists($key, $ib) || ! empty($ib[$key]);
 	};

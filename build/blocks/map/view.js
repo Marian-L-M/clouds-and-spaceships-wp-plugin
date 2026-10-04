@@ -19,9 +19,8 @@ __webpack_require__.r(__webpack_exports__);
  * The infobox side drawer, shared by the map block and the story block.
  *
  * One element (`#cns-map-drawer`) serves every block on the page, whichever
- * block created it — both suites already relied on that, each with its own copy
- * of the builder. The shell lives here; each block still composes its own body
- * HTML, because a map item and a story's map item resolve different fields.
+ * block created it. The shell lives here; each block still composes its own
+ * body HTML, because a map item and a story's map item resolve different fields.
  *
  * Visibility is a class toggle rather than the `hidden` attribute, so an
  * author's `display: flex/block` never fights the UA's `[hidden]` rule.
@@ -477,7 +476,7 @@ const TEXT_PAD_MIN = 6;
 
 /** The fields the marker drawing needs, in either row shape. */
 
-/** Rows saved before display modes existed carry none, and those were icons. */
+/** Falls back to 'icon' when the styles carry no display mode. */
 function objectDisplayMode(styles) {
   return styles?.displayMode || 'icon';
 }

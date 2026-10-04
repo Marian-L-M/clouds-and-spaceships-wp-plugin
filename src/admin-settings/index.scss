@@ -4,12 +4,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // The CNS settings screen.
 // One layout language for every tab — Info, Wiki, Glossary, Maps, Icons,
-// Stories, Substories. Previously two competing sets existed: the settings tabs
-// used .cns-settings-page/__header/-card, the list tabs used
-// .cns-maps-overview__header/-table, and the story views borrowed the map-named
-// classes while redefining them in their own bundle. Both are replaced here.
-// This sheet ships as its own bundle so the list tabs no longer pull the ~16 KB
-// map/story editor CSS just to draw a table.
+// Stories, Substories. It ships as its own bundle so a list tab does not pull
+// the map/story editor CSS just to draw a table.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Page shell ───────────────────────────────────────────────────────────────

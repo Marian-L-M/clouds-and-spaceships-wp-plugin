@@ -1,8 +1,4 @@
-// Design tokens for every CNS admin surface.
-// Before this file the same values were re-declared per bundle: $border-color
-// lived inside src/map/admin/admin.scss, the story sheet hardcoded #e0e0e0 next
-// to it, and assets/css/admin-settings.css hardcoded it a third time. The three
-// copies had already drifted. Everything visual now resolves here.
+// Design tokens for every CNS admin surface. Everything visual resolves here.
 
 // ── Surfaces & lines ─────────────────────────────────────────────────────────
 $color-surface:       #fff;
