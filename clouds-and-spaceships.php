@@ -2,7 +2,8 @@
 
 /**
  * Plugin Name:       Clouds and Spaceships
- * Description:       Clouds and Spaceships is a suite for Worldbuilders and Mapmakers: Connect your map to your post using interactive canvas maps, wiki articles, glossaries, and story paths.
+ * Plugin URI:        https://cloudsandspaceships.com/
+ * Description:       A suite for Worldbuilders, Storytellers, and Mapmakers - Turn an image into an interactive canvas to create informational maps and stories, which can be linked with wiki articles and glossaries.
  * Version:           0.1.0
  * Requires at least: 6.8
  * Requires PHP:      8.0

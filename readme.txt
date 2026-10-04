@@ -8,11 +8,13 @@ Stable tag: 0.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Interactive canvas maps, wiki articles with a glossary, and branching stories laid over your maps. A worldbuilding suite for WordPress.
+For Worldbuilders, Storytellers, and Mapmakers: turn an image into an interactive canvas of maps and stories, linked to wiki articles and glossaries.
 
 == Description ==
 
-Clouds and Spaceships bundles three toolsets for worldbuilders behind one **CNS** settings screen: Wiki, Maps and Stories. The wiki can be switched off if you do not need it, and the glossary is off until you turn it on.
+A suite for Worldbuilders, Storytellers, and Mapmakers - Turn an image into an interactive canvas to create informational maps and stories, which can be linked with wiki articles and glossaries.
+
+Three toolsets sit behind one **CNS** settings screen: Wiki, Maps and Stories. The wiki can be switched off if you do not need it, and the glossary is off until you turn it on.
 
 **Maps**
 
