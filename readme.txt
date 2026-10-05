@@ -1,5 +1,5 @@
 === Clouds and Spaceships ===
-Contributors: namatamgodev
+Contributors: namatamagodev
 Tags: worldbuilding, mapmaking, interactive map, wiki, storytelling
 Requires at least: 6.8
 Tested up to: 7.1

@@ -17,7 +17,7 @@ shared directories look the way they do.
 ## Layout
 
 ```
-clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle, migration
+clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle
 uninstall.php                  drops tables + options always, posts only on opt-in
 includes/
   settings-page.php            the tabbed CNS settings screen (cns_admin_tabs filter)
@@ -36,6 +36,7 @@ src/
   map/  story/                 the two admin React apps
   shared/                      code both editors use (see below)
   map-panel/                   the Stories tab inside the map editor
+  admin-settings/              the CNS settings screen bundle
   formats/glossary/            glossary inline rich-text format
 ```
 
@@ -146,8 +147,7 @@ anyone who had ticked it needs to re-tick the new substory setting.
 
 The plugin makes no HTTP requests: no `wp_remote_*`, no cURL, no external
 scripts, fonts or stylesheets. Keep it that way — it is what keeps the wp.org
-listing free of an external-services disclosure, and with it the need for
-hosted terms and privacy pages.
+listing free of an external-services disclosure.
 
 ---
 
