@@ -12,6 +12,15 @@ shared directories look the way they do.
 > This file is for developers. The user-facing text that wordpress.org parses
 > lives in `readme.txt`; wp.org ignores this one entirely.
 
+Repository: https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin
+
+Every global identifier uses the `clouansp` prefix: `clouansp_` for functions,
+options, meta keys, tables, post types and nonces, `CLOUANSP_` for constants,
+`clouansp-` for handles, slugs, block namespaces and CSS classes, and
+`clouansp` + CamelCase for JS globals. The old three plugins used `cns`, which
+wp.org rejects as shorter than four characters. The "CNS" menu label is
+display text, not a prefix.
+
 ---
 
 ## Layout
@@ -58,12 +67,12 @@ Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
 
 | Was                                                                                                | Now                                              |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| 4 identical `clouansp-settings-page.php` copies behind `function_exists` guards                         | `includes/settings-page.php`, one unguarded copy |
+| 4 identical `cns-settings-page.php` copies behind `function_exists` guards                         | `includes/settings-page.php`, one unguarded copy |
 | `archive.php` in map + story, plus the same logic inline in the wiki                               | `includes/archive.php`                           |
 | `cache.php` in map + story                                                                         | `includes/cache.php`                             |
 | `capabilities.php` in map + story                                                                  | `includes/capabilities.php`                      |
-| 3 rewrite-flush flags and init handlers                                                            | one `clouansp_needs_rewrite_flush` flag               |
-| 2 DB version options and upgrade routines                                                          | one `clouansp_db_version`                             |
+| 3 rewrite-flush flags and init handlers                                                            | one `clouansp_needs_rewrite_flush` flag          |
+| 2 DB version options and upgrade routines                                                          | one `clouansp_db_version`                        |
 | `ColorField` / `Notices` (byte-identical copies)                                                   | `src/shared/admin/`                              |
 | `EditorHeader` / `TabBar` (near-identical)                                                         | `src/shared/admin/`, entity labels as props      |
 | 2 `apiFetch` wrappers                                                                              | `src/shared/admin/api.ts`                        |
@@ -115,14 +124,14 @@ The plugin is self-contained and makes no assumptions about the active theme.
 `uninstall.php` always drops the seven `clouansp_map_*` / `clouansp_story_*` tables and
 deletes every option. On top of that:
 
-| Post type        | Deleted                                             |
-| ---------------- | --------------------------------------------------- |
-| `clouansp_map`        | always                                              |
-| `clouansp_story`      | always                                              |
-| `clouansp_substory`   | `clouansp_story_suite_delete_substories_on_uninstall`    |
-| `clouansp_wiki`       | `clouansp_wiki_settings['wiki_delete_on_uninstall']`     |
-| `clouansp_glossary`   | `clouansp_wiki_settings['glossary_delete_on_uninstall']` |
-| icon attachments | `clouansp_map_suite_delete_icons_on_uninstall`           |
+| Post type           | Deleted                                                  |
+| ------------------- | -------------------------------------------------------- |
+| `clouansp_map`      | always                                                   |
+| `clouansp_story`    | always                                                   |
+| `clouansp_substory` | `clouansp_story_suite_delete_substories_on_uninstall`    |
+| `clouansp_wiki`     | `clouansp_wiki_settings['wiki_delete_on_uninstall']`     |
+| `clouansp_glossary` | `clouansp_wiki_settings['glossary_delete_on_uninstall']` |
+| icon attachments    | `clouansp_map_suite_delete_icons_on_uninstall`           |
 
 Maps and stories are unconditional because their entire substance lives in the
 dropped tables — a map is its objects, areas and labels, a story is its nodes,
@@ -137,11 +146,6 @@ reappear on reinstall.
 
 `wp_delete_post()` re-parents attachments rather than deleting them, so featured
 images and map backgrounds survive in the media library either way.
-
-Two options are retired and kept only in the cleanup list, so they are removed
-from installs that saved them: `clouansp_map_suite_delete_on_uninstall` and
-`clouansp_story_suite_delete_on_uninstall`. The latter used to cover substories, so
-anyone who had ticked it needs to re-tick the new substory setting.
 
 ## No outbound requests
 
@@ -164,12 +168,15 @@ npm run format                   # prettier
 npm run plugin-zip               # distributable zip, per files[] in package.json
 ```
 
-`npm run build` is required after checkout — `build/` is gitignored and the
-plugin registers no blocks without `build/blocks-manifest.php`.
+`build/` is committed, so a checkout runs as-is; the plugin registers no
+blocks without `build/blocks-manifest.php`. Rebuild and commit `build/`
+whenever `src/` changes.
 
-**Always `npm run build` before `npm run plugin-zip`,** and stop the watcher
-first — both write to `build/`. `npm start` leaves an unminified bundle plus
-~1.4 MB of source maps there, and `plugin-zip` will happily ship it.
+**Always `npm run build` before `npm run plugin-zip` or committing,** and stop
+the watcher first — both write to `build/`. `npm start` leaves an unminified
+bundle plus ~1.4 MB of source maps there, and a production build does not
+delete them: remove leftover `build/**/*.map` files by hand, or `plugin-zip`
+and git will happily ship them.
 
 The codebase is not prettier-clean; `npm run format` would rewrite large
 amounts of unrelated code. Match the surrounding style instead, and check that

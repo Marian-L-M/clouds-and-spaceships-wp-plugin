@@ -47,6 +47,12 @@ A canvas editor for branching stories laid over one of your maps.
 
 Clouds and Spaceships never sends anything anywhere. There is no account to create and no service to connect, no tracking and no analytics, and nothing is loaded from another server. It uses no external services at all: everything you write and draw stays in your own WordPress site.
 
+**Source code**
+
+The JavaScript and CSS in the `build/` folder are compiled. The uncompiled source code and build tools are publicly available on GitHub: https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin
+
+To build it yourself, install Node.js and run `npm install` followed by `npm run build` in the plugin folder. This uses `@wordpress/scripts` and writes the compiled files to `build/`.
+
 == Installation ==
 
 1. Upload the plugin folder to `/wp-content/plugins/`, or install it from the Plugins screen.

@@ -19,7 +19,7 @@ defined('ABSPATH') || exit;
  */
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-function clouansp_map_suite_permission_check(): true|WP_Error {
+function clouansp_map_suite_permission_check(): bool|WP_Error {
 	if (current_user_can('manage_maps')) {
 		return true;
 	}
