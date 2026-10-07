@@ -22,7 +22,7 @@ const LAYERS = [
  *                                  the buttons stay put while a zoomed canvas
  *                                  pans.
  * @param {string}   opts.className Block class for the group, e.g.
- *                                  'cns-map-layers'. Buttons get `__btn`.
+ *                                  'clouansp-map-layers'. Buttons get `__btn`.
  * @param {Object}   opts.present   Which layers the map actually has content
  *                                  in; a layer that is empty gets no button.
  * @param {Object}   opts.layers    Live visibility state, mutated on click.

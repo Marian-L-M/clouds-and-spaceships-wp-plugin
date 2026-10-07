@@ -18,7 +18,7 @@ $search             = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['
 // search. Matching the title only keeps the list honest — it shows no body
 // text, so a content hit would look like a result with no visible reason.
 $query_args = [
-	'post_type'      => 'cns_substory',
+	'post_type'      => 'clouansp_substory',
 	'posts_per_page' => $per_page,
 	'offset'         => ($paged - 1) * $per_page,
 	'post_status'    => ['publish', 'draft', 'private'],
@@ -46,10 +46,10 @@ if (! $substories && $total > 0 && $paged > 1) {
 	$substories           = $query->posts;
 }
 
-$return_page = sanitize_key($_GET['page'] ?? CNS_STORY_PAGE_SETTINGS_SUBSTORIES);
-$new_url     = admin_url('post-new.php?post_type=cns_substory');
+$return_page = sanitize_key($_GET['page'] ?? CLOUANSP_STORY_PAGE_SETTINGS_SUBSTORIES);
+$new_url     = admin_url('post-new.php?post_type=clouansp_substory');
 ?>
-<div class="cns-settings-page">
+<div class="clouansp-settings-page">
 
 	<?php if (isset($_GET['trashed'])) : ?>
 		<div class="notice notice-success is-dismissible">
@@ -57,13 +57,13 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 		</div>
 	<?php endif; ?>
 
-	<div class="cns-settings-page__header">
+	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e('Substories', 'clouds-and-spaceships'); ?></h1>
-		<div class="cns-settings-page__actions">
+		<div class="clouansp-settings-page__actions">
 			<a href="<?php echo esc_url($new_url); ?>" class="button button-primary">
 				<?php esc_html_e('+ New Substory', 'clouds-and-spaceships'); ?>
 			</a>
-			<a href="<?php echo esc_url(admin_url('edit.php?post_type=cns_substory')); ?>" class="button">
+			<a href="<?php echo esc_url(admin_url('edit.php?post_type=clouansp_substory')); ?>" class="button">
 				<?php esc_html_e('Full overview', 'clouds-and-spaceships'); ?>
 			</a>
 		</div>
@@ -74,33 +74,33 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 		paged field on purpose: any change to the filter returns to page one,
 		which is the only page guaranteed to exist in the new result set.
 	-->
-	<div class="cns-settings-toolbar">
+	<div class="clouansp-settings-toolbar">
 		<form method="get">
 			<input type="hidden" name="page" value="<?php echo esc_attr($return_page); ?>" />
 
-			<span class="cns-settings-toolbar__group">
-				<label class="screen-reader-text" for="cns-sub-search">
+			<span class="clouansp-settings-toolbar__group">
+				<label class="screen-reader-text" for="clouansp-sub-search">
 					<?php esc_html_e('Search substories by name', 'clouds-and-spaceships'); ?>
 				</label>
 				<input
 					type="search"
-					id="cns-sub-search"
+					id="clouansp-sub-search"
 					name="s"
 					value="<?php echo esc_attr($search); ?>"
 					placeholder="<?php esc_attr_e('Search substories by name…', 'clouds-and-spaceships'); ?>"
 				/>
 				<button type="submit" class="button"><?php esc_html_e('Search', 'clouds-and-spaceships'); ?></button>
 				<?php if ($search !== '') : ?>
-					<a class="cns-settings-toolbar__clear" href="<?php echo esc_url(add_query_arg(
+					<a class="clouansp-settings-toolbar__clear" href="<?php echo esc_url(add_query_arg(
 						['page' => $return_page, 'per_page' => $per_page],
 						admin_url('admin.php')
 					)); ?>"><?php esc_html_e('Clear', 'clouds-and-spaceships'); ?></a>
 				<?php endif; ?>
 			</span>
 
-			<span class="cns-settings-toolbar__group">
-				<label for="cns-sub-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
-				<select name="per_page" id="cns-sub-per-page" onchange="this.form.submit()">
+			<span class="clouansp-settings-toolbar__group">
+				<label for="clouansp-sub-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
+				<select name="per_page" id="clouansp-sub-per-page" onchange="this.form.submit()">
 					<?php foreach ($per_page_options as $option) : ?>
 						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
 							<?php echo esc_html($option); ?>
@@ -112,7 +112,7 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 	</div>
 
 	<?php if ($search !== '') : ?>
-		<p class="cns-settings-toolbar__count">
+		<p class="clouansp-settings-toolbar__count">
 			<?php printf(
 				/* translators: %1$s: number of substories, %2$s: search term */
 				esc_html(_n(
@@ -127,7 +127,7 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 		</p>
 	<?php endif; ?>
 
-	<table class="wp-list-table widefat fixed striped cns-settings-table">
+	<table class="wp-list-table widefat fixed striped clouansp-settings-table">
 		<thead>
 			<tr>
 				<th class="col-thumb"></th>
@@ -140,7 +140,7 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 		<tbody>
 			<?php if (! $substories) : ?>
 				<tr>
-					<td colspan="5" class="cns-settings-table__empty">
+					<td colspan="5" class="clouansp-settings-table__empty">
 						<?php if ($search !== '') : ?>
 							<?php esc_html_e('No substories match that name.', 'clouds-and-spaceships'); ?>
 						<?php else : ?>
@@ -169,7 +169,7 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 							<?php if ($thumb_url) : ?>
 								<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($sub->post_title ?: ''); ?>" />
 							<?php else : ?>
-								<div class="cns-thumb-placeholder"></div>
+								<div class="clouansp-thumb-placeholder"></div>
 							<?php endif; ?>
 						</a>
 					</td>
@@ -181,12 +181,12 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 						</strong>
 					</td>
 					<td>
-						<span class="cns-badge cns-badge--<?php echo esc_attr($sub->post_status); ?>">
+						<span class="clouansp-badge clouansp-badge--<?php echo esc_attr($sub->post_status); ?>">
 							<?php echo esc_html($status_labels[$sub->post_status] ?? ucfirst($sub->post_status)); ?>
 						</span>
 					</td>
 					<td><?php echo esc_html(get_the_date('Y-m-d', $sub)); ?></td>
-					<td class="cns-row-actions">
+					<td class="clouansp-row-actions">
 						<a href="<?php echo esc_url($edit_url); ?>">
 							<?php esc_html_e('Edit', 'clouds-and-spaceships'); ?>
 						</a>
@@ -199,7 +199,7 @@ $new_url     = admin_url('post-new.php?post_type=cns_substory');
 						&nbsp;&middot;&nbsp;
 						<a
 							href="<?php echo esc_url(get_delete_post_link($sub->ID)); ?>"
-							class="cns-delete-link"
+							class="clouansp-delete-link"
 							onclick="return confirm('<?php esc_attr_e('Move this substory to trash?', 'clouds-and-spaceships'); ?>')"
 						><?php esc_html_e('Trash', 'clouds-and-spaceships'); ?></a>
 					</td>

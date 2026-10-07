@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "cns-map-suite/map",
+  "name": "clouansp-map-suite/map",
   "version": "0.1.0",
   "title": "CNS Map",
   "category": "widgets",

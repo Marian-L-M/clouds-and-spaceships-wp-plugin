@@ -1,7 +1,7 @@
 import { createApiFetch } from '../../shared/admin/api';
 
 /** Map-suite REST namespace. */
-export const apiFetch = createApiFetch( '/cns-map-suite/v1' );
+export const apiFetch = createApiFetch( '/clouansp-map-suite/v1' );
 
 // ── Keyboard ──────────────────────────────────────────────────────────────────
 

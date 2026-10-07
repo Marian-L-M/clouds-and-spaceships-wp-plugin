@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @use "../../shared/scss" as *;
-.wp-block-cns-wiki-suite-infobox-row {
+.wp-block-clouansp-wiki-suite-infobox-row {
 	@include fx($direction: column, $gap: 2rem);
 	width: 100%;
 	min-height: 1.8em;

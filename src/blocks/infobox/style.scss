@@ -8,22 +8,22 @@
 // Three levels, narrowest wins:
 //   1. the block's own control (Max width, or a colour) → inline style, beats
 //      everything, and is only written once someone sets it
-//   2. CNS → Wiki → Layout / Infobox colours → the --cns-wiki-infobox-*
+//   2. CNS → Wiki → Layout / Infobox colours → the --clouansp-wiki-infobox-*
 //      properties, emitted on this wrapper
 //   3. the fallbacks below → when neither is set. Colours fall through to the
 //      theme's palette presets, so an untouched infobox follows the theme.
 //
 // width: 100% matters for the alignment support: `alignleft`/`alignright` are
 // floats, and a floated element shrink-wraps its content without it.
-.wp-block-cns-wiki-suite-infobox {
+.wp-block-clouansp-wiki-suite-infobox {
 	width: 100%;
-	max-width: var(--cns-wiki-infobox-width, 360px);
+	max-width: var(--clouansp-wiki-infobox-width, 360px);
 	order: 1;
 	background-color: var(
-		--cns-wiki-infobox-bg,
+		--clouansp-wiki-infobox-bg,
 		var(--wp--preset--color--element-bg)
 	);
-	color: var(--cns-wiki-infobox-text, var(--wp--preset--color--text));
+	color: var(--clouansp-wiki-infobox-text, var(--wp--preset--color--text));
 }
 
 .infobox,
@@ -66,12 +66,12 @@
 	}
 	&__title {
 		background-color: var(
-			--cns-wiki-infobox-title-bg,
+			--clouansp-wiki-infobox-title-bg,
 			var(--wp--preset--color--element-contrast)
 		);
 		color: var(
-			--cns-wiki-infobox-title-text,
-			var(--cns-wiki-infobox-text, var(--wp--preset--color--text))
+			--clouansp-wiki-infobox-title-text,
+			var(--clouansp-wiki-infobox-text, var(--wp--preset--color--text))
 		);
 		input,
 		button {

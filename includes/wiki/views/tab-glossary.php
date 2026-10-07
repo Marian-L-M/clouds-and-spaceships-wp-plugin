@@ -2,17 +2,17 @@
 /**
  * Clouds and Spaceships — Glossary admin tab content.
  *
- * Shares the cns_wiki_settings option with the Wiki tab; the hidden _section
- * field below tells cns_sanitize_wiki_settings() which keys this form owns.
+ * Shares the clouansp_wiki_settings option with the Wiki tab; the hidden _section
+ * field below tells clouansp_sanitize_wiki_settings() which keys this form owns.
  */
 defined('ABSPATH') || exit;
 
-$glossary_enabled   = (bool) cns_get_wiki_setting( 'glossary_enabled', false );
-$glossary_slug      = cns_get_wiki_setting( 'glossary_slug', 'glossary' );
-$glossary_color     = cns_get_wiki_setting( 'glossary_text_color', '' );
-$glossary_show_menu = (bool) cns_get_wiki_setting( 'glossary_show_menu', true );
-$glossary_delete_on_uninstall = (bool) cns_get_wiki_setting( 'glossary_delete_on_uninstall', false );
-$glossary_url       = $glossary_enabled ? get_post_type_archive_link( 'cns_glossary' ) : false;
+$glossary_enabled   = (bool) clouansp_get_wiki_setting( 'glossary_enabled', false );
+$glossary_slug      = clouansp_get_wiki_setting( 'glossary_slug', 'glossary' );
+$glossary_color     = clouansp_get_wiki_setting( 'glossary_text_color', '' );
+$glossary_show_menu = (bool) clouansp_get_wiki_setting( 'glossary_show_menu', true );
+$glossary_delete_on_uninstall = (bool) clouansp_get_wiki_setting( 'glossary_delete_on_uninstall', false );
+$glossary_url       = $glossary_enabled ? get_post_type_archive_link( 'clouansp_glossary' ) : false;
 
 // Counts are only meaningful once the post type is registered.
 $published = 0;
@@ -20,64 +20,64 @@ $draft     = 0;
 $cat_count = 0;
 
 if ( $glossary_enabled ) {
-    $counts    = wp_count_posts( 'cns_glossary' );
+    $counts    = wp_count_posts( 'clouansp_glossary' );
     $published = (int) ( $counts->publish ?? 0 );
     $draft     = (int) ( $counts->draft   ?? 0 );
     $terms     = get_terms( [
-        'taxonomy'   => 'cns_glossary_category',
+        'taxonomy'   => 'clouansp_glossary_category',
         'hide_empty' => true,
         'fields'     => 'ids',
     ] );
     $cat_count = is_wp_error( $terms ) ? 0 : count( $terms );
 }
 ?>
-<div class="cns-settings-page">
+<div class="clouansp-settings-page">
 
-	<div class="cns-settings-page__header">
+	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e( 'Glossary', 'clouds-and-spaceships' ); ?></h1>
 		<?php if ( $glossary_enabled ) : ?>
-			<div class="cns-settings-page__actions">
+			<div class="clouansp-settings-page__actions">
 				<?php if ( $glossary_url ) : ?>
 					<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="button">
 						<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 					</a>
 				<?php endif; ?>
-				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=cns_glossary' ) ); ?>" class="button">
+				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=clouansp_glossary' ) ); ?>" class="button">
 					<?php esc_html_e( 'All terms', 'clouds-and-spaceships' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=cns_glossary' ) ); ?>" class="button button-primary">
+				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=clouansp_glossary' ) ); ?>" class="button button-primary">
 					<?php esc_html_e( '+ New Term', 'clouds-and-spaceships' ); ?>
 				</a>
 			</div>
 		<?php endif; ?>
 	</div>
 
-	<p class="cns-settings-page__intro">
+	<p class="clouansp-settings-page__intro">
 		<?php esc_html_e( 'Glossary for terms. Glossary terms allows for maringk text as a glossary term to display a tooltip with definition on hover.', 'clouds-and-spaceships' ); ?>
 	</p>
 
 	<?php if ( $glossary_enabled ) : ?>
-		<ul class="cns-settings-stats">
+		<ul class="clouansp-settings-stats">
 			<li>
-				<span class="cns-settings-stats__value"><?php echo esc_html( $published ); ?></span>
-				<span class="cns-settings-stats__label"><?php esc_html_e( 'Published terms', 'clouds-and-spaceships' ); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html( $published ); ?></span>
+				<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Published terms', 'clouds-and-spaceships' ); ?></span>
 			</li>
 			<li>
-				<span class="cns-settings-stats__value"><?php echo esc_html( $draft ); ?></span>
-				<span class="cns-settings-stats__label"><?php esc_html_e( 'Drafts', 'clouds-and-spaceships' ); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html( $draft ); ?></span>
+				<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Drafts', 'clouds-and-spaceships' ); ?></span>
 			</li>
 			<li>
-				<span class="cns-settings-stats__value"><?php echo esc_html( $cat_count ); ?></span>
-				<span class="cns-settings-stats__label"><?php esc_html_e( 'Categories in use', 'clouds-and-spaceships' ); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html( $cat_count ); ?></span>
+				<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Categories in use', 'clouds-and-spaceships' ); ?></span>
 			</li>
 		</ul>
 	<?php endif; ?>
 
 	<form method="post" action="options.php">
-		<?php settings_fields( 'cns_wiki_settings_group' ); ?>
-		<input type="hidden" name="cns_wiki_settings[_section]" value="glossary" />
+		<?php settings_fields( 'clouansp_wiki_settings_group' ); ?>
+		<input type="hidden" name="clouansp_wiki_settings[_section]" value="glossary" />
 
-		<div class="cns-settings-card">
+		<div class="clouansp-settings-card">
 			<h2><?php esc_html_e( 'Glossary Terms', 'clouds-and-spaceships' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
@@ -86,8 +86,8 @@ if ( $glossary_enabled ) {
 						<label>
 							<input
 								type="checkbox"
-								id="cns_glossary_enabled"
-								name="cns_wiki_settings[glossary_enabled]"
+								id="clouansp_glossary_enabled"
+								name="clouansp_wiki_settings[glossary_enabled]"
 								value="1"
 								<?php checked( $glossary_enabled ); ?>
 							/>
@@ -104,7 +104,7 @@ if ( $glossary_enabled ) {
 						<label>
 							<input
 								type="checkbox"
-								name="cns_wiki_settings[glossary_show_menu]"
+								name="clouansp_wiki_settings[glossary_show_menu]"
 								value="1"
 								<?php checked( $glossary_show_menu ); ?>
 							/>
@@ -117,18 +117,18 @@ if ( $glossary_enabled ) {
 				</tr>
 				<tr>
 				<th scope="row">
-					<label for="cns_glossary_color"><?php esc_html_e( 'Glossary term text color', 'clouds-and-spaceships' ); ?></label>
+					<label for="clouansp_glossary_color"><?php esc_html_e( 'Glossary term text color', 'clouds-and-spaceships' ); ?></label>
 				</th>
 				<td>
 					<input
 						type="color"
-						id="cns_glossary_color"
-						name="cns_wiki_settings[glossary_text_color]"
+						id="clouansp_glossary_color"
+						name="clouansp_wiki_settings[glossary_text_color]"
 						value="<?php echo esc_attr( $glossary_color ?: '#ffffff' ); ?>"
 						<?php disabled( '', $glossary_color ); ?>
 					/>
 					<label style="margin-left:8px;">
-						<input type="checkbox" class="cns-color-clear" data-color="cns_glossary_color"
+						<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_glossary_color"
 							<?php checked( '', $glossary_color ); ?> />
 						<?php esc_html_e( 'inherit', 'clouds-and-spaceships' ); ?>
 					</label>
@@ -141,14 +141,14 @@ if ( $glossary_enabled ) {
 		</table>
 	</div>
 	<!-- ── Archive ──────────────────────────────────────────────── -->
-	<div class="cns-settings-card">
+	<div class="clouansp-settings-card">
 		<h2><?php esc_html_e( 'Archive', 'clouds-and-spaceships' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row">
-					<label for="cns_glossary_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
+					<label for="clouansp_glossary_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
 					<?php if ( $glossary_url ) : ?>
-						<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="cns-settings-link">
+						<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
 							<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 						</a>
 					<?php endif; ?>
@@ -156,8 +156,8 @@ if ( $glossary_enabled ) {
 				<td>
 					<input
 						type="text"
-						id="cns_glossary_slug"
-						name="cns_wiki_settings[glossary_slug]"
+						id="clouansp_glossary_slug"
+						name="clouansp_wiki_settings[glossary_slug]"
 						value="<?php echo esc_attr( $glossary_slug ); ?>"
 						class="regular-text"
 						pattern="[a-z0-9\-]+"
@@ -176,7 +176,7 @@ if ( $glossary_enabled ) {
 	</div>
 
 		<?php /* ── Danger Zone ──────────────────────────────────────────── */ ?>
-		<div class="cns-danger-zone">
+		<div class="clouansp-danger-zone">
 			<h2><?php esc_html_e( 'Danger Zone', 'clouds-and-spaceships' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
@@ -185,7 +185,7 @@ if ( $glossary_enabled ) {
 						<label class="text-danger">
 							<input
 								type="checkbox"
-								name="cns_wiki_settings[glossary_delete_on_uninstall]"
+								name="clouansp_wiki_settings[glossary_delete_on_uninstall]"
 								value="1"
 								<?php checked( $glossary_delete_on_uninstall ); ?>
 							/>

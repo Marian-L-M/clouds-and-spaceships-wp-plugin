@@ -16,7 +16,7 @@ import {
 } from '@wordpress/components';
 import './editor.scss';
 
-const ALLOWED_BLOCKS = [ 'cns-wiki-suite/wiki-card' ];
+const ALLOWED_BLOCKS = [ 'clouansp-wiki-suite/wiki-card' ];
 
 // Site-wide grid defaults (CNS → Wiki tab), injected by PHP before this
 // script. Grid attributes stay unset until the user touches them, so blocks
@@ -27,7 +27,7 @@ const GRID_DEFAULTS = {
 	columnsDesktop: 3,
 	columnGap: 16,
 	rowGap: 16,
-	...( window.cnsWikiGridDefaults || {} ),
+	...( window.clouanspWikiGridDefaults || {} ),
 };
 
 function GridTabs( { breakpoint, attributes, setAttributes } ) {
@@ -93,7 +93,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		if ( current < numberOfPosts ) {
 			const added = Array( numberOfPosts - current )
 				.fill( null )
-				.map( () => createBlock( 'cns-wiki-suite/wiki-card', {} ) );
+				.map( () => createBlock( 'clouansp-wiki-suite/wiki-card', {} ) );
 			replaceInnerBlocks( clientId, [ ...innerBlocks, ...added ], false );
 		} else {
 			replaceInnerBlocks( clientId, innerBlocks.slice( 0, numberOfPosts ), false );

@@ -29,9 +29,9 @@ export default function Edit( { attributes, setAttributes } ) {
 				...( search ? { search } : {} ),
 			};
 			return {
-				story:         storyId ? getEntityRecord( 'postType', 'cns_story', storyId ) : null,
-				searchResults: getEntityRecords( 'postType', 'cns_story', query ),
-				isSearching:   isResolving( 'getEntityRecords', [ 'postType', 'cns_story', query ] ),
+				story:         storyId ? getEntityRecord( 'postType', 'clouansp_story', storyId ) : null,
+				searchResults: getEntityRecords( 'postType', 'clouansp_story', query ),
+				isSearching:   isResolving( 'getEntityRecords', [ 'postType', 'clouansp_story', query ] ),
 			};
 		},
 		[ storyId, search ]
@@ -84,14 +84,14 @@ export default function Edit( { attributes, setAttributes } ) {
 				) }
 
 				{ storyId > 0 && ! isLoading && story && (
-					<div className="cns-story-block-preview">
-						<div className="cns-story-block-preview__label">
+					<div className="clouansp-story-block-preview">
+						<div className="clouansp-story-block-preview__label">
 							{ __( 'Story:', 'clouds-and-spaceships' ) }
 						</div>
-						<div className="cns-story-block-preview__title">
+						<div className="clouansp-story-block-preview__title">
 							{ decodeEntities( story.title?.rendered || '' ) || __( '(no title)', 'clouds-and-spaceships' ) }
 						</div>
-						<p className="cns-story-block-preview__note">
+						<p className="clouansp-story-block-preview__note">
 							{ __( 'The interactive canvas renders on the frontend.', 'clouds-and-spaceships' ) }
 						</p>
 					</div>

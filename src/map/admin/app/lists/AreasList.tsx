@@ -17,7 +17,7 @@ const COLUMNS: EntityColumn< MapArea >[] = [
 	{
 		header: 'Type',
 		render: ( area ) => (
-			<span className="cns-badge cns-badge--type">{ area.type }</span>
+			<span className="clouansp-badge clouansp-badge--type">{ area.type }</span>
 		),
 	},
 	{

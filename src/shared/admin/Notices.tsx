@@ -16,7 +16,7 @@ export default function Notices() {
 
 	return (
 		<SnackbarList
-			className="cns-snackbar-list"
+			className="clouansp-snackbar-list"
 			notices={ notices.filter( ( n ) => n.type === 'snackbar' ) }
 			onRemove={ removeNotice }
 		/>

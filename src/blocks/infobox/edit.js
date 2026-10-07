@@ -16,9 +16,9 @@ import {
 import './editor.scss';
 
 // The effective default max width, handed over by
-// cns_wiki_expose_infobox_defaults() so the control's placeholder shows the
+// clouansp_wiki_expose_infobox_defaults() so the control's placeholder shows the
 // width this site actually falls back to rather than a hardcoded number.
-const DEFAULT_MAX_WIDTH = window.cnsWikiInfoboxDefaults?.maxWidth ?? 360;
+const DEFAULT_MAX_WIDTH = window.clouanspWikiInfoboxDefaults?.maxWidth ?? 360;
 
 // Matches the units core offers for its own width controls.
 const MAX_WIDTH_UNITS = [
@@ -39,7 +39,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const TEMPLATE = [
 		[ 'core/image', {} ],
 		[
-			'cns-wiki-suite/infobox-group',
+			'clouansp-wiki-suite/infobox-group',
 			{
 				group_title: 'Infobox group title',
 			},

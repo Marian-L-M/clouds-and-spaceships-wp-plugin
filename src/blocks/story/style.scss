@@ -2,7 +2,7 @@
 
 // ── Block layout: canvas left, node list right ────────────────────────────────
 
-.cns-story-block {
+.clouansp-story-block {
 	display: grid;
 	grid-template-columns: 3fr minmax(220px, 1fr);
 	align-items: start;
@@ -18,7 +18,7 @@
 	}
 }
 
-.cns-story-block__canvas-wrap {
+.clouansp-story-block__canvas-wrap {
 	position: relative; // anchors the zoom controls
 	overflow: hidden;
 	line-height: 0;
@@ -31,7 +31,7 @@
 }
 
 // Scroll container inserted around the canvas by view.js; pans when zoomed.
-.cns-story-canvas-scroll {
+.clouansp-story-canvas-scroll {
 	overflow: hidden;
 	line-height: 0;
 
@@ -43,7 +43,7 @@
 
 // ── Zoom controls (top right of the canvas, outside the scroll area) ──────────
 
-.cns-story-zoom {
+.clouansp-story-zoom {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -54,9 +54,9 @@
 	gap: 4px;
 	line-height: normal;
 
-	// --cns-map-zoom-main / --cns-map-zoom-accent are emitted on the block
+	// --clouansp-map-zoom-main / --clouansp-map-zoom-accent are emitted on the block
 	// wrapper from the linked map's own zoom colors (see
-	// cns_map_suite_zoom_colors), so a story's chrome matches the map it is
+	// clouansp_map_suite_zoom_colors), so a story's chrome matches the map it is
 	// built on. The fallbacks keep the original light chrome when the map sets
 	// neither and there is no global default.
 	&__btn {
@@ -65,8 +65,8 @@
 		padding: 0;
 		border: 1px solid rgba(0, 0, 0, 0.25);
 		border-radius: 4px;
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
-		color: var(--cns-map-zoom-accent, #1e1e1e);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--clouansp-map-zoom-accent, #1e1e1e);
 		font-size: 18px;
 		line-height: 1;
 		cursor: pointer;
@@ -74,7 +74,7 @@
 		&:hover:not(:disabled) {
 			// Derived rather than configurable, as on the map block.
 			filter: brightness(0.92);
-			background: var(--cns-map-zoom-main, #fff);
+			background: var(--clouansp-map-zoom-main, #fff);
 		}
 
 		&:disabled {
@@ -86,8 +86,8 @@
 	&__value {
 		font-size: 11px;
 		text-align: center;
-		color: var(--cns-map-zoom-accent, #1e1e1e);
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.85));
+		color: var(--clouansp-map-zoom-accent, #1e1e1e);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.85));
 		border-radius: 3px;
 		padding: 2px 0;
 	}
@@ -97,7 +97,7 @@
 // Sits opposite the zoom controls and borrows the same inherited colors, so
 // both control clusters read as one set of chrome.
 
-.cns-story-layers {
+.clouansp-story-layers {
 	position: absolute;
 	top: 10px;
 	left: 10px;
@@ -111,8 +111,8 @@
 		padding: 4px 8px;
 		border: 1px solid rgba(0, 0, 0, 0.25);
 		border-radius: 4px;
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
-		color: var(--cns-map-zoom-accent, #1e1e1e);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--clouansp-map-zoom-accent, #1e1e1e);
 		font-size: 11px;
 		line-height: 1.4;
 		cursor: pointer;
@@ -132,9 +132,9 @@
 
 // ── Fullscreen (lightbox) mode ────────────────────────────────────────────────
 // Toggled by the ⛶ button; the whole block becomes a fixed dark overlay showing
-// only the canvas. Zooming stays available inside. Mirrors cns-map-suite.
+// only the canvas. Zooming stays available inside. Mirrors clouansp-map-suite.
 
-.cns-story-block.is-fullscreen {
+.clouansp-story-block.is-fullscreen {
 	position: fixed;
 	inset: 0;
 	z-index: 99990; // below the node dialog (100000) and infobox drawer (99999)
@@ -145,25 +145,25 @@
 	padding: 24px;
 	background: rgba(0, 0, 0, 0.92);
 
-	.cns-story-window {
+	.clouansp-story-window {
 		display: none;
 	}
 
-	.cns-story-block__canvas-wrap {
+	.clouansp-story-block__canvas-wrap {
 		height: 100%;
 	}
 
-	.cns-story-zoom {
+	.clouansp-story-zoom {
 		top: 34px;
 		right: 34px;
 	}
 
-	.cns-story-layers {
+	.clouansp-story-layers {
 		top: 34px;
 		left: 34px;
 	}
 
-	.cns-story-canvas-scroll {
+	.clouansp-story-canvas-scroll {
 		display: flex;
 		width: 100%;
 		height: 100%;
@@ -193,13 +193,13 @@
 	}
 }
 
-body.cns-story-fullscreen-open {
+body.clouansp-story-fullscreen-open {
 	overflow: hidden;
 }
 
 // ── Story window panel ────────────────────────────────────────────────────────
 
-.cns-story-window {
+.clouansp-story-window {
 	border-left: 2px solid var(--wp--preset--color--primary, #333);
 	background: var(--wp--preset--color--background, #fff);
 	max-height: 80vh;
@@ -217,17 +217,17 @@ body.cns-story-fullscreen-open {
 
 // ── Node list ─────────────────────────────────────────────────────────────────
 
-.cns-sw-list {
+.clouansp-sw-list {
 	padding: 4px 0;
 }
 
-.cns-sw-item {
+.clouansp-sw-item {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 
-	&.is-active > .cns-sw-item__head {
+	&.is-active > .clouansp-sw-item__head {
 		background: rgba(0, 0, 0, 0.04);
 
-		.cns-sw-item__title {
+		.clouansp-sw-item__title {
 			font-weight: 600;
 		}
 	}
@@ -251,7 +251,7 @@ body.cns-story-fullscreen-open {
 }
 
 
-.cns-sw-item__num {
+.clouansp-sw-item__num {
 	font-size: 10px;
 	color: #999;
 	min-width: 32px;
@@ -262,7 +262,7 @@ body.cns-story-fullscreen-open {
 	line-height: 1;
 }
 
-.cns-sw-item__dot {
+.clouansp-sw-item__dot {
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
@@ -270,7 +270,7 @@ body.cns-story-fullscreen-open {
 	flex-shrink: 0;
 }
 
-.cns-sw-item__title {
+.clouansp-sw-item__title {
 	flex: 1;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -279,7 +279,7 @@ body.cns-story-fullscreen-open {
 
 // Path name, once above the run of nodes that belong to it, with a rule in the
 // path's own marker colour rather than a pill on every row.
-.cns-sw-path {
+.clouansp-sw-path {
 	margin: 14px 0 4px;
 	padding: 2px 0 2px 8px;
 	border-left: 3px solid #00aaff;
@@ -297,30 +297,30 @@ body.cns-story-fullscreen-open {
 
 // ── Expandable detail ─────────────────────────────────────────────────────────
 
-.cns-sw-item__detail {
+.clouansp-sw-item__detail {
 	display: none;
 	padding: 4px 12px 12px 50px;
 }
 
-.cns-sw-item.is-open > .cns-sw-item__detail {
+.clouansp-sw-item.is-open > .clouansp-sw-item__detail {
 	display: block;
 }
 
-.cns-sw-item__excerpt {
+.clouansp-sw-item__excerpt {
 	font-size: 0.8125rem;
 	margin: 0 0 8px;
 	line-height: 1.5;
 	color: #555;
 }
 
-.cns-sw-item__read-more {
+.clouansp-sw-item__read-more {
 	font-size: 0.8125rem;
 	display: inline-block;
 }
 
 // ── Node dialog (shadcn/ui Dialog-inspired, plain JS/CSS) ─────────────────────
 
-.cns-story-dialog {
+.clouansp-story-dialog {
 	position: fixed;
 	inset: 0;
 	z-index: 100000;
@@ -338,7 +338,7 @@ body.cns-story-fullscreen-open {
 		inset: 0;
 		background: rgba(0, 0, 0, 0.55);
 		backdrop-filter: blur(2px);
-		animation: cns-story-dialog-fade 0.15s ease-out;
+		animation: clouansp-story-dialog-fade 0.15s ease-out;
 	}
 
 	&__panel {
@@ -352,7 +352,7 @@ body.cns-story-fullscreen-open {
 		border-radius: 12px;
 		box-shadow: 0 10px 38px -10px rgba(0, 0, 0, 0.35), 0 10px 20px -15px rgba(0, 0, 0, 0.2);
 		padding: 24px;
-		animation: cns-story-dialog-zoom 0.15s ease-out;
+		animation: clouansp-story-dialog-zoom 0.15s ease-out;
 	}
 
 	&__close {
@@ -465,16 +465,16 @@ body.cns-story-fullscreen-open {
 	}
 }
 
-body.cns-story-dialog-open {
+body.clouansp-story-dialog-open {
 	overflow: hidden;
 }
 
-@keyframes cns-story-dialog-fade {
+@keyframes clouansp-story-dialog-fade {
 	from { opacity: 0; }
 	to   { opacity: 1; }
 }
 
-@keyframes cns-story-dialog-zoom {
+@keyframes clouansp-story-dialog-zoom {
 	from { opacity: 0; transform: scale(0.96); }
 	to   { opacity: 1; transform: scale(1); }
 }

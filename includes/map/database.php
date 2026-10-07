@@ -20,11 +20,11 @@ defined('ABSPATH') || exit;
  *
  * Correct pattern:
  *   $wpdb->get_results( $wpdb->prepare(
- *       "SELECT * FROM {$wpdb->prefix}cns_map_objects WHERE map_id = %d",
+ *       "SELECT * FROM {$wpdb->prefix}clouansp_map_objects WHERE map_id = %d",
  *       $map_id
  *   ) );
  */
-function cns_map_suite_create_tables(): void {
+function clouansp_map_suite_create_tables(): void {
 	global $wpdb;
 
 	$charset_collate = $wpdb->get_charset_collate();
@@ -32,7 +32,7 @@ function cns_map_suite_create_tables(): void {
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 	// Clickable SVG icon markers on a map.
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_map_objects (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_map_objects (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		map_id BIGINT UNSIGNED NOT NULL,
 		linked_post_id BIGINT UNSIGNED NULL DEFAULT NULL,
@@ -54,7 +54,7 @@ function cns_map_suite_create_tables(): void {
 	) $charset_collate;");
 
 	// Polygon / bezier / circle overlay areas on a map.
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_map_areas (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_map_areas (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		map_id BIGINT UNSIGNED NOT NULL,
 		linked_post_id BIGINT UNSIGNED NULL DEFAULT NULL,
@@ -78,7 +78,7 @@ function cns_map_suite_create_tables(): void {
 	// placement: 'centered' = label box centered on (x, y);
 	//            'indicator' = dot at (x, y) with a leader line to the label
 	//            box, which sits at (x + offset_x, y + offset_y).
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_map_labels (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_map_labels (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		map_id BIGINT UNSIGNED NOT NULL,
 		linked_post_id BIGINT UNSIGNED NULL DEFAULT NULL,
@@ -101,7 +101,7 @@ function cns_map_suite_create_tables(): void {
 
 	// Parent → child map relationships for MasterMap mode.
 	// One row per child; multiple rows with the same parent_map_id form the child list.
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_map_hierarchy (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_map_hierarchy (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		parent_map_id BIGINT UNSIGNED NOT NULL,
 		child_map_id BIGINT UNSIGNED NOT NULL,
@@ -123,18 +123,18 @@ function cns_map_suite_create_tables(): void {
 // Runs for every permanent deletion path (admin handler, wp-cli, REST), so a
 // deleted map can never leave orphaned object/area/label/hierarchy rows.
 
-function cns_map_suite_purge_map_rows(int $map_id): void {
+function clouansp_map_suite_purge_map_rows(int $map_id): void {
 	global $wpdb;
-	$wpdb->delete($wpdb->prefix . 'cns_map_objects', ['map_id' => $map_id], ['%d']);
-	$wpdb->delete($wpdb->prefix . 'cns_map_areas',   ['map_id' => $map_id], ['%d']);
-	$wpdb->delete($wpdb->prefix . 'cns_map_labels',  ['map_id' => $map_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_map_objects', ['map_id' => $map_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_map_areas',   ['map_id' => $map_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_map_labels',  ['map_id' => $map_id], ['%d']);
 	// Hierarchy rows reference the map from either side.
-	$wpdb->delete($wpdb->prefix . 'cns_map_hierarchy', ['parent_map_id' => $map_id], ['%d']);
-	$wpdb->delete($wpdb->prefix . 'cns_map_hierarchy', ['child_map_id'  => $map_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_map_hierarchy', ['parent_map_id' => $map_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_map_hierarchy', ['child_map_id'  => $map_id], ['%d']);
 }
 
 add_action('before_delete_post', function (int $post_id, WP_Post $post): void {
-	if ($post->post_type === 'cns_map') {
-		cns_map_suite_purge_map_rows($post_id);
+	if ($post->post_type === 'clouansp_map') {
+		clouansp_map_suite_purge_map_rows($post_id);
 	}
 }, 10, 2);

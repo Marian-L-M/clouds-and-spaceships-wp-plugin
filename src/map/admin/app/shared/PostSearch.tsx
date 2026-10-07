@@ -7,7 +7,7 @@ import type { PostSearchResult } from '../../../types';
 interface Props {
 	label?: string;
 	help?: string;
-	/** wp/v2/search subtype filter, e.g. 'any' (default) or 'cns_map'. */
+	/** wp/v2/search subtype filter, e.g. 'any' (default) or 'clouansp_map'. */
 	subtype?: string;
 	selectedId: number;
 	selectedLabel: string;

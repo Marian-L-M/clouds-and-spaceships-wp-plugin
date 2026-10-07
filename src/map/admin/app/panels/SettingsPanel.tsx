@@ -46,15 +46,15 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 
 	return (
 		<div
-			className="cns-tab-panel cns-tab-panel--active"
+			className="clouansp-tab-panel clouansp-tab-panel--active"
 			data-panel="settings"
 			role="tabpanel"
 		>
-			<div className="cns-settings-layout">
-				<div className="cns-settings-form">
-					<div className="cns-grid cns-grid__24">
+			<div className="clouansp-settings-layout">
+				<div className="clouansp-settings-form">
+					<div className="clouansp-grid clouansp-grid__24">
 						{ /* Title Input */ }
-						<div className="cns-grid__group cns-grid__span-3">
+						<div className="clouansp-grid__group clouansp-grid__span-3">
 							<TextControl
 								label={ __(
 									'Map Title',
@@ -70,7 +70,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 						{ /*  Map Time Value */ }
 						{ /*  Sneaky sneaky. Map time is a placeholder for a future functionality */ }
-						{ /* <div className="cns-grid__group cns-grid__span-1">
+						{ /* <div className="clouansp-grid__group clouansp-grid__span-1">
 							<NumberControl
 								label={ __(
 									'Timeline value',
@@ -92,7 +92,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div> */ }
 
 						{ /* Flags */ }
-						<div className="cns-grid__group cns-grid__span-4">
+						<div className="clouansp-grid__group clouansp-grid__span-4">
 							<Flex gap={ 1 } align="center" justify="start">
 								<ToggleControl
 									label={ __(
@@ -114,7 +114,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 
 						{ /* Aspect Ratio */ }
-						<div className="cns-grid__group cns-grid__span-3">
+						<div className="clouansp-grid__group clouansp-grid__span-3">
 							<RangeControl
 								label={ __(
 									'Aspect Ratio',
@@ -148,7 +148,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 
 						{ /*  Canvas max width input */ }
-						<div className="cns-grid__group cns-grid__span-1">
+						<div className="clouansp-grid__group clouansp-grid__span-1">
 							<NumberControl
 								label={ __(
 									'Max Width',
@@ -167,7 +167,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 
 						{ /* Base map image */ }
-						<div className="cns-grid__group cns-grid__span-2">
+						<div className="clouansp-grid__group clouansp-grid__span-2">
 							<MediaPicker
 								imageId={ settings.imageId }
 								imageUrl={ settings.imageUrl }
@@ -190,7 +190,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 
 						{ /* Image placement */ }
-						<div className="cns-grid__group cns-grid__span-2">
+						<div className="clouansp-grid__group clouansp-grid__span-2">
 							<Card className="image-scale-positioning">
 								<CardBody>
 									<RangeControl
@@ -250,7 +250,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 						</div>
 
 						{ /* Thumbnail */ }
-						<div className="cns-grid__group cns-grid__span-2">
+						<div className="clouansp-grid__group clouansp-grid__span-2">
 							<MediaPicker
 								imageId={ settings.thumbnailId ?? 0 }
 								imageUrl={ settings.thumbnailUrl }
@@ -272,7 +272,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 							/>
 						</div>
 						{ /* Map Background */ }
-						<div className="cns-grid__group cns-grid__span-2">
+						<div className="clouansp-grid__group clouansp-grid__span-2">
 							<RadioControl
 								label={ __(
 									'Map Background',
@@ -333,7 +333,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 
 						{ /* Zoom controls */ }
 						<div
-							className="cns-grid__group cns-grid__span-full"
+							className="clouansp-grid__group clouansp-grid__span-full"
 							style={ { marginBottom: '8px' } }
 						>
 							<ToggleControl
@@ -384,11 +384,11 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 							) }
 						</div>
 						<div
-							className="cns-grid__group cns-grid__span-full"
+							className="clouansp-grid__group clouansp-grid__span-full"
 							style={ { marginBottom: '8px' } }
 						>
 							<BaseControl
-								id="cns-map-layers"
+								id="clouansp-map-layers"
 								label={ __(
 									'Frontend layers',
 									'clouds-and-spaceships'

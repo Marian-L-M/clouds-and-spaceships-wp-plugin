@@ -1,7 +1,7 @@
 /**
  * Canvas label font choices, shared by the area and hierarchy region forms.
  *
- * Keep in sync with cns_map_suite_label_font_families() in
+ * Keep in sync with clouansp_map_suite_label_font_families() in
  * includes/admin/api.php — the REST layer rejects any family not on that list,
  * because canvas silently ignores an entire `ctx.font` assignment it cannot
  * parse, which would drop the size along with the family.

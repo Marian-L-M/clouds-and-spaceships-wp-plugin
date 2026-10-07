@@ -98,7 +98,7 @@ export default function ObjectsCanvas( {
 
 	return (
 		<Flex
-			className={ 'cns-objects-canvas-wrap' }
+			className={ 'clouansp-objects-canvas-wrap' }
 			gap={ 4 }
 			direction="column"
 			align="center"

@@ -32,10 +32,10 @@ export default function LabelForm( { formData, onChange }: Props ) {
 	return (
 		<>
 			{ /* ── Text ── */ }
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Label', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<TextControl
 							__next40pxDefaultSize
 							label={ __( 'Text', 'clouds-and-spaceships' ) }
@@ -43,7 +43,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 							onChange={ ( v ) => set( 'text', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Label Time',
@@ -63,10 +63,10 @@ export default function LabelForm( { formData, onChange }: Props ) {
 			</section>
 
 			{ /* ── Placement ── */ }
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Placement', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<RadioControl
 							label={ __(
 								'Placement mode',
@@ -95,7 +95,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __( 'X (px)', 'clouds-and-spaceships' ) }
 							value={ formData.x }
@@ -105,7 +105,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __( 'Y (px)', 'clouds-and-spaceships' ) }
 							value={ formData.y }
@@ -117,7 +117,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 					</div>
 					{ isIndicator && (
 						<>
-							<div className="cns-grid__group">
+							<div className="clouansp-grid__group">
 								<NumberControl
 									label={ __(
 										'Label Offset X (px)',
@@ -133,7 +133,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 									}
 								/>
 							</div>
-							<div className="cns-grid__group">
+							<div className="clouansp-grid__group">
 								<NumberControl
 									label={ __(
 										'Label Offset Y (px)',
@@ -172,10 +172,10 @@ export default function LabelForm( { formData, onChange }: Props ) {
 			</p>
 
 			{ /* ── Design ── */ }
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Design', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<RangeControl
 							label={ __(
 								'Font Size (px)',
@@ -190,7 +190,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Background Color',
@@ -200,7 +200,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 							onChange={ ( v ) => set( 'style_bg', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Border Color',
@@ -210,7 +210,7 @@ export default function LabelForm( { formData, onChange }: Props ) {
 							onChange={ ( v ) => set( 'style_border', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Text Color',

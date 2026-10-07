@@ -36,7 +36,7 @@ export default function SettingsCanvas( { settings }: Props ) {
 	] );
 
 	return (
-		<div className="cns-settings-canvas">
+		<div className="clouansp-settings-canvas">
 			<canvas ref={ canvasRef } />
 			<p className="description">Canvas base live preview.</p>
 		</div>

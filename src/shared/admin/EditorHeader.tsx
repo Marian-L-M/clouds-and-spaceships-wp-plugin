@@ -44,12 +44,12 @@ export default function EditorHeader( {
 	saveLabel,
 }: Props ) {
 	return (
-		<div className="cns-map-editor__header">
+		<div className="clouansp-map-editor__header">
 			<Button href={ overviewUrl } variant="tertiary" icon={ arrowLeft }>
 				{ backLabel }
 			</Button>
 			<h1>{ pageTitle }</h1>
-			<div className="cns-map-editor__header-actions">
+			<div className="clouansp-map-editor__header-actions">
 				{ viewUrl && (
 					<Button
 						href={ viewUrl }

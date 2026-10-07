@@ -180,25 +180,25 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		const infoboxes = resolved.infoboxes || [];
 
 		let html = '';
-		if (imgUrl)  html += `<img class="cns-map-drawer__image" src="${escHtml(encodeURI(imgUrl))}" alt="" />`;
-		if (title)   html += `<h2 class="cns-map-drawer__title">${escHtml(title)}</h2>`;
+		if (imgUrl)  html += `<img class="clouansp-map-drawer__image" src="${escHtml(encodeURI(imgUrl))}" alt="" />`;
+		if (title)   html += `<h2 class="clouansp-map-drawer__title">${escHtml(title)}</h2>`;
 		// Prefer the excerpt (plain text → escaped); fall back to the block
 		// content only when there's no excerpt (e.g. manual infoboxes, whose
 		// content is server-rendered block HTML sanitized before storage).
 		if (excerpt) {
-			html += `<p class="cns-map-drawer__excerpt">${escHtml(excerpt)}</p>`;
+			html += `<p class="clouansp-map-drawer__excerpt">${escHtml(excerpt)}</p>`;
 		} else if (content) {
-			html += `<div class="cns-map-drawer__content">${content}</div>`;
+			html += `<div class="clouansp-map-drawer__content">${content}</div>`;
 		}
 		// Wiki-suite infoboxes: server-rendered block markup (render_block of
 		// trusted admin content), one wrapper per top-level infobox.
 		infoboxes.forEach(function (ib) {
-			html += `<div class="cns-map-drawer__infobox">${ib}</div>`;
+			html += `<div class="clouansp-map-drawer__infobox">${ib}</div>`;
 		});
-		if (postUrl) html += `<a class="cns-map-drawer__link" href="${escHtml(encodeURI(postUrl))}">Read more &rarr;</a>`;
+		if (postUrl) html += `<a class="clouansp-map-drawer__link" href="${escHtml(encodeURI(postUrl))}">Read more &rarr;</a>`;
 
 		showDrawer(html, handleInfoboxToggle);
-		expandInfoboxes(document.querySelector('.cns-map-drawer__body'));
+		expandInfoboxes(document.querySelector('.clouansp-map-drawer__body'));
 	}
 
 	// The wiki-suite infobox collapse is normally driven by the WP Interactivity
@@ -239,11 +239,11 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 	// All thumbnail images are pre-loaded during initMap for a smooth experience.
 
 	function getOrCreateHierarchyTooltip() {
-		var tip = document.getElementById('cns-map-hierarchy-tip');
+		var tip = document.getElementById('clouansp-map-hierarchy-tip');
 		if (!tip) {
 			tip = document.createElement('div');
-			tip.id        = 'cns-map-hierarchy-tip';
-			tip.className = 'cns-map-hierarchy-tip';
+			tip.id        = 'clouansp-map-hierarchy-tip';
+			tip.className = 'clouansp-map-hierarchy-tip';
 			tip.setAttribute('aria-hidden', 'true');
 			document.body.appendChild(tip);
 		}
@@ -259,16 +259,16 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		// region's palette sticks. Removing the property falls back to the
 		// stylesheet's default rather than to an empty value.
 		var styles = region.canvas_styles || {};
-		if (styles.tipBgColor) tip.style.setProperty('--cns-tip-bg', styles.tipBgColor);
-		else                   tip.style.removeProperty('--cns-tip-bg');
-		if (styles.tipBorderColor) tip.style.setProperty('--cns-tip-border', styles.tipBorderColor);
-		else                       tip.style.removeProperty('--cns-tip-border');
-		if (styles.tipTextColor) tip.style.setProperty('--cns-tip-text', styles.tipTextColor);
-		else                     tip.style.removeProperty('--cns-tip-text');
+		if (styles.tipBgColor) tip.style.setProperty('--clouansp-tip-bg', styles.tipBgColor);
+		else                   tip.style.removeProperty('--clouansp-tip-bg');
+		if (styles.tipBorderColor) tip.style.setProperty('--clouansp-tip-border', styles.tipBorderColor);
+		else                       tip.style.removeProperty('--clouansp-tip-border');
+		if (styles.tipTextColor) tip.style.setProperty('--clouansp-tip-text', styles.tipTextColor);
+		else                     tip.style.removeProperty('--clouansp-tip-text');
 
 		if (region.child_map_thumbnail) {
 			var thumb = document.createElement('img');
-			thumb.className = 'cns-map-hierarchy-tip__thumb';
+			thumb.className = 'clouansp-map-hierarchy-tip__thumb';
 			thumb.src       = encodeURI(region.child_map_thumbnail);
 			thumb.alt       = '';
 			tip.appendChild(thumb);
@@ -280,13 +280,13 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 
 		if (tipTitle) {
 			var title = document.createElement('strong');
-			title.className   = 'cns-map-hierarchy-tip__title';
+			title.className   = 'clouansp-map-hierarchy-tip__title';
 			title.textContent = tipTitle;
 			tip.appendChild(title);
 		}
 		if (tipExcerpt) {
 			var excerpt = document.createElement('p');
-			excerpt.className   = 'cns-map-hierarchy-tip__excerpt';
+			excerpt.className   = 'clouansp-map-hierarchy-tip__excerpt';
 			excerpt.textContent = tipExcerpt;
 			tip.appendChild(excerpt);
 		}
@@ -300,26 +300,26 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 	}
 
 	function hideHierarchyTooltip() {
-		var tip = document.getElementById('cns-map-hierarchy-tip');
+		var tip = document.getElementById('clouansp-map-hierarchy-tip');
 		if (tip) tip.classList.remove('is-visible');
 	}
 
 	// ── Zoom controls ─────────────────────────────────────────────────────────
 	// Zoom scales the canvas's *display* width inside the (then scrollable)
-	// .cns-map-canvas-wrap. The canvas pixel coordinate system is untouched,
+	// .clouansp-map-canvas-wrap. The canvas pixel coordinate system is untouched,
 	// so all hit tests keep working — click/hover handlers already normalize
 	// by getBoundingClientRect. Buttons sit on the block wrapper (top right),
 	// outside the scroll area, so they stay put while panning.
 
 	function setupZoomControls(wrapper, canvas) {
-		const scroller = canvas.parentElement; // .cns-map-canvas-wrap
+		const scroller = canvas.parentElement; // .clouansp-map-canvas-wrap
 		if (!scroller) return;
 
 		const MIN = 1, MAX = 4, STEP = 0.1;
 		let zoom = 1;
 
 		const controls = document.createElement('div');
-		controls.className = 'cns-map-zoom';
+		controls.className = 'clouansp-map-zoom';
 		const fsBtn   = document.createElement('button');
 		const zoomIn  = document.createElement('button');
 		const zoomOut = document.createElement('button');
@@ -327,14 +327,14 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		fsBtn.type   = 'button';
 		zoomIn.type  = 'button';
 		zoomOut.type = 'button';
-		fsBtn.className   = 'cns-map-zoom__btn cns-map-zoom__btn--fs';
-		zoomIn.className  = 'cns-map-zoom__btn';
-		zoomOut.className = 'cns-map-zoom__btn';
+		fsBtn.className   = 'clouansp-map-zoom__btn clouansp-map-zoom__btn--fs';
+		zoomIn.className  = 'clouansp-map-zoom__btn';
+		zoomOut.className = 'clouansp-map-zoom__btn';
 		zoomIn.textContent  = '+';
 		zoomOut.textContent = '−';
 		zoomIn.setAttribute('aria-label', 'Zoom map in');
 		zoomOut.setAttribute('aria-label', 'Zoom map out');
-		value.className = 'cns-map-zoom__value';
+		value.className = 'clouansp-map-zoom__value';
 		controls.appendChild(fsBtn);
 		controls.appendChild(zoomIn);
 		controls.appendChild(value);
@@ -352,7 +352,7 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		function setFullscreen(on) {
 			fullscreen = on;
 			wrapper.classList.toggle('is-fullscreen', on);
-			document.body.classList.toggle('cns-map-fullscreen-open', on);
+			document.body.classList.toggle('clouansp-map-fullscreen-open', on);
 			renderFsBtn();
 			// Fullscreen fits the canvas to the viewport, normal mode fits it to
 			// the wrap, so the zoom-1 size differs between them and the base has
@@ -428,13 +428,13 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 	// ── Map initialiser ───────────────────────────────────────────────────────
 
 	async function initMap(wrapper) {
-		const scriptEl = wrapper.querySelector('script[data-cns-map]');
+		const scriptEl = wrapper.querySelector('script[data-clouansp-map]');
 		if (!scriptEl) return;
 
 		let data;
-		try { data = JSON.parse(scriptEl.textContent); } catch (err) { console.error('[cns-map-suite] Block data parse error:', err); return; }
+		try { data = JSON.parse(scriptEl.textContent); } catch (err) { console.error('[clouansp-map-suite] Block data parse error:', err); return; }
 
-		const canvas = wrapper.querySelector('.cns-map-canvas');
+		const canvas = wrapper.querySelector('.clouansp-map-canvas');
 		if (!canvas) return;
 
 		canvas.width  = data.width;
@@ -490,11 +490,11 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		}
 
 		await paint();
-		// On the block wrapper, outside .cns-map-canvas-wrap, so the buttons stay
+		// On the block wrapper, outside .clouansp-map-canvas-wrap, so the buttons stay
 		// put while a zoomed canvas pans — same as the zoom controls.
 		setupLayerToggles({
 			container: wrapper,
-			className: 'cns-map-layers',
+			className: 'clouansp-map-layers',
 			present: {
 				areas:   (data.areas   || []).length > 0,
 				objects: (data.objects || []).length > 0,
@@ -598,7 +598,7 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 	// ── Boot ──────────────────────────────────────────────────────────────────
 
 	function init() {
-		document.querySelectorAll('.wp-block-cns-map-suite-map').forEach(initMap);
+		document.querySelectorAll('.wp-block-clouansp-map-suite-map').forEach(initMap);
 	}
 
 	if (document.readyState === 'loading') {

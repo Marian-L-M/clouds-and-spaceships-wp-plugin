@@ -15,13 +15,13 @@ $bp-spc: 1200px;
 $bp-lpc: 1400px;
 
 // L000000 Utilities
-.cns__fx-col {
+.clouansp__fx-col {
 	display: flex;
 	flex-direction: column;
 }
 
 // L1000 Editor Layout
-.cns-map-editor {
+.clouansp-map-editor {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
@@ -71,7 +71,7 @@ $bp-lpc: 1400px;
 // L1100 Panel Layout
 // ── Tab panels ────────────────────────────────────────────────────────────────
 
-.cns-tab-panel {
+.clouansp-tab-panel {
 	display: none;
 	padding: 1rem;
 	&--active {
@@ -80,7 +80,7 @@ $bp-lpc: 1400px;
 }
 
 // L1110 Individual Panel Layout
-.cns-settings-layout {
+.clouansp-settings-layout {
 	display: flex;
 	flex-direction: column;
 	// align-items: start;
@@ -93,7 +93,7 @@ $bp-lpc: 1400px;
 
 // L1110 Elements
 
-.cns-grid {
+.clouansp-grid {
 	width: 100%;
 	display: grid;
 	gap: $space-10;
@@ -151,7 +151,7 @@ $bp-lpc: 1400px;
 }
 
 // L1120 Canvas Elements
-.cns-canvas-zoom {
+.clouansp-canvas-zoom {
 	position: relative;
 	width: 100%;
 	&__controls {
@@ -161,18 +161,18 @@ $bp-lpc: 1400px;
 		z-index: 20;
 
 		.components-button.is-primary {
-			background: var(--cns-map-zoom-main, var(--wp-admin-theme-color));
-			border-color: var(--cns-map-zoom-main, var(--wp-admin-theme-color));
-			color: var(--cns-map-zoom-accent, #fff);
+			background: var(--clouansp-map-zoom-main, var(--wp-admin-theme-color));
+			border-color: var(--clouansp-map-zoom-main, var(--wp-admin-theme-color));
+			color: var(--clouansp-map-zoom-accent, #fff);
 
 			&:hover:not(:disabled) {
 				filter: brightness(0.92);
 				background: var(
-					--cns-map-zoom-main,
+					--clouansp-map-zoom-main,
 					var(--wp-admin-theme-color-darker-10)
 				);
 				border-color: var(
-					--cns-map-zoom-main,
+					--clouansp-map-zoom-main,
 					var(--wp-admin-theme-color-darker-10)
 				);
 			}
@@ -180,10 +180,10 @@ $bp-lpc: 1400px;
 
 		// The fullscreen toggle is a secondary button: light fill, accent glyph.
 		.components-button.is-secondary {
-			background: var(--cns-map-zoom-main, #fff);
+			background: var(--clouansp-map-zoom-main, #fff);
 			box-shadow: inset 0 0 0 1px
-				var(--cns-map-zoom-accent, var(--wp-admin-theme-color));
-			color: var(--cns-map-zoom-accent, var(--wp-admin-theme-color));
+				var(--clouansp-map-zoom-accent, var(--wp-admin-theme-color));
+			color: var(--clouansp-map-zoom-accent, var(--wp-admin-theme-color));
 
 			&:hover:not(:disabled) {
 				filter: brightness(0.96);
@@ -196,8 +196,8 @@ $bp-lpc: 1400px;
 	}
 	&__value {
 		width: 100%;
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
-		color: var(--cns-map-zoom-accent, inherit);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--clouansp-map-zoom-accent, inherit);
 		text-align: center;
 	}
 	&__scroll {
@@ -216,7 +216,7 @@ $bp-lpc: 1400px;
 }
 
 // L1130 Sidebar Elements
-.cns-map-editor {
+.clouansp-map-editor {
 	&__context {
 		flex: 1;
 		max-height: calc(100vh - 140px);
@@ -251,21 +251,21 @@ $bp-lpc: 1400px;
 }
 
 // Editor-side preview of the published hierarchy hover card. Values mirror
-// .cns-map-hierarchy-tip in src/blocks/map/style.scss — keep the two in step.
+// .clouansp-map-hierarchy-tip in src/blocks/map/style.scss — keep the two in step.
 // Background and border colors are set inline from the form's live values.
-.cns-hovercard-preview {
+.clouansp-hovercard-preview {
 	box-sizing: border-box;
 	width: 240px;
 	max-width: 100%;
 	margin-top: $space-05;
 	padding: 10px 12px;
-	--cns-tip-bg: #{rgba(0, 0, 0, 0.82)};
-	--cns-tip-border: #{rgba(255, 255, 255, 0.15)};
-	--cns-tip-text: #fff;
-	background: var(--cns-tip-bg);
-	border: 1px solid var(--cns-tip-border);
+	--clouansp-tip-bg: #{rgba(0, 0, 0, 0.82)};
+	--clouansp-tip-border: #{rgba(255, 255, 255, 0.15)};
+	--clouansp-tip-text: #fff;
+	background: var(--clouansp-tip-bg);
+	border: 1px solid var(--clouansp-tip-border);
 	border-radius: 6px;
-	color: var(--cns-tip-text);
+	color: var(--clouansp-tip-text);
 	font-size: 0.85rem;
 	line-height: 1.4;
 
@@ -296,7 +296,7 @@ $bp-lpc: 1400px;
 	}
 }
 
-.cns-modal-section {
+.clouansp-modal-section {
 	padding: $space-10 $space-05;
 	border-bottom: 1px solid $color-border;
 	&:last-child {
@@ -326,7 +326,7 @@ $bp-lpc: 1400px;
 
 // ── Settings two-column layout ────────────────────────────────────────────────
 
-.cns-settings-canvas {
+.clouansp-settings-canvas {
 	position: sticky;
 	top: 32px;
 	display: flex;
@@ -350,7 +350,7 @@ $bp-lpc: 1400px;
 
 // ── Canvas preview ────────────────────────────────────────────────────────────
 
-.cns-canvas-wrap {
+.clouansp-canvas-wrap {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -358,7 +358,7 @@ $bp-lpc: 1400px;
 	gap: 12px;
 }
 
-#cns-preview-canvas {
+#clouansp-preview-canvas {
 	border: 1px solid $color-border;
 	border-radius: 3px;
 	max-width: 100%;
@@ -368,7 +368,7 @@ $bp-lpc: 1400px;
 
 // ── Objects tab ───────────────────────────────────────────────────────────────
 
-#cns-objects-canvas {
+#clouansp-objects-canvas {
 	border: 1px solid $color-border;
 	border-radius: 3px;
 	max-width: 100%;
@@ -376,33 +376,33 @@ $bp-lpc: 1400px;
 	display: block;
 	cursor: crosshair;
 
-	&.cns-canvas--repositioning {
+	&.clouansp-canvas--repositioning {
 		cursor: grabbing;
 		outline: 2px solid #2271b1;
 		outline-offset: 2px;
 	}
 }
 
-.cns-objects-table {
+.clouansp-objects-table {
 	.col-icon {
 		width: 44px;
 	}
 
 	.col-icon img,
-	.cns-obj-dot {
+	.clouansp-obj-dot {
 		width: 32px;
 		height: 32px;
 		display: block;
 	}
 }
 
-.cns-obj-dot {
+.clouansp-obj-dot {
 	border-radius: 50%;
 	background: #646970;
 	flex-shrink: 0;
 }
 
-.cns-objects-empty {
+.clouansp-objects-empty {
 	padding: 32px;
 	text-align: center;
 	color: #646970;
@@ -411,7 +411,7 @@ $bp-lpc: 1400px;
 
 // ── Icon picker grid ──────────────────────────────────────────────────────────
 
-.cns-icon-picker-grid {
+.clouansp-icon-picker-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
 	gap: 6px;
@@ -423,7 +423,7 @@ $bp-lpc: 1400px;
 	background: #f6f7f7;
 }
 
-.cns-icon-item {
+.clouansp-icon-item {
 	all: unset;
 	display: flex;
 	align-items: center;
@@ -456,7 +456,7 @@ $bp-lpc: 1400px;
 
 // ── Icon library page ─────────────────────────────────────────────────────────
 
-.cns-icon-library-grid {
+.clouansp-icon-library-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 	gap: 16px;
@@ -470,7 +470,7 @@ $bp-lpc: 1400px;
 	}
 }
 
-.cns-icon-library-item {
+.clouansp-icon-library-item {
 	background: #fff;
 	border: 1px solid $color-border;
 	border-radius: 4px;
@@ -521,7 +521,7 @@ $bp-lpc: 1400px;
 
 // ── Areas canvas ──────────────────────────────────────────────────────────────
 
-#cns-areas-canvas {
+#clouansp-areas-canvas {
 	border: 1px solid $color-border;
 	border-radius: 3px;
 	max-width: 100%;
@@ -530,7 +530,7 @@ $bp-lpc: 1400px;
 	cursor: crosshair;
 
 	// TO do check or delete
-	&.cns-canvas--repositioning {
+	&.clouansp-canvas--repositioning {
 		cursor: grabbing;
 		outline: 2px solid #e75252;
 		outline-offset: 2px;
@@ -539,13 +539,13 @@ $bp-lpc: 1400px;
 
 // ── Nodes table ───────────────────────────────────────────────────────────────
 
-.cns-nodes-section h3 {
+.clouansp-nodes-section h3 {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.cns-nodes-table {
+.clouansp-nodes-table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 12px;
@@ -569,14 +569,14 @@ $bp-lpc: 1400px;
 	}
 }
 
-.cns-node-num {
+.clouansp-node-num {
 	color: #646970;
 	width: 20px;
 }
 
 // ── Hierarchy panel ───────────────────────────────────────────────────────────
 
-.cns-hierarchy-parents {
+.clouansp-hierarchy-parents {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -616,7 +616,7 @@ $bp-lpc: 1400px;
 
 // ── Generic items list (hierarchy regions, etc.) ──────────────────────────────
 
-.cns-items-list {
+.clouansp-items-list {
 	list-style: none;
 	margin: 8px 0 0;
 	padding: 0;
@@ -665,7 +665,7 @@ $bp-lpc: 1400px;
 
 // ── Fullscreen (lightbox) mode for the Preview canvas ─────────────────────────
 
-.cns-canvas-zoom.is-fullscreen {
+.clouansp-canvas-zoom.is-fullscreen {
 	position: fixed;
 	inset: 0;
 	z-index: 99990;
@@ -673,12 +673,12 @@ $bp-lpc: 1400px;
 	padding: 24px;
 	background: rgba(0, 0, 0, 0.92);
 
-	.cns-canvas-zoom__controls {
+	.clouansp-canvas-zoom__controls {
 		top: 34px;
 		right: 34px;
 	}
 
-	.cns-canvas-zoom__scroll {
+	.clouansp-canvas-zoom__scroll {
 		display: flex;
 		width: 100%;
 		height: 100%;
@@ -687,13 +687,13 @@ $bp-lpc: 1400px;
 		background: transparent;
 	}
 
-	.cns-canvas-zoom__inner {
+	.clouansp-canvas-zoom__inner {
 		margin: auto; // centers when smaller, stays scrollable when zoomed
 	}
 
 	// At 100% the map fits the screen like a lightbox image; zoomed state
 	// keeps the width-driven scaling (max-height would distort it there).
-	&:not(.cns-canvas-zoom--zoomed) .cns-canvas-zoom__inner {
+	&:not(.clouansp-canvas-zoom--zoomed) .clouansp-canvas-zoom__inner {
 		min-width: 0;
 		width: auto;
 
@@ -705,13 +705,13 @@ $bp-lpc: 1400px;
 	}
 }
 
-body.cns-canvas-fullscreen-open {
+body.clouansp-canvas-fullscreen-open {
 	overflow: hidden;
 }
 
 // ── Description tab ───────────────────────────────────────────────────────────
 
-.cns-desc-editor {
+.clouansp-desc-editor {
 	max-width: 900px;
 
 	&__header {
@@ -732,7 +732,7 @@ body.cns-canvas-fullscreen-open {
 }
 
 // Preview tab: mirrors the frontend description placement beneath the map.
-.cns-map-description--preview {
+.clouansp-map-description--preview {
 	max-width: 900px;
 	margin-top: 16px;
 }

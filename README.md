@@ -20,11 +20,11 @@ shared directories look the way they do.
 clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle
 uninstall.php                  drops tables + options always, posts only on opt-in
 includes/
-  settings-page.php            the tabbed CNS settings screen (cns_admin_tabs filter)
+  settings-page.php            the tabbed CNS settings screen (clouansp_admin_tabs filter)
   archive.php                  archive on/off + slug + rewrite flush, all suites
   cache.php                    render-row cache for the map and story tables
   capabilities.php             manage_maps / manage_stories
-  map-template.php             single-cns_map + single-cns_story block templates
+  map-template.php             single-clouansp_map + single-clouansp_story block templates
   info/                        the Info tab
   wiki/                        settings, wiki CPT, glossary, the Wiki + Glossary tabs
   map/                         map CPT, tables, public map-data API, admin + REST
@@ -40,7 +40,7 @@ src/
   formats/glossary/            glossary inline rich-text format
 ```
 
-Settings tabs register through the `cns_admin_tabs` filter and currently are:
+Settings tabs register through the `clouansp_admin_tabs` filter and currently are:
 Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
 
 ### `src/shared/`
@@ -58,12 +58,12 @@ Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
 
 | Was                                                                                                | Now                                              |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| 4 identical `cns-settings-page.php` copies behind `function_exists` guards                         | `includes/settings-page.php`, one unguarded copy |
+| 4 identical `clouansp-settings-page.php` copies behind `function_exists` guards                         | `includes/settings-page.php`, one unguarded copy |
 | `archive.php` in map + story, plus the same logic inline in the wiki                               | `includes/archive.php`                           |
 | `cache.php` in map + story                                                                         | `includes/cache.php`                             |
 | `capabilities.php` in map + story                                                                  | `includes/capabilities.php`                      |
-| 3 rewrite-flush flags and init handlers                                                            | one `cns_needs_rewrite_flush` flag               |
-| 2 DB version options and upgrade routines                                                          | one `cns_db_version`                             |
+| 3 rewrite-flush flags and init handlers                                                            | one `clouansp_needs_rewrite_flush` flag               |
+| 2 DB version options and upgrade routines                                                          | one `clouansp_db_version`                             |
 | `ColorField` / `Notices` (byte-identical copies)                                                   | `src/shared/admin/`                              |
 | `EditorHeader` / `TabBar` (near-identical)                                                         | `src/shared/admin/`, entity labels as props      |
 | 2 `apiFetch` wrappers                                                                              | `src/shared/admin/api.ts`                        |
@@ -104,25 +104,25 @@ branches are unreachable, so they are gone:
 
 The plugin is self-contained and makes no assumptions about the active theme.
 
--   `assets/css/wiki-layout.css` gives the wiki's `cns-col*` columns sensible
+-   `assets/css/wiki-layout.css` gives the wiki's `clouansp-col*` columns sensible
     proportions on any theme, since the classes carry no widths of their own.
--   Block templates (`single-cns_map`, `single-cns_wiki`, `single-cns_story`) are
+-   Block templates (`single-clouansp_map`, `single-clouansp_wiki`, `single-clouansp_story`) are
     registered by the plugin and sit below theme templates, so a theme can
     override any of them by shipping a template of the same name.
 
 ## Uninstall
 
-`uninstall.php` always drops the seven `cns_map_*` / `cns_story_*` tables and
+`uninstall.php` always drops the seven `clouansp_map_*` / `clouansp_story_*` tables and
 deletes every option. On top of that:
 
 | Post type        | Deleted                                             |
 | ---------------- | --------------------------------------------------- |
-| `cns_map`        | always                                              |
-| `cns_story`      | always                                              |
-| `cns_substory`   | `cns_story_suite_delete_substories_on_uninstall`    |
-| `cns_wiki`       | `cns_wiki_settings['wiki_delete_on_uninstall']`     |
-| `cns_glossary`   | `cns_wiki_settings['glossary_delete_on_uninstall']` |
-| icon attachments | `cns_map_suite_delete_icons_on_uninstall`           |
+| `clouansp_map`        | always                                              |
+| `clouansp_story`      | always                                              |
+| `clouansp_substory`   | `clouansp_story_suite_delete_substories_on_uninstall`    |
+| `clouansp_wiki`       | `clouansp_wiki_settings['wiki_delete_on_uninstall']`     |
+| `clouansp_glossary`   | `clouansp_wiki_settings['glossary_delete_on_uninstall']` |
+| icon attachments | `clouansp_map_suite_delete_icons_on_uninstall`           |
 
 Maps and stories are unconditional because their entire substance lives in the
 dropped tables — a map is its objects, areas and labels, a story is its nodes,
@@ -139,8 +139,8 @@ reappear on reinstall.
 images and map backgrounds survive in the media library either way.
 
 Two options are retired and kept only in the cleanup list, so they are removed
-from installs that saved them: `cns_map_suite_delete_on_uninstall` and
-`cns_story_suite_delete_on_uninstall`. The latter used to cover substories, so
+from installs that saved them: `clouansp_map_suite_delete_on_uninstall` and
+`clouansp_story_suite_delete_on_uninstall`. The latter used to cover substories, so
 anyone who had ticked it needs to re-tick the new substory setting.
 
 ## No outbound requests

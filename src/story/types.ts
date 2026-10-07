@@ -15,7 +15,7 @@ export type StoryTab     = 'settings' | 'canvas' | 'nodes' | 'paths';
 
 // ── Window globals ────────────────────────────────────────────────────────────
 
-export interface CnsStoryEditorGlobal {
+export interface ClouanspStoryEditorGlobal {
 	storyId:         number;
 	isNew:           boolean;
 	status:          PostStatus;
@@ -25,7 +25,7 @@ export interface CnsStoryEditorGlobal {
 	substoryBaseUrl: string;
 }
 
-export interface CnsStorySuiteGlobal {
+export interface ClouanspStorySuiteGlobal {
 	nonce:       string;
 	restUrl:     string;
 	mapRestUrl:  string;
@@ -36,8 +36,8 @@ export interface CnsStorySuiteGlobal {
 
 declare global {
 	interface Window {
-		cnsStoryEditor: CnsStoryEditorGlobal;
-		cnsStorySuite:  CnsStorySuiteGlobal;
+		clouanspStoryEditor: ClouanspStoryEditorGlobal;
+		clouanspStorySuite:  ClouanspStorySuiteGlobal;
 	}
 }
 

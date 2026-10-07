@@ -60,10 +60,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 	return (
 		<>
 			{ /* ── Display mode ── */ }
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Display Settings', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid">
-					<div className="cns-grid__row">
+				<div className="clouansp-grid">
+					<div className="clouansp-grid__row">
 						<RadioControl
 							label={ __( 'Mode', 'clouds-and-spaceships' ) }
 							selected={ formData.display_mode }
@@ -78,10 +78,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 
 			{ /* ── Icon ── */ }
 			{ isIconMode && (
-				<section className="cns-modal-section">
+				<section className="clouansp-modal-section">
 					<h3>{ __( 'Icon', 'clouds-and-spaceships' ) }</h3>
-					<div className="cns-grid">
-						<div className="cns-grid__row">
+					<div className="clouansp-grid">
+						<div className="clouansp-grid__row">
 							<RadioControl
 								label={ __(
 									'Icon source',
@@ -96,7 +96,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							/>
 						</div>
 						{ isSvgSource && (
-							<div className="cns-grid__row cns__fx-col">
+							<div className="clouansp-grid__row clouansp__fx-col">
 								<IconPicker
 									icons={ icons }
 									selectedIconId={
@@ -108,7 +108,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 								/>
 								<p className="description">
 									<ExternalLink
-										href={ window.cnsMapSuite.iconsUrl }
+										href={ window.clouanspMapSuite.iconsUrl }
 									>
 										{ __(
 											'Manage icon library',
@@ -119,7 +119,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							</div>
 						) }
 						{ ! isSvgSource && (
-							<div className="cns-grid__row">
+							<div className="clouansp-grid__row">
 								<MediaPicker
 									imageId={ formData.icon_image_id_custom }
 									imageUrl={ formData.icon_image_url }
@@ -144,10 +144,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 			) }
 
 			{ /* ── Details ── */ }
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Details', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__row">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__row">
 						<TextControl
 							__next40pxDefaultSize
 							label={ __( 'Title', 'clouds-and-spaceships' ) }
@@ -155,7 +155,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							onChange={ ( v ) => set( 'title', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<SelectControl
 							label={ __( 'Type', 'clouds-and-spaceships' ) }
 							value={ formData.type }
@@ -164,7 +164,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 						/>
 					</div>
 					{ /* Oops you found a placeholder for a future functionality. Please keep it commented out. */ }
-					{ /* <div className="cns-grid__group">
+					{ /* <div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Object Time',
@@ -180,7 +180,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							}
 						/>
 					</div> */ }
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __( 'X (px)', 'clouds-and-spaceships' ) }
 							value={ formData.x }
@@ -190,7 +190,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __( 'Y (px)', 'clouds-and-spaceships' ) }
 							value={ formData.y }
@@ -207,10 +207,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 			<InfoboxSection formData={ formData } onChange={ onChange } />
 
 			{ /* ── Design ── */ }
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Design', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<RangeControl
 							label={
 								isIconMode
@@ -227,7 +227,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							onChange={ ( v ) => set( 'style_size', v ?? 32 ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Background Color',
@@ -237,7 +237,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							onChange={ ( v ) => set( 'style_bg', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<RangeControl
 							label={ __(
 								'Border Thickness (px)',
@@ -253,7 +253,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Border Color',
@@ -268,10 +268,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 
 			{ /* ── Text ── */ }
 			{ isTextMode && (
-				<section className="cns-modal-section">
+				<section className="clouansp-modal-section">
 					<h3>{ __( 'Text', 'clouds-and-spaceships' ) }</h3>
-					<div className="cns-grid cns-grid__12">
-						<div className="cns-grid__group">
+					<div className="clouansp-grid clouansp-grid__12">
+						<div className="clouansp-grid__group">
 							<SelectControl
 								label={ __(
 									'Font Family',
@@ -284,7 +284,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 								}
 							/>
 						</div>
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<NumberControl
 								label={ __(
 									'Font Size (px)',
@@ -302,7 +302,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 								}
 							/>
 						</div>
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<ColorField
 								label={ __(
 									'Font Color',
@@ -320,10 +320,10 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 
 			{ /* ── Icon colors ── */ }
 			{ isIconMode && (
-				<section className="cns-modal-section">
+				<section className="clouansp-modal-section">
 					<h3>{ __( 'Icon Colors', 'clouds-and-spaceships' ) }</h3>
-					<div className="cns-grid cns-grid__12">
-						<div className="cns-grid__group">
+					<div className="clouansp-grid clouansp-grid__12">
+						<div className="clouansp-grid__group">
 							<ColorField
 								label={ __(
 									'Fill Color',
@@ -333,7 +333,7 @@ export default function ObjectForm( { formData, onChange, icons }: Props ) {
 								onChange={ ( v ) => set( 'style_fill', v ) }
 							/>
 						</div>
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<ColorField
 								label={ __(
 									'Stroke Color',

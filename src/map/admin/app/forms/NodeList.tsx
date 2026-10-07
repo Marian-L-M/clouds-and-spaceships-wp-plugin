@@ -62,7 +62,7 @@ export default function NodeList( {
 	}
 
 	return (
-		<section className="cns-modal-section cns-nodes-section">
+		<section className="clouansp-modal-section clouansp-nodes-section">
 			<h3>
 				{ __( 'Nodes', 'clouds-and-spaceships' ) }
 				{ ! isFixed && (
@@ -81,12 +81,12 @@ export default function NodeList( {
 					{ __( 'No nodes yet. Click the canvas to add nodes.', 'clouds-and-spaceships' ) }
 				</p>
 			) : (
-				<table className="cns-nodes-table">
+				<table className="clouansp-nodes-table">
 					<thead><tr><th>#</th><th>X&nbsp;%</th><th>Y&nbsp;%</th><th></th></tr></thead>
 					<tbody>
 						{ nodes.map( ( node, idx ) => (
 							<tr key={ idx }>
-								<td className="cns-node-num">{ labels ? ( labels[ idx ] ?? idx + 1 ) : idx + 1 }</td>
+								<td className="clouansp-node-num">{ labels ? ( labels[ idx ] ?? idx + 1 ) : idx + 1 }</td>
 								<td>
 									<NumberControl
 										size="small"

@@ -10,7 +10,7 @@
 
 // ── Page shell ───────────────────────────────────────────────────────────────
 
-.cns-settings-page {
+.clouansp-settings-page {
 	display: flex;
 	flex-direction: column;
 	gap: $space-10;
@@ -48,7 +48,7 @@
 // The default container for a group of settings or a list. Danger Zone below is
 // the same box with a red top edge.
 
-.cns-settings-card {
+.clouansp-settings-card {
 	padding: 20px 24px;
 	border: 1px solid $color-border;
 	background: $color-surface;
@@ -76,7 +76,7 @@
 }
 
 // "View archive ↗" links sitting next to a section or row heading.
-.cns-settings-link {
+.clouansp-settings-link {
 	display: block;
 	font-size: 12px;
 	font-weight: 400;
@@ -84,9 +84,9 @@
 
 // ── Toolbar ──────────────────────────────────────────────────────────────────
 // Search, per-page and result count above a list. Replaces
-// .cns-maps-overview__toolbar, which the story views used under the map's name.
+// .clouansp-maps-overview__toolbar, which the story views used under the map's name.
 
-.cns-settings-toolbar {
+.clouansp-settings-toolbar {
 	form {
 		display: flex;
 		align-items: center;
@@ -124,15 +124,15 @@
 }
 
 // ── List table ───────────────────────────────────────────────────────────────
-// Sits on top of core's .wp-list-table. Replaces .cns-maps-table.
+// Sits on top of core's .wp-list-table. Replaces .clouansp-maps-table.
 
-.cns-settings-table {
+.clouansp-settings-table {
 	.col-thumb {
 		padding: 0;
 		width: $thumb-size;
 
 		img,
-		.cns-thumb-placeholder {
+		.clouansp-thumb-placeholder {
 			display: block;
 			width: 100%;
 			height: auto;
@@ -144,13 +144,13 @@
 			object-fit: cover;
 		}
 
-		.cns-thumb-placeholder {
+		.clouansp-thumb-placeholder {
 			background: $color-border;
 		}
 	}
 
 	// Empty state row.
-	.cns-settings-table__empty {
+	.clouansp-settings-table__empty {
 		padding: $space-15;
 		text-align: center;
 		color: $color-text-muted;
@@ -159,12 +159,12 @@
 
 // Row action links under a list item's title. Shared with both editors, which
 // render the same affordance inside their entity tables.
-.cns-row-actions {
+.clouansp-row-actions {
 	a {
 		text-decoration: none;
 	}
 
-	.cns-delete-link {
+	.clouansp-delete-link {
 		color: $color-danger;
 
 		&:hover {
@@ -175,7 +175,7 @@
 
 // ── Stat strip ───────────────────────────────────────────────────────────────
 
-.cns-settings-stats {
+.clouansp-settings-stats {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
@@ -209,13 +209,13 @@
 // ── Danger Zone ──────────────────────────────────────────────────────────────
 // Destructive settings. One definition; the map and story sheets each carried a
 // slightly different copy of this before.
-.cns-danger-zone h2,
+.clouansp-danger-zone h2,
 .text-danger {
 	font-weight: 600;
 	color: $color-danger;
 }
 
-.cns-danger-zone {
+.clouansp-danger-zone {
 	margin-top: 40px;
 	padding: 20px 24px;
 	border: 1px solid $color-border;

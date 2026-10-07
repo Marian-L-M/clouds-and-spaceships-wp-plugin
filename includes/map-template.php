@@ -8,8 +8,8 @@ defined('ABSPATH') || exit;
  * Both post types show the same page: title, the interactive canvas, who wrote
  * it, when it last changed, and the description. One layout file,
  * templates/single-map.html, is registered once per post type so each gets the
- * slug WordPress's template hierarchy actually looks for (single-cns_map,
- * single-cns_story). A theme can still override either by shipping a template
+ * slug WordPress's template hierarchy actually looks for (single-clouansp_map,
+ * single-clouansp_story). A theme can still override either by shipping a template
  * of the same name — plugin templates sit below theme templates.
  *
  * Rendering the canvas from a template lets the block drop its own description
@@ -35,7 +35,7 @@ defined('ABSPATH') || exit;
  * data was last touched. Bound to `datetime`, which core allows for
  * core/post-date, so the block keeps its own formatting and styling controls.
  */
-function cns_register_updated_date_binding(): void {
+function clouansp_register_updated_date_binding(): void {
 	register_block_bindings_source('clouds-and-spaceships/updated-date', [
 		'label'              => __('Last updated', 'clouds-and-spaceships'),
 		'uses_context'       => ['postId'],
@@ -49,23 +49,23 @@ function cns_register_updated_date_binding(): void {
 		},
 	]);
 }
-add_action('init', 'cns_register_updated_date_binding');
+add_action('init', 'clouansp_register_updated_date_binding');
 
-function cns_single_map_template_variants(): array {
+function clouansp_single_map_template_variants(): array {
 	return [
-		'cns_map' => [
-			'slug'        => 'single-cns_map',
+		'clouansp_map' => [
+			'slug'        => 'single-clouansp_map',
 			'title'       => __('Single Map', 'clouds-and-spaceships'),
 			'description' => __('Template for single map pages.', 'clouds-and-spaceships'),
-			'canvas'      => '<!-- wp:cns-map-suite/map /-->',
+			'canvas'      => '<!-- wp:clouansp-map-suite/map /-->',
 			'body'        => '<!-- wp:post-content /-->',
 		],
-		'cns_story' => [
-			'slug'        => 'single-cns_story',
+		'clouansp_story' => [
+			'slug'        => 'single-clouansp_story',
 			'title'       => __('Single Story', 'clouds-and-spaceships'),
 			'description' => __('Template for single story pages.', 'clouds-and-spaceships'),
-			'canvas'      => '<!-- wp:cns-story-suite/story /-->',
-			// Both blocks ship; cns_story_pick_description_block() below drops
+			'canvas'      => '<!-- wp:clouansp-story-suite/story /-->',
+			// Both blocks ship; clouansp_story_pick_description_block() below drops
 			// whichever one does not apply to the post being viewed.
 			//
 			// excerptLength is capped at 55 words by default and always applied,
@@ -81,7 +81,7 @@ function cns_single_map_template_variants(): array {
  * Shows a story's written description, whichever field holds it.
  *
  * A story is edited on the CNS canvas page, where the Description field writes
- * to post_excerpt — so the template rendered the excerpt. But cns_story also
+ * to post_excerpt — so the template rendered the excerpt. But clouansp_story also
  * supports 'editor', so anything typed into the post's own content box went to
  * post_content and never appeared on the page.
  *
@@ -91,14 +91,14 @@ function cns_single_map_template_variants(): array {
  * Scoped to the story being viewed — a query loop listing stories elsewhere
  * keeps rendering whichever block it asked for.
  */
-function cns_story_pick_description_block(string $block_content, array $block, WP_Block $instance): string {
+function clouansp_story_pick_description_block(string $block_content, array $block, WP_Block $instance): string {
 	$name = $block['blockName'] ?? '';
 	if ('core/post-content' !== $name && 'core/post-excerpt' !== $name) {
 		return $block_content;
 	}
 
 	$post_id = (int) ($instance->context['postId'] ?? 0);
-	if (! $post_id || 'cns_story' !== get_post_type($post_id) || ! is_singular('cns_story')) {
+	if (! $post_id || 'clouansp_story' !== get_post_type($post_id) || ! is_singular('clouansp_story')) {
 		return $block_content;
 	}
 
@@ -113,10 +113,10 @@ function cns_story_pick_description_block(string $block_content, array $block, W
 	}
 	return $has_content ? '' : $block_content;
 }
-add_filter('render_block', 'cns_story_pick_description_block', 10, 3);
+add_filter('render_block', 'clouansp_story_pick_description_block', 10, 3);
 
-function cns_register_single_map_template(): void {
-	$layout_file = CNS_DIR . 'templates/single-map.html';
+function clouansp_register_single_map_template(): void {
+	$layout_file = CLOUANSP_DIR . 'templates/single-map.html';
 
 	if (! file_exists($layout_file)) {
 		return;
@@ -124,7 +124,7 @@ function cns_register_single_map_template(): void {
 
 	$layout = file_get_contents($layout_file);
 
-	foreach (cns_single_map_template_variants() as $post_type => $variant) {
+	foreach (clouansp_single_map_template_variants() as $post_type => $variant) {
 		// The map and story post types can each be switched off; registering a
 		// template for a post type that does not exist would orphan it.
 		if (! post_type_exists($post_type)) {
@@ -143,4 +143,4 @@ function cns_register_single_map_template(): void {
 	}
 }
 // Priority 20: the map and story post types register at the default priority.
-add_action('init', 'cns_register_single_map_template', 20);
+add_action('init', 'clouansp_register_single_map_template', 20);

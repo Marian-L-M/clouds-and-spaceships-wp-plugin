@@ -20,13 +20,13 @@ function StoriesPanel( {
 
 	const g = (
 		window as unknown as {
-			cnsStorySuite: {
+			clouanspStorySuite: {
 				restUrl: string;
 				nonce: string;
 				editorUrl: string;
 			};
 		}
-	 ).cnsStorySuite;
+	 ).clouanspStorySuite;
 
 	useEffect( () => {
 		( async () => {
@@ -45,7 +45,7 @@ function StoriesPanel( {
 		mapId;
 
 	return (
-		<div className="cns-panel" style={ { padding: '16px' } }>
+		<div className="clouansp-panel" style={ { padding: '16px' } }>
 			<div
 				style={ {
 					display: 'flex',
@@ -108,7 +108,7 @@ function StoriesPanel( {
 
 // Mount into the placeholder rendered by map-suite's MapEditorApp.
 function init() {
-	const container = document.getElementById( 'cns-map-stories-panel' );
+	const container = document.getElementById( 'clouansp-map-stories-panel' );
 	if ( ! container ) return;
 
 	const mapId = parseInt( container.dataset.mapId || '0', 10 );
@@ -116,7 +116,7 @@ function init() {
 
 	if ( ! mapId ) {
 		container.innerHTML =
-			'<div class="cns-panel" style="padding:16px"><p class="description">Save the map first to manage stories.</p></div>';
+			'<div class="clouansp-panel" style="padding:16px"><p class="description">Save the map first to manage stories.</p></div>';
 		return;
 	}
 
@@ -128,7 +128,7 @@ function init() {
 // The container is rendered by React (MapEditorApp) so it may not exist yet at script load.
 // Use MutationObserver to detect when the tab becomes active.
 const observer = new MutationObserver( () => {
-	if ( document.getElementById( 'cns-map-stories-panel' ) ) {
+	if ( document.getElementById( 'clouansp-map-stories-panel' ) ) {
 		observer.disconnect();
 		init();
 	}

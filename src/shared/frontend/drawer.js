@@ -1,7 +1,7 @@
 /**
  * The infobox side drawer, shared by the map block and the story block.
  *
- * One element (`#cns-map-drawer`) serves every block on the page, whichever
+ * One element (`#clouansp-map-drawer`) serves every block on the page, whichever
  * block created it. The shell lives here; each block still composes its own
  * body HTML, because a map item and a story's map item resolve different fields.
  *
@@ -9,14 +9,14 @@
  * author's `display: flex/block` never fights the UA's `[hidden]` rule.
  */
 
-const DRAWER_ID = 'cns-map-drawer';
-const BODY_OPEN_CLASS = 'cns-map-drawer-open';
+const DRAWER_ID = 'clouansp-map-drawer';
+const BODY_OPEN_CLASS = 'clouansp-map-drawer-open';
 
 /** Attaches the delegated body handler once, whoever supplies it first. */
 function attachBodyClick( drawer, handler ) {
-	if ( ! handler || drawer.dataset.cnsBodyClick === '1' ) return;
-	drawer.querySelector( '.cns-map-drawer__body' ).addEventListener( 'click', handler );
-	drawer.dataset.cnsBodyClick = '1';
+	if ( ! handler || drawer.dataset.clouanspBodyClick === '1' ) return;
+	drawer.querySelector( '.clouansp-map-drawer__body' ).addEventListener( 'click', handler );
+	drawer.dataset.clouanspBodyClick = '1';
 }
 
 /** Escapes text for interpolation into a drawer HTML string. */
@@ -58,21 +58,21 @@ function getOrCreateDrawer( onBodyClick ) {
 
 	drawer = document.createElement( 'div' );
 	drawer.id = DRAWER_ID;
-	drawer.className = 'cns-map-drawer';
+	drawer.className = 'clouansp-map-drawer';
 	drawer.setAttribute( 'role', 'dialog' );
 	drawer.setAttribute( 'aria-modal', 'true' );
 	drawer.innerHTML =
-		'<div class="cns-map-drawer__backdrop"></div>' +
-		'<div class="cns-map-drawer__panel">' +
-			'<div class="cns-map-drawer__header">' +
-				'<button class="cns-map-drawer__close" aria-label="Close">&times;</button>' +
+		'<div class="clouansp-map-drawer__backdrop"></div>' +
+		'<div class="clouansp-map-drawer__panel">' +
+			'<div class="clouansp-map-drawer__header">' +
+				'<button class="clouansp-map-drawer__close" aria-label="Close">&times;</button>' +
 			'</div>' +
-			'<div class="cns-map-drawer__body"></div>' +
+			'<div class="clouansp-map-drawer__body"></div>' +
 		'</div>';
 	document.body.appendChild( drawer );
 
-	drawer.querySelector( '.cns-map-drawer__backdrop' ).addEventListener( 'click', closeDrawer );
-	drawer.querySelector( '.cns-map-drawer__close' ).addEventListener( 'click', closeDrawer );
+	drawer.querySelector( '.clouansp-map-drawer__backdrop' ).addEventListener( 'click', closeDrawer );
+	drawer.querySelector( '.clouansp-map-drawer__close' ).addEventListener( 'click', closeDrawer );
 	attachBodyClick( drawer, onBodyClick );
 	document.addEventListener( 'keydown', function ( e ) {
 		if ( e.key === 'Escape' ) closeDrawer();
@@ -86,8 +86,8 @@ function getOrCreateDrawer( onBodyClick ) {
  */
 export function showDrawer( html, onBodyClick ) {
 	const drawer = getOrCreateDrawer( onBodyClick );
-	drawer.querySelector( '.cns-map-drawer__body' ).innerHTML = html;
+	drawer.querySelector( '.clouansp-map-drawer__body' ).innerHTML = html;
 	drawer.classList.add( 'is-open' );
 	document.body.classList.add( BODY_OPEN_CLASS );
-	drawer.querySelector( '.cns-map-drawer__close' ).focus();
+	drawer.querySelector( '.clouansp-map-drawer__close' ).focus();
 }

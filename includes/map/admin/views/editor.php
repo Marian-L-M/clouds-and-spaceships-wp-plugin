@@ -20,22 +20,22 @@ defined('ABSPATH') || exit;
 
 $map_id    = isset($_GET['map_id']) ? (int) $_GET['map_id'] : 0;
 $map       = $map_id ? get_post($map_id) : null;
-$is_new    = (! $map || $map->post_type !== 'cns_map');
-$is_master = $map_id ? (bool) get_post_meta($map_id, '_cns_map_is_master', true) : false;
+$is_new    = (! $map || $map->post_type !== 'clouansp_map');
+$is_master = $map_id ? (bool) get_post_meta($map_id, '_clouansp_map_is_master', true) : false;
 
 $meta = $map_id ? [
-    'width'        => (int) (get_post_meta($map_id, '_cns_map_width', true) ?: 1000),
-    'aspect_ratio' => (float) (get_post_meta($map_id, '_cns_map_aspect_ratio', true) ?: 1.0),
-    'time'         => (int) get_post_meta($map_id, '_cns_map_time', true),
-    'image_id'     => (int) get_post_meta($map_id, '_cns_map_image_id', true),
-    'image_x'      => (float) get_post_meta($map_id, '_cns_map_image_x', true),
-    'image_y'      => (float) get_post_meta($map_id, '_cns_map_image_y', true),
-    'image_width'  => (float) (get_post_meta($map_id, '_cns_map_image_width', true) ?: 1.0),
-    'bg_type'      => get_post_meta($map_id, '_cns_map_bg_type', true) ?: 'color',
-    'bg_color'     => get_post_meta($map_id, '_cns_map_bg_color', true) ?: '#1a1a2e',
-    'bg_image_id'  => (int) get_post_meta($map_id, '_cns_map_bg_image_id', true),
-    'zoom_main'    => (string) get_post_meta($map_id, '_cns_map_zoom_main_color', true),
-    'zoom_accent'  => (string) get_post_meta($map_id, '_cns_map_zoom_accent_color', true),
+    'width'        => (int) (get_post_meta($map_id, '_clouansp_map_width', true) ?: 1000),
+    'aspect_ratio' => (float) (get_post_meta($map_id, '_clouansp_map_aspect_ratio', true) ?: 1.0),
+    'time'         => (int) get_post_meta($map_id, '_clouansp_map_time', true),
+    'image_id'     => (int) get_post_meta($map_id, '_clouansp_map_image_id', true),
+    'image_x'      => (float) get_post_meta($map_id, '_clouansp_map_image_x', true),
+    'image_y'      => (float) get_post_meta($map_id, '_clouansp_map_image_y', true),
+    'image_width'  => (float) (get_post_meta($map_id, '_clouansp_map_image_width', true) ?: 1.0),
+    'bg_type'      => get_post_meta($map_id, '_clouansp_map_bg_type', true) ?: 'color',
+    'bg_color'     => get_post_meta($map_id, '_clouansp_map_bg_color', true) ?: '#1a1a2e',
+    'bg_image_id'  => (int) get_post_meta($map_id, '_clouansp_map_bg_image_id', true),
+    'zoom_main'    => (string) get_post_meta($map_id, '_clouansp_map_zoom_main_color', true),
+    'zoom_accent'  => (string) get_post_meta($map_id, '_clouansp_map_zoom_accent_color', true),
 ] : [
     'width' => 1000, 'aspect_ratio' => 1.0,
     'time' => 0, 'image_id' => 0, 'image_x' => 0.0, 'image_y' => 0.0, 'image_width' => 1.0,
@@ -48,7 +48,7 @@ $bg_image_url   = $meta['bg_image_id'] ? wp_get_attachment_image_url($meta['bg_i
 $thumbnail_id   = $map_id ? (int) get_post_thumbnail_id($map_id) : 0;
 $thumbnail_url  = $thumbnail_id ? (wp_get_attachment_image_url($thumbnail_id, 'medium') ?: '') : '';
 $overview_url = add_query_arg(
-    ['page' => CNS_MAP_PAGE_SETTINGS_MAPS],
+    ['page' => CLOUANSP_MAP_PAGE_SETTINGS_MAPS],
     admin_url('admin.php')
 );
 $view_url = (! $is_new && $map && in_array($map->post_status, ['publish', 'private'], true))
@@ -67,27 +67,27 @@ if ($map_id && ! $is_new) {
     global $wpdb;
     $parent_rows = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT parent_map_id FROM {$wpdb->prefix}cns_map_hierarchy WHERE child_map_id = %d",
+            "SELECT parent_map_id FROM {$wpdb->prefix}clouansp_map_hierarchy WHERE child_map_id = %d",
             $map_id
         ),
         ARRAY_A
     );
     foreach ($parent_rows as $row) {
         $parent   = get_post((int) $row['parent_map_id']);
-        if (!$parent || $parent->post_type !== 'cns_map') continue;
-        $image_id = (int) get_post_meta($parent->ID, '_cns_map_image_id', true);
+        if (!$parent || $parent->post_type !== 'clouansp_map') continue;
+        $image_id = (int) get_post_meta($parent->ID, '_clouansp_map_image_id', true);
         $parent_maps[] = [
             'map_id'    => $parent->ID,
             'title'     => $parent->post_title ?: __('(no title)', 'clouds-and-spaceships'),
             'thumbnail' => $image_id ? (wp_get_attachment_image_url($image_id, 'thumbnail') ?: '') : '',
-            'url'       => cns_map_suite_editor_url($parent->ID),
+            'url'       => clouansp_map_suite_editor_url($parent->ID),
         ];
     }
 }
 ?>
 <script>
-window.cnsMapEditor = {
-    storiesOverviewUrl: <?php echo wp_json_encode(add_query_arg(['page' => CNS_STORY_PAGE_SETTINGS], admin_url('admin.php'))); ?>,
+window.clouanspMapEditor = {
+    storiesOverviewUrl: <?php echo wp_json_encode(add_query_arg(['page' => CLOUANSP_STORY_PAGE_SETTINGS], admin_url('admin.php'))); ?>,
     mapId:       <?php echo (int) $map_id; ?>,
     isNew:       <?php echo $is_new ? 'true' : 'false'; ?>,
     status:      <?php echo wp_json_encode($map ? $map->post_status : 'draft'); ?>,
@@ -115,15 +115,15 @@ window.cnsMapEditor = {
     zoomAccentColor:    <?php echo wp_json_encode($meta['zoom_accent']); ?>,
     // Global defaults from the Maps settings tab, shown when the map has no
     // override of its own so the editor previews what a visitor would see.
-    zoomMainDefault:    <?php echo wp_json_encode((string) get_option('cns_map_suite_zoom_main_color', '')); ?>,
-    zoomAccentDefault:  <?php echo wp_json_encode((string) get_option('cns_map_suite_zoom_accent_color', '')); ?>,
+    zoomMainDefault:    <?php echo wp_json_encode((string) get_option('clouansp_map_suite_zoom_main_color', '')); ?>,
+    zoomAccentDefault:  <?php echo wp_json_encode((string) get_option('clouansp_map_suite_zoom_accent_color', '')); ?>,
     // Frontend layer visibility; unset meta means "on" (see
-    // cns_map_suite_layer_visible).
-    showAreas:   <?php echo wp_json_encode(cns_map_suite_layer_visible($map_id, '_cns_map_show_areas')); ?>,
-    showObjects: <?php echo wp_json_encode(cns_map_suite_layer_visible($map_id, '_cns_map_show_objects')); ?>,
-    showLabels:  <?php echo wp_json_encode(cns_map_suite_layer_visible($map_id, '_cns_map_show_labels')); ?>,
+    // clouansp_map_suite_layer_visible).
+    showAreas:   <?php echo wp_json_encode(clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_areas')); ?>,
+    showObjects: <?php echo wp_json_encode(clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_objects')); ?>,
+    showLabels:  <?php echo wp_json_encode(clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_labels')); ?>,
     parentMaps:  <?php echo wp_json_encode($parent_maps); ?>,
 };
 </script>
 
-<div id="cns-admin-root"></div>
+<div id="clouansp-admin-root"></div>

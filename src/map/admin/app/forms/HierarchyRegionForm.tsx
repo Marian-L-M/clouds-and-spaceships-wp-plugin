@@ -28,7 +28,7 @@ interface Props {
 /**
  * Shown at true size (240px, the width the published card uses), because the
  * point is to judge the real thing — colors, crop and clamped excerpt — not a
- * scaled impression of it. Mirrors .cns-map-hierarchy-tip in
+ * scaled impression of it. Mirrors .clouansp-map-hierarchy-tip in
  * src/blocks/map/style.scss; keep the two in step.
  */
 function HoverCardPreview( {
@@ -57,29 +57,29 @@ function HoverCardPreview( {
 
 	return (
 		<div
-			className="cns-hovercard-preview"
+			className="clouansp-hovercard-preview"
 			style={
 				{
-					'--cns-tip-bg': formData.style_tip_bg,
-					'--cns-tip-border': formData.style_tip_border,
-					'--cns-tip-text': formData.style_tip_text,
+					'--clouansp-tip-bg': formData.style_tip_bg,
+					'--clouansp-tip-border': formData.style_tip_border,
+					'--clouansp-tip-text': formData.style_tip_text,
 				} as React.CSSProperties
 			}
 		>
 			{ thumb && (
 				<img
-					className="cns-hovercard-preview__thumb"
+					className="clouansp-hovercard-preview__thumb"
 					src={ thumb }
 					alt=""
 				/>
 			) }
 			{ title && (
-				<strong className="cns-hovercard-preview__title">
+				<strong className="clouansp-hovercard-preview__title">
 					{ title }
 				</strong>
 			) }
 			{ excerpt && (
-				<p className="cns-hovercard-preview__excerpt">{ excerpt }</p>
+				<p className="clouansp-hovercard-preview__excerpt">{ excerpt }</p>
 			) }
 		</div>
 	);
@@ -106,11 +106,11 @@ export default function HierarchyRegionForm( {
 
 	return (
 		<>
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Child Map', 'clouds-and-spaceships' ) }</h3>
 				<PostSearch
 					label={ __( 'Child Map', 'clouds-and-spaceships' ) }
-					subtype="cns_map"
+					subtype="clouansp_map"
 					selectedId={ formData.child_map_id }
 					selectedLabel={ formData.child_map_label }
 					onChange={ ( item ) =>
@@ -129,7 +129,7 @@ export default function HierarchyRegionForm( {
 				/>
 			</section>
 
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Infobox Override', 'clouds-and-spaceships' ) }</h3>
 				<p className="description">
 					{ __(
@@ -137,8 +137,8 @@ export default function HierarchyRegionForm( {
 						'clouds-and-spaceships'
 					) }
 				</p>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<TextControl
 							__next40pxDefaultSize
 							label={ __( 'Title', 'clouds-and-spaceships' ) }
@@ -150,7 +150,7 @@ export default function HierarchyRegionForm( {
 							onChange={ ( v ) => set( 'title_override', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<TextareaControl
 							label={ __(
 								'Description',
@@ -170,10 +170,10 @@ export default function HierarchyRegionForm( {
 				</div>
 			</section>
 
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Region Style', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Fill Color',
@@ -183,7 +183,7 @@ export default function HierarchyRegionForm( {
 							onChange={ ( v ) => set( 'style_fill', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Stroke Color',
@@ -193,7 +193,7 @@ export default function HierarchyRegionForm( {
 							onChange={ ( v ) => set( 'style_stroke', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Stroke Width',
@@ -220,8 +220,8 @@ export default function HierarchyRegionForm( {
 						'clouds-and-spaceships'
 					) }
 				</p>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<ToggleControl
 							label={ __(
 								'Hide label on canvas',
@@ -231,7 +231,7 @@ export default function HierarchyRegionForm( {
 							onChange={ ( v ) => set( 'style_label_hidden', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<SelectControl
 							label={ __(
 								'Font Family',
@@ -244,7 +244,7 @@ export default function HierarchyRegionForm( {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Font Size (px)',
@@ -262,7 +262,7 @@ export default function HierarchyRegionForm( {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Font Color',
@@ -281,8 +281,8 @@ export default function HierarchyRegionForm( {
 						'clouds-and-spaceships'
 					) }
 				</p>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Background Color',
@@ -292,7 +292,7 @@ export default function HierarchyRegionForm( {
 							onChange={ ( v ) => set( 'style_tip_bg', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Border Color',
@@ -302,7 +302,7 @@ export default function HierarchyRegionForm( {
 							onChange={ ( v ) => set( 'style_tip_border', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Text Color',

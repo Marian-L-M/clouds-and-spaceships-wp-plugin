@@ -19,14 +19,14 @@ export default function TabBar< T extends string >( {
 }: Props< T > ) {
 	return (
 		<nav
-			className="cns-map-editor__tabs"
+			className="clouansp-map-editor__tabs"
 			role="tablist"
 			aria-label={ ariaLabel }
 		>
 			{ tabs.map( ( t ) => (
 				<button
 					key={ t.id }
-					className={ `cns-tab${ activeTab === t.id ? ' cns-tab--active' : '' }` }
+					className={ `clouansp-tab${ activeTab === t.id ? ' clouansp-tab--active' : '' }` }
 					role="tab"
 					aria-selected={ activeTab === t.id }
 					onClick={ () => onChange( t.id ) }

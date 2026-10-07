@@ -15,7 +15,7 @@ interface Props {
 
 export default function PreviewPanel( { settings, objects, areas, labels, viewUrl }: Props ) {
 	return (
-		<div className="cns-tab-panel cns-tab-panel--active" data-panel="preview" role="tabpanel">
+		<div className="clouansp-tab-panel clouansp-tab-panel--active" data-panel="preview" role="tabpanel">
 			<PreviewCanvas
 				drawState={ settingsToDrawState( settings ) }
 				objects={ objects }
@@ -26,12 +26,12 @@ export default function PreviewPanel( { settings, objects, areas, labels, viewUr
 				// Mirrors the frontend: description renders beneath the map.
 				// Own admin input; the server sanitizes it (wp_kses_post) on save.
 				<div
-					className="cns-map-description cns-map-description--preview"
+					className="clouansp-map-description clouansp-map-description--preview"
 					dangerouslySetInnerHTML={ { __html: settings.description } }
 				/>
 			) }
 			{ viewUrl && (
-				<div className="cns-preview-actions">
+				<div className="clouansp-preview-actions">
 					<Button
 						href={ viewUrl }
 						variant="secondary"

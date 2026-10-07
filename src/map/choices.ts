@@ -11,7 +11,7 @@
  */
 
 // ── Area types ────────────────────────────────────────────────────────────────
-// Keep in sync with cns_map_suite_area_types() in includes/admin/api.php.
+// Keep in sync with clouansp_map_suite_area_types() in includes/admin/api.php.
 
 const AREA_TYPE_CHOICES = [
 	{ value: 'POLITICAL', label: 'Political' },
@@ -32,7 +32,7 @@ export const AREA_TYPES: { value: AreaType; label: string }[] = [
 export const AREA_TYPE_DEFAULT: AreaType = 'POLITICAL';
 
 // ── Object types ──────────────────────────────────────────────────────────────
-// Keep in sync with cns_map_suite_object_types() in includes/admin/api.php.
+// Keep in sync with clouansp_map_suite_object_types() in includes/admin/api.php.
 
 const OBJECT_TYPE_CHOICES = [
 	{ value: 'LOCATION', label: 'Location' },
@@ -52,7 +52,7 @@ export const OBJECT_TYPE_DEFAULT: ObjectType = 'LOCATION';
 
 // ── Object display modes ──────────────────────────────────────────────────────
 // How an object draws itself on the canvas, mirroring the story node's shape
-// list. Keep in sync with cns_map_suite_object_display_modes() in
+// list. Keep in sync with clouansp_map_suite_object_display_modes() in
 // includes/map/admin/api.php.
 
 const OBJECT_DISPLAY_MODE_CHOICES = [
@@ -75,7 +75,7 @@ export const OBJECT_DISPLAY_MODE_DEFAULT: ObjectDisplayMode = 'icon';
 
 // ── Shape types ───────────────────────────────────────────────────────────────
 // Shared by areas and hierarchy regions. Keep in sync with
-// cns_map_suite_shape_types() in includes/admin/api.php.
+// clouansp_map_suite_shape_types() in includes/admin/api.php.
 
 const SHAPE_TYPE_CHOICES = [
 	{ value: 'POLYGON', label: 'Polygon (Nodes)' },

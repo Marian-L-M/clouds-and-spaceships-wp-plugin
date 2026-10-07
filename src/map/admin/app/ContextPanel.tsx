@@ -212,14 +212,14 @@ export default function ContextPanel( {
 	if ( ! maybeSelection ) {
 		return (
 			<aside
-				className="cns-map-editor__context"
+				className="clouansp-map-editor__context"
 				aria-label="Context panel"
 			>
 				<Flex
 					direction={ 'column' }
 					align={ 'center' }
 					justify={ 'center' }
-					className="cns-map-editor__context-empty"
+					className="clouansp-map-editor__context-empty"
 				>
 					<p>
 						{ __(
@@ -348,20 +348,20 @@ export default function ContextPanel( {
 
 	return (
 		<aside
-			className="cns-map-editor__context"
+			className="clouansp-map-editor__context"
 			aria-label="Context panel"
-			id="cns-context-form"
+			id="clouansp-context-form"
 		>
-			<div className="cns-map-editor__context-header">
+			<div className="clouansp-map-editor__context-header">
 				<Flex align="center" justify="space-between">
-					<FlexBlock className="cns-map-editor__context-title">
+					<FlexBlock className="clouansp-map-editor__context-title">
 						<h3>{ title }</h3>
 					</FlexBlock>
 					<FlexItem>
 						<Flex
 							gap={ 2 }
 							align="center"
-							className="cns-map-editor__context-title-actions"
+							className="clouansp-map-editor__context-title-actions"
 						>
 							{ onDuplicate && (
 								<Button
@@ -382,7 +382,7 @@ export default function ContextPanel( {
 				</Flex>
 			</div>
 
-			<div className="cns-map-editor__context-body">
+			<div className="clouansp-map-editor__context-body">
 				{ selection.kind === 'object' && objFormData && (
 					<ObjectForm
 						formData={ objFormData }
@@ -585,7 +585,7 @@ export default function ContextPanel( {
 				) }
 			</div>
 			<Flex
-				className="cns-map-editor__context-footer"
+				className="clouansp-map-editor__context-footer"
 				justify="end"
 				align="center"
 				gap={ 2 }

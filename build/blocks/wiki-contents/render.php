@@ -10,12 +10,12 @@
 defined( 'ABSPATH' ) || exit;
 
 $mode            = $attributes['mode']           ?? 'manual';
-$columns_mobile  = intval( $attributes['columnsMobile']  ?? cns_get_wiki_setting( 'grid_columns_mobile',  1 ) );
-$columns_tablet  = intval( $attributes['columnsTablet']  ?? cns_get_wiki_setting( 'grid_columns_tablet',  2 ) );
-$columns_desktop = intval( $attributes['columnsDesktop'] ?? cns_get_wiki_setting( 'grid_columns_desktop', 3 ) );
+$columns_mobile  = intval( $attributes['columnsMobile']  ?? clouansp_get_wiki_setting( 'grid_columns_mobile',  1 ) );
+$columns_tablet  = intval( $attributes['columnsTablet']  ?? clouansp_get_wiki_setting( 'grid_columns_tablet',  2 ) );
+$columns_desktop = intval( $attributes['columnsDesktop'] ?? clouansp_get_wiki_setting( 'grid_columns_desktop', 3 ) );
 $number_of_posts = intval( $attributes['numberOfPosts']  ?? $columns_desktop );
-$column_gap      = intval( $attributes['columnGap'] ?? cns_get_wiki_setting( 'grid_column_gap', 16 ) );
-$row_gap         = intval( $attributes['rowGap']    ?? cns_get_wiki_setting( 'grid_row_gap',    16 ) );
+$column_gap      = intval( $attributes['columnGap'] ?? clouansp_get_wiki_setting( 'grid_column_gap', 16 ) );
+$row_gap         = intval( $attributes['rowGap']    ?? clouansp_get_wiki_setting( 'grid_row_gap',    16 ) );
 
 // CSS custom properties drive the responsive grid via style.scss media queries.
 $grid_vars = sprintf(
@@ -36,7 +36,7 @@ if ( 'newest' === $mode ) {
 	$total = $number_of_posts;
 
 	$query = new WP_Query( [
-		'post_type'      => 'cns_wiki',
+		'post_type'      => 'clouansp_wiki',
 		'posts_per_page' => $total,
 		'post_status'    => 'publish',
 		'orderby'        => 'date',
@@ -48,7 +48,7 @@ if ( 'newest' === $mode ) {
 	$inner = '';
 	foreach ( $query->posts as $wiki_post ) {
 		$inner .= render_block( [
-			'blockName' => 'cns-wiki-suite/wiki-card',
+			'blockName' => 'clouansp-wiki-suite/wiki-card',
 			'attrs'     => [ 'postId' => $wiki_post->ID ],
 		] );
 	}

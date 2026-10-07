@@ -158,7 +158,7 @@ export default function ObjectsPanel( {
 
 	return (
 		<div
-			className="cns-tab-panel cns-tab-panel--active"
+			className="clouansp-tab-panel clouansp-tab-panel--active"
 			data-panel="objects"
 			role="tabpanel"
 		>

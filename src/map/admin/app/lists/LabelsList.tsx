@@ -19,7 +19,7 @@ const COLUMNS: EntityColumn< MapLabel >[] = [
 		className: 'col-icon',
 		render: ( label ) => (
 			<span
-				className="cns-obj-dot"
+				className="clouansp-obj-dot"
 				style={ {
 					background: label.canvas_styles?.bgColor || '#ffffff',
 					border: `2px solid ${
@@ -34,7 +34,7 @@ const COLUMNS: EntityColumn< MapLabel >[] = [
 	{
 		header: 'Placement',
 		render: ( label ) => (
-			<span className="cns-badge cns-badge--type">
+			<span className="clouansp-badge clouansp-badge--type">
 				{ label.placement === 'indicator' ? 'Indicator' : 'Centered' }
 			</span>
 		),

@@ -19,7 +19,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	function updateGroupTitle( value ) {
 		setAttributes( { group_title: value } );
 	}
-	const TEMPLATE = [ [ 'cns-wiki-suite/infobox-row', {} ] ];
+	const TEMPLATE = [ [ 'clouansp-wiki-suite/infobox-row', {} ] ];
 
 	return (
 		<div

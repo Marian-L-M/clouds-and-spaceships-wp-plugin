@@ -16,7 +16,7 @@ defined('ABSPATH') || exit;
  * DB query standard: all SELECT / INSERT / UPDATE / DELETE against custom tables
  * must use $wpdb->prepare() for any value derived from user input or external data.
  */
-function cns_story_suite_create_tables(): void {
+function clouansp_story_suite_create_tables(): void {
 	global $wpdb;
 
 	$charset_collate = $wpdb->get_charset_collate();
@@ -24,7 +24,7 @@ function cns_story_suite_create_tables(): void {
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 	// Story paths: named node groups with shared marker settings.
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_story_paths (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_story_paths (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		story_id BIGINT UNSIGNED NOT NULL,
 		label VARCHAR(255) NOT NULL DEFAULT '',
@@ -41,7 +41,7 @@ function cns_story_suite_create_tables(): void {
 	) $charset_collate;");
 
 	// Story nodes: one row per canvas node, optionally linked to a substory post.
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_story_nodes (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_story_nodes (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		story_id BIGINT UNSIGNED NOT NULL,
 		path_id BIGINT UNSIGNED NULL DEFAULT NULL,
@@ -74,7 +74,7 @@ function cns_story_suite_create_tables(): void {
 
 	// Story edges: directed graph connections between nodes.
 	// sort_order controls navigation priority at branch points (lower = first).
-	dbDelta("CREATE TABLE {$wpdb->prefix}cns_story_edges (
+	dbDelta("CREATE TABLE {$wpdb->prefix}clouansp_story_edges (
 		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 		story_id BIGINT UNSIGNED NOT NULL,
 		from_node_id BIGINT UNSIGNED NOT NULL,
@@ -95,7 +95,7 @@ function cns_story_suite_create_tables(): void {
 	// is obsolete. dbDelta() widens columns but never drops them.
 	// $edges is built from $wpdb->prefix, never from input, and a table name
 	// cannot be passed as a placeholder.
-	$edges = "{$wpdb->prefix}cns_story_edges";
+	$edges = "{$wpdb->prefix}clouansp_story_edges";
 	if ($wpdb->get_var($wpdb->prepare(
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		"SHOW COLUMNS FROM `{$edges}` LIKE %s", 'line_opacity'
@@ -111,13 +111,13 @@ function cns_story_suite_create_tables(): void {
 // wp-cli, REST), so story rows can never be orphaned. Trashing a story keeps
 // its rows, which is what makes restoring from trash lossless.
 
-function cns_story_suite_purge_story_rows(int $story_id): void {
+function clouansp_story_suite_purge_story_rows(int $story_id): void {
 	global $wpdb;
 
 	// Edges carry story_id, but also sweep by node id to catch any stray rows
 	// linked across stories (mirrors the pre-trash admin delete handler).
 	$node_ids = $wpdb->get_col(
-		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}cns_story_nodes WHERE story_id = %d", $story_id)
+		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}clouansp_story_nodes WHERE story_id = %d", $story_id)
 	);
 	if ($node_ids) {
 		$placeholders = implode(',', array_fill(0, count($node_ids), '%d'));
@@ -125,17 +125,17 @@ function cns_story_suite_purge_story_rows(int $story_id): void {
 		// to prepare(), so the IN() list is fully parameterised.
 		$wpdb->query($wpdb->prepare(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-			"DELETE FROM {$wpdb->prefix}cns_story_edges WHERE from_node_id IN ($placeholders) OR to_node_id IN ($placeholders)",
+			"DELETE FROM {$wpdb->prefix}clouansp_story_edges WHERE from_node_id IN ($placeholders) OR to_node_id IN ($placeholders)",
 			...array_merge($node_ids, $node_ids)
 		));
 	}
-	$wpdb->delete($wpdb->prefix . 'cns_story_edges', ['story_id' => $story_id], ['%d']);
-	$wpdb->delete($wpdb->prefix . 'cns_story_nodes', ['story_id' => $story_id], ['%d']);
-	$wpdb->delete($wpdb->prefix . 'cns_story_paths', ['story_id' => $story_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_story_edges', ['story_id' => $story_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_story_nodes', ['story_id' => $story_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_story_paths', ['story_id' => $story_id], ['%d']);
 }
 
 add_action('before_delete_post', function (int $post_id, WP_Post $post): void {
-	if ($post->post_type === 'cns_story') {
-		cns_story_suite_purge_story_rows($post_id);
+	if ($post->post_type === 'clouansp_story') {
+		clouansp_story_suite_purge_story_rows($post_id);
 	}
 }, 10, 2);

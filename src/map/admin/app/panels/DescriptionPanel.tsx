@@ -3,7 +3,7 @@ import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import type { TinyMceEditor } from '../../../types';
 
-const EDITOR_ID = 'cns-map-description';
+const EDITOR_ID = 'clouansp-map-description';
 
 interface Props {
 	value: string;
@@ -77,12 +77,12 @@ export default function DescriptionPanel( {
 
 	return (
 		<div
-			className="cns-tab-panel cns-tab-panel--active"
+			className="clouansp-tab-panel clouansp-tab-panel--active"
 			data-panel="description"
 			role="tabpanel"
 		>
-			<div className="cns-desc-editor">
-				<div className="cns-desc-editor__header">
+			<div className="clouansp-desc-editor">
+				<div className="clouansp-desc-editor__header">
 					<p className="description">
 						{ __(
 							'Description of the current map.\n Displayed underneath map element.',

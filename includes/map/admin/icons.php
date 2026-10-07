@@ -10,13 +10,13 @@ defined('ABSPATH') || exit;
  * upload through a DOMDocument-based sanitizer that strips <script>,
  * <foreignObject>, event handler attributes (on*), and javascript: href values.
  *
- * Icons are stored as regular WP attachments tagged with _cns_map_icon meta.
+ * Icons are stored as regular WP attachments tagged with _clouansp_map_icon meta.
  */
 
 // Allow SVG mime type — manage_maps users only.
-add_filter('upload_mimes', 'cns_map_suite_allow_svg');
+add_filter('upload_mimes', 'clouansp_map_suite_allow_svg');
 
-function cns_map_suite_allow_svg(array $mimes): array {
+function clouansp_map_suite_allow_svg(array $mimes): array {
 	if (current_user_can('manage_maps')) {
 		$mimes['svg'] = 'image/svg+xml';
 	}
@@ -25,9 +25,9 @@ function cns_map_suite_allow_svg(array $mimes): array {
 
 // WP 4.7.1+ validates file content against the declared extension.
 // SVGs are XML, not a binary image type, so the check fails without this.
-add_filter('wp_check_filetype_and_ext', 'cns_map_suite_svg_filetype_fix', 10, 3);
+add_filter('wp_check_filetype_and_ext', 'clouansp_map_suite_svg_filetype_fix', 10, 3);
 
-function cns_map_suite_svg_filetype_fix(array $checked, string $file, string $filename): array {
+function clouansp_map_suite_svg_filetype_fix(array $checked, string $file, string $filename): array {
 	if (!current_user_can('manage_maps')) {
 		return $checked;
 	}
@@ -39,9 +39,9 @@ function cns_map_suite_svg_filetype_fix(array $checked, string $file, string $fi
 }
 
 // Sanitize SVG content before the file is written to disk.
-add_filter('wp_handle_upload_prefilter', 'cns_map_suite_sanitize_svg_on_upload');
+add_filter('wp_handle_upload_prefilter', 'clouansp_map_suite_sanitize_svg_on_upload');
 
-function cns_map_suite_sanitize_svg_on_upload(array $file): array {
+function clouansp_map_suite_sanitize_svg_on_upload(array $file): array {
 	if (($file['type'] ?? '') !== 'image/svg+xml') {
 		return $file;
 	}
@@ -52,7 +52,7 @@ function cns_map_suite_sanitize_svg_on_upload(array $file): array {
 		return $file;
 	}
 
-	$clean = cns_map_suite_sanitize_svg($content);
+	$clean = clouansp_map_suite_sanitize_svg($content);
 	if ($clean === false) {
 		$file['error'] = __('SVG sanitization failed — ensure the file is valid XML.', 'clouds-and-spaceships');
 		return $file;
@@ -71,7 +71,7 @@ function cns_map_suite_sanitize_svg_on_upload(array $file): array {
  * Preserved: fill, stroke, style attributes and presentation attributes
  * needed for valid icon rendering.
  */
-function cns_map_suite_sanitize_svg(string $content): string|false {
+function clouansp_map_suite_sanitize_svg(string $content): string|false {
 	$doc = new DOMDocument();
 	libxml_use_internal_errors(true);
 	$ok = $doc->loadXML($content, LIBXML_NONET | LIBXML_NOERROR);

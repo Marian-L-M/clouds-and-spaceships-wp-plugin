@@ -121,7 +121,7 @@ export default function LabelsCanvas( {
 	} ); // run after every render
 
 	return (
-		<div className="cns-objects-canvas-wrap">
+		<div className="clouansp-objects-canvas-wrap">
 			<CanvasZoomWrap>
 				<canvas ref={ canvasRef } />
 			</CanvasZoomWrap>

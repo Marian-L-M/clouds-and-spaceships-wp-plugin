@@ -39,7 +39,7 @@ import type {
 } from '../../types';
 
 function buildInitialSettings(): MapSettings {
-	const d = window.cnsMapEditor || ( {} as typeof window.cnsMapEditor );
+	const d = window.clouanspMapEditor || ( {} as typeof window.clouanspMapEditor );
 	return {
 		status: d.status ?? 'draft',
 		title: d.title ?? '',
@@ -68,7 +68,7 @@ function buildInitialSettings(): MapSettings {
 }
 
 export default function MapEditorApp() {
-	const d = window.cnsMapEditor || ( {} as typeof window.cnsMapEditor );
+	const d = window.clouanspMapEditor || ( {} as typeof window.clouanspMapEditor );
 	const mapId = d.mapId || 0;
 	const isNew = d.isNew || false;
 	const overviewUrl = d.overviewUrl || '#';
@@ -616,11 +616,11 @@ export default function MapEditorApp() {
 	const zoomVars: Record< string, string > = {};
 	const zoomMain = settings.zoomMainColor || d.zoomMainDefault || '';
 	const zoomAccent = settings.zoomAccentColor || d.zoomAccentDefault || '';
-	if ( zoomMain ) zoomVars[ '--cns-map-zoom-main' ] = zoomMain;
-	if ( zoomAccent ) zoomVars[ '--cns-map-zoom-accent' ] = zoomAccent;
+	if ( zoomMain ) zoomVars[ '--clouansp-map-zoom-main' ] = zoomMain;
+	if ( zoomAccent ) zoomVars[ '--clouansp-map-zoom-accent' ] = zoomAccent;
 
 	return (
-		<div className="cns-map-editor" style={ zoomVars }>
+		<div className="clouansp-map-editor" style={ zoomVars }>
 			<EditorHeader
 				pageTitle={ pageTitle }
 				overviewUrl={ overviewUrl }
@@ -635,15 +635,15 @@ export default function MapEditorApp() {
 				viewLabel={ __( 'View Map', 'clouds-and-spaceships' ) }
 				saveLabel={ __( 'Save Map', 'clouds-and-spaceships' ) }
 			/>
-			<div className="cns-map-editor__main">
-				<div className="cns-map-editor__body">
+			<div className="clouansp-map-editor__main">
+				<div className="clouansp-map-editor__body">
 					<TabBar
 						activeTab={ activeTab }
 						isMaster={ settings.isMaster }
 						onChange={ handleTabChange }
 					/>
 
-					<div className="cns-map-editor__content">
+					<div className="clouansp-map-editor__content">
 						{ activeTab === 'settings' && (
 							<SettingsPanel
 								settings={ settings }
@@ -737,10 +737,10 @@ export default function MapEditorApp() {
 						) }
 						{ activeTab === 'stories' && (
 							<div
-								id="cns-map-stories-panel"
+								id="clouansp-map-stories-panel"
 								data-map-id={ mapId }
 								data-overview-url={
-									window.cnsMapEditor
+									window.clouanspMapEditor
 										.storiesOverviewUrl || ''
 								}
 							/>

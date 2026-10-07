@@ -28,7 +28,7 @@ interface NodeModalState {
 }
 
 function buildInitialSettings(): StorySettings {
-	const d = window.cnsStoryEditor || ( {} as typeof window.cnsStoryEditor );
+	const d = window.clouanspStoryEditor || ( {} as typeof window.clouanspStoryEditor );
 	return {
 		title:           d.title    ?? '',
 		status:          d.status   ?? 'draft',
@@ -63,7 +63,7 @@ function buildInitialSettings(): StorySettings {
 
 
 export default function StoryEditorApp() {
-	const d       = window.cnsStoryEditor || ( {} as typeof window.cnsStoryEditor );
+	const d       = window.clouanspStoryEditor || ( {} as typeof window.clouanspStoryEditor );
 	const storyId = d.storyId  || 0;
 	const isNew   = d.isNew    || false;
 
@@ -604,11 +604,11 @@ export default function StoryEditorApp() {
 	const selectedNode = nodes.find( ( n ) => n.id === selectedNodeId ) ?? null;
 
 	if ( loading ) {
-		return <div className="cns-story-editor"><div className="cns-loading">Loading…</div></div>;
+		return <div className="clouansp-story-editor"><div className="clouansp-loading">Loading…</div></div>;
 	}
 
 	return (
-		<div className="cns-story-editor cns-map-editor">
+		<div className="clouansp-story-editor clouansp-map-editor">
 			<EditorHeader
 				pageTitle={ pageTitle }
 				overviewUrl={ d.overviewUrl || '#' }
@@ -622,11 +622,11 @@ export default function StoryEditorApp() {
 				saveLabel={ __( 'Save Story', 'clouds-and-spaceships' ) }
 			/>
 
-			<div className="cns-map-editor__main">
-				<div className="cns-map-editor__body">
+			<div className="clouansp-map-editor__main">
+				<div className="clouansp-map-editor__body">
 					<TabBar activeTab={ activeTab } onChange={ handleTabChange } />
 
-					<div className="cns-map-editor__content">
+					<div className="clouansp-map-editor__content">
 						{ activeTab === 'settings' && (
 							<SettingsPanel
 								settings={ settings }

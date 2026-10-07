@@ -29,7 +29,7 @@ const COLUMNS: EntityColumn< MapObject >[] = [
 				/>
 			) : (
 				<span
-					className="cns-obj-dot"
+					className="clouansp-obj-dot"
 					style={ {
 						background: obj.canvas_styles?.bgColor || '#2271b1',
 					} }
@@ -40,7 +40,7 @@ const COLUMNS: EntityColumn< MapObject >[] = [
 	{
 		header: 'Type',
 		render: ( obj ) => (
-			<span className="cns-badge cns-badge--type">{ obj.type }</span>
+			<span className="clouansp-badge clouansp-badge--type">{ obj.type }</span>
 		),
 	},
 	{

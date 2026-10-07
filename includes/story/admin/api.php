@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
  * Direct database access notice.
  *
  * Every query in this file runs against the plugin's own custom tables
- * ({$wpdb->prefix}cns_*), which hold data WordPress has no API for — there is
+ * ({$wpdb->prefix}clouansp_*), which hold data WordPress has no API for — there is
  * no post, meta or options equivalent to read instead. All values are passed
  * through $wpdb->prepare().
  *
@@ -21,7 +21,7 @@ defined('ABSPATH') || exit;
 
 // ── Route registration ────────────────────────────────────────────────────────
 
-add_action('rest_api_init', 'cns_story_suite_register_routes');
+add_action('rest_api_init', 'clouansp_story_suite_register_routes');
 
 /**
  * Sanitizes a colour, allowing the alpha byte. Colours carry their own opacity
@@ -29,7 +29,7 @@ add_action('rest_api_init', 'cns_story_suite_register_routes');
  * six digits. Returns $default for an empty or malformed value; pass null as
  * the default for nullable "inherit" columns.
  */
-function cns_story_suite_sanitize_color($value, ?string $default): ?string {
+function clouansp_story_suite_sanitize_color($value, ?string $default): ?string {
 	$value = is_string($value) ? trim($value) : '';
 	if ($value === '') {
 		return $default;
@@ -40,106 +40,106 @@ function cns_story_suite_sanitize_color($value, ?string $default): ?string {
 	return $default;
 }
 
-function cns_story_suite_register_routes(): void {
-	$ns = 'cns-story-suite/v1';
+function clouansp_story_suite_register_routes(): void {
+	$ns = 'clouansp-story-suite/v1';
 
 	register_rest_route($ns, '/stories', [
 		'methods'             => 'POST',
-		'callback'            => 'cns_story_suite_api_save_story',
-		'permission_callback' => 'cns_story_suite_api_can_manage',
+		'callback'            => 'clouansp_story_suite_api_save_story',
+		'permission_callback' => 'clouansp_story_suite_api_can_manage',
 	]);
 
 	register_rest_route($ns, '/stories/(?P<id>\d+)/data', [
 		'methods'             => 'GET',
-		'callback'            => 'cns_story_suite_api_get_story_data',
-		'permission_callback' => 'cns_story_suite_api_can_manage',
+		'callback'            => 'clouansp_story_suite_api_get_story_data',
+		'permission_callback' => 'clouansp_story_suite_api_can_manage',
 	]);
 
 	register_rest_route($ns, '/maps/(?P<id>\d+)/stories', [
 		'methods'             => 'GET',
-		'callback'            => 'cns_story_suite_api_get_map_stories',
-		'permission_callback' => 'cns_story_suite_api_can_manage',
+		'callback'            => 'clouansp_story_suite_api_get_map_stories',
+		'permission_callback' => 'clouansp_story_suite_api_can_manage',
 	]);
 
 	register_rest_route($ns, '/stories/(?P<id>\d+)/nodes', [
 		'methods'             => 'POST',
-		'callback'            => 'cns_story_suite_api_create_node',
-		'permission_callback' => 'cns_story_suite_api_can_manage',
+		'callback'            => 'clouansp_story_suite_api_create_node',
+		'permission_callback' => 'clouansp_story_suite_api_can_manage',
 	]);
 
 	register_rest_route($ns, '/nodes/(?P<id>\d+)', [
 		[
 			'methods'             => 'PATCH',
-			'callback'            => 'cns_story_suite_api_update_node',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_update_node',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 		[
 			'methods'             => 'DELETE',
-			'callback'            => 'cns_story_suite_api_delete_node',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_delete_node',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 	]);
 
 	register_rest_route($ns, '/edges', [
 		'methods'             => 'POST',
-		'callback'            => 'cns_story_suite_api_create_edge',
-		'permission_callback' => 'cns_story_suite_api_can_manage',
+		'callback'            => 'clouansp_story_suite_api_create_edge',
+		'permission_callback' => 'clouansp_story_suite_api_can_manage',
 	]);
 
 	register_rest_route($ns, '/edges/(?P<id>\d+)', [
 		[
 			'methods'             => 'PATCH',
-			'callback'            => 'cns_story_suite_api_update_edge',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_update_edge',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 		[
 			'methods'             => 'DELETE',
-			'callback'            => 'cns_story_suite_api_delete_edge',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_delete_edge',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 	]);
 
 	register_rest_route($ns, '/substories', [
 		[
 			'methods'             => 'GET',
-			'callback'            => 'cns_story_suite_api_search_substories',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_search_substories',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 		[
 			'methods'             => 'POST',
-			'callback'            => 'cns_story_suite_api_create_substory',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_create_substory',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 	]);
 
 	register_rest_route($ns, '/stories/(?P<id>\d+)/paths', [
 		[
 			'methods'             => 'GET',
-			'callback'            => 'cns_story_suite_api_get_paths',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_get_paths',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 		[
 			'methods'             => 'POST',
-			'callback'            => 'cns_story_suite_api_create_path',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_create_path',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 	]);
 
 	register_rest_route($ns, '/paths/(?P<id>\d+)', [
 		[
 			'methods'             => 'PATCH',
-			'callback'            => 'cns_story_suite_api_update_path',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_update_path',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 		[
 			'methods'             => 'DELETE',
-			'callback'            => 'cns_story_suite_api_delete_path',
-			'permission_callback' => 'cns_story_suite_api_can_manage',
+			'callback'            => 'clouansp_story_suite_api_delete_path',
+			'permission_callback' => 'clouansp_story_suite_api_can_manage',
 		],
 	]);
 }
 
-function cns_story_suite_api_can_manage(): bool {
+function clouansp_story_suite_api_can_manage(): bool {
 	return current_user_can('manage_stories');
 }
 
@@ -148,15 +148,15 @@ function cns_story_suite_api_can_manage(): bool {
 // frontend block render). These wrappers keep the admin-shape callbacks
 // usable as array_map callables.
 
-function cns_story_suite_format_path(array $row): array {
-	return cns_story_suite_serialize_path($row, false);
+function clouansp_story_suite_format_path(array $row): array {
+	return clouansp_story_suite_serialize_path($row, false);
 }
 
-function cns_story_suite_format_node(array $row): array {
-	return cns_story_suite_serialize_node($row, false);
+function clouansp_story_suite_format_node(array $row): array {
+	return clouansp_story_suite_serialize_node($row, false);
 }
 
-function cns_story_suite_format_edge(array $row): array {
+function clouansp_story_suite_format_edge(array $row): array {
 	return [
 		'id'         => (int) $row['id'],
 		'storyId'    => (int) $row['story_id'],
@@ -175,21 +175,21 @@ function cns_story_suite_format_edge(array $row): array {
  * Unset meta reads as '', which means "visible". Only an explicit '0' hides
  * a layer.
  */
-function cns_story_suite_layer_visible(int $story_id, string $meta_key): bool {
+function clouansp_story_suite_layer_visible(int $story_id, string $meta_key): bool {
 	return (string) get_post_meta($story_id, $meta_key, true) !== '0';
 }
 
 /**
  * Map render data in the story block's camelCase shape.
  *
- * Thin adapter over the public cns_map_suite_get_map_data() — the story code
- * never reads the cns_map_* tables or meta directly.
+ * Thin adapter over the public clouansp_map_suite_get_map_data() — the story code
+ * never reads the clouansp_map_* tables or meta directly.
  *
  * @param bool $resolve_infoboxes Attach 'infoboxResolved' to clickable
  *                                objects/areas (frontend rendering only).
  */
-function cns_story_suite_get_map_render_data(int $map_id, bool $resolve_infoboxes = false): ?array {
-	$map = cns_map_suite_get_map_data($map_id, [
+function clouansp_story_suite_get_map_render_data(int $map_id, bool $resolve_infoboxes = false): ?array {
+	$map = clouansp_map_suite_get_map_data($map_id, [
 		'image_size'        => 'large',
 		'resolve_infoboxes' => $resolve_infoboxes,
 		'labels'            => true,  // the story canvas renders map labels too
@@ -302,7 +302,7 @@ function cns_story_suite_get_map_render_data(int $map_id, bool $resolve_infoboxe
 
 // ── Story endpoints ───────────────────────────────────────────────────────────
 
-function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	$story_id        = (int)    ($req->get_param('story_id')       ?? 0);
 	$title           = (string) ($req->get_param('title')          ?? '');
 	$description     = (string) ($req->get_param('description')    ?? '');
@@ -343,7 +343,7 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	$allowed_marker_types = ['ring', 'icon'];
 	if (! in_array($marker_type, $allowed_marker_types, true)) $marker_type = 'ring';
 
-	if ($map_id && (! get_post($map_id) || get_post_type($map_id) !== 'cns_map')) {
+	if ($map_id && (! get_post($map_id) || get_post_type($map_id) !== 'clouansp_map')) {
 		return new WP_Error('invalid_map', __('Map not found.', 'clouds-and-spaceships'), ['status' => 400]);
 	}
 
@@ -351,7 +351,7 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 		'post_title'   => sanitize_text_field($title),
 		'post_excerpt' => sanitize_textarea_field($description),
 		'post_status'  => $status,
-		'post_type'    => 'cns_story',
+		'post_type'    => 'clouansp_story',
 	];
 
 	$is_new = (! $story_id);
@@ -363,7 +363,7 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 		}
 	} else {
 		$story = get_post($story_id);
-		if (! $story || $story->post_type !== 'cns_story') {
+		if (! $story || $story->post_type !== 'clouansp_story') {
 			return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
 		}
 		$post_data['ID'] = $story_id;
@@ -373,24 +373,24 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 		}
 	}
 
-	update_post_meta($story_id, '_cns_story_map_id',             $map_id);
-	update_post_meta($story_id, '_cns_story_line_color',         cns_story_suite_sanitize_color($line_color, '#ffffff'));
-	update_post_meta($story_id, '_cns_story_line_width',         max(0.5, min(20.0, $line_width)));
-	update_post_meta($story_id, '_cns_story_line_style',         $line_style);
-	update_post_meta($story_id, '_cns_story_marker_color',          cns_story_suite_sanitize_color($marker_color, '#00aaff'));
-	update_post_meta($story_id, '_cns_story_marker_size',           max(0.0, min(30.0, $marker_size)));
-	update_post_meta($story_id, '_cns_story_marker_type',           $marker_type);
-	update_post_meta($story_id, '_cns_story_marker_icon_id',        $marker_icon_id);
-	update_post_meta($story_id, '_cns_story_marker_icon_offset_x',  $marker_icon_off_x);
-	update_post_meta($story_id, '_cns_story_marker_icon_offset_y',  $marker_icon_off_y);
-	update_post_meta($story_id, '_cns_story_show_areas',            $show_areas   ? 1 : 0);
-	update_post_meta($story_id, '_cns_story_show_objects',          $show_objects ? 1 : 0);
-	update_post_meta($story_id, '_cns_story_show_labels',           $show_labels  ? 1 : 0);
-	update_post_meta($story_id, '_cns_story_disable_map_click',     $disable_map_click ? 1 : 0);
-	update_post_meta($story_id, '_cns_story_hide_window',           $hide_window       ? 1 : 0);
+	update_post_meta($story_id, '_clouansp_story_map_id',             $map_id);
+	update_post_meta($story_id, '_clouansp_story_line_color',         clouansp_story_suite_sanitize_color($line_color, '#ffffff'));
+	update_post_meta($story_id, '_clouansp_story_line_width',         max(0.5, min(20.0, $line_width)));
+	update_post_meta($story_id, '_clouansp_story_line_style',         $line_style);
+	update_post_meta($story_id, '_clouansp_story_marker_color',          clouansp_story_suite_sanitize_color($marker_color, '#00aaff'));
+	update_post_meta($story_id, '_clouansp_story_marker_size',           max(0.0, min(30.0, $marker_size)));
+	update_post_meta($story_id, '_clouansp_story_marker_type',           $marker_type);
+	update_post_meta($story_id, '_clouansp_story_marker_icon_id',        $marker_icon_id);
+	update_post_meta($story_id, '_clouansp_story_marker_icon_offset_x',  $marker_icon_off_x);
+	update_post_meta($story_id, '_clouansp_story_marker_icon_offset_y',  $marker_icon_off_y);
+	update_post_meta($story_id, '_clouansp_story_show_areas',            $show_areas   ? 1 : 0);
+	update_post_meta($story_id, '_clouansp_story_show_objects',          $show_objects ? 1 : 0);
+	update_post_meta($story_id, '_clouansp_story_show_labels',           $show_labels  ? 1 : 0);
+	update_post_meta($story_id, '_clouansp_story_disable_map_click',     $disable_map_click ? 1 : 0);
+	update_post_meta($story_id, '_clouansp_story_hide_window',           $hide_window       ? 1 : 0);
 
 	if ($start_node !== null) {
-		update_post_meta($story_id, '_cns_story_start_node_id', (int) $start_node);
+		update_post_meta($story_id, '_clouansp_story_start_node_id', (int) $start_node);
 	}
 
 	if ($thumbnail_id) {
@@ -400,7 +400,7 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	}
 
 	$editor_url = add_query_arg(
-		['page' => CNS_STORY_PAGE_EDITOR, 'story_id' => $story_id],
+		['page' => CLOUANSP_STORY_PAGE_EDITOR, 'story_id' => $story_id],
 		admin_url('admin.php')
 	);
 
@@ -418,71 +418,71 @@ function cns_story_suite_api_save_story(WP_REST_Request $req): WP_REST_Response|
 	], 200);
 }
 
-function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$story_id = (int) $req['id'];
 	$story    = get_post($story_id);
 
-	if (! $story || $story->post_type !== 'cns_story') {
+	if (! $story || $story->post_type !== 'clouansp_story') {
 		return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
-	$map_id             = (int)    get_post_meta($story_id, '_cns_story_map_id', true);
-	$line_color         = (string) (get_post_meta($story_id, '_cns_story_line_color', true)         ?: '#ffffff');
-	$line_width         = (float)  (get_post_meta($story_id, '_cns_story_line_width', true)         ?: 3.0);
-	$line_style         = (string) (get_post_meta($story_id, '_cns_story_line_style', true)         ?: 'solid');
-	$start_node         = (int)    get_post_meta($story_id, '_cns_story_start_node_id', true);
+	$map_id             = (int)    get_post_meta($story_id, '_clouansp_story_map_id', true);
+	$line_color         = (string) (get_post_meta($story_id, '_clouansp_story_line_color', true)         ?: '#ffffff');
+	$line_width         = (float)  (get_post_meta($story_id, '_clouansp_story_line_width', true)         ?: 3.0);
+	$line_style         = (string) (get_post_meta($story_id, '_clouansp_story_line_style', true)         ?: 'solid');
+	$start_node         = (int)    get_post_meta($story_id, '_clouansp_story_start_node_id', true);
 	// Unset meta reads as '', which means "on" — only an explicit '0' hides
 	// a layer.
-	$show_areas         = cns_story_suite_layer_visible($story_id, '_cns_story_show_areas');
-	$show_objects       = cns_story_suite_layer_visible($story_id, '_cns_story_show_objects');
-	$show_labels        = cns_story_suite_layer_visible($story_id, '_cns_story_show_labels');
+	$show_areas         = clouansp_story_suite_layer_visible($story_id, '_clouansp_story_show_areas');
+	$show_objects       = clouansp_story_suite_layer_visible($story_id, '_clouansp_story_show_objects');
+	$show_labels        = clouansp_story_suite_layer_visible($story_id, '_clouansp_story_show_labels');
 	// These two default off, so a plain truthiness check is right here — the
 	// layer_visible() helper above defaults the other way on purpose.
-	$disable_map_click  = (bool) get_post_meta($story_id, '_cns_story_disable_map_click', true);
-	$hide_window        = (bool) get_post_meta($story_id, '_cns_story_hide_window', true);
-	$marker_color      = (string) (get_post_meta($story_id, '_cns_story_marker_color', true)          ?: '#00aaff');
-	$marker_size       = (float)  (get_post_meta($story_id, '_cns_story_marker_size', true)           ?: 5.0);
-	$marker_type       = (string) (get_post_meta($story_id, '_cns_story_marker_type', true)           ?: 'ring');
-	$marker_icon_id_v  = (int)    get_post_meta($story_id, '_cns_story_marker_icon_id', true);
+	$disable_map_click  = (bool) get_post_meta($story_id, '_clouansp_story_disable_map_click', true);
+	$hide_window        = (bool) get_post_meta($story_id, '_clouansp_story_hide_window', true);
+	$marker_color      = (string) (get_post_meta($story_id, '_clouansp_story_marker_color', true)          ?: '#00aaff');
+	$marker_size       = (float)  (get_post_meta($story_id, '_clouansp_story_marker_size', true)           ?: 5.0);
+	$marker_type       = (string) (get_post_meta($story_id, '_clouansp_story_marker_type', true)           ?: 'ring');
+	$marker_icon_id_v  = (int)    get_post_meta($story_id, '_clouansp_story_marker_icon_id', true);
 	$marker_icon_url   = $marker_icon_id_v ? (wp_get_attachment_url($marker_icon_id_v) ?: '') : '';
-	$marker_off_x_raw  = get_post_meta($story_id, '_cns_story_marker_icon_offset_x', true);
-	$marker_off_y_raw  = get_post_meta($story_id, '_cns_story_marker_icon_offset_y', true);
+	$marker_off_x_raw  = get_post_meta($story_id, '_clouansp_story_marker_icon_offset_x', true);
+	$marker_off_y_raw  = get_post_meta($story_id, '_clouansp_story_marker_icon_offset_y', true);
 	$marker_icon_off_x = $marker_off_x_raw !== '' && $marker_off_x_raw !== false ? (float) $marker_off_x_raw : 0.0;
 	$marker_icon_off_y = $marker_off_y_raw !== '' && $marker_off_y_raw !== false ? (float) $marker_off_y_raw : -30.0;
 
 	$raw_nodes = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT * FROM {$wpdb->prefix}cns_story_nodes WHERE story_id = %d ORDER BY created_at ASC, id ASC",
+			"SELECT * FROM {$wpdb->prefix}clouansp_story_nodes WHERE story_id = %d ORDER BY created_at ASC, id ASC",
 			$story_id
 		),
 		ARRAY_A
 	) ?: [];
 
-	cns_story_suite_prime_node_caches($raw_nodes);
-	$nodes = array_map('cns_story_suite_format_node', $raw_nodes);
+	clouansp_story_suite_prime_node_caches($raw_nodes);
+	$nodes = array_map('clouansp_story_suite_format_node', $raw_nodes);
 
 	$raw_edges = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT * FROM {$wpdb->prefix}cns_story_edges WHERE story_id = %d ORDER BY sort_order ASC, id ASC",
+			"SELECT * FROM {$wpdb->prefix}clouansp_story_edges WHERE story_id = %d ORDER BY sort_order ASC, id ASC",
 			$story_id
 		),
 		ARRAY_A
 	) ?: [];
 
-	$edges = array_map('cns_story_suite_format_edge', $raw_edges);
+	$edges = array_map('clouansp_story_suite_format_edge', $raw_edges);
 
-	$map_data = $map_id ? cns_story_suite_get_map_render_data($map_id) : null;
+	$map_data = $map_id ? clouansp_story_suite_get_map_render_data($map_id) : null;
 
 	$raw_paths = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT * FROM {$wpdb->prefix}cns_story_paths WHERE story_id = %d ORDER BY sort_order ASC, id ASC",
+			"SELECT * FROM {$wpdb->prefix}clouansp_story_paths WHERE story_id = %d ORDER BY sort_order ASC, id ASC",
 			$story_id
 		),
 		ARRAY_A
 	) ?: [];
-	$paths = array_map('cns_story_suite_format_path', $raw_paths);
+	$paths = array_map('clouansp_story_suite_format_path', $raw_paths);
 
 	$view_url = in_array($story->post_status, ['publish', 'private'], true)
 		? (string) (get_permalink($story_id) ?: '')
@@ -528,18 +528,18 @@ function cns_story_suite_api_get_story_data(WP_REST_Request $req): WP_REST_Respo
 	], 200);
 }
 
-function cns_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Response {
+function clouansp_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Response {
 	$map_id  = (int) $req['id'];
 	// Reverse lookup of the stories built on one map: a single-clause query on
 	// an indexed meta_key, admin-only, and bounded in practice by how many
 	// stories a map has. Only the ID, title and status are read below.
 	$stories = get_posts([
-		'post_type'      => 'cns_story',
+		'post_type'      => 'clouansp_story',
 		'posts_per_page' => -1,
 		'post_status'    => ['publish', 'draft', 'private'],
 		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 		'meta_query'     => [
-			['key' => '_cns_story_map_id', 'value' => $map_id, 'type' => 'NUMERIC'],
+			['key' => '_clouansp_story_map_id', 'value' => $map_id, 'type' => 'NUMERIC'],
 		],
 		'no_found_rows'          => true,
 		'update_post_meta_cache' => false,
@@ -557,7 +557,7 @@ function cns_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Resp
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-				"SELECT story_id, COUNT(*) AS n FROM {$wpdb->prefix}cns_story_nodes WHERE story_id IN ($placeholders) GROUP BY story_id",
+				"SELECT story_id, COUNT(*) AS n FROM {$wpdb->prefix}clouansp_story_nodes WHERE story_id IN ($placeholders) GROUP BY story_id",
 				...$story_ids
 			),
 			ARRAY_A
@@ -574,7 +574,7 @@ function cns_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Resp
 			'status'     => $s->post_status,
 			'nodeCount'  => $node_counts[$s->ID] ?? 0,
 			'editUrl'    => add_query_arg(
-				['page' => CNS_STORY_PAGE_EDITOR, 'story_id' => $s->ID],
+				['page' => CLOUANSP_STORY_PAGE_EDITOR, 'story_id' => $s->ID],
 				admin_url('admin.php')
 			),
 		];
@@ -585,12 +585,12 @@ function cns_story_suite_api_get_map_stories(WP_REST_Request $req): WP_REST_Resp
 
 // ── Node endpoints ────────────────────────────────────────────────────────────
 
-function cns_story_suite_api_create_node(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_create_node(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$story_id = (int) $req['id'];
 	$story    = get_post($story_id);
-	if (! $story || $story->post_type !== 'cns_story') {
+	if (! $story || $story->post_type !== 'clouansp_story') {
 		return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
@@ -625,7 +625,7 @@ function cns_story_suite_api_create_node(WP_REST_Request $req): WP_REST_Response
 	if (! in_array($node_marker_type, $allowed_marker_types, true)) $node_marker_type = 'inherit';
 
 	$wpdb->insert(
-		$wpdb->prefix . 'cns_story_nodes',
+		$wpdb->prefix . 'clouansp_story_nodes',
 		[
 			'story_id'             => $story_id,
 			'path_id'              => $path_id ?: null,
@@ -636,15 +636,15 @@ function cns_story_suite_api_create_node(WP_REST_Request $req): WP_REST_Response
 			'y'                    => max(0.0, min(1.0, $y)),
 			'icon_type'            => $icon_type,
 			'icon_id'              => $icon_id ?: null,
-			'icon_color'           => cns_story_suite_sanitize_color($icon_color, '#ffffff'),
+			'icon_color'           => clouansp_story_suite_sanitize_color($icon_color, '#ffffff'),
 			'icon_size'            => max(0.25, min(4.0, $icon_size)),
-			'icon_border_color'    => cns_story_suite_sanitize_color($icon_border_color, '#000000'),
+			'icon_border_color'    => clouansp_story_suite_sanitize_color($icon_border_color, '#000000'),
 			'icon_border_width'    => max(0.0, min(20.0, $icon_border_width)),
-			'icon_bg_color'        => cns_story_suite_sanitize_color($icon_bg_color, '#ffffff'),
+			'icon_bg_color'        => clouansp_story_suite_sanitize_color($icon_bg_color, '#ffffff'),
 			'icon_bg_shape'        => $icon_bg_shape,
 			'marker_type'          => $node_marker_type,
 			'marker_icon_id'       => $node_marker_icon ?: null,
-			'marker_color'         => cns_story_suite_sanitize_color($node_marker_color, null),
+			'marker_color'         => clouansp_story_suite_sanitize_color($node_marker_color, null),
 			'marker_size'          => ($node_marker_size !== null)  ? max(0.0, min(30.0, (float) $node_marker_size)) : null,
 			'marker_icon_offset_x' => ($node_off_x !== null) ? (float) $node_off_x : null,
 			'marker_icon_offset_y' => ($node_off_y !== null) ? (float) $node_off_y : null,
@@ -658,19 +658,19 @@ function cns_story_suite_api_create_node(WP_REST_Request $req): WP_REST_Response
 
 	$node_id = (int) $wpdb->insert_id;
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_nodes WHERE id = %d", $node_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_nodes WHERE id = %d", $node_id),
 		ARRAY_A
 	);
 
-	return new WP_REST_Response(cns_story_suite_format_node($row), 201);
+	return new WP_REST_Response(clouansp_story_suite_format_node($row), 201);
 }
 
-function cns_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$node_id = (int) $req['id'];
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_nodes WHERE id = %d", $node_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_nodes WHERE id = %d", $node_id),
 		ARRAY_A
 	);
 
@@ -699,7 +699,7 @@ function cns_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response
 		$formats[]          = '%d';
 	}
 	if (($v = $req->get_param('icon_color')) !== null) {
-		$updates['icon_color'] = cns_story_suite_sanitize_color($v, '#ffffff');
+		$updates['icon_color'] = clouansp_story_suite_sanitize_color($v, '#ffffff');
 		$formats[]             = '%s';
 	}
 	if (($v = $req->get_param('icon_size')) !== null) {
@@ -721,7 +721,7 @@ function cns_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response
 		$formats[]                   = '%s';
 	}
 	if (($v = $req->get_param('icon_border_color')) !== null) {
-		$updates['icon_border_color'] = cns_story_suite_sanitize_color($v, '#000000');
+		$updates['icon_border_color'] = clouansp_story_suite_sanitize_color($v, '#000000');
 		$formats[] = '%s';
 	}
 	if (($v = $req->get_param('icon_border_width')) !== null) {
@@ -729,7 +729,7 @@ function cns_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response
 		$formats[] = '%f';
 	}
 	if (($v = $req->get_param('icon_bg_color')) !== null) {
-		$updates['icon_bg_color'] = cns_story_suite_sanitize_color($v, '#ffffff');
+		$updates['icon_bg_color'] = clouansp_story_suite_sanitize_color($v, '#ffffff');
 		$formats[] = '%s';
 	}
 	if (($v = $req->get_param('icon_bg_shape')) !== null) {
@@ -753,7 +753,7 @@ function cns_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response
 	// marker_color: explicitly null = clear override; string = set override.
 	if ($req->has_param('marker_color')) {
 		$v = $req->get_param('marker_color');
-		$updates['marker_color'] = cns_story_suite_sanitize_color($v, null);
+		$updates['marker_color'] = clouansp_story_suite_sanitize_color($v, null);
 		$formats[] = '%s';
 	}
 	if ($req->has_param('marker_size')) {
@@ -773,23 +773,23 @@ function cns_story_suite_api_update_node(WP_REST_Request $req): WP_REST_Response
 	}
 
 	if ($updates) {
-		$wpdb->update($wpdb->prefix . 'cns_story_nodes', $updates, ['id' => $node_id], $formats, ['%d']);
+		$wpdb->update($wpdb->prefix . 'clouansp_story_nodes', $updates, ['id' => $node_id], $formats, ['%d']);
 	}
 
 	$updated = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_nodes WHERE id = %d", $node_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_nodes WHERE id = %d", $node_id),
 		ARRAY_A
 	);
 
-	return new WP_REST_Response(cns_story_suite_format_node($updated), 200);
+	return new WP_REST_Response(clouansp_story_suite_format_node($updated), 200);
 }
 
-function cns_story_suite_api_delete_node(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_delete_node(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$node_id = (int) $req['id'];
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}cns_story_nodes WHERE id = %d", $node_id)
+		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}clouansp_story_nodes WHERE id = %d", $node_id)
 	);
 
 	if (! $row) {
@@ -800,12 +800,12 @@ function cns_story_suite_api_delete_node(WP_REST_Request $req): WP_REST_Response
 	$wpdb->query('START TRANSACTION');
 	$wpdb->query(
 		$wpdb->prepare(
-			"DELETE FROM {$wpdb->prefix}cns_story_edges WHERE from_node_id = %d OR to_node_id = %d",
+			"DELETE FROM {$wpdb->prefix}clouansp_story_edges WHERE from_node_id = %d OR to_node_id = %d",
 			$node_id,
 			$node_id
 		)
 	);
-	$deleted = $wpdb->delete($wpdb->prefix . 'cns_story_nodes', ['id' => $node_id], ['%d']);
+	$deleted = $wpdb->delete($wpdb->prefix . 'clouansp_story_nodes', ['id' => $node_id], ['%d']);
 	if ($deleted === false) {
 		$wpdb->query('ROLLBACK');
 	} else {
@@ -821,7 +821,7 @@ function cns_story_suite_api_delete_node(WP_REST_Request $req): WP_REST_Response
 
 // ── Edge endpoints ────────────────────────────────────────────────────────────
 
-function cns_story_suite_api_create_edge(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_create_edge(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$story_id    = (int) ($req->get_param('story_id')    ?? 0);
@@ -840,7 +840,7 @@ function cns_story_suite_api_create_edge(WP_REST_Request $req): WP_REST_Response
 	// Check both nodes belong to this story.
 	$nodes = $wpdb->get_col(
 		$wpdb->prepare(
-			"SELECT id FROM {$wpdb->prefix}cns_story_nodes WHERE story_id = %d AND id IN (%d, %d)",
+			"SELECT id FROM {$wpdb->prefix}clouansp_story_nodes WHERE story_id = %d AND id IN (%d, %d)",
 			$story_id, $from_node, $to_node
 		)
 	);
@@ -849,7 +849,7 @@ function cns_story_suite_api_create_edge(WP_REST_Request $req): WP_REST_Response
 	}
 
 	$inserted = $wpdb->insert(
-		$wpdb->prefix . 'cns_story_edges',
+		$wpdb->prefix . 'clouansp_story_edges',
 		[
 			'story_id'    => $story_id,
 			'from_node_id' => $from_node,
@@ -863,29 +863,29 @@ function cns_story_suite_api_create_edge(WP_REST_Request $req): WP_REST_Response
 		// Likely a duplicate — return the existing edge.
 		$existing = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}cns_story_edges WHERE from_node_id = %d AND to_node_id = %d",
+				"SELECT * FROM {$wpdb->prefix}clouansp_story_edges WHERE from_node_id = %d AND to_node_id = %d",
 				$from_node, $to_node
 			),
 			ARRAY_A
 		);
-		return new WP_REST_Response(cns_story_suite_format_edge($existing), 200);
+		return new WP_REST_Response(clouansp_story_suite_format_edge($existing), 200);
 	}
 
 	$edge_id = (int) $wpdb->insert_id;
 	$edge    = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_edges WHERE id = %d", $edge_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_edges WHERE id = %d", $edge_id),
 		ARRAY_A
 	);
 
-	return new WP_REST_Response(cns_story_suite_format_edge($edge), 201);
+	return new WP_REST_Response(clouansp_story_suite_format_edge($edge), 201);
 }
 
-function cns_story_suite_api_update_edge(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_update_edge(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$edge_id = (int) $req['id'];
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_edges WHERE id = %d", $edge_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_edges WHERE id = %d", $edge_id),
 		ARRAY_A
 	);
 
@@ -908,7 +908,7 @@ function cns_story_suite_api_update_edge(WP_REST_Request $req): WP_REST_Response
 		$node_ids = array_unique([$new_from, $new_to]);
 		$found    = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT id FROM {$wpdb->prefix}cns_story_nodes WHERE story_id = %d AND id IN (%d, %d)",
+				"SELECT id FROM {$wpdb->prefix}clouansp_story_nodes WHERE story_id = %d AND id IN (%d, %d)",
 				(int) $row['story_id'], $new_from, $new_to
 			)
 		);
@@ -918,7 +918,7 @@ function cns_story_suite_api_update_edge(WP_REST_Request $req): WP_REST_Response
 
 		$duplicate = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT id FROM {$wpdb->prefix}cns_story_edges WHERE from_node_id = %d AND to_node_id = %d AND id != %d",
+				"SELECT id FROM {$wpdb->prefix}clouansp_story_edges WHERE from_node_id = %d AND to_node_id = %d AND id != %d",
 				$new_from, $new_to, $edge_id
 			)
 		);
@@ -938,7 +938,7 @@ function cns_story_suite_api_update_edge(WP_REST_Request $req): WP_REST_Response
 	}
 	if ($req->has_param('line_color')) {
 		$v = $req->get_param('line_color');
-		$updates['line_color'] = cns_story_suite_sanitize_color($v, null);
+		$updates['line_color'] = clouansp_story_suite_sanitize_color($v, null);
 		$formats[] = '%s';
 	}
 	if ($req->has_param('line_width')) {
@@ -955,42 +955,42 @@ function cns_story_suite_api_update_edge(WP_REST_Request $req): WP_REST_Response
 	}
 
 	if ($updates) {
-		$wpdb->update($wpdb->prefix . 'cns_story_edges', $updates, ['id' => $edge_id], $formats, ['%d']);
+		$wpdb->update($wpdb->prefix . 'clouansp_story_edges', $updates, ['id' => $edge_id], $formats, ['%d']);
 	}
 
 	$updated = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_edges WHERE id = %d", $edge_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_edges WHERE id = %d", $edge_id),
 		ARRAY_A
 	);
 
-	return new WP_REST_Response(cns_story_suite_format_edge($updated), 200);
+	return new WP_REST_Response(clouansp_story_suite_format_edge($updated), 200);
 }
 
-function cns_story_suite_api_delete_edge(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_delete_edge(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 
 	$edge_id = (int) $req['id'];
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}cns_story_edges WHERE id = %d", $edge_id)
+		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}clouansp_story_edges WHERE id = %d", $edge_id)
 	);
 
 	if (! $row) {
 		return new WP_Error('not_found', __('Edge not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
-	$wpdb->delete($wpdb->prefix . 'cns_story_edges', ['id' => $edge_id], ['%d']);
+	$wpdb->delete($wpdb->prefix . 'clouansp_story_edges', ['id' => $edge_id], ['%d']);
 
 	return new WP_REST_Response(['deleted' => true, 'id' => $edge_id], 200);
 }
 
 // ── Substory endpoints ────────────────────────────────────────────────────────
 
-function cns_story_suite_api_search_substories(WP_REST_Request $req): WP_REST_Response {
+function clouansp_story_suite_api_search_substories(WP_REST_Request $req): WP_REST_Response {
 	$search   = sanitize_text_field($req->get_param('search') ?? '');
 	$per_page = max(1, min(50, (int) ($req->get_param('per_page') ?? 20)));
 
 	$query_args = [
-		'post_type'      => 'cns_substory',
+		'post_type'      => 'clouansp_substory',
 		'posts_per_page' => $per_page,
 		'post_status'    => ['publish', 'draft', 'private'],
 		'orderby'        => 'title',
@@ -1017,13 +1017,13 @@ function cns_story_suite_api_search_substories(WP_REST_Request $req): WP_REST_Re
 	return new WP_REST_Response($result, 200);
 }
 
-function cns_story_suite_api_create_substory(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_create_substory(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	$title   = sanitize_text_field($req->get_param('title')   ?? '');
 	$content = wp_kses_post($req->get_param('content')        ?? '');
 	$excerpt = sanitize_textarea_field($req->get_param('excerpt') ?? '');
 
 	$post_id = wp_insert_post([
-		'post_type'    => 'cns_substory',
+		'post_type'    => 'clouansp_substory',
 		'post_title'   => $title,
 		'post_content' => $content,
 		'post_excerpt' => $excerpt,
@@ -1043,33 +1043,33 @@ function cns_story_suite_api_create_substory(WP_REST_Request $req): WP_REST_Resp
 
 // ── Path endpoints ────────────────────────────────────────────────────────────
 
-function cns_story_suite_api_get_paths(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_get_paths(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 	$story_id = (int) $req['id'];
 	$story    = get_post($story_id);
-	if (! $story || $story->post_type !== 'cns_story') {
+	if (! $story || $story->post_type !== 'clouansp_story') {
 		return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 	$rows = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT * FROM {$wpdb->prefix}cns_story_paths WHERE story_id = %d ORDER BY sort_order ASC, id ASC",
+			"SELECT * FROM {$wpdb->prefix}clouansp_story_paths WHERE story_id = %d ORDER BY sort_order ASC, id ASC",
 			$story_id
 		),
 		ARRAY_A
 	) ?: [];
-	return new WP_REST_Response(array_map('cns_story_suite_format_path', $rows), 200);
+	return new WP_REST_Response(array_map('clouansp_story_suite_format_path', $rows), 200);
 }
 
-function cns_story_suite_api_create_path(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_create_path(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 	$story_id = (int) $req['id'];
 	$story    = get_post($story_id);
-	if (! $story || $story->post_type !== 'cns_story') {
+	if (! $story || $story->post_type !== 'clouansp_story') {
 		return new WP_Error('not_found', __('Story not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 
 	$label    = sanitize_text_field($req->get_param('label') ?? '');
-	$m_color  = cns_story_suite_sanitize_color($req->get_param('marker_color'), '#00aaff');
+	$m_color  = clouansp_story_suite_sanitize_color($req->get_param('marker_color'), '#00aaff');
 	$m_size   = max(0.0, min(30.0, (float) ($req->get_param('marker_size') ?? 5.0)));
 	// 'inherit' (the default for a new path) defers the whole marker to the
 	// story's own settings, the same way a node defers to its path.
@@ -1083,7 +1083,7 @@ function cns_story_suite_api_create_path(WP_REST_Request $req): WP_REST_Response
 	if (! in_array($m_type, $allowed_types, true)) $m_type = 'ring';
 
 	$wpdb->insert(
-		$wpdb->prefix . 'cns_story_paths',
+		$wpdb->prefix . 'clouansp_story_paths',
 		[
 			'story_id'             => $story_id,
 			'label'                => $label,
@@ -1102,17 +1102,17 @@ function cns_story_suite_api_create_path(WP_REST_Request $req): WP_REST_Response
 	}
 
 	$row = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_paths WHERE id = %d", $wpdb->insert_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_paths WHERE id = %d", $wpdb->insert_id),
 		ARRAY_A
 	);
-	return new WP_REST_Response(cns_story_suite_format_path($row), 201);
+	return new WP_REST_Response(clouansp_story_suite_format_path($row), 201);
 }
 
-function cns_story_suite_api_update_path(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_update_path(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 	$path_id = (int) $req['id'];
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_paths WHERE id = %d", $path_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_paths WHERE id = %d", $path_id),
 		ARRAY_A
 	);
 	if (! $row) {
@@ -1127,7 +1127,7 @@ function cns_story_suite_api_update_path(WP_REST_Request $req): WP_REST_Response
 		$formats[] = '%s';
 	}
 	if (($v = $req->get_param('marker_color')) !== null) {
-		$updates['marker_color'] = cns_story_suite_sanitize_color($v, '#00aaff');
+		$updates['marker_color'] = clouansp_story_suite_sanitize_color($v, '#00aaff');
 		$formats[] = '%s';
 	}
 	if (($v = $req->get_param('marker_size')) !== null) {
@@ -1152,29 +1152,29 @@ function cns_story_suite_api_update_path(WP_REST_Request $req): WP_REST_Response
 	}
 
 	if ($updates) {
-		$wpdb->update($wpdb->prefix . 'cns_story_paths', $updates, ['id' => $path_id], $formats, ['%d']);
+		$wpdb->update($wpdb->prefix . 'clouansp_story_paths', $updates, ['id' => $path_id], $formats, ['%d']);
 	}
 
 	$updated = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_story_paths WHERE id = %d", $path_id),
+		$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_story_paths WHERE id = %d", $path_id),
 		ARRAY_A
 	);
-	return new WP_REST_Response(cns_story_suite_format_path($updated), 200);
+	return new WP_REST_Response(clouansp_story_suite_format_path($updated), 200);
 }
 
-function cns_story_suite_api_delete_path(WP_REST_Request $req): WP_REST_Response|WP_Error {
+function clouansp_story_suite_api_delete_path(WP_REST_Request $req): WP_REST_Response|WP_Error {
 	global $wpdb;
 	$path_id = (int) $req['id'];
 	$row     = $wpdb->get_row(
-		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}cns_story_paths WHERE id = %d", $path_id)
+		$wpdb->prepare("SELECT id FROM {$wpdb->prefix}clouansp_story_paths WHERE id = %d", $path_id)
 	);
 	if (! $row) {
 		return new WP_Error('not_found', __('Path not found.', 'clouds-and-spaceships'), ['status' => 404]);
 	}
 	// Clearing node references and deleting the path must land together.
 	$wpdb->query('START TRANSACTION');
-	$wpdb->update($wpdb->prefix . 'cns_story_nodes', ['path_id' => null], ['path_id' => $path_id], ['%d'], ['%d']);
-	$deleted = $wpdb->delete($wpdb->prefix . 'cns_story_paths', ['id' => $path_id], ['%d']);
+	$wpdb->update($wpdb->prefix . 'clouansp_story_nodes', ['path_id' => null], ['path_id' => $path_id], ['%d'], ['%d']);
+	$deleted = $wpdb->delete($wpdb->prefix . 'clouansp_story_paths', ['id' => $path_id], ['%d']);
 	if ($deleted === false) {
 		$wpdb->query('ROLLBACK');
 	} else {

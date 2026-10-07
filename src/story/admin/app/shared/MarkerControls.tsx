@@ -50,8 +50,8 @@ export default function MarkerControls<
 	onChange,
 }: Props< T > ) {
 	return (
-		<div className="cns-marker-controls cns-grid cns-grid__12">
-			<div className="cns-grid__group cns-grid__span-full">
+		<div className="clouansp-marker-controls clouansp-grid clouansp-grid__12">
+			<div className="clouansp-grid__group clouansp-grid__span-full">
 				<RadioControl
 					label={ __( 'Type', 'clouds-and-spaceships' ) }
 					selected={ markerType }
@@ -83,14 +83,14 @@ export default function MarkerControls<
 				/>
 			</div>
 
-			<div className="cns-grid__group">
+			<div className="clouansp-grid__group">
 				<ColorField
 					label={ __( 'Color', 'clouds-and-spaceships' ) }
 					value={ markerColor }
 					onChange={ ( v ) => onChange( { markerColor: v } ) }
 				/>
 			</div>
-			<div className="cns-grid__group">
+			<div className="clouansp-grid__group">
 				<RangeControl
 					label={
 						markerType === 'ring'
@@ -108,15 +108,15 @@ export default function MarkerControls<
 
 			{ markerType === 'icon' && (
 				<>
-					<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<BaseControl
-							id="cns-marker-icon"
+							id="clouansp-marker-icon"
 							label={ __(
 								'Icon image',
 								'clouds-and-spaceships'
 							) }
 						>
-							<div className="cns-actions-row">
+							<div className="clouansp-actions-row">
 								{ markerIconUrl && (
 									<img
 										src={ markerIconUrl }
@@ -176,15 +176,15 @@ export default function MarkerControls<
 						</BaseControl>
 					</div>
 
-					<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<BaseControl
-							id="cns-marker-presets"
+							id="clouansp-marker-presets"
 							label={ __(
 								'Position preset',
 								'clouds-and-spaceships'
 							) }
 						>
-							<div className="cns-actions-row">
+							<div className="clouansp-actions-row">
 								{ PRESETS.map( ( preset ) => (
 									<Button
 										key={ preset.label }
@@ -208,7 +208,7 @@ export default function MarkerControls<
 						</BaseControl>
 					</div>
 
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Offset X (px)',
@@ -226,7 +226,7 @@ export default function MarkerControls<
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Offset Y (px)',

@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "cns-wiki-suite/infobox",
+  "name": "clouansp-wiki-suite/infobox",
   "version": "0.1.0",
   "title": "Infobox",
   "category": "widgets",
@@ -43,8 +43,8 @@
     }
   },
   "allowedBlocks": [
-    "cns-wiki-suite/infobox-group",
-    "cns-wiki-suite/infobox-row",
+    "clouansp-wiki-suite/infobox-group",
+    "clouansp-wiki-suite/infobox-row",
     "core/paragraph",
     "core/heading",
     "core/list",

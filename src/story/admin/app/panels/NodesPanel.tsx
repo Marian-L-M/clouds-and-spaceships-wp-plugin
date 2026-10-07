@@ -43,7 +43,7 @@ export default function NodesPanel( {
 	const pathMap = new Map( paths.map( ( p ) => [ p.id, p ] ) );
 	if ( ! nodes.length ) {
 		return (
-			<div className="cns-panel">
+			<div className="clouansp-panel">
 				<p>No nodes yet.</p>
 			</div>
 		);
@@ -75,7 +75,7 @@ export default function NodesPanel( {
 			gap={ 2 }
 			direction="column"
 			align="center"
-			className="cns-panel cns-nodes-panel"
+			className="clouansp-panel clouansp-nodes-panel"
 		>
 			<FlexBlock style={ { width: '100%' } }>
 				<Flex gap={ 4 } align="center" justify="start">
@@ -146,7 +146,7 @@ export default function NodesPanel( {
 									{ /* Icon */ }
 									<td>
 										<span
-											className="cns-node-swatch"
+											className="clouansp-node-swatch"
 											style={ {
 												background:
 													node.iconType ===
@@ -178,7 +178,7 @@ export default function NodesPanel( {
 										</strong>
 										{ node.id === startNodeId && (
 											<span
-												className="cns-badge cns-badge--featured"
+												className="clouansp-badge clouansp-badge--featured"
 												style={ { marginLeft: 6 } }
 											>
 												Start
@@ -187,7 +187,7 @@ export default function NodesPanel( {
 										{ node.pathId &&
 											pathMap.has( node.pathId ) && (
 												<span
-													className="cns-badge"
+													className="clouansp-badge"
 													style={ {
 														marginLeft: 6,
 														background: pathMap.get(
@@ -251,7 +251,7 @@ export default function NodesPanel( {
 													justify="space-between"
 													gap={ 2 }
 													key={ edge.id }
-													className="cns-edge-row"
+													className="clouansp-edge-row"
 												>
 													<FlexItem>
 														→{ ' ' }
@@ -386,13 +386,13 @@ export default function NodesPanel( {
 										} ) }
 									</td>
 									{ /* Actions */ }
-									<td className="cns-row-actions">
+									<td className="clouansp-row-actions">
 										<Flex
 											direction="row"
 											align="center"
 											justify="end"
 											gap={ 0 }
-											className="cns-actions-row"
+											className="clouansp-actions-row"
 										>
 											{ node.id !== startNodeId && (
 												<Button

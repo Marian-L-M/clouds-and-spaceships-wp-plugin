@@ -4,7 +4,7 @@
 
 $auto-fit: repeat(auto-fill, minmax(200px, 1fr));
 
-.cns-glossary-index {
+.clouansp-glossary-index {
 
 	&__section {
 		margin-bottom: 2rem;
@@ -14,8 +14,8 @@ $auto-fit: repeat(auto-fill, minmax(200px, 1fr));
 		margin-bottom: 0.5rem;
 		padding-bottom: 0.25rem;
 		border-bottom: 1px solid currentcolor;
-		font-size: var(--cns-glossary-title-size, inherit);
-		color: var(--cns-glossary-title-color, inherit);
+		font-size: var(--clouansp-glossary-title-size, inherit);
+		color: var(--clouansp-glossary-title-color, inherit);
 	}
 
 	&__list {
@@ -23,24 +23,24 @@ $auto-fit: repeat(auto-fill, minmax(200px, 1fr));
 		padding: 0;
 		list-style: none;
 		display: grid;
-		grid-template-columns: var(--cns-glossary-columns, #{$auto-fit});
+		grid-template-columns: var(--clouansp-glossary-columns, #{$auto-fit});
 		gap: 0.25rem 1.5rem;
 
 		// A column count chosen for desktop cramps a phone, so an explicit
 		// count collapses to one. Unset, this is the same auto-fitting value
 		// as above and nothing changes.
 		@media (max-width: 600px) {
-			grid-template-columns: var(--cns-glossary-columns-mobile, #{$auto-fit});
+			grid-template-columns: var(--clouansp-glossary-columns-mobile, #{$auto-fit});
 		}
 	}
 
 	&__item {
-		font-size: var(--cns-glossary-item-size, inherit);
+		font-size: var(--clouansp-glossary-item-size, inherit);
 	}
 
 	&__item a {
 		text-decoration: none;
-		color: var(--cns-glossary-item-color, inherit);
+		color: var(--clouansp-glossary-item-color, inherit);
 
 		&:hover,
 		&:focus-visible {

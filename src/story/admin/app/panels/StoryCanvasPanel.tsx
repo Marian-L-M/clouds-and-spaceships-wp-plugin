@@ -110,19 +110,19 @@ export default function StoryCanvasPanel( {
 			if ( e.key === 'Escape' ) setIsFullscreen( false );
 		}
 		document.addEventListener( 'keydown', onKeyDown );
-		document.body.classList.add( 'cns-story-canvas-fullscreen-open' );
+		document.body.classList.add( 'clouansp-story-canvas-fullscreen-open' );
 		return () => {
 			document.removeEventListener( 'keydown', onKeyDown );
 			document.body.classList.remove(
-				'cns-story-canvas-fullscreen-open'
+				'clouansp-story-canvas-fullscreen-open'
 			);
 		};
 	}, [ isFullscreen ] );
 
 	return (
-		<div className="cns-story-canvas-view">
-			<div className="cns-story-canvas-toolbar">
-				<div className="cns-story-canvas-toolbar__row">
+		<div className="clouansp-story-canvas-view">
+			<div className="clouansp-story-canvas-toolbar">
+				<div className="clouansp-story-canvas-toolbar__row">
 					{ ! isNew && (
 						<ToggleGroupControl
 							__next40pxDefaultSize
@@ -228,11 +228,11 @@ export default function StoryCanvasPanel( {
 				     none chosen every click just leaves the mode again. Say
 				     so instead of failing silently. */ }
 				{ canvasMode === 'connect' && edgeStartNodeId === null && (
-					<div className="cns-story-canvas-toolbar__row">
+					<div className="clouansp-story-canvas-toolbar__row">
 						<Notice
 							status="warning"
 							isDismissible={ false }
-							className="cns-story-canvas-toolbar__notice"
+							className="clouansp-story-canvas-toolbar__notice"
 						>
 							{ __(
 								'Please select a node before connecting',
@@ -242,10 +242,10 @@ export default function StoryCanvasPanel( {
 					</div>
 				) }
 
-				<div className="cns-story-canvas-toolbar__row cns-story-canvas-toolbar__line-style">
+				<div className="clouansp-story-canvas-toolbar__row clouansp-story-canvas-toolbar__line-style">
 					<Flex gap={ 2 } direction="row" justify="start" align="end">
 						<FlexItem>
-							<h3 className="cns-story-canvas-toolbar__label">
+							<h3 className="clouansp-story-canvas-toolbar__label">
 								{ __( 'Path Lines:', 'clouds-and-spaceships' ) }
 							</h3>
 						</FlexItem>
@@ -318,14 +318,14 @@ export default function StoryCanvasPanel( {
 				</div>
 
 				{ settings.mapId && (
-					<div className="cns-story-canvas-toolbar__row">
+					<div className="clouansp-story-canvas-toolbar__row">
 						<Flex
 							direction={ 'row' }
 							align="center"
 							justify="start"
 							gap={ 2 }
 						>
-							<span className="cns-story-canvas-toolbar__label">
+							<span className="clouansp-story-canvas-toolbar__label">
 								{ __( 'Map layers:', 'clouds-and-spaceships' ) }
 							</span>
 							<Flex direction={ 'row' } justify="start" gap={ 2 }>
@@ -361,16 +361,16 @@ export default function StoryCanvasPanel( {
 				) }
 			</div>
 
-			<div className="cns-story-canvas-layout">
-				<div className="cns-story-canvas-main">
+			<div className="clouansp-story-canvas-layout">
+				<div className="clouansp-story-canvas-main">
 					<div
 						className={
-							'cns-story-canvas-wrap' +
+							'clouansp-story-canvas-wrap' +
 							( isFullscreen ? ' is-fullscreen' : '' )
 						}
 					>
 						<Button
-							className="cns-story-canvas-fs"
+							className="clouansp-story-canvas-fs"
 							variant="secondary"
 							icon={ isFullscreen ? close : fullscreenIcon }
 							label={
@@ -418,7 +418,7 @@ export default function StoryCanvasPanel( {
 					</div>
 				</div>
 
-				<div className="cns-story-window-panel">
+				<div className="clouansp-story-window-panel">
 					<CanvasNodeList
 						nodes={ nodes }
 						edges={ edges }

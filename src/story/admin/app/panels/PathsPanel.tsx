@@ -57,7 +57,7 @@ export default function PathsPanel( {
 	}
 
 	return (
-		<div className="cns-panel cns-paths-panel">
+		<div className="clouansp-panel clouansp-paths-panel">
 			<h2>{ __( 'Story Paths', 'clouds-and-spaceships' ) }</h2>
 			<p className="description">
 				{ __(
@@ -142,7 +142,7 @@ export default function PathsPanel( {
 									}
 								</td>
 								<td>
-									<div className="cns-actions-row">
+									<div className="clouansp-actions-row">
 										<Flex
 											direction="row"
 											align="center"
