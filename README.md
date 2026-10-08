@@ -32,7 +32,7 @@ includes/
   settings-page.php            the tabbed CNS settings screen (clouansp_admin_tabs filter)
   archive.php                  archive on/off + slug + rewrite flush, all suites
   cache.php                    render-row cache for the map and story tables
-  capabilities.php             manage_maps / manage_stories
+  capabilities.php             clouansp_manage_maps / clouansp_manage_stories
   map-template.php             single-clouansp_map + single-clouansp_story block templates
   info/                        the Info tab
   wiki/                        settings, wiki CPT, glossary, the Wiki + Glossary tabs

@@ -29,5 +29,10 @@ node_modules/
 # dotenv environment variables file
 .env
 
-CHECKLIST.md
-REVIEW.md
+checklist.md
+Review.md
+
+tools/
+
+# macOS
+.DS_Store

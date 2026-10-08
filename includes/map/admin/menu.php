@@ -11,14 +11,14 @@ add_filter('clouansp_admin_tabs', function (array $tabs): array {
 	$tabs['maps'] = [
 		'menu_title' => __('Maps', 'clouds-and-spaceships'),
 		'title'      => __('Maps', 'clouds-and-spaceships'),
-		'capability' => 'manage_maps',
+		'capability' => 'clouansp_manage_maps',
 		'callback'   => 'clouansp_map_suite_render_overview',
 		'priority'   => 30,
 	];
 	$tabs['icons'] = [
 		'menu_title' => __('Icons', 'clouds-and-spaceships'),
 		'title'      => __('Icons', 'clouds-and-spaceships'),
-		'capability' => 'manage_maps',
+		'capability' => 'clouansp_manage_maps',
 		'callback'   => 'clouansp_map_suite_render_icons',
 		'priority'   => 31,
 	];
@@ -33,7 +33,7 @@ function clouansp_map_suite_register_menus(): void {
 		'clouansp-settings',
 		__('Map Editor', 'clouds-and-spaceships'),
 		__('Map Editor', 'clouds-and-spaceships'),
-		'manage_maps',
+		'clouansp_manage_maps',
 		CLOUANSP_MAP_PAGE_EDITOR,
 		'clouansp_map_suite_render_editor'
 	);
@@ -68,7 +68,120 @@ add_action('admin_init', function (): void {
 	}
 });
 
+/**
+ * Initial state for the map editor app, exposed as window.clouanspMapEditor by
+ * clouansp_map_suite_enqueue_admin_assets().
+ */
+function clouansp_map_suite_editor_data(): array {
+	// Read-only: picks which map to load. Nothing changes state, and every write
+	// goes through the REST API's permission callbacks.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$map_id    = isset($_GET['map_id']) ? (int) $_GET['map_id'] : 0;
+	$map       = $map_id ? get_post($map_id) : null;
+	$is_new    = (! $map || $map->post_type !== 'clouansp_map');
+	$is_master = $map_id ? (bool) get_post_meta($map_id, '_clouansp_map_is_master', true) : false;
 
+	$meta = $map_id ? [
+		'width'        => (int) (get_post_meta($map_id, '_clouansp_map_width', true) ?: 1000),
+		'aspect_ratio' => (float) (get_post_meta($map_id, '_clouansp_map_aspect_ratio', true) ?: 1.0),
+		'time'         => (int) get_post_meta($map_id, '_clouansp_map_time', true),
+		'image_id'     => (int) get_post_meta($map_id, '_clouansp_map_image_id', true),
+		'image_x'      => (float) get_post_meta($map_id, '_clouansp_map_image_x', true),
+		'image_y'      => (float) get_post_meta($map_id, '_clouansp_map_image_y', true),
+		'image_width'  => (float) (get_post_meta($map_id, '_clouansp_map_image_width', true) ?: 1.0),
+		'bg_type'      => get_post_meta($map_id, '_clouansp_map_bg_type', true) ?: 'color',
+		'bg_color'     => get_post_meta($map_id, '_clouansp_map_bg_color', true) ?: '#1a1a2e',
+		'bg_image_id'  => (int) get_post_meta($map_id, '_clouansp_map_bg_image_id', true),
+		'zoom_main'    => (string) get_post_meta($map_id, '_clouansp_map_zoom_main_color', true),
+		'zoom_accent'  => (string) get_post_meta($map_id, '_clouansp_map_zoom_accent_color', true),
+	] : [
+		'width' => 1000, 'aspect_ratio' => 1.0,
+		'time' => 0, 'image_id' => 0, 'image_x' => 0.0, 'image_y' => 0.0, 'image_width' => 1.0,
+		'bg_type' => 'color', 'bg_color' => '#1a1a2e', 'bg_image_id' => 0,
+		'zoom_main' => '', 'zoom_accent' => '',
+	];
+
+	$image_url     = $meta['image_id']    ? wp_get_attachment_image_url($meta['image_id'], 'large') : '';
+	$bg_image_url  = $meta['bg_image_id'] ? wp_get_attachment_image_url($meta['bg_image_id'], 'large') : '';
+	$thumbnail_id  = $map_id ? (int) get_post_thumbnail_id($map_id) : 0;
+	$thumbnail_url = $thumbnail_id ? (wp_get_attachment_image_url($thumbnail_id, 'medium') ?: '') : '';
+	$view_url      = (! $is_new && $map && in_array($map->post_status, ['publish', 'private'], true))
+		? get_permalink($map->ID)
+		: '';
+
+	// Hand-off to the stock post editor from the Description tab. Empty for unsaved
+	// maps and for users who may not edit the post, so the button can stay hidden.
+	$wp_edit_url = (! $is_new && $map && current_user_can('edit_post', $map->ID))
+		? (get_edit_post_link($map->ID, 'raw') ?: '')
+		: '';
+
+	// Parent maps — maps that include this map as a hierarchy child region.
+	// One prepared read against a plugin-owned custom table, for this admin
+	// screen only: no WordPress API covers it, and the editor must show current
+	// rows rather than a cached copy.
+	$parent_maps = [];
+	if ($map_id && ! $is_new) {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$parent_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT parent_map_id FROM {$wpdb->prefix}clouansp_map_hierarchy WHERE child_map_id = %d",
+				$map_id
+			),
+			ARRAY_A
+		);
+		foreach ($parent_rows as $row) {
+			$parent = get_post((int) $row['parent_map_id']);
+			if (! $parent || $parent->post_type !== 'clouansp_map') continue;
+			$image_id      = (int) get_post_meta($parent->ID, '_clouansp_map_image_id', true);
+			$parent_maps[] = [
+				'map_id'    => $parent->ID,
+				'title'     => $parent->post_title ?: __('(no title)', 'clouds-and-spaceships'),
+				'thumbnail' => $image_id ? (wp_get_attachment_image_url($image_id, 'thumbnail') ?: '') : '',
+				'url'       => clouansp_map_suite_editor_url($parent->ID),
+			];
+		}
+	}
+
+	return [
+		'storiesOverviewUrl' => add_query_arg(['page' => CLOUANSP_STORY_PAGE_SETTINGS], admin_url('admin.php')),
+		'mapId'              => $map_id,
+		'isNew'              => $is_new,
+		'status'             => $map ? $map->post_status : 'draft',
+		'title'              => $map ? $map->post_title : '',
+		'description'        => $map ? $map->post_content : '',
+		'width'              => (int) $meta['width'],
+		'aspectRatio'        => (float) $meta['aspect_ratio'],
+		'time'               => (int) $meta['time'],
+		'imageId'            => (int) $meta['image_id'],
+		'imageUrl'           => $image_url ?: '',
+		'imageX'             => (float) $meta['image_x'],
+		'imageY'             => (float) $meta['image_y'],
+		'imageWidth'         => (float) $meta['image_width'],
+		'isMaster'           => $is_master,
+		'bgType'             => $meta['bg_type'],
+		'bgColor'            => $meta['bg_color'],
+		'bgImageId'          => (int) $meta['bg_image_id'],
+		'bgImageUrl'         => $bg_image_url ?: '',
+		'thumbnailId'        => $thumbnail_id,
+		'thumbnailUrl'       => $thumbnail_url,
+		'overviewUrl'        => add_query_arg(['page' => CLOUANSP_MAP_PAGE_SETTINGS_MAPS], admin_url('admin.php')),
+		'viewUrl'            => $view_url,
+		'wpEditUrl'          => $wp_edit_url,
+		'zoomMainColor'      => $meta['zoom_main'],
+		'zoomAccentColor'    => $meta['zoom_accent'],
+		// Global defaults from the Maps settings tab, shown when the map has no
+		// override of its own so the editor previews what a visitor would see.
+		'zoomMainDefault'    => (string) get_option('clouansp_map_suite_zoom_main_color', ''),
+		'zoomAccentDefault'  => (string) get_option('clouansp_map_suite_zoom_accent_color', ''),
+		// Frontend layer visibility; unset meta means "on" (see
+		// clouansp_map_suite_layer_visible).
+		'showAreas'          => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_areas'),
+		'showObjects'        => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_objects'),
+		'showLabels'         => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_labels'),
+		'parentMaps'         => $parent_maps,
+	];
+}
 
 function clouansp_map_suite_enqueue_admin_assets(): void {
 	$screen = get_current_screen();
@@ -128,6 +241,11 @@ function clouansp_map_suite_enqueue_admin_assets(): void {
 	wp_enqueue_style('wp-components');
 
 	if ($page === CLOUANSP_MAP_PAGE_EDITOR) {
+		wp_add_inline_script(
+			'clouansp-map-admin',
+			'window.clouanspMapEditor = ' . wp_json_encode(clouansp_map_suite_editor_data()) . ';',
+			'before'
+		);
 		// Classic TinyMCE editor for the Description tab (wp.editor / wp.oldEditor).
 		wp_enqueue_editor();
 		// The editor's Stories tab is rendered by the story suite's panel bundle.

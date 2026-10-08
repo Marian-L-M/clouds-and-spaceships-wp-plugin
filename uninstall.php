@@ -6,7 +6,7 @@
  * Always removes:
  *  - Custom DB tables (clouansp_map_* and clouansp_story_*)
  *  - Plugin options and render-cache transients
- *  - The manage_maps / manage_stories capabilities from all roles
+ *  - The clouansp_manage_maps / clouansp_manage_stories capabilities from all roles
  *
  * Conditionally removes (each requires opt-in via its Danger Zone setting):
  *  - All maps

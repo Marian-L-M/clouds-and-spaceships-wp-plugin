@@ -10,7 +10,7 @@ add_filter('clouansp_admin_tabs', function (array $tabs): array {
 	$tabs['stories'] = [
 		'menu_title' => __('Stories', 'clouds-and-spaceships'),
 		'title'      => __('Stories', 'clouds-and-spaceships'),
-		'capability' => 'manage_stories',
+		'capability' => 'clouansp_manage_stories',
 		'callback'   => 'clouansp_story_suite_render_overview',
 		'priority'   => 40,
 	];
@@ -32,7 +32,7 @@ function clouansp_story_suite_register_menus(): void {
 		'clouansp-settings',
 		__('Story Editor', 'clouds-and-spaceships'),
 		__('Story Editor', 'clouds-and-spaceships'),
-		'manage_stories',
+		'clouansp_manage_stories',
 		CLOUANSP_STORY_PAGE_EDITOR,
 		'clouansp_story_suite_render_editor'
 	);
@@ -56,6 +56,33 @@ function clouansp_story_suite_current_page(): string {
 }
 
 // ── Asset enqueuing ───────────────────────────────────────────────────────────
+
+/**
+ * Initial state for the story editor app, exposed as window.clouanspStoryEditor
+ * by clouansp_story_suite_enqueue_admin_assets().
+ */
+function clouansp_story_suite_editor_data(): array {
+	// Read-only: picks which story to load. Nothing changes state, and every
+	// write goes through the REST API's permission callbacks.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$story_id = isset($_GET['story_id']) ? (int) $_GET['story_id'] : 0;
+	$story    = $story_id ? get_post($story_id) : null;
+	$is_new   = (! $story || $story->post_type !== 'clouansp_story');
+
+	$view_url = (! $is_new && $story && in_array($story->post_status, ['publish', 'private'], true))
+		? get_permalink($story->ID)
+		: '';
+
+	return [
+		'storyId'         => $story_id,
+		'isNew'           => $is_new,
+		'status'          => $story ? $story->post_status : 'draft',
+		'title'           => $story ? $story->post_title : '',
+		'overviewUrl'     => add_query_arg(['page' => CLOUANSP_STORY_PAGE_SETTINGS], admin_url('admin.php')),
+		'viewUrl'         => $view_url ?: '',
+		'substoryBaseUrl' => add_query_arg(['post_type' => 'clouansp_substory'], admin_url('edit.php')),
+	];
+}
 
 function clouansp_story_suite_enqueue_admin_assets(): void {
 	$page = clouansp_story_suite_current_page();
@@ -96,6 +123,12 @@ function clouansp_story_suite_enqueue_admin_assets(): void {
 		'editorUrl'     => add_query_arg(['page' => CLOUANSP_STORY_PAGE_EDITOR], admin_url('admin.php')),
 		'substoriesUrl' => admin_url('edit.php?post_type=clouansp_substory'),
 	]);
+
+	wp_add_inline_script(
+		'clouansp-story-admin',
+		'window.clouanspStoryEditor = ' . wp_json_encode(clouansp_story_suite_editor_data()) . ';',
+		'before'
+	);
 
 	wp_enqueue_media();
 	wp_enqueue_style('wp-color-picker');
@@ -150,7 +183,7 @@ add_action('admin_init', function (): void {
 		isset($_POST['clouansp_story_action']) &&
 		$_POST['clouansp_story_action'] === 'save_settings' &&
 		check_admin_referer('clouansp_story_save_settings') &&
-		current_user_can('manage_stories')
+		current_user_can('clouansp_manage_stories')
 	) {
 		update_option('clouansp_story_suite_delete_substories_on_uninstall', ! empty($_POST['delete_substories_on_uninstall']));
 		update_option('clouansp_story_suite_show_stories_menu',     ! empty($_POST['show_stories_menu']));
@@ -201,7 +234,7 @@ add_action('admin_init', function (): void {
 	}
 
 	$story = get_post($story_id);
-	if ($story && $story->post_type === 'clouansp_story' && current_user_can('manage_stories')) {
+	if ($story && $story->post_type === 'clouansp_story' && current_user_can('clouansp_manage_stories')) {
 		switch ($action) {
 			case 'delete':
 				wp_trash_post($story_id);

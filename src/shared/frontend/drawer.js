@@ -9,6 +9,8 @@
  * author's `display: flex/block` never fights the UA's `[hidden]` rule.
  */
 
+import { __ } from '@wordpress/i18n';
+
 const DRAWER_ID = 'clouansp-map-drawer';
 const BODY_OPEN_CLASS = 'clouansp-map-drawer-open';
 
@@ -65,7 +67,7 @@ function getOrCreateDrawer( onBodyClick ) {
 		'<div class="clouansp-map-drawer__backdrop"></div>' +
 		'<div class="clouansp-map-drawer__panel">' +
 			'<div class="clouansp-map-drawer__header">' +
-				'<button class="clouansp-map-drawer__close" aria-label="Close">&times;</button>' +
+				'<button class="clouansp-map-drawer__close" aria-label="' + escHtml( __( 'Close', 'clouds-and-spaceships' ) ) + '">&times;</button>' +
 			'</div>' +
 			'<div class="clouansp-map-drawer__body"></div>' +
 		'</div>';

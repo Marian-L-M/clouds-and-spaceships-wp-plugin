@@ -14,6 +14,7 @@ import {
 } from '../../shared/map-geometry';
 import { escHtml, showDrawer, closeDrawer, isDrawerOpen } from '../../shared/frontend/drawer';
 import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
+import { __ } from '@wordpress/i18n';
 
 (function () {
 	'use strict';
@@ -195,7 +196,7 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		infoboxes.forEach(function (ib) {
 			html += `<div class="clouansp-map-drawer__infobox">${ib}</div>`;
 		});
-		if (postUrl) html += `<a class="clouansp-map-drawer__link" href="${escHtml(encodeURI(postUrl))}">Read more &rarr;</a>`;
+		if (postUrl) html += `<a class="clouansp-map-drawer__link" href="${escHtml(encodeURI(postUrl))}">${escHtml(__('Read more', 'clouds-and-spaceships'))} &rarr;</a>`;
 
 		showDrawer(html, handleInfoboxToggle);
 		expandInfoboxes(document.querySelector('.clouansp-map-drawer__body'));
@@ -332,8 +333,8 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 		zoomOut.className = 'clouansp-map-zoom__btn';
 		zoomIn.textContent  = '+';
 		zoomOut.textContent = '−';
-		zoomIn.setAttribute('aria-label', 'Zoom map in');
-		zoomOut.setAttribute('aria-label', 'Zoom map out');
+		zoomIn.setAttribute('aria-label', __('Zoom map in', 'clouds-and-spaceships'));
+		zoomOut.setAttribute('aria-label', __('Zoom map out', 'clouds-and-spaceships'));
 		value.className = 'clouansp-map-zoom__value';
 		controls.appendChild(fsBtn);
 		controls.appendChild(zoomIn);
@@ -346,7 +347,7 @@ import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
 
 		function renderFsBtn() {
 			fsBtn.textContent = fullscreen ? '✕' : '⛶';
-			fsBtn.setAttribute('aria-label', fullscreen ? 'Exit fullscreen' : 'View map fullscreen');
+			fsBtn.setAttribute('aria-label', fullscreen ? __('Exit fullscreen', 'clouds-and-spaceships') : __('View map fullscreen', 'clouds-and-spaceships'));
 		}
 
 		function setFullscreen(on) {

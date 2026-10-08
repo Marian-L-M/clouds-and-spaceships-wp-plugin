@@ -180,14 +180,15 @@ function clouansp_admin_enqueue_shared_assets( string $hook ): void {
     wp_enqueue_script(
         'clouansp-admin-settings',
         CLOUANSP_URL . 'build/admin-settings/index.js',
-        $asset['dependencies'],
+        // jQuery for the inline helpers below, which ride on this handle.
+        array_merge( [ 'jquery' ], $asset['dependencies'] ),
         $asset['version'],
         true
     );
 
     wp_enqueue_media();
-    wp_add_inline_script( 'jquery', clouansp_admin_media_picker_js() );
-    wp_add_inline_script( 'jquery', clouansp_admin_color_clear_js() );
+    wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_media_picker_js() );
+    wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_color_clear_js() );
 }
 
 /**
@@ -214,9 +215,20 @@ function clouansp_admin_color_clear_js(): string {
 JS;
 }
 
+/**
+ * Media picker buttons. Each button passes its own translated labels as data
+ * attributes; the strings handed in as l10n are the fallbacks.
+ */
 function clouansp_admin_media_picker_js(): string {
-    return <<<'JS'
-(function ($) {
+    $l10n = [
+        'title'  => __( 'Select image', 'clouds-and-spaceships' ),
+        'button' => __( 'Use this image', 'clouds-and-spaceships' ),
+        'change' => __( 'Change image', 'clouds-and-spaceships' ),
+        'select' => __( 'Select image', 'clouds-and-spaceships' ),
+    ];
+
+    return sprintf( <<<'JS'
+(function ($, l10n) {
     $(function () {
         $('.clouansp-media-btn').on('click', function (e) {
             e.preventDefault();
@@ -225,8 +237,8 @@ function clouansp_admin_media_picker_js(): string {
             var imgId    = btn.data('preview');
             var removeId = btn.data('remove');
             var frame    = wp.media({
-                title:    btn.data('title') || 'Select Image',
-                button:   { text: 'Use this image' },
+                title:    btn.data('title') || l10n.title,
+                button:   { text: l10n.button },
                 multiple: false,
                 library:  { type: 'image' },
             });
@@ -235,7 +247,7 @@ function clouansp_admin_media_picker_js(): string {
                 $('#' + inputId).val(att.id);
                 $('#' + imgId).attr('src', att.url).show();
                 $('#' + removeId).show();
-                btn.text(btn.data('change-label') || 'Change image');
+                btn.text(btn.data('change-label') || l10n.change);
             });
             frame.open();
         });
@@ -249,9 +261,11 @@ function clouansp_admin_media_picker_js(): string {
             $('#' + inputId).val('');
             $('#' + imgId).attr('src', '').hide();
             btn.hide();
-            $('#' + pickerId).text($('#' + pickerId).data('select-label') || 'Select image');
+            $('#' + pickerId).text($('#' + pickerId).data('select-label') || l10n.select);
         });
     });
-})(jQuery);
-JS;
+})(jQuery, %s);
+JS,
+        wp_json_encode( $l10n )
+    );
 }

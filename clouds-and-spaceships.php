@@ -21,7 +21,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-define('CLOUANSP_VERSION', '0.1.0');
+define('CLOUANSP_VERSION', '0.2.0');
 define('CLOUANSP_DB_VERSION', '1.0.0');
 define('CLOUANSP_DIR', plugin_dir_path(__FILE__));
 define('CLOUANSP_URL', plugin_dir_url(__FILE__));

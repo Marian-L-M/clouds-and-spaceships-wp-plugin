@@ -33,7 +33,7 @@ if (! $map || $map->post_type !== 'clouansp_map') {
 if ($map->post_status === 'private' && ! current_user_can('read_private_posts')) {
 	return;
 }
-if (! in_array($map->post_status, ['publish', 'private'], true) && ! current_user_can('manage_maps')) {
+if (! in_array($map->post_status, ['publish', 'private'], true) && ! current_user_can('clouansp_manage_maps')) {
 	return;
 }
 
@@ -62,7 +62,7 @@ $visible_regions = array_values(array_filter(
 		if ($status === 'private') {
 			return current_user_can('read_private_posts');
 		}
-		return $status !== '' && current_user_can('manage_maps');
+		return $status !== '' && current_user_can('clouansp_manage_maps');
 	}
 ));
 

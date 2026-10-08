@@ -140,7 +140,7 @@ function clouansp_story_suite_register_routes(): void {
 }
 
 function clouansp_story_suite_api_can_manage(): bool {
-	return current_user_can('manage_stories');
+	return current_user_can('clouansp_manage_stories');
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

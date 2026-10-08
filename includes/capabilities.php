@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
  * Was one file per suite before the merge; the two lists differed only in the
  * capability name.
  */
-const CLOUANSP_CAPABILITIES = ['manage_maps', 'manage_stories'];
+const CLOUANSP_CAPABILITIES = ['clouansp_manage_maps', 'clouansp_manage_stories'];
 
 function clouansp_add_capabilities(): void {
 	$role = get_role('administrator');

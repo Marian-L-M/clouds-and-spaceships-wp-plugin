@@ -9,10 +9,12 @@
  * state without any wiring beyond the `onChange` repaint.
  */
 
+import { __ } from '@wordpress/i18n';
+
 const LAYERS = [
-	[ 'areas', 'Areas' ],
-	[ 'objects', 'Objects' ],
-	[ 'labels', 'Labels' ],
+	[ 'areas', __( 'Areas', 'clouds-and-spaceships' ) ],
+	[ 'objects', __( 'Objects', 'clouds-and-spaceships' ) ],
+	[ 'labels', __( 'Labels', 'clouds-and-spaceships' ) ],
 ];
 
 /**
@@ -35,7 +37,7 @@ export function setupLayerToggles( { container, className, present, layers, onCh
 	const box = document.createElement( 'div' );
 	box.className = className;
 	box.setAttribute( 'role', 'group' );
-	box.setAttribute( 'aria-label', 'Map layers' );
+	box.setAttribute( 'aria-label', __( 'Map layers', 'clouds-and-spaceships' ) );
 
 	LAYERS.forEach( function ( [ key, label ] ) {
 		if ( ! present[ key ] ) return;

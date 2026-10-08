@@ -14,7 +14,7 @@ defined('ABSPATH') || exit;
  * last core action (View/Preview).
  */
 function clouansp_map_suite_post_row_actions(array $actions, WP_Post $post): array {
-	if ($post->post_type !== 'clouansp_map' || ! current_user_can('manage_maps')) {
+	if ($post->post_type !== 'clouansp_map' || ! current_user_can('clouansp_manage_maps')) {
 		return $actions;
 	}
 
@@ -31,7 +31,9 @@ add_filter('post_row_actions', 'clouansp_map_suite_post_row_actions', 10, 2);
 /**
  * "Edit map element" button beside "Add New Map" on the single-post edit
  * screen. edit-form-advanced.php prints the heading and the Add New link with
- * no action hook in between, so the link is inserted client-side.
+ * no action hook in between, so the link is inserted client-side. The script
+ * has no file of its own: it is an inline script on a src-less handle, printed
+ * in the footer once the heading exists.
  */
 function clouansp_map_suite_post_screen_title_action(): void {
 	$screen = get_current_screen();
@@ -39,7 +41,7 @@ function clouansp_map_suite_post_screen_title_action(): void {
 		return;
 	}
 	// post-new.php has an auto-draft only — there is no map element to edit yet.
-	if ($screen->action === 'add' || ! current_user_can('manage_maps')) {
+	if ($screen->action === 'add' || ! current_user_can('clouansp_manage_maps')) {
 		return;
 	}
 
@@ -49,7 +51,9 @@ function clouansp_map_suite_post_screen_title_action(): void {
 		return;
 	}
 
-	wp_print_inline_script_tag(sprintf(
+	wp_register_script('clouansp-map-post-screen', false, [], CLOUANSP_VERSION, true);
+	wp_enqueue_script('clouansp-map-post-screen');
+	wp_add_inline_script('clouansp-map-post-screen', sprintf(
 		<<<'JS'
 		( function () {
 			var wrap = document.querySelector( '.wrap' );
@@ -69,4 +73,4 @@ function clouansp_map_suite_post_screen_title_action(): void {
 		wp_json_encode(__('Edit map element', 'clouds-and-spaceships'))
 	));
 }
-add_action('admin_print_footer_scripts', 'clouansp_map_suite_post_screen_title_action');
+add_action('admin_enqueue_scripts', 'clouansp_map_suite_post_screen_title_action');

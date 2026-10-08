@@ -43,7 +43,7 @@ if (! $story || $story->post_type !== 'clouansp_story') {
 if ($story->post_status === 'private' && ! current_user_can('read_private_posts')) {
 	return '';
 }
-if (! in_array($story->post_status, ['publish', 'private'], true) && ! current_user_can('manage_stories')) {
+if (! in_array($story->post_status, ['publish', 'private'], true) && ! current_user_can('clouansp_manage_stories')) {
 	return '';
 }
 
@@ -142,7 +142,7 @@ if ($map_id && function_exists('clouansp_story_suite_get_map_render_data')) {
 				if ($status === 'private') {
 					return current_user_can('read_private_posts');
 				}
-				return $status !== '' && current_user_can('manage_maps');
+				return $status !== '' && current_user_can('clouansp_manage_maps');
 			}
 		));
 	}

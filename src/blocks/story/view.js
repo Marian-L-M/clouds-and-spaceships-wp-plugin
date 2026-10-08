@@ -15,6 +15,7 @@ import {
 } from '../../shared/map-geometry';
 import { escHtml, showDrawer, closeDrawer, isDrawerOpen } from '../../shared/frontend/drawer';
 import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
+import { __ } from '@wordpress/i18n';
 
 // ── Image loading ─────────────────────────────────────────────────────────────
 
@@ -52,7 +53,7 @@ function showInfobox( item ) {
 	if ( imgUrl  ) html += '<img class="clouansp-map-drawer__image" src="' + encodeURI( imgUrl ) + '" alt="" />';
 	if ( title   ) html += '<h2 class="clouansp-map-drawer__title">' + escHtml( title ) + '</h2>';
 	if ( content ) html += '<div class="clouansp-map-drawer__content">' + content + '</div>';
-	if ( postUrl ) html += '<a class="clouansp-map-drawer__link" href="' + encodeURI( postUrl ) + '">View full post &rarr;</a>';
+	if ( postUrl ) html += '<a class="clouansp-map-drawer__link" href="' + encodeURI( postUrl ) + '">' + escHtml( __( 'View full post', 'clouds-and-spaceships' ) ) + ' &rarr;</a>';
 	showDrawer( html );
 }
 
@@ -79,7 +80,7 @@ function getOrCreateStoryDialog() {
 		dialog.innerHTML =
 			'<div class="clouansp-story-dialog__backdrop"></div>' +
 			'<div class="clouansp-story-dialog__panel">' +
-				'<button class="clouansp-story-dialog__close" type="button" aria-label="Close">&times;</button>' +
+				'<button class="clouansp-story-dialog__close" type="button" aria-label="' + esc( __( 'Close', 'clouds-and-spaceships' ) ) + '">&times;</button>' +
 				'<div class="clouansp-story-dialog__body"></div>' +
 				'<div class="clouansp-story-dialog__nav"></div>' +
 			'</div>';
@@ -117,7 +118,7 @@ function renderStoryDialog( data, nodeId, openFn ) {
 	// Step label: same numbering as the sidebar list; the start node is unnumbered.
 	let stepLabel = '';
 	if ( node.id === data.story.startNodeId ) {
-		stepLabel = 'Start';
+		stepLabel = __( 'Start', 'clouds-and-spaceships' );
 	} else {
 		const items = buildOrderedNodes( data.nodes, data.edges, data.story.startNodeId );
 		const item  = items.find( ( i ) => i.node.id === nodeId );
@@ -130,9 +131,9 @@ function renderStoryDialog( data, nodeId, openFn ) {
 	if ( title )     html += '<h2 class="clouansp-story-dialog__title">' + esc( title ) + '</h2>';
 	if ( excerpt )   html += '<p class="clouansp-story-dialog__excerpt">' + esc( excerpt ) + '</p>';
 	if ( node.substoryUrl ) {
-		html += '<a class="clouansp-story-dialog__read-more" href="' + esc( node.substoryUrl ) + '">Read more &rarr;</a>';
+		html += '<a class="clouansp-story-dialog__read-more" href="' + esc( node.substoryUrl ) + '">' + esc( __( 'Read more', 'clouds-and-spaceships' ) ) + ' &rarr;</a>';
 	}
-	body.innerHTML = html || '<p class="clouansp-story-dialog__excerpt">' + esc( 'No details for this node.' ) + '</p>';
+	body.innerHTML = html || '<p class="clouansp-story-dialog__excerpt">' + esc( __( 'No details for this node.', 'clouds-and-spaceships' ) ) + '</p>';
 
 	// Prev = first incoming connection, next = outgoing connections in branch order.
 	const byOrder   = ( a, b ) => a.sortOrder - b.sortOrder || a.id - b.id;
@@ -751,8 +752,8 @@ function setupZoomControls( canvas ) {
 	zoomOut.className = 'clouansp-story-zoom__btn';
 	zoomIn.textContent  = '+';
 	zoomOut.textContent = '−';
-	zoomIn.setAttribute( 'aria-label', 'Zoom map in' );
-	zoomOut.setAttribute( 'aria-label', 'Zoom map out' );
+	zoomIn.setAttribute( 'aria-label', __( 'Zoom map in', 'clouds-and-spaceships' ) );
+	zoomOut.setAttribute( 'aria-label', __( 'Zoom map out', 'clouds-and-spaceships' ) );
 	value.className = 'clouansp-story-zoom__value';
 	controls.appendChild( fsBtn );
 	controls.appendChild( zoomIn );
@@ -766,7 +767,7 @@ function setupZoomControls( canvas ) {
 
 	function renderFsBtn() {
 		fsBtn.textContent = fullscreen ? '✕' : '⛶';
-		fsBtn.setAttribute( 'aria-label', fullscreen ? 'Exit fullscreen' : 'View story fullscreen' );
+		fsBtn.setAttribute( 'aria-label', fullscreen ? __( 'Exit fullscreen', 'clouds-and-spaceships' ) : __( 'View story fullscreen', 'clouds-and-spaceships' ) );
 	}
 
 	function setFullscreen( on ) {

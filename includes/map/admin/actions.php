@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
 if (
 	isset($_GET['action'], $_GET['map_id']) &&
 	$_GET['action'] === 'delete' &&
-	current_user_can('manage_maps') &&
+	current_user_can('clouansp_manage_maps') &&
 	check_admin_referer('clouansp_delete_map_' . (int) $_GET['map_id'])
 ) {
 	$map_id = (int) $_GET['map_id'];
@@ -26,7 +26,7 @@ if (
 if (
 	isset($_POST['clouansp_map_action']) &&
 	$_POST['clouansp_map_action'] === 'save_icon_settings' &&
-	current_user_can('manage_maps') &&
+	current_user_can('clouansp_manage_maps') &&
 	check_admin_referer('clouansp_map_save_icon_settings')
 ) {
 	update_option('clouansp_map_suite_delete_icons_on_uninstall', isset($_POST['delete_icons_on_uninstall']) ? 1 : 0, false);
@@ -42,7 +42,7 @@ if (
 if (
 	isset($_POST['clouansp_map_action']) &&
 	$_POST['clouansp_map_action'] === 'save_settings' &&
-	current_user_can('manage_maps') &&
+	current_user_can('clouansp_manage_maps') &&
 	check_admin_referer('clouansp_map_save_settings')
 ) {
 	update_option('clouansp_map_suite_show_maps_menu',      isset($_POST['show_maps_menu']) ? 1 : 0);
