@@ -17,36 +17,36 @@ defined('ABSPATH') || exit;
 // or goes through the REST API's permission callbacks.
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 
-$per_page_options   = [10, 20, 50, 100];
-$requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
-$per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
-$paged              = max(1, absint($_GET['paged'] ?? 1));
-$in_trash           = (sanitize_key($_GET['status'] ?? '') === 'trash');
-$search             = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
-$total_stories      = clouansp_story_suite_count_stories($in_trash, $search);
+$clouansp_per_page_options   = [10, 20, 50, 100];
+$clouansp_requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
+$clouansp_per_page           = in_array($clouansp_requested_per_page, $clouansp_per_page_options, true) ? $clouansp_requested_per_page : 20;
+$clouansp_paged              = max(1, absint($_GET['paged'] ?? 1));
+$clouansp_in_trash           = (sanitize_key($_GET['status'] ?? '') === 'trash');
+$clouansp_search             = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+$clouansp_total_stories      = clouansp_story_suite_count_stories($clouansp_in_trash, $clouansp_search);
 // The All/Trash counts describe each bucket as a whole, so they ignore the
 // search — same as the core list tables.
-$trash_count        = clouansp_story_suite_count_stories(true);
-$total_pages        = (int) ceil($total_stories / $per_page);
+$clouansp_trash_count        = clouansp_story_suite_count_stories(true);
+$clouansp_total_pages        = (int) ceil($clouansp_total_stories / $clouansp_per_page);
 
 // A stale paged value — a bookmark, or a search that shrank the list — would
 // otherwise render an empty table while matches sit on earlier pages.
-if ($total_pages > 0 && $paged > $total_pages) {
-	$paged = $total_pages;
+if ($clouansp_total_pages > 0 && $clouansp_paged > $clouansp_total_pages) {
+	$clouansp_paged = $clouansp_total_pages;
 }
 
-$stories            = clouansp_story_suite_get_all_stories($per_page, ($paged - 1) * $per_page, $in_trash, $search);
+$clouansp_stories            = clouansp_story_suite_get_all_stories($clouansp_per_page, ($clouansp_paged - 1) * $clouansp_per_page, $clouansp_in_trash, $clouansp_search);
 
-$return_page = sanitize_key($_GET['page'] ?? CLOUANSP_STORY_PAGE_SETTINGS);
-$editor_url  = add_query_arg(['page' => CLOUANSP_STORY_PAGE_EDITOR], admin_url('admin.php'));
-$delete_substories    = (bool) get_option('clouansp_story_suite_delete_substories_on_uninstall', false);
-$show_stories_menu    = (bool) get_option('clouansp_story_suite_show_stories_menu', false);
-$show_substories_menu = (bool) get_option('clouansp_story_suite_show_substories_menu', false);
-$archive_enabled      = clouansp_archive_enabled('clouansp_story');
-$archive_slug         = clouansp_archive_slug('clouansp_story');
-$archive_url          = $archive_enabled ? get_post_type_archive_link('clouansp_story') : '';
-$placeholder_id       = absint(get_option('clouansp_story_suite_placeholder_thumb_id', 0));
-$placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placeholder_id, 'medium') : '';
+$clouansp_return_page = sanitize_key($_GET['page'] ?? CLOUANSP_STORY_PAGE_SETTINGS);
+$clouansp_editor_url  = add_query_arg(['page' => CLOUANSP_STORY_PAGE_EDITOR], admin_url('admin.php'));
+$clouansp_delete_substories    = (bool) get_option('clouansp_story_suite_delete_substories_on_uninstall', false);
+$clouansp_show_stories_menu    = (bool) get_option('clouansp_story_suite_show_stories_menu', false);
+$clouansp_show_substories_menu = (bool) get_option('clouansp_story_suite_show_substories_menu', false);
+$clouansp_archive_enabled      = clouansp_archive_enabled('clouansp_story');
+$clouansp_archive_slug         = clouansp_archive_slug('clouansp_story');
+$clouansp_archive_url          = $clouansp_archive_enabled ? get_post_type_archive_link('clouansp_story') : '';
+$clouansp_placeholder_id       = absint(get_option('clouansp_story_suite_placeholder_thumb_id', 0));
+$clouansp_placeholder_url      = $clouansp_placeholder_id ? wp_get_attachment_image_url($clouansp_placeholder_id, 'medium') : '';
 ?>
 <div class="clouansp-settings-page">
 
@@ -77,33 +77,33 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e('Stories', 'clouds-and-spaceships'); ?></h1>
 		<div class="clouansp-settings-page__actions">
-			<a href="<?php echo esc_url($editor_url); ?>" class="button button-primary">
+			<a href="<?php echo esc_url($clouansp_editor_url); ?>" class="button button-primary">
 				<?php esc_html_e('+ New Story', 'clouds-and-spaceships'); ?>
 			</a>
 		</div>
 	</div>
 
-	<?php if ($trash_count > 0 || $in_trash) : ?>
+	<?php if ($clouansp_trash_count > 0 || $clouansp_in_trash) : ?>
 		<ul class="subsubsub" style="margin: 0 0 4px;">
-			<?php $status_args = $search !== '' ? ['s' => $search] : []; ?>
+			<?php $clouansp_status_args = $clouansp_search !== '' ? ['s' => $clouansp_search] : []; ?>
 			<li>
 				<a href="<?php echo esc_url(add_query_arg(
-					$status_args + ['page' => $return_page],
+					$clouansp_status_args + ['page' => $clouansp_return_page],
 					admin_url('admin.php')
 				)); ?>"
-					<?php if (! $in_trash) : ?>class="current"<?php endif; ?>>
+					<?php if (! $clouansp_in_trash) : ?>class="current"<?php endif; ?>>
 					<?php esc_html_e('All', 'clouds-and-spaceships'); ?>
 					<span class="count">(<?php echo (int) clouansp_story_suite_count_stories(); ?>)</span>
 				</a> |
 			</li>
 			<li>
 				<a href="<?php echo esc_url(add_query_arg(
-					$status_args + ['page' => $return_page, 'status' => 'trash'],
+					$clouansp_status_args + ['page' => $clouansp_return_page, 'status' => 'trash'],
 					admin_url('admin.php')
 				)); ?>"
-					<?php if ($in_trash) : ?>class="current"<?php endif; ?>>
+					<?php if ($clouansp_in_trash) : ?>class="current"<?php endif; ?>>
 					<?php esc_html_e('Trash', 'clouds-and-spaceships'); ?>
-					<span class="count">(<?php echo (int) $trash_count; ?>)</span>
+					<span class="count">(<?php echo (int) $clouansp_trash_count; ?>)</span>
 				</a>
 			</li>
 		</ul>
@@ -116,10 +116,10 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 	-->
 	<div class="clouansp-settings-toolbar">
 		<form method="get">
-			<?php if ($in_trash) : ?>
+			<?php if ($clouansp_in_trash) : ?>
 				<input type="hidden" name="status" value="trash" />
 			<?php endif; ?>
-			<input type="hidden" name="page" value="<?php echo esc_attr($return_page); ?>" />
+			<input type="hidden" name="page" value="<?php echo esc_attr($clouansp_return_page); ?>" />
 
 			<span class="clouansp-settings-toolbar__group">
 				<label class="screen-reader-text" for="clouansp-story-search">
@@ -129,13 +129,13 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 					type="search"
 					id="clouansp-story-search"
 					name="s"
-					value="<?php echo esc_attr($search); ?>"
+					value="<?php echo esc_attr($clouansp_search); ?>"
 					placeholder="<?php esc_attr_e('Search stories', 'clouds-and-spaceships'); ?>"
 				/>
 				<button type="submit" class="button"><?php esc_html_e('Search', 'clouds-and-spaceships'); ?></button>
-				<?php if ($search !== '') : ?>
+				<?php if ($clouansp_search !== '') : ?>
 					<a class="clouansp-settings-toolbar__clear" href="<?php echo esc_url(add_query_arg(
-						($in_trash ? ['status' => 'trash'] : []) + ['page' => $return_page, 'per_page' => $per_page],
+						($clouansp_in_trash ? ['status' => 'trash'] : []) + ['page' => $clouansp_return_page, 'per_page' => $clouansp_per_page],
 						admin_url('admin.php')
 					)); ?>"><?php esc_html_e('Clear', 'clouds-and-spaceships'); ?></a>
 				<?php endif; ?>
@@ -144,9 +144,9 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 			<span class="clouansp-settings-toolbar__group">
 				<label for="clouansp-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
 				<select name="per_page" id="clouansp-per-page" data-autosubmit>
-					<?php foreach ($per_page_options as $option) : ?>
-						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
-							<?php echo esc_html($option); ?>
+					<?php foreach ($clouansp_per_page_options as $clouansp_option) : ?>
+						<option value="<?php echo esc_attr($clouansp_option); ?>" <?php selected($clouansp_per_page, $clouansp_option); ?>>
+							<?php echo esc_html($clouansp_option); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -154,18 +154,18 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 		</form>
 	</div>
 
-	<?php if ($search !== '') : ?>
+	<?php if ($clouansp_search !== '') : ?>
 		<p class="clouansp-settings-toolbar__count">
 			<?php printf(
 				/* translators: %1$s: number of stories, %2$s: search term */
 				esc_html(_n(
 					'%1$s story matching “%2$s”.',
 					'%1$s stories matching “%2$s”.',
-					$total_stories,
+					$clouansp_total_stories,
 					'clouds-and-spaceships'
 				)),
-				esc_html(number_format_i18n($total_stories)),
-				esc_html($search)
+				esc_html(number_format_i18n($clouansp_total_stories)),
+				esc_html($clouansp_search)
 			); ?>
 		</p>
 	<?php endif; ?>
@@ -183,10 +183,10 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 			</tr>
 		</thead>
 		<tbody>
-			<?php if (! $stories) : ?>
+			<?php if (! $clouansp_stories) : ?>
 				<tr>
 					<td colspan="7" class="clouansp-settings-table__empty">
-						<?php if ($search !== '') : ?>
+						<?php if ($clouansp_search !== '') : ?>
 							<?php esc_html_e('No stories match that name.', 'clouds-and-spaceships'); ?>
 						<?php else : ?>
 							<?php esc_html_e('No stories found.', 'clouds-and-spaceships'); ?>
@@ -194,38 +194,38 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 					</td>
 				</tr>
 			<?php endif; ?>
-			<?php foreach ($stories as $story) :
+			<?php foreach ($clouansp_stories as $clouansp_story) :
 				global $wpdb;
-				$map_id    = (int) get_post_meta($story->ID, '_clouansp_story_map_id', true);
-				$map_title = $map_id ? get_the_title($map_id) : '—';
-				$node_count = (int) $wpdb->get_var(
+				$clouansp_map_id    = (int) get_post_meta($clouansp_story->ID, '_clouansp_story_map_id', true);
+				$clouansp_map_title = $clouansp_map_id ? get_the_title($clouansp_map_id) : '—';
+				$clouansp_node_count = (int) $wpdb->get_var(
 					$wpdb->prepare(
 						"SELECT COUNT(*) FROM {$wpdb->prefix}clouansp_story_nodes WHERE story_id = %d",
-						$story->ID
+						$clouansp_story->ID
 					)
 				);
-				$thumb_id  = (int) get_post_thumbnail_id($story->ID);
-				$thumb_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'thumbnail') : '';
+				$clouansp_thumb_id  = (int) get_post_thumbnail_id($clouansp_story->ID);
+				$clouansp_thumb_url = $clouansp_thumb_id ? wp_get_attachment_image_url($clouansp_thumb_id, 'thumbnail') : '';
 
-				$edit_url   = esc_url(add_query_arg(
-					['page' => CLOUANSP_STORY_PAGE_EDITOR, 'story_id' => $story->ID],
+				$clouansp_edit_url   = esc_url(add_query_arg(
+					['page' => CLOUANSP_STORY_PAGE_EDITOR, 'story_id' => $clouansp_story->ID],
 					admin_url('admin.php')
 				));
-				$action_url = static function (string $action) use ($return_page, $story): string {
+				$clouansp_action_url = static function (string $action) use ($clouansp_return_page, $clouansp_story): string {
 					return esc_url(wp_nonce_url(
 						add_query_arg(
-							['page' => $return_page, 'action' => $action, 'story_id' => $story->ID],
+							['page' => $clouansp_return_page, 'action' => $action, 'story_id' => $clouansp_story->ID],
 							admin_url('admin.php')
 						),
-						'clouansp_' . $action . '_story_' . $story->ID
+						'clouansp_' . $action . '_story_' . $clouansp_story->ID
 					));
 				};
 			?>
 				<tr>
 					<td class="clouansp-settings-table__thumb">
-						<a href="<?php echo esc_url($edit_url); ?>">
-							<?php if ($thumb_url) : ?>
-								<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($story->post_title ?: ''); ?>" />
+						<a href="<?php echo esc_url($clouansp_edit_url); ?>">
+							<?php if ($clouansp_thumb_url) : ?>
+								<img src="<?php echo esc_url($clouansp_thumb_url); ?>" alt="<?php echo esc_attr($clouansp_story->post_title ?: ''); ?>" />
 							<?php else : ?>
 								<div class="clouansp-thumb-placeholder"></div>
 							<?php endif; ?>
@@ -233,38 +233,38 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 					</td>
 					<td>
 						<strong>
-							<a href="<?php echo esc_url($edit_url); ?>">
-								<?php echo esc_html($story->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
+							<a href="<?php echo esc_url($clouansp_edit_url); ?>">
+								<?php echo esc_html($clouansp_story->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
 							</a>
 						</strong>
 					</td>
-					<td><?php echo esc_html($map_title); ?></td>
-					<td><?php echo (int) $node_count; ?></td>
+					<td><?php echo esc_html($clouansp_map_title); ?></td>
+					<td><?php echo (int) $clouansp_node_count; ?></td>
 					<td><?php
-						$labels = ['publish' => __('Published', 'clouds-and-spaceships'), 'draft' => __('Draft', 'clouds-and-spaceships'), 'private' => __('Private', 'clouds-and-spaceships'), 'trash' => __('Trash', 'clouds-and-spaceships')];
-						echo esc_html($labels[$story->post_status] ?? ucfirst($story->post_status));
+						$clouansp_labels = ['publish' => __('Published', 'clouds-and-spaceships'), 'draft' => __('Draft', 'clouds-and-spaceships'), 'private' => __('Private', 'clouds-and-spaceships'), 'trash' => __('Trash', 'clouds-and-spaceships')];
+						echo esc_html($clouansp_labels[$clouansp_story->post_status] ?? ucfirst($clouansp_story->post_status));
 					?></td>
-					<td><?php echo esc_html(get_the_date('Y-m-d', $story)); ?></td>
+					<td><?php echo esc_html(get_the_date('Y-m-d', $clouansp_story)); ?></td>
 					<td class="clouansp-row-actions">
-						<?php if ($in_trash) : ?>
-							<a href="<?php echo esc_url($action_url('restore')); ?>"><?php esc_html_e('Restore', 'clouds-and-spaceships'); ?></a>
+						<?php if ($clouansp_in_trash) : ?>
+							<a href="<?php echo esc_url($clouansp_action_url('restore')); ?>"><?php esc_html_e('Restore', 'clouds-and-spaceships'); ?></a>
 							&nbsp;&middot;&nbsp;
 							<a
-								href="<?php echo esc_url($action_url('delete-forever')); ?>"
+								href="<?php echo esc_url($clouansp_action_url('delete-forever')); ?>"
 								class="clouansp-delete-link"
 								data-confirm="<?php esc_attr_e('Permanently delete this story and all its nodes, paths and edges? This cannot be undone.', 'clouds-and-spaceships'); ?>"
 							><?php esc_html_e('Delete Permanently', 'clouds-and-spaceships'); ?></a>
 						<?php else : ?>
-							<a href="<?php echo esc_url($edit_url); ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
-							<?php if (in_array($story->post_status, ['publish', 'private'], true)) : ?>
+							<a href="<?php echo esc_url($clouansp_edit_url); ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
+							<?php if (in_array($clouansp_story->post_status, ['publish', 'private'], true)) : ?>
 								&nbsp;&middot;&nbsp;
-								<a href="<?php echo esc_url(get_permalink($story->ID)); ?>" target="_blank" rel="noopener">
+								<a href="<?php echo esc_url(get_permalink($clouansp_story->ID)); ?>" target="_blank" rel="noopener">
 									<?php esc_html_e('View', 'clouds-and-spaceships'); ?>
 								</a>
 							<?php endif; ?>
 							&nbsp;&middot;&nbsp;
 							<a
-								href="<?php echo esc_url($action_url('delete')); ?>"
+								href="<?php echo esc_url($clouansp_action_url('delete')); ?>"
 								class="clouansp-delete-link"
 								data-confirm="<?php esc_attr_e('Move this story to trash?', 'clouds-and-spaceships'); ?>"
 							><?php esc_html_e('Trash', 'clouds-and-spaceships'); ?></a>
@@ -275,14 +275,14 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 		</tbody>
 	</table>
 
-	<?php if ($total_pages > 1) : ?>
+	<?php if ($clouansp_total_pages > 1) : ?>
 		<div class="tablenav bottom">
 			<div class="tablenav-pages">
 				<?php echo wp_kses_post(paginate_links([
 					'base'      => add_query_arg('paged', '%#%'),
 					'format'    => '',
-					'current'   => $paged,
-					'total'     => $total_pages,
+					'current'   => $clouansp_paged,
+					'total'     => $clouansp_total_pages,
 					'prev_text' => '&laquo;',
 					'next_text' => '&raquo;',
 				])); ?>
@@ -306,12 +306,12 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 					<th scope="row"><?php esc_html_e('Admin menu visibility', 'clouds-and-spaceships'); ?></th>
 					<td>
 						<label>
-							<input type="checkbox" name="show_stories_menu" value="1" <?php checked($show_stories_menu); ?> />
+							<input type="checkbox" name="show_stories_menu" value="1" <?php checked($clouansp_show_stories_menu); ?> />
 							<?php esc_html_e('Show Stories in the WordPress admin sidebar', 'clouds-and-spaceships'); ?>
 						</label>
 						<br />
 						<label>
-							<input type="checkbox" name="show_substories_menu" value="1" <?php checked($show_substories_menu); ?> />
+							<input type="checkbox" name="show_substories_menu" value="1" <?php checked($clouansp_show_substories_menu); ?> />
 							<?php esc_html_e('Show Substories in the WordPress admin sidebar', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
@@ -332,8 +332,8 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 				<tr>
 					<th scope="row">
 						<label for="clouansp_story_archive_slug"><?php esc_html_e('URL slug', 'clouds-and-spaceships'); ?></label>
-						<?php if ($archive_url) : ?>
-							<a href="<?php echo esc_url($archive_url); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
+						<?php if ($clouansp_archive_url) : ?>
+							<a href="<?php echo esc_url($clouansp_archive_url); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
 								<?php esc_html_e('View archive ↗', 'clouds-and-spaceships'); ?>
 							</a>
 						<?php endif; ?>
@@ -343,7 +343,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 							type="text"
 							id="clouansp_story_archive_slug"
 							name="archive_slug"
-							value="<?php echo esc_attr($archive_slug); ?>"
+							value="<?php echo esc_attr($clouansp_archive_slug); ?>"
 							class="regular-text"
 							pattern="[a-z0-9\-]+"
 							placeholder="stories"
@@ -360,7 +360,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 					<th scope="row"><?php esc_html_e('Enable archive', 'clouds-and-spaceships'); ?></th>
 					<td>
 						<label>
-							<input type="checkbox" name="archive_enabled" value="1" <?php checked($archive_enabled); ?> />
+							<input type="checkbox" name="archive_enabled" value="1" <?php checked($clouansp_archive_enabled); ?> />
 							<?php esc_html_e('Publish a public listing of all stories', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
@@ -377,12 +377,12 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 							type="hidden"
 							id="clouansp_story_placeholder_id"
 							name="placeholder_thumb_id"
-							value="<?php echo esc_attr($placeholder_id ?: ''); ?>"
+							value="<?php echo esc_attr($clouansp_placeholder_id ?: ''); ?>"
 						/>
 						<img
 							id="clouansp_story_placeholder_preview"
-							src="<?php echo $placeholder_url ? esc_url($placeholder_url) : ''; ?>"
-							style="max-height:80px;display:<?php echo $placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
+							src="<?php echo $clouansp_placeholder_url ? esc_url($clouansp_placeholder_url) : ''; ?>"
+							style="max-height:80px;display:<?php echo $clouansp_placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
 							alt=""
 						/>
 						<button
@@ -395,7 +395,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 							data-title="<?php esc_attr_e('Select default story thumbnail', 'clouds-and-spaceships'); ?>"
 							data-select-label="<?php esc_attr_e('Select image', 'clouds-and-spaceships'); ?>"
 							data-change-label="<?php esc_attr_e('Change image', 'clouds-and-spaceships'); ?>"
-						><?php echo $placeholder_id ? esc_html__('Change image', 'clouds-and-spaceships') : esc_html__('Select image', 'clouds-and-spaceships'); ?></button>
+						><?php echo $clouansp_placeholder_id ? esc_html__('Change image', 'clouds-and-spaceships') : esc_html__('Select image', 'clouds-and-spaceships'); ?></button>
 						<button
 							type="button"
 							id="clouansp_story_placeholder_remove"
@@ -403,7 +403,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 							data-input="clouansp_story_placeholder_id"
 							data-preview="clouansp_story_placeholder_preview"
 							data-picker="clouansp_story_placeholder_btn"
-							style="display:<?php echo $placeholder_id ? 'inline-block' : 'none'; ?>;"
+							style="display:<?php echo $clouansp_placeholder_id ? 'inline-block' : 'none'; ?>;"
 						><?php esc_html_e('Remove', 'clouds-and-spaceships'); ?></button>
 						<p class="description">
 							<?php esc_html_e('Stands in for stories that have no featured image of their own. Leave empty to show no image.', 'clouds-and-spaceships'); ?>
@@ -427,7 +427,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 							<?php esc_html_e('This plugin uses custom database tables to store story nodes, which are always removed on uninstall. Therefore stories cannot be preserved on uninstall. Simple plugin deactivation will however not delete stories.', 'clouds-and-spaceships'); ?>
 						</p>
 						<label class="clouansp-text-danger">
-							<input type="checkbox" name="delete_substories_on_uninstall" value="1" <?php checked($delete_substories); ?> />
+							<input type="checkbox" name="delete_substories_on_uninstall" value="1" <?php checked($clouansp_delete_substories); ?> />
 							<?php esc_html_e('Delete substory articles as well', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">

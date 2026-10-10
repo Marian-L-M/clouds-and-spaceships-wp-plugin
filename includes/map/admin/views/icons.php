@@ -9,7 +9,7 @@ defined('ABSPATH') || exit;
 // or goes through the REST API's permission callbacks.
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 
-$delete_icons_on_uninstall = (bool) get_option('clouansp_map_suite_delete_icons_on_uninstall', false);
+$clouansp_delete_icons_on_uninstall = (bool) get_option('clouansp_map_suite_delete_icons_on_uninstall', false);
 ?>
 <div class="clouansp-settings-page clouansp-icon-library">
 
@@ -45,7 +45,7 @@ $delete_icons_on_uninstall = (bool) get_option('clouansp_map_suite_delete_icons_
 								type="checkbox"
 								name="delete_icons_on_uninstall"
 								value="1"
-								<?php checked($delete_icons_on_uninstall); ?>
+								<?php checked($clouansp_delete_icons_on_uninstall); ?>
 							/>
 							<?php esc_html_e('Delete all icons from the Media Library when this plugin is uninstalled', 'clouds-and-spaceships'); ?>
 						</label>

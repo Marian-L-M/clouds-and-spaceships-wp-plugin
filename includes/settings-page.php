@@ -187,24 +187,25 @@ function clouansp_admin_enqueue_shared_assets( string $hook ): void {
 
     wp_enqueue_media();
     wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_media_picker_js() );
-    wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_color_clear_js() );
+    wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_field_clear_js() );
 }
 
 /**
- * "Clear (use theme default)" checkboxes next to a colour input.
+ * "Use default" checkboxes next to a setting whose default is "no value": the
+ * theme colour for a colour input, full width for the wiki content width.
  *
- * Colour inputs cannot hold an empty value, so clearing one means disabling it
- * so the browser leaves it out of the submitted form — the sanitizer then
- * stores an empty string and the theme default applies. Markup:
+ * Colour inputs cannot hold an empty value, so clearing a field means disabling
+ * it so the browser leaves it out of the submitted form — the sanitizer then
+ * stores an empty string and the default applies. Markup:
  *
- *   <input type="checkbox" class="clouansp-color-clear" data-color="the-input-id">
+ *   <input type="checkbox" class="clouansp-field-clear" data-field="the-input-id">
  */
-function clouansp_admin_color_clear_js(): string {
+function clouansp_admin_field_clear_js(): string {
     return <<<'JS'
 (function ($) {
     $(function () {
-        $('.clouansp-color-clear').on('change', function () {
-            var input = $('#' + $(this).data('color'));
+        $('.clouansp-field-clear').on('change', function () {
+            var input = $('#' + $(this).data('field'));
             if (! input.length) return;
             input.prop('disabled', this.checked);
             if (this.checked) input.val('');

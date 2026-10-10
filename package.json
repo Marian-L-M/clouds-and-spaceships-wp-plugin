@@ -26,6 +26,7 @@
 		"@wordpress/core-data": "latest",
 		"@wordpress/data": "latest",
 		"@wordpress/element": "latest",
+		"@wordpress/html-entities": "^4.57.0",
 		"@wordpress/i18n": "latest",
 		"@wordpress/icons": "^13.2.0",
 		"@wordpress/media-utils": "^5.51.0",

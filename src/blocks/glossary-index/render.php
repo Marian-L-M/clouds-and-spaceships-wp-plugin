@@ -20,46 +20,46 @@ if (! clouansp_wiki_glossary_enabled()) {
     return;
 }
 
-$group_by = ($attributes['groupBy'] ?? 'alphabetical') === 'category' ? 'category' : 'alphabetical';
+$clouansp_group_by = ($attributes['groupBy'] ?? 'alphabetical') === 'category' ? 'category' : 'alphabetical';
 
 /**
  * Appearance, all optional. Each one is emitted as a custom property only when
  * the author set it, so an unset control leaves the stylesheet (and through it
  * the theme) in charge rather than hard-coding a value into the markup.
  */
-$style_vars = '';
+$clouansp_style_vars = '';
 
-$title_size = isset($attributes['titleFontSize']) ? (float) $attributes['titleFontSize'] : 0;
-if ($title_size > 0) {
-    $style_vars .= sprintf('--clouansp-glossary-title-size:%spx;', $title_size);
+$clouansp_title_size = isset($attributes['titleFontSize']) ? (float) $attributes['titleFontSize'] : 0;
+if ($clouansp_title_size > 0) {
+    $clouansp_style_vars .= sprintf('--clouansp-glossary-title-size:%spx;', $clouansp_title_size);
 }
-$title_color = sanitize_hex_color((string) ($attributes['titleColor'] ?? '')) ?: '';
-if ('' !== $title_color) {
-    $style_vars .= sprintf('--clouansp-glossary-title-color:%s;', $title_color);
+$clouansp_title_color = sanitize_hex_color((string) ($attributes['titleColor'] ?? '')) ?: '';
+if ('' !== $clouansp_title_color) {
+    $clouansp_style_vars .= sprintf('--clouansp-glossary-title-color:%s;', $clouansp_title_color);
 }
 
-$item_size = isset($attributes['itemFontSize']) ? (float) $attributes['itemFontSize'] : 0;
-if ($item_size > 0) {
-    $style_vars .= sprintf('--clouansp-glossary-item-size:%spx;', $item_size);
+$clouansp_item_size = isset($attributes['itemFontSize']) ? (float) $attributes['itemFontSize'] : 0;
+if ($clouansp_item_size > 0) {
+    $clouansp_style_vars .= sprintf('--clouansp-glossary-item-size:%spx;', $clouansp_item_size);
 }
-$item_color = sanitize_hex_color((string) ($attributes['itemColor'] ?? '')) ?: '';
-if ('' !== $item_color) {
-    $style_vars .= sprintf('--clouansp-glossary-item-color:%s;', $item_color);
+$clouansp_item_color = sanitize_hex_color((string) ($attributes['itemColor'] ?? '')) ?: '';
+if ('' !== $clouansp_item_color) {
+    $clouansp_style_vars .= sprintf('--clouansp-glossary-item-color:%s;', $clouansp_item_color);
 }
 
 // The property holds the whole grid-template-columns value, so leaving it unset
 // falls back to the auto-fitting default in style.scss. One column on narrow
 // screens, since a fixed count set for desktop cramps a phone.
-$columns = isset($attributes['columns']) ? (int) $attributes['columns'] : 0;
-if ($columns > 0) {
-    $columns = min(12, $columns);
-    $style_vars .= sprintf(
+$clouansp_columns = isset($attributes['columns']) ? (int) $attributes['columns'] : 0;
+if ($clouansp_columns > 0) {
+    $clouansp_columns = min(12, $clouansp_columns);
+    $clouansp_style_vars .= sprintf(
         '--clouansp-glossary-columns:repeat(%d,minmax(0,1fr));--clouansp-glossary-columns-mobile:1fr;',
-        $columns
+        $clouansp_columns
     );
 }
 
-$entries = get_posts([
+$clouansp_entries = get_posts([
     'post_type'              => 'clouansp_glossary',
     'post_status'            => 'publish',
     'posts_per_page'         => -1,
@@ -71,16 +71,16 @@ $entries = get_posts([
     'update_post_meta_cache' => false,
 ]);
 
-if (empty($entries)) {
+if (empty($clouansp_entries)) {
     if (! empty($attributes['showEmptyNotice'])) {
-        $wrapper = get_block_wrapper_attributes([
+        $clouansp_wrapper = get_block_wrapper_attributes([
             'class' => 'clouansp-glossary-index',
-            'style' => $style_vars,
+            'style' => $clouansp_style_vars,
         ]);
-        $notice  = esc_html__('No glossary entries yet.', 'clouds-and-spaceships');
+        $clouansp_notice  = esc_html__('No glossary entries yet.', 'clouds-and-spaceships');
 
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output; $notice is escaped above.
-        echo '<div ' . $wrapper . '><p>' . $notice . '</p></div>';
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output; $clouansp_notice is escaped above.
+        echo '<div ' . $clouansp_wrapper . '><p>' . $clouansp_notice . '</p></div>';
     }
     return;
 }
@@ -88,91 +88,91 @@ if (empty($entries)) {
 /**
  * Builds [ section label => WP_Post[] ] in output order.
  */
-$sections = [];
+$clouansp_sections = [];
 
-if ('category' === $group_by) {
-    $terms = get_terms([
+if ('category' === $clouansp_group_by) {
+    $clouansp_terms = get_terms([
         'taxonomy'   => 'clouansp_glossary_category',
         'hide_empty' => true,
         'orderby'    => 'name',
         'order'      => 'ASC',
     ]);
-    $terms = is_wp_error($terms) ? [] : $terms;
+    $clouansp_terms = is_wp_error($clouansp_terms) ? [] : $clouansp_terms;
 
     // [ entry ID => [ term ID => true ] ], built once. has_term() in the loop
     // below would re-resolve the entry's terms on every term/entry pair.
-    $entry_terms = [];
-    $object_terms = wp_get_object_terms(
-        wp_list_pluck($entries, 'ID'),
+    $clouansp_entry_terms = [];
+    $clouansp_object_terms = wp_get_object_terms(
+        wp_list_pluck($clouansp_entries, 'ID'),
         'clouansp_glossary_category',
         ['fields' => 'all_with_object_id']
     );
-    if (! is_wp_error($object_terms)) {
-        foreach ($object_terms as $object_term) {
-            $entry_terms[$object_term->object_id][$object_term->term_id] = true;
+    if (! is_wp_error($clouansp_object_terms)) {
+        foreach ($clouansp_object_terms as $clouansp_object_term) {
+            $clouansp_entry_terms[$clouansp_object_term->object_id][$clouansp_object_term->term_id] = true;
         }
     }
 
-    $assigned = [];
-    foreach ($terms as $term) {
-        foreach ($entries as $entry) {
-            if (isset($entry_terms[$entry->ID][$term->term_id])) {
-                $sections[$term->name][] = $entry;
-                $assigned[$entry->ID]    = true;
+    $clouansp_assigned = [];
+    foreach ($clouansp_terms as $clouansp_term) {
+        foreach ($clouansp_entries as $clouansp_entry) {
+            if (isset($clouansp_entry_terms[$clouansp_entry->ID][$clouansp_term->term_id])) {
+                $clouansp_sections[$clouansp_term->name][] = $clouansp_entry;
+                $clouansp_assigned[$clouansp_entry->ID]    = true;
             }
         }
     }
 
-    $uncategorized = array_filter($entries, static fn($entry) => ! isset($assigned[$entry->ID]));
-    if ($uncategorized) {
-        $sections[__('Other', 'clouds-and-spaceships')] = array_values($uncategorized);
+    $clouansp_uncategorized = array_filter($clouansp_entries, static fn($clouansp_entry) => ! isset($clouansp_assigned[$clouansp_entry->ID]));
+    if ($clouansp_uncategorized) {
+        $clouansp_sections[__('Other', 'clouds-and-spaceships')] = array_values($clouansp_uncategorized);
     }
 } else {
-    foreach ($entries as $entry) {
-        $first  = mb_substr(remove_accents(trim($entry->post_title)), 0, 1);
-        $letter = strtoupper($first);
-        if (! preg_match('/[A-Z]/', $letter)) {
-            $letter = '#';
+    foreach ($clouansp_entries as $clouansp_entry) {
+        $clouansp_first  = mb_substr(remove_accents(trim($clouansp_entry->post_title)), 0, 1);
+        $clouansp_letter = strtoupper($clouansp_first);
+        if (! preg_match('/[A-Z]/', $clouansp_letter)) {
+            $clouansp_letter = '#';
         }
-        $sections[$letter][] = $entry;
+        $clouansp_sections[$clouansp_letter][] = $clouansp_entry;
     }
-    ksort($sections, SORT_STRING);
+    ksort($clouansp_sections, SORT_STRING);
 
     // Numbers/symbols share one section, placed after Z.
-    if (isset($sections['#'])) {
-        $symbols = $sections['#'];
-        unset($sections['#']);
-        $sections['#'] = $symbols;
+    if (isset($clouansp_sections['#'])) {
+        $clouansp_symbols = $clouansp_sections['#'];
+        unset($clouansp_sections['#']);
+        $clouansp_sections['#'] = $clouansp_symbols;
     }
 }
 
-$html = '';
-foreach ($sections as $label => $section_entries) {
-    $section_id = 'glossary-' . sanitize_title('#' === $label ? 'symbols' : $label);
+$clouansp_html = '';
+foreach ($clouansp_sections as $clouansp_label => $clouansp_section_entries) {
+    $clouansp_section_id = 'glossary-' . sanitize_title('#' === $clouansp_label ? 'symbols' : $clouansp_label);
 
-    $items = '';
-    foreach ($section_entries as $entry) {
-        $items .= sprintf(
+    $clouansp_items = '';
+    foreach ($clouansp_section_entries as $clouansp_entry) {
+        $clouansp_items .= sprintf(
             '<li class="clouansp-glossary-index__item"><a href="%s">%s</a></li>',
-            esc_url(get_permalink($entry)),
-            esc_html(get_the_title($entry))
+            esc_url(get_permalink($clouansp_entry)),
+            esc_html(get_the_title($clouansp_entry))
         );
     }
 
-    $html .= sprintf(
+    $clouansp_html .= sprintf(
         '<section class="clouansp-glossary-index__section" id="%s"><h2 class="clouansp-glossary-index__title">%s</h2><ul class="clouansp-glossary-index__list">%s</ul></section>',
-        esc_attr($section_id),
-        esc_html('#' === $label ? __('0–9 & symbols', 'clouds-and-spaceships') : $label),
-        $items
+        esc_attr($clouansp_section_id),
+        esc_html('#' === $clouansp_label ? __('0–9 & symbols', 'clouds-and-spaceships') : $clouansp_label),
+        $clouansp_items
     );
 }
 
-$wrapper = get_block_wrapper_attributes([
-    'class' => 'clouansp-glossary-index clouansp-glossary-index--' . $group_by,
-    'style' => $style_vars,
+$clouansp_wrapper = get_block_wrapper_attributes([
+    'class' => 'clouansp-glossary-index clouansp-glossary-index--' . $clouansp_group_by,
+    'style' => $clouansp_style_vars,
 ]);
 
 // The ignore covers only the line that follows it, so the whole statement has
-// to sit on one line — splitting the echo is what let $html escape its scope.
-// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output; every value in $html is escaped where it is built above.
-echo '<div ' . $wrapper . '>' . $html . '</div>';
+// to sit on one line — splitting the echo is what let $clouansp_html escape its scope.
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output; every value in $clouansp_html is escaped where it is built above.
+echo '<div ' . $clouansp_wrapper . '>' . $clouansp_html . '</div>';

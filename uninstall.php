@@ -34,7 +34,7 @@ global $wpdb;
 
 // ── Custom tables, dropped in reverse dependency order ────────────────────────
 
-$tables = [
+$clouansp_tables = [
 	$wpdb->prefix . 'clouansp_map_hierarchy',
 	$wpdb->prefix . 'clouansp_map_labels',
 	$wpdb->prefix . 'clouansp_map_areas',
@@ -44,11 +44,11 @@ $tables = [
 	$wpdb->prefix . 'clouansp_story_paths',
 ];
 
-foreach ($tables as $table) {
-	// $table comes from the fixed list above, built from $wpdb->prefix; a table
+foreach ($clouansp_tables as $clouansp_table) {
+	// $clouansp_table comes from the fixed list above, built from $wpdb->prefix; a table
 	// name cannot be passed as a placeholder.
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-	$wpdb->query("DROP TABLE IF EXISTS {$table}");
+	$wpdb->query("DROP TABLE IF EXISTS {$clouansp_table}");
 }
 
 // ── Content ───────────────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ foreach ($tables as $table) {
 // The wiki and glossary flags live inside the shared clouansp_wiki_settings array
 // rather than in options of their own; read it before the options loop below
 // deletes it.
-$wiki_settings = (array) get_option('clouansp_wiki_settings', []);
+$clouansp_wiki_settings = (array) get_option('clouansp_wiki_settings', []);
 
 // Maps and stories are always deleted. Their substance lives entirely in the
 // clouansp_map_* / clouansp_story_* tables dropped above — a map is its objects, areas and
@@ -68,33 +68,33 @@ $wiki_settings = (array) get_option('clouansp_wiki_settings', []);
 // stays opt-in: wiki articles and glossary entries are ordinary post content,
 // and a substory is an article in its own right that happens to be shown at a
 // story node.
-$delete_post_types = ['clouansp_map', 'clouansp_story'];
+$clouansp_delete_post_types = ['clouansp_map', 'clouansp_story'];
 
 if ((bool) get_option('clouansp_story_suite_delete_substories_on_uninstall')) {
-	$delete_post_types[] = 'clouansp_substory';
+	$clouansp_delete_post_types[] = 'clouansp_substory';
 }
-if (! empty($wiki_settings['wiki_delete_on_uninstall'])) {
-	$delete_post_types[] = 'clouansp_wiki';
+if (! empty($clouansp_wiki_settings['wiki_delete_on_uninstall'])) {
+	$clouansp_delete_post_types[] = 'clouansp_wiki';
 }
-if (! empty($wiki_settings['glossary_delete_on_uninstall'])) {
-	$delete_post_types[] = 'clouansp_glossary';
+if (! empty($clouansp_wiki_settings['glossary_delete_on_uninstall'])) {
+	$clouansp_delete_post_types[] = 'clouansp_glossary';
 }
 
-foreach ($delete_post_types as $post_type) {
+foreach ($clouansp_delete_post_types as $clouansp_post_type) {
 	// The plugin is not loaded here, so these post types are unregistered.
 	// WP_Query builds the post_type/post_status clauses straight from the
 	// arguments and guards its post-type-object lookups, so the query is
 	// unaffected by that.
-	$ids = get_posts([
-		'post_type'      => $post_type,
+	$clouansp_ids = get_posts([
+		'post_type'      => $clouansp_post_type,
 		'posts_per_page' => -1,
 		'post_status'    => 'any',
 		'fields'         => 'ids',
 	]);
-	foreach ($ids as $id) {
+	foreach ($clouansp_ids as $clouansp_id) {
 		// wp_delete_post() re-parents attachments rather than deleting them, so
 		// a map's featured image and background stay in the media library.
-		wp_delete_post((int) $id, true);
+		wp_delete_post((int) $clouansp_id, true);
 	}
 }
 
@@ -104,7 +104,7 @@ foreach ($delete_post_types as $post_type) {
 if (get_option('clouansp_map_suite_delete_icons_on_uninstall')) {
 	// Runs once, during uninstall, and only when the user opted in. The meta
 	// flag is the only thing identifying a library icon.
-	$icon_ids = get_posts([
+	$clouansp_icon_ids = get_posts([
 		'post_type'      => 'attachment',
 		'post_status'    => 'inherit',
 		'posts_per_page' => -1,
@@ -115,14 +115,14 @@ if (get_option('clouansp_map_suite_delete_icons_on_uninstall')) {
 		'update_post_meta_cache' => false,
 		'update_post_term_cache' => false,
 	]);
-	foreach ($icon_ids as $icon_id) {
-		wp_delete_attachment((int) $icon_id, true);
+	foreach ($clouansp_icon_ids as $clouansp_icon_id) {
+		wp_delete_attachment((int) $clouansp_icon_id, true);
 	}
 }
 
 // ── Options ───────────────────────────────────────────────────────────────────
 
-$options = [
+$clouansp_options = [
 	// Shared
 	'clouansp_db_version',
 	'clouansp_needs_rewrite_flush',
@@ -145,8 +145,8 @@ $options = [
 	'clouansp_wiki_cpt_structure_version',
 ];
 
-foreach ($options as $option) {
-	delete_option($option);
+foreach ($clouansp_options as $clouansp_option) {
+	delete_option($clouansp_option);
 }
 
 // ── Render-cache transients (includes/cache.php) ──────────────────────────────

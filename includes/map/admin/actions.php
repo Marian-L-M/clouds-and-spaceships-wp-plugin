@@ -11,9 +11,9 @@ if (
 	current_user_can('clouansp_manage_maps') &&
 	check_admin_referer('clouansp_delete_map_' . (int) $_GET['map_id'])
 ) {
-	$map_id = (int) $_GET['map_id'];
-	if (get_post_type($map_id) === 'clouansp_map') {
-		wp_delete_post($map_id, true);
+	$clouansp_map_id = (int) $_GET['map_id'];
+	if (get_post_type($clouansp_map_id) === 'clouansp_map') {
+		wp_delete_post($clouansp_map_id, true);
 	}
 	wp_safe_redirect(add_query_arg(
 		['page' => sanitize_key($_GET['page'] ?? CLOUANSP_MAP_PAGE_SETTINGS_MAPS), 'deleted' => '1'],

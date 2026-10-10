@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { decodeEntities } from '@wordpress/html-entities';
 import {
 	useBlockProps,
 	InspectorControls,
@@ -98,7 +99,7 @@ function PostSelectorModal( { currentPostType, onSelect, onClose } ) {
 						onClick={ () => onSelect( post.id, postType ) }
 						type="button"
 					>
-						{ post.title?.rendered ?? post.title?.raw ?? `#${ post.id }` }
+						{ decodeEntities( post.title?.rendered ?? '' ) || `#${ post.id }` }
 					</button>
 				) ) }
 			</div>
@@ -154,7 +155,7 @@ function CardPreview( { postId, postType, attributes } ) {
 		);
 	}
 
-	const title = post.title?.rendered ?? '';
+	const title = decodeEntities( post.title?.rendered ?? '' );
 	const excerpt = post.excerpt?.rendered ?? '';
 
 	const cardStyle = { backgroundColor };

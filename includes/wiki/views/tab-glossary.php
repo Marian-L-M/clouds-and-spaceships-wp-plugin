@@ -7,38 +7,38 @@
  */
 defined('ABSPATH') || exit;
 
-$glossary_enabled   = (bool) clouansp_get_wiki_setting( 'glossary_enabled', false );
-$glossary_slug      = clouansp_get_wiki_setting( 'glossary_slug', 'glossary' );
-$glossary_color     = clouansp_get_wiki_setting( 'glossary_text_color', '' );
-$glossary_show_menu = (bool) clouansp_get_wiki_setting( 'glossary_show_menu', true );
-$glossary_delete_on_uninstall = (bool) clouansp_get_wiki_setting( 'glossary_delete_on_uninstall', false );
-$glossary_url       = $glossary_enabled ? get_post_type_archive_link( 'clouansp_glossary' ) : false;
+$clouansp_glossary_enabled   = (bool) clouansp_get_wiki_setting( 'glossary_enabled', false );
+$clouansp_glossary_slug      = clouansp_get_wiki_setting( 'glossary_slug', 'glossary' );
+$clouansp_glossary_color     = clouansp_get_wiki_setting( 'glossary_text_color', '' );
+$clouansp_glossary_show_menu = (bool) clouansp_get_wiki_setting( 'glossary_show_menu', true );
+$clouansp_glossary_delete_on_uninstall = (bool) clouansp_get_wiki_setting( 'glossary_delete_on_uninstall', false );
+$clouansp_glossary_url       = $clouansp_glossary_enabled ? get_post_type_archive_link( 'clouansp_glossary' ) : false;
 
 // Counts are only meaningful once the post type is registered.
-$published = 0;
-$draft     = 0;
-$cat_count = 0;
+$clouansp_published = 0;
+$clouansp_draft     = 0;
+$clouansp_cat_count = 0;
 
-if ( $glossary_enabled ) {
-    $counts    = wp_count_posts( 'clouansp_glossary' );
-    $published = (int) ( $counts->publish ?? 0 );
-    $draft     = (int) ( $counts->draft   ?? 0 );
-    $terms     = get_terms( [
+if ( $clouansp_glossary_enabled ) {
+    $clouansp_counts    = wp_count_posts( 'clouansp_glossary' );
+    $clouansp_published = (int) ( $clouansp_counts->publish ?? 0 );
+    $clouansp_draft     = (int) ( $clouansp_counts->draft   ?? 0 );
+    $clouansp_terms     = get_terms( [
         'taxonomy'   => 'clouansp_glossary_category',
         'hide_empty' => true,
         'fields'     => 'ids',
     ] );
-    $cat_count = is_wp_error( $terms ) ? 0 : count( $terms );
+    $clouansp_cat_count = is_wp_error( $clouansp_terms ) ? 0 : count( $clouansp_terms );
 }
 ?>
 <div class="clouansp-settings-page">
 
 	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e( 'Glossary', 'clouds-and-spaceships' ); ?></h1>
-		<?php if ( $glossary_enabled ) : ?>
+		<?php if ( $clouansp_glossary_enabled ) : ?>
 			<div class="clouansp-settings-page__actions">
-				<?php if ( $glossary_url ) : ?>
-					<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="button">
+				<?php if ( $clouansp_glossary_url ) : ?>
+					<a href="<?php echo esc_url( $clouansp_glossary_url ); ?>" target="_blank" rel="noopener" class="button">
 						<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 					</a>
 				<?php endif; ?>
@@ -56,18 +56,18 @@ if ( $glossary_enabled ) {
 		<?php esc_html_e( 'A glossary of terms. Text in a post can be marked as a glossary term, which shows the term\'s definition in a tooltip on hover.', 'clouds-and-spaceships' ); ?>
 	</p>
 
-	<?php if ( $glossary_enabled ) : ?>
+	<?php if ( $clouansp_glossary_enabled ) : ?>
 		<ul class="clouansp-settings-stats">
 			<li>
-				<span class="clouansp-settings-stats__value"><?php echo esc_html( $published ); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_published ); ?></span>
 				<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Published terms', 'clouds-and-spaceships' ); ?></span>
 			</li>
 			<li>
-				<span class="clouansp-settings-stats__value"><?php echo esc_html( $draft ); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_draft ); ?></span>
 				<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Drafts', 'clouds-and-spaceships' ); ?></span>
 			</li>
 			<li>
-				<span class="clouansp-settings-stats__value"><?php echo esc_html( $cat_count ); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_cat_count ); ?></span>
 				<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Categories in use', 'clouds-and-spaceships' ); ?></span>
 			</li>
 		</ul>
@@ -89,7 +89,7 @@ if ( $glossary_enabled ) {
 								id="clouansp_glossary_enabled"
 								name="clouansp_wiki_settings[glossary_enabled]"
 								value="1"
-								<?php checked( $glossary_enabled ); ?>
+								<?php checked( $clouansp_glossary_enabled ); ?>
 							/>
 							<?php esc_html_e( 'Enable glossary post type and functionality', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -106,7 +106,7 @@ if ( $glossary_enabled ) {
 								type="checkbox"
 								name="clouansp_wiki_settings[glossary_show_menu]"
 								value="1"
-								<?php checked( $glossary_show_menu ); ?>
+								<?php checked( $clouansp_glossary_show_menu ); ?>
 							/>
 							<?php esc_html_e( 'Show Glossary in the WordPress admin sidebar', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -124,12 +124,12 @@ if ( $glossary_enabled ) {
 						type="color"
 						id="clouansp_glossary_color"
 						name="clouansp_wiki_settings[glossary_text_color]"
-						value="<?php echo esc_attr( $glossary_color ?: '#ffffff' ); ?>"
-						<?php disabled( '', $glossary_color ); ?>
+						value="<?php echo esc_attr( $clouansp_glossary_color ?: '#ffffff' ); ?>"
+						<?php disabled( '', $clouansp_glossary_color ); ?>
 					/>
 					<label style="margin-left:8px;">
-						<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_glossary_color"
-							<?php checked( '', $glossary_color ); ?> />
+						<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_glossary_color"
+							<?php checked( '', $clouansp_glossary_color ); ?> />
 						<?php esc_html_e( 'inherit', 'clouds-and-spaceships' ); ?>
 					</label>
 					<p class="description">
@@ -147,8 +147,8 @@ if ( $glossary_enabled ) {
 			<tr>
 				<th scope="row">
 					<label for="clouansp_glossary_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
-					<?php if ( $glossary_url ) : ?>
-						<a href="<?php echo esc_url( $glossary_url ); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
+					<?php if ( $clouansp_glossary_url ) : ?>
+						<a href="<?php echo esc_url( $clouansp_glossary_url ); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
 							<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 						</a>
 					<?php endif; ?>
@@ -158,7 +158,7 @@ if ( $glossary_enabled ) {
 						type="text"
 						id="clouansp_glossary_slug"
 						name="clouansp_wiki_settings[glossary_slug]"
-						value="<?php echo esc_attr( $glossary_slug ); ?>"
+						value="<?php echo esc_attr( $clouansp_glossary_slug ); ?>"
 						class="regular-text"
 						pattern="[a-z0-9\-]+"
 						placeholder="glossary"
@@ -187,7 +187,7 @@ if ( $glossary_enabled ) {
 								type="checkbox"
 								name="clouansp_wiki_settings[glossary_delete_on_uninstall]"
 								value="1"
-								<?php checked( $glossary_delete_on_uninstall ); ?>
+								<?php checked( $clouansp_glossary_delete_on_uninstall ); ?>
 							/>
 							<?php esc_html_e( 'Delete all glossary posts when the plugin is uninstalled', 'clouds-and-spaceships' ); ?>
 						</label>
