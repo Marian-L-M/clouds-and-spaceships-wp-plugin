@@ -253,7 +253,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 							<?php disabled('', $zoom_main_color); ?>
 						/>
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_map_zoom_main"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_map_zoom_main"
 								<?php checked('', $zoom_main_color); ?> />
 							<?php esc_html_e('Use default', 'clouds-and-spaceships'); ?>
 						</label>
@@ -275,7 +275,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 							<?php disabled('', $zoom_accent_color); ?>
 						/>
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_map_zoom_accent"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_map_zoom_accent"
 								<?php checked('', $zoom_accent_color); ?> />
 							<?php esc_html_e('Use default', 'clouds-and-spaceships'); ?>
 						</label>

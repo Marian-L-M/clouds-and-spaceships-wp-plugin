@@ -128,7 +128,7 @@ if ( $glossary_enabled ) {
 						<?php disabled( '', $glossary_color ); ?>
 					/>
 					<label style="margin-left:8px;">
-						<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_glossary_color"
+						<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_glossary_color"
 							<?php checked( '', $glossary_color ); ?> />
 						<?php esc_html_e( 'inherit', 'clouds-and-spaceships' ); ?>
 					</label>

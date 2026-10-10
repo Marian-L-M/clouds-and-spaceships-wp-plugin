@@ -254,7 +254,7 @@ if ( $wiki_enabled ) {
 						/>
 						<span><?php esc_html_e( 'px', 'clouds-and-spaceships' ); ?></span>
 						<p class="description">
-							<?php esc_html_e( 'Default maximum width for infobox. Post content will takes the remaining content width. Infobox max-width can be overridden on any individual block.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Global default maximum width of the infobox. Min. 200 px. Defaults to 360 px. The post content takes the remaining width. Each Infobox block can override this width individually.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -269,13 +269,18 @@ if ( $wiki_enabled ) {
 							name="clouansp_wiki_settings[content_width]"
 							value="<?php echo esc_attr( $content_width ); ?>"
 							min="640" max="3200" step="1"
-							default="1200"
 							class="small-text"
 							placeholder="<?php esc_attr_e( 'full', 'clouds-and-spaceships' ); ?>"
+							<?php disabled( '', $content_width ); ?>
 						/>
 						<span><?php esc_html_e( 'px', 'clouds-and-spaceships' ); ?></span>
+						<label style="margin-left:8px;">
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_wiki_content_width"
+								<?php checked( '', $content_width ); ?> />
+							<?php esc_html_e( 'Use full width', 'clouds-and-spaceships' ); ?>
+						</label>
 						<p class="description">
-							<?php esc_html_e( 'Maximum width for wiki post layout — including infobox.', 'clouds-and-spaceships' ); ?>
+							<?php esc_html_e( 'Maximum width of the wiki post layout, infobox included. Min. 640 px. Check "Use full width" to take up all available space.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
 				</tr>
@@ -348,7 +353,7 @@ if ( $wiki_enabled ) {
 							value="<?php echo esc_attr( $infobox_bg ?: '#ffffff' ); ?>"
 							<?php disabled( '', $infobox_bg ); ?> />
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_infobox_bg"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_bg"
 								<?php checked( '', $infobox_bg ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -365,7 +370,7 @@ if ( $wiki_enabled ) {
 							value="<?php echo esc_attr( $infobox_text ?: '#000000' ); ?>"
 							<?php disabled( '', $infobox_text ); ?> />
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_infobox_text"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_text"
 								<?php checked( '', $infobox_text ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -382,7 +387,7 @@ if ( $wiki_enabled ) {
 							value="<?php echo esc_attr( $infobox_title ?: '#000000' ); ?>"
 							<?php disabled( '', $infobox_title ); ?> />
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_infobox_title"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_title"
 								<?php checked( '', $infobox_title ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -399,7 +404,7 @@ if ( $wiki_enabled ) {
 							value="<?php echo esc_attr( $infobox_contrast ?: '#e0e0e0' ); ?>"
 							<?php disabled( '', $infobox_contrast ); ?> />
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_infobox_contrast"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_contrast"
 								<?php checked( '', $infobox_contrast ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -417,7 +422,7 @@ if ( $wiki_enabled ) {
 							value="<?php echo esc_attr( $infobox_accent ?: '#f2f2f2' ); ?>"
 							<?php disabled( '', $infobox_accent ); ?> />
 						<label style="margin-left:8px;">
-							<input type="checkbox" class="clouansp-color-clear" data-color="clouansp_infobox_accent"
+							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_accent"
 								<?php checked( '', $infobox_accent ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
