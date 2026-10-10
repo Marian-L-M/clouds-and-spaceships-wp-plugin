@@ -4,6 +4,10 @@
 	"description": "Wiki articles and glossary, interactive canvas maps, and branching stories for the Clouds and Spaceships platform.",
 	"author": "Marian Maschke",
 	"license": "GPL-2.0-or-later",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin.git"
+	},
 	"scripts": {
 		"build": "wp-scripts build --blocks-manifest --experimental-modules",
 		"start": "wp-scripts start --blocks-manifest --experimental-modules",
