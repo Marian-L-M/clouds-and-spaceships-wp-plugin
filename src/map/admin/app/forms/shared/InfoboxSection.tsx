@@ -38,10 +38,10 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 	}
 
 	return (
-		<section className="cns-modal-section">
+		<section className="clouansp-modal-section">
 			<h3>{ __( 'Infobox', 'clouds-and-spaceships' ) }</h3>
-			<div className="cns-grid cns-grid__12">
-				<div className="cns-grid__group cns-grid__span-full">
+			<div className="clouansp-grid clouansp-grid__12">
+				<div className="clouansp-grid__group clouansp-grid__span-full">
 					<PostSearch
 						selectedId={ formData.linked_post_id }
 						selectedLabel={ formData.linked_post_label }
@@ -59,7 +59,7 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 					/>
 				</div>
 				{ formData.linked_post_id ? (
-					<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<CheckboxControl
 							label={ __(
 								'Display infobox',
@@ -74,7 +74,7 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 						/>
 					</div>
 				) : null }
-				<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid__group clouansp-grid__span-full">
 					<RadioControl
 						label={ __(
 							'Sidebar Content source',
@@ -104,7 +104,7 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 				</div>
 				{ isManualIb ? (
 					<>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<TextControl
 								__next40pxDefaultSize
 								label={ __(
@@ -115,7 +115,7 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 								onChange={ ( v ) => set( 'infobox_title', v ) }
 							/>
 						</div>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<TextareaControl
 								label={ __(
 									'Description',
@@ -128,7 +128,7 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 								}
 							/>
 						</div>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<MediaPicker
 								imageId={ formData.infobox_image_id }
 								imageUrl={ formData.infobox_image_url }
@@ -152,20 +152,20 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 					</>
 				) : (
 					<>
-						<p className="description cns-grid__span-full">
+						<p className="description clouansp-grid__span-full">
 							{ __(
 								'Title, excerpt, thumbnail. Uncheck to hide.',
 								'clouds-and-spaceships'
 							) }
 						</p>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<CheckboxControl
 								label={ __( 'Title', 'clouds-and-spaceships' ) }
 								checked={ formData.show_title }
 								onChange={ ( v ) => set( 'show_title', v ) }
 							/>
 						</div>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<CheckboxControl
 								label={ __(
 									'Excerpt',
@@ -175,7 +175,7 @@ export default function InfoboxSection< T extends InfoboxFormFields >( {
 								onChange={ ( v ) => set( 'show_excerpt', v ) }
 							/>
 						</div>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<CheckboxControl
 								label={ __(
 									'Thumbnail',

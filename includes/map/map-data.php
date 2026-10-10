@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
  *
  * Reads the plugin's own custom tables, which have no WordPress API
  * equivalent, with every value passed through $wpdb->prepare(). These reads
- * *are* cached: raw rows go through cns_cache_get()/cns_cache_set() in
+ * *are* cached: raw rows go through clouansp_cache_get()/clouansp_cache_set() in
  * includes/cache.php, which stores them in transients (so a persistent object
  * cache is used when one is installed) and invalidates them by generation bump
  * on any write. The sniff cannot see through that wrapper.
@@ -17,8 +17,8 @@ defined('ABSPATH') || exit;
 /**
  * Public map-data API.
  *
- * Other plugins (e.g. CNS Story Suite) and themes should read map data through
- * these functions instead of querying the cns_map_* tables or _cns_map_* meta
+ * The story block, other plugins and themes should read map data through
+ * these functions instead of querying the clouansp_map_* tables or _clouansp_map_* meta
  * directly — the table/meta layout is considered private and may change.
  *
  * Callers must apply their own visibility rules (post status / capabilities);
@@ -35,11 +35,11 @@ defined('ABSPATH') || exit;
  * are picked up recursively; render_block renders the whole infobox subtree, so
  * groups/rows come along for free.
  */
-function cns_map_suite_extract_infoboxes(WP_Post $post): array {
+function clouansp_map_suite_extract_infoboxes(WP_Post $post): array {
 	$found = [];
 	$walk  = static function (array $blocks) use (&$walk, &$found): void {
 		foreach ($blocks as $block) {
-			if (($block['blockName'] ?? '') === 'cns-wiki-suite/infobox') {
+			if (($block['blockName'] ?? '') === 'clouansp-wiki-suite/infobox') {
 				$html = render_block($block);
 				if (trim(wp_strip_all_tags($html)) !== '') {
 					$found[] = $html;
@@ -61,7 +61,7 @@ function cns_map_suite_extract_infoboxes(WP_Post $post): array {
  *
  * The connected post (linked_post_id) is independent of the content source:
  * whenever one is set, post_url carries its permalink so the frontend can show
- * a "Read more" link, and its cns-wiki-suite infoboxes are pulled in when the
+ * a "Read more" link, and its wiki Infobox blocks are pulled in when the
  * display_infobox flag is on. infobox_source picks where title/excerpt/image
  * come from — 'post' from the connected post (each gated by a show_* flag),
  * 'manual' from the stored infobox_data. `infobox_data` may be a raw JSON string
@@ -69,7 +69,7 @@ function cns_map_suite_extract_infoboxes(WP_Post $post): array {
  *
  * @return array{title:string,excerpt:string,content:string,image_url:string,post_url:string,infoboxes:string[]}
  */
-function cns_map_suite_resolve_infobox(array $item): array {
+function clouansp_map_suite_resolve_infobox(array $item): array {
 	$linked   = ! empty($item['linked_post_id']) ? get_post((int) $item['linked_post_id']) : null;
 	$post_url = $linked ? (get_permalink($linked) ?: '') : '';
 
@@ -89,7 +89,7 @@ function cns_map_suite_resolve_infobox(array $item): array {
 	// Wiki infoboxes come from the connected post regardless of content source,
 	// so a manually-written description can sit alongside the pulled infoboxes.
 	$infoboxes = ($linked && $flag('display_infobox'))
-		? cns_map_suite_extract_infoboxes($linked)
+		? clouansp_map_suite_extract_infoboxes($linked)
 		: [];
 
 	if (($item['infobox_source'] ?? '') === 'post' && $linked) {
@@ -127,9 +127,9 @@ function cns_map_suite_resolve_infobox(array $item): array {
  *  - image_size         string attachment size for map/bg image URLs (default 'full')
  *
  * Object/area rows use the same normalized shape as the REST API
- * (see cns_map_suite_normalize_object_row / cns_map_suite_normalize_area_row).
+ * (see clouansp_map_suite_normalize_object_row / clouansp_map_suite_normalize_area_row).
  */
-function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
+function clouansp_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 	$opts = array_merge([
 		'objects'           => true,
 		'areas'             => true,
@@ -141,16 +141,16 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 	], $opts);
 
 	$map = get_post($map_id);
-	if (! $map || $map->post_type !== 'cns_map') {
+	if (! $map || $map->post_type !== 'clouansp_map') {
 		return null;
 	}
 
 	global $wpdb;
 
-	$width       = (int) (get_post_meta($map_id, '_cns_map_width', true) ?: 1000);
-	$ratio       = (float) (get_post_meta($map_id, '_cns_map_aspect_ratio', true) ?: 1.0);
-	$bg_image_id = (int) get_post_meta($map_id, '_cns_map_bg_image_id', true);
-	$image_id    = (int) get_post_meta($map_id, '_cns_map_image_id', true);
+	$width       = (int) (get_post_meta($map_id, '_clouansp_map_width', true) ?: 1000);
+	$ratio       = (float) (get_post_meta($map_id, '_clouansp_map_aspect_ratio', true) ?: 1.0);
+	$bg_image_id = (int) get_post_meta($map_id, '_clouansp_map_bg_image_id', true);
+	$image_id    = (int) get_post_meta($map_id, '_clouansp_map_image_id', true);
 
 	$data = [
 		'id'           => $map_id,
@@ -159,16 +159,16 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 		'width'        => $width,
 		'aspect_ratio' => $ratio,
 		'height'       => $ratio > 0 ? (int) round($width / $ratio) : $width,
-		'bg_type'      => get_post_meta($map_id, '_cns_map_bg_type', true) ?: 'color',
-		'bg_color'     => get_post_meta($map_id, '_cns_map_bg_color', true) ?: '#1a1a2e',
+		'bg_type'      => get_post_meta($map_id, '_clouansp_map_bg_type', true) ?: 'color',
+		'bg_color'     => get_post_meta($map_id, '_clouansp_map_bg_color', true) ?: '#1a1a2e',
 		'bg_image_id'  => $bg_image_id,
 		'bg_image_url' => $bg_image_id ? (wp_get_attachment_image_url($bg_image_id, $opts['image_size']) ?: '') : '',
 		'image_id'     => $image_id,
 		'image_url'    => $image_id ? (wp_get_attachment_image_url($image_id, $opts['image_size']) ?: '') : '',
-		'image_x'      => (float) get_post_meta($map_id, '_cns_map_image_x', true),
-		'image_y'      => (float) get_post_meta($map_id, '_cns_map_image_y', true),
-		'image_w'      => (float) (get_post_meta($map_id, '_cns_map_image_width', true) ?: 1.0),
-		'is_master'    => (bool) get_post_meta($map_id, '_cns_map_is_master', true),
+		'image_x'      => (float) get_post_meta($map_id, '_clouansp_map_image_x', true),
+		'image_y'      => (float) get_post_meta($map_id, '_clouansp_map_image_y', true),
+		'image_w'      => (float) (get_post_meta($map_id, '_clouansp_map_image_width', true) ?: 1.0),
+		'is_master'    => (bool) get_post_meta($map_id, '_clouansp_map_is_master', true),
 		'objects'           => [],
 		'areas'             => [],
 		'labels'            => [],
@@ -178,7 +178,7 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 
 	$attach_infobox = static function (array $row) use ($opts): array {
 		if ($opts['resolve_infoboxes']) {
-			$row['infobox_resolved'] = cns_map_suite_resolve_infobox($row);
+			$row['infobox_resolved'] = clouansp_map_suite_resolve_infobox($row);
 		}
 		return $row;
 	};
@@ -202,7 +202,7 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 	// Raw table rows come from the render cache (includes/cache.php); everything
 	// derived from posts/meta below stays live so cached rows never carry
 	// user- or status-dependent data.
-	$row_cache   = cns_cache_get('map', $map_id);
+	$row_cache   = clouansp_cache_get('map', $map_id);
 	$cache_dirty = false;
 	$cached_rows = static function (string $kind, callable $query) use (&$row_cache, &$cache_dirty): array {
 		if (! array_key_exists($kind, $row_cache)) {
@@ -214,47 +214,47 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 
 	if ($opts['objects']) {
 		$rows = $cached_rows('objects', static fn(): array => $wpdb->get_results(
-			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_map_objects WHERE map_id = %d ORDER BY id ASC", $map_id),
+			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_map_objects WHERE map_id = %d ORDER BY id ASC", $map_id),
 			ARRAY_A
 		) ?: []);
 		$prime_rows($rows, $opts['resolve_infoboxes'] ? ['linked_post_id', 'icon_image_id'] : ['icon_image_id']);
 		$data['objects'] = array_map(
-			fn($row) => $attach_infobox(cns_map_suite_normalize_object_row($row)),
+			fn($row) => $attach_infobox(clouansp_map_suite_normalize_object_row($row)),
 			$rows
 		);
 	}
 
 	if ($opts['areas']) {
 		$rows = $cached_rows('areas', static fn(): array => $wpdb->get_results(
-			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_map_areas WHERE map_id = %d ORDER BY id ASC", $map_id),
+			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_map_areas WHERE map_id = %d ORDER BY id ASC", $map_id),
 			ARRAY_A
 		) ?: []);
 		if ($opts['resolve_infoboxes']) {
 			$prime_rows($rows, ['linked_post_id']);
 		}
 		$data['areas'] = array_map(
-			fn($row) => $attach_infobox(cns_map_suite_normalize_area_row($row)),
+			fn($row) => $attach_infobox(clouansp_map_suite_normalize_area_row($row)),
 			$rows
 		);
 	}
 
 	if ($opts['labels']) {
 		$rows = $cached_rows('labels', static fn(): array => $wpdb->get_results(
-			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_map_labels WHERE map_id = %d ORDER BY id ASC", $map_id),
+			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_map_labels WHERE map_id = %d ORDER BY id ASC", $map_id),
 			ARRAY_A
 		) ?: []);
 		if ($opts['resolve_infoboxes']) {
 			$prime_rows($rows, ['linked_post_id']);
 		}
 		$data['labels'] = array_map(
-			fn($row) => $attach_infobox(cns_map_suite_normalize_label_row($row)),
+			fn($row) => $attach_infobox(clouansp_map_suite_normalize_label_row($row)),
 			$rows
 		);
 	}
 
 	if ($opts['hierarchy']) {
 		$rows = $cached_rows('hierarchy', static fn(): array => $wpdb->get_results(
-			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}cns_map_hierarchy WHERE parent_map_id = %d ORDER BY id ASC", $map_id),
+			$wpdb->prepare("SELECT * FROM {$wpdb->prefix}clouansp_map_hierarchy WHERE parent_map_id = %d ORDER BY id ASC", $map_id),
 			ARRAY_A
 		) ?: []);
 		$prime_rows($rows, ['child_map_id']);
@@ -267,7 +267,7 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 			}
 
 			$child    = get_post((int) $row['child_map_id']);
-			$image_id = $child ? (int) get_post_meta($child->ID, '_cns_map_image_id', true) : 0;
+			$image_id = $child ? (int) get_post_meta($child->ID, '_clouansp_map_image_id', true) : 0;
 			$row['child_map_title']     = $child ? ($child->post_title ?: '') : '';
 			$row['child_map_status']    = $child ? $child->post_status : '';
 			// Raw excerpt only — get_the_excerpt() would fall back to trimming
@@ -283,13 +283,13 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 
 	if ($opts['parents']) {
 		$rows = $cached_rows('parents', static fn(): array => $wpdb->get_results(
-			$wpdb->prepare("SELECT parent_map_id FROM {$wpdb->prefix}cns_map_hierarchy WHERE child_map_id = %d", $map_id),
+			$wpdb->prepare("SELECT parent_map_id FROM {$wpdb->prefix}clouansp_map_hierarchy WHERE child_map_id = %d", $map_id),
 			ARRAY_A
 		) ?: []);
 		$data['parent_maps'] = array_values(array_filter(array_map(function ($row) {
 			$parent = get_post((int) $row['parent_map_id']);
-			if (! $parent || $parent->post_type !== 'cns_map') return null;
-			$image_id = (int) get_post_meta($parent->ID, '_cns_map_image_id', true);
+			if (! $parent || $parent->post_type !== 'clouansp_map') return null;
+			$image_id = (int) get_post_meta($parent->ID, '_clouansp_map_image_id', true);
 			return [
 				'map_id'    => $parent->ID,
 				'title'     => $parent->post_title ?: '',
@@ -300,7 +300,7 @@ function cns_map_suite_get_map_data(int $map_id, array $opts = []): ?array {
 	}
 
 	if ($cache_dirty) {
-		cns_cache_set('map', $map_id, $row_cache);
+		clouansp_cache_set('map', $map_id, $row_cache);
 	}
 
 	return $data;

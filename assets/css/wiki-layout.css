@@ -1,13 +1,13 @@
-#cns-layout-wrapper {
+#clouansp-layout-wrapper {
 	margin: auto;
 }
 
-body.single-wiki #cns-layout-wrapper > * {
-	max-width: var(--cns-wiki-content-width, none);
+body.single-clouansp_wiki #clouansp-layout-wrapper > * {
+	max-width: var(--clouansp-wiki-content-width, none);
 	margin-inline: auto;
 }
 
-.wp-block-post-title.cns-wiki-title {
+.wp-block-post-title.clouansp-wiki-title {
 	margin-block: 0 1.5rem;
 	padding-bottom: 0.75rem;
 	border-bottom: 1px solid #9b9b9b;
@@ -15,22 +15,22 @@ body.single-wiki #cns-layout-wrapper > * {
 
 @media (max-width: 781px) {
 	/* Mobile Wiki template layout */
-	.cns-col__wiki {
+	.clouansp-col__wiki {
 		order: 1;
 	}
-	.cns-col__center {
+	.clouansp-col__center {
 		order: 2;
 	}
 }
 @media (min-width: 782px) {
-	.wp-block-columns > .wp-block-column.cns-col.cns-col__wiki {
+	.wp-block-columns > .wp-block-column.clouansp-col.clouansp-col__wiki {
 		flex: 0 0 auto;
 		width: fit-content;
 		max-width: 100%;
 	}
 
-	.wp-block-columns > .wp-block-column.cns-col.cns-col__center,
-	.wp-block-columns > .wp-block-column.cns-col.cns-col__center-area {
+	.wp-block-columns > .wp-block-column.clouansp-col.clouansp-col__center,
+	.wp-block-columns > .wp-block-column.clouansp-col.clouansp-col__center-area {
 		flex: 1 1 0;
 		min-width: 0;
 	}

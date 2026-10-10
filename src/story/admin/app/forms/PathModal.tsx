@@ -54,7 +54,7 @@ export default function PathModal( { path, onSave, onClose }: Props ) {
 			onRequestClose={ onClose }
 			size="medium"
 		>
-			<div className="cns-modal-section">
+			<div className="clouansp-modal-section">
 				<h3>{ __( 'Path Label', 'clouds-and-spaceships' ) }</h3>
 				<TextControl
 					__next40pxDefaultSize
@@ -69,7 +69,7 @@ export default function PathModal( { path, onSave, onClose }: Props ) {
 				/>
 			</div>
 
-			<div className="cns-modal-section">
+			<div className="clouansp-modal-section">
 				<h3>{ __( 'Marker Settings', 'clouds-and-spaceships' ) }</h3>
 				<p className="description" style={ { marginBottom: 10 } }>
 					{ __(

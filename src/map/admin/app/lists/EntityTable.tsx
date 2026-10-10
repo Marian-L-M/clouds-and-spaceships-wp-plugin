@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Generic list table for the entity tabs (objects / areas / labels): the
@@ -23,17 +24,17 @@ export default function EntityTable<T extends { id: number }>( {
 	items, columns, emptyText, renderActions,
 }: Props<T> ) {
 	if ( ! items.length ) {
-		return <p className="cns-objects-empty">{ emptyText }</p>;
+		return <p className="clouansp-objects-empty">{ emptyText }</p>;
 	}
 
 	return (
-		<table className="widefat cns-objects-table">
+		<table className="widefat clouansp-objects-table">
 			<thead>
 				<tr>
 					{ columns.map( ( col, i ) => (
 						<th key={ i } style={ col.width ? { width: col.width } : undefined }>{ col.header }</th>
 					) ) }
-					<th>Actions</th>
+					<th>{ __( 'Actions', 'clouds-and-spaceships' ) }</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -42,8 +43,8 @@ export default function EntityTable<T extends { id: number }>( {
 						{ columns.map( ( col, i ) => (
 							<td key={ i } className={ col.className }>{ col.render( item ) }</td>
 						) ) }
-						<td className="cns-row-actions">
-							<div className="cns-actions-row">{ renderActions( item ) }</div>
+						<td className="clouansp-row-actions">
+							<div className="clouansp-actions-row">{ renderActions( item ) }</div>
 						</td>
 					</tr>
 				) ) }

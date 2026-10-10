@@ -8,15 +8,15 @@ defined('ABSPATH') || exit;
 if (
 	isset($_GET['action'], $_GET['map_id']) &&
 	$_GET['action'] === 'delete' &&
-	current_user_can('manage_maps') &&
-	check_admin_referer('cns_delete_map_' . (int) $_GET['map_id'])
+	current_user_can('clouansp_manage_maps') &&
+	check_admin_referer('clouansp_delete_map_' . (int) $_GET['map_id'])
 ) {
 	$map_id = (int) $_GET['map_id'];
-	if (get_post_type($map_id) === 'cns_map') {
+	if (get_post_type($map_id) === 'clouansp_map') {
 		wp_delete_post($map_id, true);
 	}
 	wp_safe_redirect(add_query_arg(
-		['page' => sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS), 'deleted' => '1'],
+		['page' => sanitize_key($_GET['page'] ?? CLOUANSP_MAP_PAGE_SETTINGS_MAPS), 'deleted' => '1'],
 		admin_url('admin.php')
 	));
 	exit;
@@ -24,15 +24,15 @@ if (
 
 // Handle the Icons tab's settings save.
 if (
-	isset($_POST['cns_map_action']) &&
-	$_POST['cns_map_action'] === 'save_icon_settings' &&
-	current_user_can('manage_maps') &&
-	check_admin_referer('cns_map_save_icon_settings')
+	isset($_POST['clouansp_map_action']) &&
+	$_POST['clouansp_map_action'] === 'save_icon_settings' &&
+	current_user_can('clouansp_manage_maps') &&
+	check_admin_referer('clouansp_map_save_icon_settings')
 ) {
-	update_option('cns_map_suite_delete_icons_on_uninstall', isset($_POST['delete_icons_on_uninstall']) ? 1 : 0, false);
+	update_option('clouansp_map_suite_delete_icons_on_uninstall', isset($_POST['delete_icons_on_uninstall']) ? 1 : 0, false);
 
 	wp_safe_redirect(add_query_arg(
-		['page' => CNS_MAP_PAGE_SETTINGS_ICONS, 'settings-saved' => '1'],
+		['page' => CLOUANSP_MAP_PAGE_SETTINGS_ICONS, 'settings-saved' => '1'],
 		admin_url('admin.php')
 	));
 	exit;
@@ -40,22 +40,22 @@ if (
 
 // Handle plugin settings save (admin visibility, uninstall).
 if (
-	isset($_POST['cns_map_action']) &&
-	$_POST['cns_map_action'] === 'save_settings' &&
-	current_user_can('manage_maps') &&
-	check_admin_referer('cns_map_save_settings')
+	isset($_POST['clouansp_map_action']) &&
+	$_POST['clouansp_map_action'] === 'save_settings' &&
+	current_user_can('clouansp_manage_maps') &&
+	check_admin_referer('clouansp_map_save_settings')
 ) {
-	update_option('cns_map_suite_show_maps_menu',      isset($_POST['show_maps_menu']) ? 1 : 0);
+	update_option('clouansp_map_suite_show_maps_menu',      isset($_POST['show_maps_menu']) ? 1 : 0);
 
 	// Zoom control colors. A cleared field posts nothing (the input is disabled
 	// by the "Use default" checkbox), which stores an empty string and returns
 	// the controls to the stylesheet fallback.
-	update_option('cns_map_suite_zoom_main_color',   cns_map_suite_sanitize_optional_color(sanitize_text_field(wp_unslash($_POST['zoom_main_color']   ?? ''))));
-	update_option('cns_map_suite_zoom_accent_color', cns_map_suite_sanitize_optional_color(sanitize_text_field(wp_unslash($_POST['zoom_accent_color'] ?? ''))));
+	update_option('clouansp_map_suite_zoom_main_color',   clouansp_map_suite_sanitize_optional_color(sanitize_text_field(wp_unslash($_POST['zoom_main_color']   ?? ''))));
+	update_option('clouansp_map_suite_zoom_accent_color', clouansp_map_suite_sanitize_optional_color(sanitize_text_field(wp_unslash($_POST['zoom_accent_color'] ?? ''))));
 
 	// Nothing archive-related is saved: the plugin publishes no map archive.
 	wp_safe_redirect(add_query_arg(
-		['page' => sanitize_key($_GET['page'] ?? CNS_MAP_PAGE_SETTINGS_MAPS), 'settings-saved' => '1'],
+		['page' => sanitize_key($_GET['page'] ?? CLOUANSP_MAP_PAGE_SETTINGS_MAPS), 'settings-saved' => '1'],
 		admin_url('admin.php')
 	));
 	exit;

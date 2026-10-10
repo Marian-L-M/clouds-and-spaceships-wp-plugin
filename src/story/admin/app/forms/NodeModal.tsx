@@ -78,11 +78,11 @@ function buildInitialForm(
 }
 
 const SHAPE_OPTIONS: { value: IconType; label: string }[] = [
-	{ value: 'round', label: 'Round' },
-	{ value: 'square', label: 'Square' },
-	{ value: 'diamond', label: 'Diamond' },
-	{ value: 'icon', label: 'Icon' },
-	{ value: 'thumbnail', label: 'Thumbnail' },
+	{ value: 'round', label: __( 'Round', 'clouds-and-spaceships' ) },
+	{ value: 'square', label: __( 'Square', 'clouds-and-spaceships' ) },
+	{ value: 'diamond', label: __( 'Diamond', 'clouds-and-spaceships' ) },
+	{ value: 'icon', label: __( 'Icon', 'clouds-and-spaceships' ) },
+	{ value: 'thumbnail', label: __( 'Thumbnail', 'clouds-and-spaceships' ) },
 ];
 
 export default function NodeModal( {
@@ -148,11 +148,11 @@ export default function NodeModal( {
 			}
 			onRequestClose={ onClose }
 			size="medium"
-			className="cns-node-modal"
+			className="clouansp-node-modal"
 		>
-			<div className="cns-node-modal__body">
+			<div className="clouansp-node-modal__body">
 				{ /* Substory connection */ }
-				<div className="cns-modal-section">
+				<div className="clouansp-modal-section">
 					<h3>{ __( 'Substory Post', 'clouds-and-spaceships' ) }</h3>
 					<SubstoryPicker
 						substoryId={ form.substoryId }
@@ -219,7 +219,7 @@ export default function NodeModal( {
 				</div>
 
 				{ /* Title / excerpt overrides */ }
-				<div className="cns-modal-section">
+				<div className="clouansp-modal-section">
 					<h3>
 						{ __( 'Display Overrides', 'clouds-and-spaceships' ) }
 					</h3>
@@ -229,8 +229,8 @@ export default function NodeModal( {
 							'clouds-and-spaceships'
 						) }
 					</p>
-					<div className="cns-grid cns-grid__12">
-						<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid clouansp-grid__12">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<TextControl
 								label={ __( 'Title', 'clouds-and-spaceships' ) }
 								value={ form.titleOverride }
@@ -241,7 +241,7 @@ export default function NodeModal( {
 								onChange={ ( v ) => set( 'titleOverride', v ) }
 							/>
 						</div>
-						<div className="cns-grid__group cns-grid__span-full">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<TextareaControl
 								label={ __(
 									'Excerpt',
@@ -262,10 +262,10 @@ export default function NodeModal( {
 				</div>
 
 				{ /* Position */ }
-				<div className="cns-modal-section">
+				<div className="clouansp-modal-section">
 					<h3>{ __( 'Position', 'clouds-and-spaceships' ) }</h3>
-					<div className="cns-grid cns-grid__12">
-						<div className="cns-grid__group">
+					<div className="clouansp-grid clouansp-grid__12">
+						<div className="clouansp-grid__group">
 							<NumberControl
 								label={ __( 'X (%)', 'clouds-and-spaceships' ) }
 								min={ 0 }
@@ -287,7 +287,7 @@ export default function NodeModal( {
 								}
 							/>
 						</div>
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<NumberControl
 								label={ __( 'Y (%)', 'clouds-and-spaceships' ) }
 								min={ 0 }
@@ -319,12 +319,12 @@ export default function NodeModal( {
 				</div>
 
 				{ /* Icon settings */ }
-				<div className="cns-modal-section">
+				<div className="clouansp-modal-section">
 					<h3>
 						{ __( 'Node Appearance', 'clouds-and-spaceships' ) }
 					</h3>
-					<div className="cns-grid cns-grid__12">
-						<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid clouansp-grid__12">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<RadioControl
 								label={ __( 'Shape', 'clouds-and-spaceships' ) }
 								selected={ form.iconType }
@@ -362,15 +362,15 @@ export default function NodeModal( {
 						</div>
 
 						{ form.iconType === 'icon' && (
-							<div className="cns-grid__group cns-grid__span-full">
+							<div className="clouansp-grid__group clouansp-grid__span-full">
 								<BaseControl
-									id="cns-node-icon-image"
+									id="clouansp-node-icon-image"
 									label={ __(
 										'Icon Image',
 										'clouds-and-spaceships'
 									) }
 								>
-									<div className="cns-actions-row">
+									<div className="clouansp-actions-row">
 										<MediaSelectButton
 											title={ __(
 												'Select Icon',
@@ -411,7 +411,7 @@ export default function NodeModal( {
 						{ /* Background (for icon and thumbnail) */ }
 						{ ( form.iconType === 'icon' ||
 							form.iconType === 'thumbnail' ) && (
-							<div className="cns-grid__group cns-grid__span-full">
+							<div className="clouansp-grid__group clouansp-grid__span-full">
 								<RadioControl
 									label={ __(
 										'Background shape',
@@ -440,7 +440,7 @@ export default function NodeModal( {
 						{ ( form.iconType === 'icon' ||
 							form.iconType === 'thumbnail' ) &&
 							form.iconBgShape !== 'none' && (
-								<div className="cns-grid__group">
+								<div className="clouansp-grid__group">
 									<ColorField
 										label={ __(
 											'Background color',
@@ -457,7 +457,7 @@ export default function NodeModal( {
 						{ ! [ 'icon', 'thumbnail' ].includes(
 							form.iconType
 						) && (
-							<div className="cns-grid__group">
+							<div className="clouansp-grid__group">
 								<ColorField
 									label={ __(
 										'Fill color',
@@ -469,7 +469,7 @@ export default function NodeModal( {
 							</div>
 						) }
 
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<ColorField
 								label={ __(
 									'Border color',
@@ -481,7 +481,7 @@ export default function NodeModal( {
 								}
 							/>
 						</div>
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<RangeControl
 								label={ __(
 									'Border width',
@@ -497,7 +497,7 @@ export default function NodeModal( {
 								}
 							/>
 						</div>
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<RangeControl
 								label={ __(
 									'Size (px)',
@@ -527,7 +527,7 @@ export default function NodeModal( {
 				</div>
 
 				{ /* Path assignment */ }
-				<div className="cns-modal-section">
+				<div className="clouansp-modal-section">
 					<h3>{ __( 'Story Path', 'clouds-and-spaceships' ) }</h3>
 					<SelectControl
 						label={ __( 'Path', 'clouds-and-spaceships' ) }
@@ -559,7 +559,7 @@ export default function NodeModal( {
 				</div>
 
 				{ /* Per-node marker override */ }
-				<div className="cns-modal-section">
+				<div className="clouansp-modal-section">
 					<h3>
 						{ __(
 							'Individual Marker Override',
@@ -573,8 +573,8 @@ export default function NodeModal( {
 						) }
 					</p>
 
-					<div className="cns-grid cns-grid__12">
-						<div className="cns-grid__group cns-grid__span-full">
+					<div className="clouansp-grid clouansp-grid__12">
+						<div className="clouansp-grid__group clouansp-grid__span-full">
 							<RadioControl
 								label={ __(
 									'Marker type',
@@ -611,7 +611,7 @@ export default function NodeModal( {
 						</div>
 
 						{ /* Color override */ }
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<CheckboxControl
 								label={ __(
 									'Color override',
@@ -640,7 +640,7 @@ export default function NodeModal( {
 						</div>
 
 						{ /* Size override */ }
-						<div className="cns-grid__group">
+						<div className="clouansp-grid__group">
 							<CheckboxControl
 								label={ __(
 									'Size override',
@@ -672,15 +672,15 @@ export default function NodeModal( {
 
 						{ /* Icon picker — only when type is icon */ }
 						{ form.markerType === 'icon' && (
-							<div className="cns-grid__group cns-grid__span-full">
+							<div className="clouansp-grid__group clouansp-grid__span-full">
 								<BaseControl
-									id="cns-node-marker-icon"
+									id="clouansp-node-marker-icon"
 									label={ __(
 										'Marker icon',
 										'clouds-and-spaceships'
 									) }
 								>
-									<div className="cns-actions-row">
+									<div className="clouansp-actions-row">
 										<MediaSelectButton
 											title={ __(
 												'Select Marker Icon',
@@ -722,7 +722,7 @@ export default function NodeModal( {
 						{ /* Offset overrides — only when type is icon */ }
 						{ form.markerType === 'icon' && (
 							<>
-								<div className="cns-grid__group">
+								<div className="clouansp-grid__group">
 									<CheckboxControl
 										label={ __(
 											'Offset X override',
@@ -758,7 +758,7 @@ export default function NodeModal( {
 										/>
 									) }
 								</div>
-								<div className="cns-grid__group">
+								<div className="clouansp-grid__group">
 									<CheckboxControl
 										label={ __(
 											'Offset Y override',
@@ -800,7 +800,7 @@ export default function NodeModal( {
 				</div>
 			</div>
 
-			<div className="cns-node-modal__footer">
+			<div className="clouansp-node-modal__footer">
 				<Button variant="tertiary" onClick={ onClose }>
 					{ __( 'Cancel', 'clouds-and-spaceships' ) }
 				</Button>

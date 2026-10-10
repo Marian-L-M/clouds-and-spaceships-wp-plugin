@@ -1,7 +1,7 @@
 import { useState } from '@wordpress/element';
 import { Button, Flex } from '@wordpress/components';
 import { listView, pencil, plus, trash } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import PathModal from '../forms/PathModal';
 import PathNodesModal from '../forms/PathNodesModal';
 import type {
@@ -57,7 +57,7 @@ export default function PathsPanel( {
 	}
 
 	return (
-		<div className="cns-panel cns-paths-panel">
+		<div className="clouansp-panel clouansp-paths-panel">
 			<h2>{ __( 'Story Paths', 'clouds-and-spaceships' ) }</h2>
 			<p className="description">
 				{ __(
@@ -142,7 +142,7 @@ export default function PathsPanel( {
 									}
 								</td>
 								<td>
-									<div className="cns-actions-row">
+									<div className="clouansp-actions-row">
 										<Flex
 											direction="row"
 											align="center"
@@ -197,7 +197,14 @@ export default function PathsPanel( {
 												onClick={ () => {
 													if (
 														window.confirm(
-															`Delete path "${ path.label }"? Nodes will become unassigned.`
+															sprintf(
+																/* translators: %s: path label. */
+																__(
+																	'Delete path "%s"? Nodes will become unassigned.',
+																	'clouds-and-spaceships'
+																),
+																path.label
+															)
 														)
 													) {
 														onDeletePath( path.id );

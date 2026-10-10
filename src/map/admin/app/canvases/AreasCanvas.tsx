@@ -240,8 +240,8 @@ export default function AreasCanvas( {
 	const isRepositioning = repoNodeIdx !== null;
 	return (
 		<Flex
-			className={ `cns-objects-canvas-wrap${
-				isRepositioning ? ' cns-canvas--repositioning' : ''
+			className={ `clouansp-objects-canvas-wrap${
+				isRepositioning ? ' clouansp-canvas--repositioning' : ''
 			}` }
 			gap={ 4 }
 			direction="column"

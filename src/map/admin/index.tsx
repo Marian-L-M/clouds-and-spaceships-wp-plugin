@@ -4,10 +4,10 @@ import IconLibraryApp from './app/IconLibraryApp';
 import './admin.scss';
 
 document.addEventListener( 'DOMContentLoaded', () => {
-	const editorEl = document.getElementById( 'cns-admin-root' );
+	const editorEl = document.getElementById( 'clouansp-admin-root' );
 	if ( editorEl ) createRoot( editorEl ).render( <MapEditorApp /> );
 
-	const iconsEl = document.getElementById( 'cns-icons-root' );
+	const iconsEl = document.getElementById( 'clouansp-icons-root' );
 	if ( iconsEl ) createRoot( iconsEl ).render( <IconLibraryApp /> );
 
 	document.body.addEventListener( 'click', ( e ) => {

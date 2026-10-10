@@ -29,7 +29,7 @@ export default function PreviewCanvas( { drawState, objects, areas, labels }: Pr
 	} );
 
 	return (
-		<div className="cns-canvas-wrap">
+		<div className="clouansp-canvas-wrap">
 			<CanvasZoomWrap allowFullscreen>
 				<canvas ref={ canvasRef } />
 			</CanvasZoomWrap>

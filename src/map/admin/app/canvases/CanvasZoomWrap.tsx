@@ -74,22 +74,22 @@ export default function CanvasZoomWrap( {
 			if ( e.key === 'Escape' ) setFullscreen( false );
 		}
 		document.addEventListener( 'keydown', onKeyDown );
-		document.body.classList.add( 'cns-canvas-fullscreen-open' );
+		document.body.classList.add( 'clouansp-canvas-fullscreen-open' );
 		return () => {
 			document.removeEventListener( 'keydown', onKeyDown );
-			document.body.classList.remove( 'cns-canvas-fullscreen-open' );
+			document.body.classList.remove( 'clouansp-canvas-fullscreen-open' );
 		};
 	}, [ fullscreen ] );
 
 	const rootClass =
-		'cns-canvas-zoom' +
-		( zoom > 1 ? ' cns-canvas-zoom--zoomed' : '' ) +
+		'clouansp-canvas-zoom' +
+		( zoom > 1 ? ' clouansp-canvas-zoom--zoomed' : '' ) +
 		( fullscreen ? ' is-fullscreen' : '' );
 
 	return (
 		<div className={ rootClass }>
 			<Flex
-				className="cns-canvas-zoom__controls"
+				className="clouansp-canvas-zoom__controls"
 				gap={ 1 }
 				direction="column"
 				align="start"
@@ -115,7 +115,7 @@ export default function CanvasZoomWrap( {
 					onClick={ () => changeZoom( ZOOM_STEP ) }
 					disabled={ zoom >= MAX_ZOOM }
 				/>
-				<span className="cns-canvas-zoom__value">
+				<span className="clouansp-canvas-zoom__value">
 					{ Math.round( zoom * 100 ) }%
 				</span>
 				<Button
@@ -126,9 +126,9 @@ export default function CanvasZoomWrap( {
 					disabled={ zoom <= MIN_ZOOM }
 				/>
 			</Flex>
-			<div className="cns-canvas-zoom__scroll" ref={ scrollRef }>
+			<div className="clouansp-canvas-zoom__scroll" ref={ scrollRef }>
 				<div
-					className="cns-canvas-zoom__inner"
+					className="clouansp-canvas-zoom__inner"
 					style={
 						zoom > 1 ? { width: `${ zoom * 100 }%` } : undefined
 					}

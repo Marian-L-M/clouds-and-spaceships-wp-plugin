@@ -26,9 +26,9 @@ export default function save( { attributes } ) {
 	);
 
 	const renderDatalist = () => (
-		<dl className="infobox-row__list">
+		<dl className="clouansp-infobox-row__list">
 			{ orderedItems.map( ( item ) => (
-				<div key={ item.id } className="infobox-row__item">
+				<div key={ item.id } className="clouansp-infobox-row__item">
 					<dt>{ item.dt }</dt>
 					<dd>
 						{ item.ddText }
@@ -40,7 +40,7 @@ export default function save( { attributes } ) {
 	);
 
 	const renderTable = () => (
-		<table className="infobox-row__table">
+		<table className="clouansp-infobox-row__table">
 			<tbody>
 				{ orderedItems.map( ( item ) => (
 					<tr key={ item.id }>

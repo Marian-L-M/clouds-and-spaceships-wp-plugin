@@ -10,6 +10,7 @@ import type {
 	ShapeType,
 	LabelStyleFields,
 } from '../map/types';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Canvas geometry shared between the admin editor (src/admin) and the
@@ -292,7 +293,7 @@ export function drawLabelShape(
 	ctx.textAlign    = 'center';
 	ctx.textBaseline = 'middle';
 	ctx.fillStyle    = textColor;
-	ctx.fillText( label.text || ( opts.showEmptyPlaceholder ? '(empty label)' : '' ), box.cx, box.cy );
+	ctx.fillText( label.text || ( opts.showEmptyPlaceholder ? __( '(empty label)', 'clouds-and-spaceships' ) : '' ), box.cx, box.cy );
 
 	if ( opts.selected ) {
 		ctx.beginPath();

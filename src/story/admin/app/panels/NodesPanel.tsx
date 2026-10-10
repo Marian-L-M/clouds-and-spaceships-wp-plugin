@@ -43,8 +43,8 @@ export default function NodesPanel( {
 	const pathMap = new Map( paths.map( ( p ) => [ p.id, p ] ) );
 	if ( ! nodes.length ) {
 		return (
-			<div className="cns-panel">
-				<p>No nodes yet.</p>
+			<div className="clouansp-panel">
+				<p>{ __( 'No nodes yet.', 'clouds-and-spaceships' ) }</p>
 			</div>
 		);
 	}
@@ -75,22 +75,22 @@ export default function NodesPanel( {
 			gap={ 2 }
 			direction="column"
 			align="center"
-			className="cns-panel cns-nodes-panel"
+			className="clouansp-panel clouansp-nodes-panel"
 		>
 			<FlexBlock style={ { width: '100%' } }>
 				<Flex gap={ 4 } align="center" justify="start">
 					<FlexItem>
-						<h2>Story Nodes</h2>
+						<h2>{ __( 'Story Nodes', 'clouds-and-spaceships' ) }</h2>
 					</FlexItem>
 					<FlexItem>
 						<Button
 							variant="secondary"
 							onClick={ toggleVisibleHelpInformation }
 						>
-							Help Information
+							{ __( 'Help Information', 'clouds-and-spaceships' ) }
 							{ isVisibleHelpInformation && (
 								<Popover
-									headerTitle="Help Information"
+									headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 									expandOnMobile
 								>
 									<ol
@@ -100,19 +100,13 @@ export default function NodesPanel( {
 										} }
 									>
 										<li>
-											Set Start - marks the initial node
-											and path for the story element.
+											{ __( 'Set Start - marks the initial node and path for the story element.', 'clouds-and-spaceships' ) }
 										</li>
 										<li>
-											Style Path - style setting for path
-											between this node and the next in
-											path.
+											{ __( 'Style Path - style setting for path between this node and the next in path.', 'clouds-and-spaceships' ) }
 										</li>
 										<li>
-											Branch Order - If a story path
-											splits into multiple nodes, set the
-											branch order to determine the
-											primary path and the menu order.
+											{ __( 'Branch Order - If a story path splits into multiple nodes, set the branch order to determine the primary path and the menu order.', 'clouds-and-spaceships' ) }
 										</li>
 									</ol>
 								</Popover>
@@ -126,10 +120,10 @@ export default function NodesPanel( {
 					<thead>
 						<tr>
 							<th style={ { width: 32 } }></th>
-							<th>Node</th>
-							<th>Substory</th>
-							<th>Outgoing Paths</th>
-							<th>Actions</th>
+							<th>{ __( 'Node', 'clouds-and-spaceships' ) }</th>
+							<th>{ __( 'Substory', 'clouds-and-spaceships' ) }</th>
+							<th>{ __( 'Outgoing Paths', 'clouds-and-spaceships' ) }</th>
+							<th>{ __( 'Actions', 'clouds-and-spaceships' ) }</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -146,7 +140,7 @@ export default function NodesPanel( {
 									{ /* Icon */ }
 									<td>
 										<span
-											className="cns-node-swatch"
+											className="clouansp-node-swatch"
 											style={ {
 												background:
 													node.iconType ===
@@ -178,16 +172,16 @@ export default function NodesPanel( {
 										</strong>
 										{ node.id === startNodeId && (
 											<span
-												className="cns-badge cns-badge--featured"
+												className="clouansp-badge clouansp-badge--featured"
 												style={ { marginLeft: 6 } }
 											>
-												Start
+												{ __( 'Start', 'clouds-and-spaceships' ) }
 											</span>
 										) }
 										{ node.pathId &&
 											pathMap.has( node.pathId ) && (
 												<span
-													className="cns-badge"
+													className="clouansp-badge"
 													style={ {
 														marginLeft: 6,
 														background: pathMap.get(
@@ -237,7 +231,7 @@ export default function NodesPanel( {
 									<td>
 										{ outEdges.length === 0 && (
 											<span className="description">
-												None
+												{ __( 'None', 'clouds-and-spaceships' ) }
 											</span>
 										) }
 										{ outEdges.map( ( edge, index ) => {
@@ -251,7 +245,7 @@ export default function NodesPanel( {
 													justify="space-between"
 													gap={ 2 }
 													key={ edge.id }
-													className="cns-edge-row"
+													className="clouansp-edge-row"
 												>
 													<FlexItem>
 														→{ ' ' }
@@ -369,7 +363,7 @@ export default function NodesPanel( {
 																		onClick={ () => {
 																			if (
 																				window.confirm(
-																					'Are you sure you want to delete this connection?'
+																					__( 'Are you sure you want to delete this connection?', 'clouds-and-spaceships' )
 																				)
 																			)
 																				onEdgeDelete(
@@ -386,13 +380,13 @@ export default function NodesPanel( {
 										} ) }
 									</td>
 									{ /* Actions */ }
-									<td className="cns-row-actions">
+									<td className="clouansp-row-actions">
 										<Flex
 											direction="row"
 											align="center"
 											justify="end"
 											gap={ 0 }
-											className="cns-actions-row"
+											className="clouansp-actions-row"
 										>
 											{ node.id !== startNodeId && (
 												<Button
@@ -443,7 +437,7 @@ export default function NodesPanel( {
 												onClick={ () => {
 													if (
 														window.confirm(
-															'Delete this node and all of its connections?'
+															__( 'Delete this node and all of its connections?', 'clouds-and-spaceships' )
 														)
 													) {
 														onDeleteNode( node.id );

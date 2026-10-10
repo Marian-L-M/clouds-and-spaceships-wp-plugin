@@ -43,7 +43,7 @@ export default function MediaPicker( {
 	onChange,
 }: Props ) {
 	return (
-		<Card className="cns-image-picker">
+		<Card className="clouansp-image-picker">
 			{ label && <CardHeader> { label }</CardHeader> }
 			{ imageUrl ? (
 				<CardMedia>

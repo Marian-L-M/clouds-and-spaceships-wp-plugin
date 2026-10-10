@@ -16,7 +16,7 @@ import {
 } from '@wordpress/components';
 import './editor.scss';
 
-const ALLOWED_BLOCKS = [ 'cns-wiki-suite/wiki-card' ];
+const ALLOWED_BLOCKS = [ 'clouansp-wiki-suite/wiki-card' ];
 
 // Site-wide grid defaults (CNS → Wiki tab), injected by PHP before this
 // script. Grid attributes stay unset until the user touches them, so blocks
@@ -27,7 +27,7 @@ const GRID_DEFAULTS = {
 	columnsDesktop: 3,
 	columnGap: 16,
 	rowGap: 16,
-	...( window.cnsWikiGridDefaults || {} ),
+	...( window.clouanspWikiGridDefaults || {} ),
 };
 
 function GridTabs( { breakpoint, attributes, setAttributes } ) {
@@ -49,18 +49,18 @@ function GridTabs( { breakpoint, attributes, setAttributes } ) {
 function NewestPreviewGrid( { columns, numberOfPosts, columnGap, rowGap } ) {
 	return (
 		<div
-			className="wiki-contents__grid wiki-contents__grid--preview"
+			className="clouansp-wiki-contents__grid clouansp-wiki-contents__grid--preview"
 			style={ {
-				'--wiki-columns-desktop': columns,
-				'--wiki-column-gap': `${ columnGap }px`,
-				'--wiki-row-gap': `${ rowGap }px`,
+				'--clouansp-wiki-columns-desktop': columns,
+				'--clouansp-wiki-column-gap': `${ columnGap }px`,
+				'--clouansp-wiki-row-gap': `${ rowGap }px`,
 			} }
 		>
 			{ Array( numberOfPosts )
 				.fill( null )
 				.map( ( _, i ) => (
-					<div key={ i } className="wiki-contents__placeholder-cell">
-						<span className="wiki-contents__placeholder-label">
+					<div key={ i } className="clouansp-wiki-contents__placeholder-cell">
+						<span className="clouansp-wiki-contents__placeholder-label">
 							{ __( 'Wiki', 'clouds-and-spaceships' ) } { i + 1 }
 						</span>
 					</div>
@@ -93,7 +93,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		if ( current < numberOfPosts ) {
 			const added = Array( numberOfPosts - current )
 				.fill( null )
-				.map( () => createBlock( 'cns-wiki-suite/wiki-card', {} ) );
+				.map( () => createBlock( 'clouansp-wiki-suite/wiki-card', {} ) );
 			replaceInnerBlocks( clientId, [ ...innerBlocks, ...added ], false );
 		} else {
 			replaceInnerBlocks( clientId, innerBlocks.slice( 0, numberOfPosts ), false );
@@ -101,18 +101,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}, [ numberOfPosts, mode ] );
 
 	const gridStyle = {
-		'--wiki-columns-desktop': columnsDesktop,
-		'--wiki-columns-tablet':  columnsTablet,
-		'--wiki-columns-mobile':  columnsMobile,
-		'--wiki-column-gap':      `${ columnGap }px`,
-		'--wiki-row-gap':         `${ rowGap }px`,
+		'--clouansp-wiki-columns-desktop': columnsDesktop,
+		'--clouansp-wiki-columns-tablet':  columnsTablet,
+		'--clouansp-wiki-columns-mobile':  columnsMobile,
+		'--clouansp-wiki-column-gap':      `${ columnGap }px`,
+		'--clouansp-wiki-row-gap':         `${ rowGap }px`,
 	};
 
 	// Always mount InnerBlocks so WordPress state is preserved when toggling modes.
 	// In newest mode the inner blocks container is hidden via CSS.
 	const innerBlocksProps = useInnerBlocksProps(
 		{
-			className: 'wiki-contents__grid',
+			className: 'clouansp-wiki-contents__grid',
 			style: {
 				...gridStyle,
 				...( mode === 'newest' ? { display: 'none' } : {} ),
@@ -124,7 +124,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 	);
 
-	const blockProps = useBlockProps( { className: 'wiki-contents' } );
+	const blockProps = useBlockProps( { className: 'clouansp-wiki-contents' } );
 
 	return (
 		<div { ...blockProps }>

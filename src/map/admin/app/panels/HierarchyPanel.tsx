@@ -109,23 +109,23 @@ export default function HierarchyPanel( {
 
 	return (
 		<div
-			className="cns-tab-panel cns-tab-panel--active"
+			className="clouansp-tab-panel clouansp-tab-panel--active"
 			data-panel="hierarchy"
 			role="tabpanel"
 		>
 			<Flex gap={ 2 } direction="column" align="center">
-				<div className="cns-objects-layout">
+				<div className="clouansp-objects-layout">
 					{ /* ── Parent maps breadcrumb scaffold ── */ }
 					{ parentMaps.length > 0 && (
-						<div className="cns-hierarchy-parents">
-							<span className="cns-hierarchy-parents__label">
+						<div className="clouansp-hierarchy-parents">
+							<span className="clouansp-hierarchy-parents__label">
 								{ __( 'Parent maps:', 'clouds-and-spaceships' ) }
 							</span>
 							{ parentMaps.map( ( p ) => (
 								<a
 									key={ p.map_id }
 									href={ p.url }
-									className="cns-hierarchy-parents__link"
+									className="clouansp-hierarchy-parents__link"
 								>
 									{ p.thumbnail && (
 										<img src={ p.thumbnail } alt="" />
@@ -142,10 +142,10 @@ export default function HierarchyPanel( {
 									variant="tertiary"
 									onClick={ toggleVisibleHelpInformation }
 								>
-									Help Information
+									{ __( 'Help Information', 'clouds-and-spaceships' ) }
 									{ isVisibleHelpInformation && (
 										<Popover
-											headerTitle="Help Information"
+											headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 											expandOnMobile
 										>
 											<ol

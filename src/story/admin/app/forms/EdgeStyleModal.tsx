@@ -82,8 +82,8 @@ export default function EdgeStyleModal( {
 					'clouds-and-spaceships'
 				) }
 			</p>
-			<div className="cns-grid cns-grid__12">
-				<div className="cns-grid__group">
+			<div className="clouansp-grid clouansp-grid__12">
+				<div className="clouansp-grid__group">
 					<Flex gap={ 1 } align="flex-end">
 						<div style={ { flex: 1 } }>
 							<ColorField
@@ -113,7 +113,7 @@ export default function EdgeStyleModal( {
 						/>
 					</Flex>
 				</div>
-				<div className="cns-grid__group">
+				<div className="clouansp-grid__group">
 					<Flex gap={ 1 } align="flex-end">
 						<div style={ { flex: 1 } }>
 							<NumberControl
@@ -147,7 +147,7 @@ export default function EdgeStyleModal( {
 						/>
 					</Flex>
 				</div>
-				<div className="cns-grid__group">
+				<div className="clouansp-grid__group">
 					<Flex gap={ 1 } align="flex-end">
 						<div style={ { flex: 1 } }>
 							<SelectControl

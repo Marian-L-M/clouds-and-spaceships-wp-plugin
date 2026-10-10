@@ -12,6 +12,20 @@ shared directories look the way they do.
 > This file is for developers. The user-facing text that wordpress.org parses
 > lives in `readme.txt`; wp.org ignores this one entirely.
 
+Repository: https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin
+
+Every global identifier uses the `clouansp` prefix: `clouansp_` for functions,
+options, meta keys, tables, post types, capabilities and nonces, `CLOUANSP_`
+for constants, `clouansp-` for handles, slugs, block namespaces and CSS
+classes, `--clouansp-` for CSS custom properties, and `clouansp` + CamelCase for
+JS globals. The old three plugins used `cns`, which wp.org rejects as shorter
+than four characters. The "CNS" menu label is display text, not a prefix.
+
+CSS classes are BEM under the prefix (`clouansp-infobox__title`,
+`clouansp-infobox-group__outer--collapse-mobile`). State classes toggled at
+runtime keep core's unprefixed `is-*` convention (`is-active`, `is-open`,
+`is-fullscreen`) and are only ever styled in combination with a prefixed class.
+
 ---
 
 ## Layout
@@ -20,11 +34,11 @@ shared directories look the way they do.
 clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle
 uninstall.php                  drops tables + options always, posts only on opt-in
 includes/
-  settings-page.php            the tabbed CNS settings screen (cns_admin_tabs filter)
-  archive.php                  archive on/off + slug + rewrite flush, all suites
+  settings-page.php            the tabbed CNS settings screen (clouansp_admin_tabs filter)
+  archive.php                  story + wiki archives: on/off, slug, rewrite flush
   cache.php                    render-row cache for the map and story tables
-  capabilities.php             manage_maps / manage_stories
-  map-template.php             single-cns_map + single-cns_story block templates
+  capabilities.php             clouansp_manage_maps / clouansp_manage_stories
+  map-template.php             single-clouansp_map + single-clouansp_story block templates
   info/                        the Info tab
   wiki/                        settings, wiki CPT, glossary, the Wiki + Glossary tabs
   map/                         map CPT, tables, public map-data API, admin + REST
@@ -36,12 +50,14 @@ src/
   map/  story/                 the two admin React apps
   shared/                      code both editors use (see below)
   map-panel/                   the Stories tab inside the map editor
-  admin-settings/              the CNS settings screen bundle
+  admin-settings/              the CNS settings screen bundle (layout, data-confirm
+                               prompts, data-autosubmit selects)
   formats/glossary/            glossary inline rich-text format
 ```
 
-Settings tabs register through the `cns_admin_tabs` filter and currently are:
-Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
+Settings tabs register through the `clouansp_admin_tabs` filter and currently are,
+in order: Info, Wiki, Glossary, Maps, Icons, Stories, Substories. Info comes first,
+so the top-level CNS menu entry opens it.
 
 ### `src/shared/`
 
@@ -62,8 +78,8 @@ Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
 | `archive.php` in map + story, plus the same logic inline in the wiki                               | `includes/archive.php`                           |
 | `cache.php` in map + story                                                                         | `includes/cache.php`                             |
 | `capabilities.php` in map + story                                                                  | `includes/capabilities.php`                      |
-| 3 rewrite-flush flags and init handlers                                                            | one `cns_needs_rewrite_flush` flag               |
-| 2 DB version options and upgrade routines                                                          | one `cns_db_version`                             |
+| 3 rewrite-flush flags and init handlers                                                            | one `clouansp_needs_rewrite_flush` flag          |
+| 2 DB version options and upgrade routines                                                          | one `clouansp_db_version`                        |
 | `ColorField` / `Notices` (byte-identical copies)                                                   | `src/shared/admin/`                              |
 | `EditorHeader` / `TabBar` (near-identical)                                                         | `src/shared/admin/`, entity labels as props      |
 | 2 `apiFetch` wrappers                                                                              | `src/shared/admin/api.ts`                        |
@@ -100,29 +116,42 @@ branches are unreachable, so they are gone:
 
 ---
 
+### Block deprecations
+
+Infobox, Infobox Group and Infobox Row are static blocks: their markup, class
+names included, is saved into post content. 0.2.0 prefixed those classes, so
+each block carries a `deprecated.js` with a verbatim copy of its pre-0.2.0
+`save()`. The editor upgrades old blocks silently and they are saved with the
+new markup on the next post save; until then the front end still serves the
+old, now unstyled, classes. Never edit a deprecated `save()` — add a new
+deprecation instead. `display_mode` values are stored attributes and keep
+their old spellings; `save.js` maps each one to a modifier class.
+
+---
+
 ## Theme independence
 
 The plugin is self-contained and makes no assumptions about the active theme.
 
--   `assets/css/wiki-layout.css` gives the wiki's `cns-col*` columns sensible
+-   `assets/css/wiki-layout.css` gives the wiki's `clouansp-col*` columns sensible
     proportions on any theme, since the classes carry no widths of their own.
--   Block templates (`single-cns_map`, `single-cns_wiki`, `single-cns_story`) are
+-   Block templates (`single-clouansp_map`, `single-clouansp_wiki`, `single-clouansp_story`) are
     registered by the plugin and sit below theme templates, so a theme can
     override any of them by shipping a template of the same name.
 
 ## Uninstall
 
-`uninstall.php` always drops the seven `cns_map_*` / `cns_story_*` tables and
+`uninstall.php` always drops the seven `clouansp_map_*` / `clouansp_story_*` tables and
 deletes every option. On top of that:
 
-| Post type        | Deleted                                             |
-| ---------------- | --------------------------------------------------- |
-| `cns_map`        | always                                              |
-| `cns_story`      | always                                              |
-| `cns_substory`   | `cns_story_suite_delete_substories_on_uninstall`    |
-| `cns_wiki`       | `cns_wiki_settings['wiki_delete_on_uninstall']`     |
-| `cns_glossary`   | `cns_wiki_settings['glossary_delete_on_uninstall']` |
-| icon attachments | `cns_map_suite_delete_icons_on_uninstall`           |
+| Post type           | Deleted                                                  |
+| ------------------- | -------------------------------------------------------- |
+| `clouansp_map`      | always                                                   |
+| `clouansp_story`    | always                                                   |
+| `clouansp_substory` | `clouansp_story_suite_delete_substories_on_uninstall`    |
+| `clouansp_wiki`     | `clouansp_wiki_settings['wiki_delete_on_uninstall']`     |
+| `clouansp_glossary` | `clouansp_wiki_settings['glossary_delete_on_uninstall']` |
+| icon attachments    | `clouansp_map_suite_delete_icons_on_uninstall`           |
 
 Maps and stories are unconditional because their entire substance lives in the
 dropped tables — a map is its objects, areas and labels, a story is its nodes,
@@ -138,11 +167,6 @@ reappear on reinstall.
 `wp_delete_post()` re-parents attachments rather than deleting them, so featured
 images and map backgrounds survive in the media library either way.
 
-Two options are retired and kept only in the cleanup list, so they are removed
-from installs that saved them: `cns_map_suite_delete_on_uninstall` and
-`cns_story_suite_delete_on_uninstall`. The latter used to cover substories, so
-anyone who had ticked it needs to re-tick the new substory setting.
-
 ## No outbound requests
 
 The plugin makes no HTTP requests: no `wp_remote_*`, no cURL, no external
@@ -153,8 +177,10 @@ listing free of an external-services disclosure.
 
 ## Development
 
+Needs Node.js 20.19 or later (`sass` and `chokidar` require it).
+
 ```sh
-npm install --legacy-peer-deps   # @wordpress/icons needs the flag
+npm ci                           # exact dependency tree from package-lock.json
 npm run build                    # production: minified, no source maps
 npm start                        # watch mode: unminified + source maps
 npm run lint:ts                  # tsc --noEmit
@@ -164,12 +190,19 @@ npm run format                   # prettier
 npm run plugin-zip               # distributable zip, per files[] in package.json
 ```
 
-`npm run build` is required after checkout — `build/` is gitignored and the
-plugin registers no blocks without `build/blocks-manifest.php`.
+`build/` is committed, so a checkout runs as-is; the plugin registers no
+blocks without `build/blocks-manifest.php`. Rebuild and commit `build/`
+whenever `src/` changes.
 
-**Always `npm run build` before `npm run plugin-zip`,** and stop the watcher
-first — both write to `build/`. `npm start` leaves an unminified bundle plus
-~1.4 MB of source maps there, and `plugin-zip` will happily ship it.
+**Always `npm run build` before `npm run plugin-zip` or committing,** and stop
+the watcher first — both write to `build/`. `npm start` leaves an unminified
+bundle plus ~1.4 MB of source maps there, and a production build does not
+delete them: remove leftover `build/**/*.map` files by hand, or `plugin-zip`
+and git will happily ship them.
+
+`npm ci` needs no flags. Adding or upgrading a dependency with `npm install`
+does: without the lockfile pinning versions, `@wordpress/icons`' React peer
+range conflicts, so use `npm install --legacy-peer-deps <package>`.
 
 The codebase is not prettier-clean; `npm run format` would rewrite large
 amounts of unrelated code. Match the surrounding style instead, and check that

@@ -4,7 +4,7 @@ Tags: worldbuilding, mapmaking, interactive map, wiki, storytelling
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,12 @@ A canvas editor for branching stories laid over one of your maps.
 **Your world stays on your site**
 
 Clouds and Spaceships never sends anything anywhere. There is no account to create and no service to connect, no tracking and no analytics, and nothing is loaded from another server. It uses no external services at all: everything you write and draw stays in your own WordPress site.
+
+**Source code**
+
+The JavaScript and CSS in the `build/` folder are compiled. The uncompiled source code and build tools are publicly available on GitHub: https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin
+
+To build it yourself, install Node.js (20.19 or later) and run `npm ci` followed by `npm run build` in the plugin folder. `npm ci` installs the exact dependency versions recorded in `package-lock.json`; the build uses `@wordpress/scripts` and writes the compiled files from `src/` to `build/`.
 
 == Installation ==
 
@@ -91,5 +97,5 @@ The plugin's settings are always removed. If you intend to come back, back up fi
 
 == Changelog ==
 
-= 0.1.0 =
+= 0.2.0 =
 * Initial release.

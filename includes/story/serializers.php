@@ -8,14 +8,14 @@ defined('ABSPATH') || exit;
  * frontend may see (no edit URLs, unpublished substories gated by read_post).
  */
 
-function cns_story_suite_resolve_icon_url(int $icon_id): string {
+function clouansp_story_suite_resolve_icon_url(int $icon_id): string {
 	if (! $icon_id) return '';
-	// Map-suite icons are regular WP attachments (tagged with _cns_map_icon meta),
+	// Map icons are regular WP attachments (tagged with _clouansp_map_icon meta),
 	// so the attachment URL is the canonical source.
 	return (string) (wp_get_attachment_url($icon_id) ?: '');
 }
 
-function cns_story_suite_serialize_node(array $row, bool $public = false): array {
+function clouansp_story_suite_serialize_node(array $row, bool $public = false): array {
 	$node = ['id' => (int) $row['id']];
 
 	if (! $public) {
@@ -31,7 +31,7 @@ function cns_story_suite_serialize_node(array $row, bool $public = false): array
 		'y'                => (float) $row['y'],
 		'iconType'         => $row['icon_type'],
 		'iconId'           => $row['icon_id'] ? (int) $row['icon_id'] : null,
-		'iconUrl'          => $row['icon_id'] ? cns_story_suite_resolve_icon_url((int) $row['icon_id']) : null,
+		'iconUrl'          => $row['icon_id'] ? clouansp_story_suite_resolve_icon_url((int) $row['icon_id']) : null,
 		'iconColor'        => $row['icon_color'],
 		'iconSize'         => (float) $row['icon_size'],
 		'iconBorderColor'  => $row['icon_border_color'] ?? '#000000',
@@ -40,7 +40,7 @@ function cns_story_suite_serialize_node(array $row, bool $public = false): array
 		'iconBgShape'      => $row['icon_bg_shape'] ?? 'none',
 		'markerType'       => $row['marker_type'] ?? 'inherit',
 		'markerIconId'     => !empty($row['marker_icon_id']) ? (int) $row['marker_icon_id'] : null,
-		'markerIconUrl'    => !empty($row['marker_icon_id']) ? cns_story_suite_resolve_icon_url((int) $row['marker_icon_id']) : null,
+		'markerIconUrl'    => !empty($row['marker_icon_id']) ? clouansp_story_suite_resolve_icon_url((int) $row['marker_icon_id']) : null,
 		'markerColor'      => isset($row['marker_color'])        ? ($row['marker_color'] ?: null) : null,
 		'markerSize'       => isset($row['marker_size'])         ? ($row['marker_size'] !== null ? (float) $row['marker_size'] : null) : null,
 		'markerIconOffsetX' => isset($row['marker_icon_offset_x']) ? ($row['marker_icon_offset_x'] !== null ? (float) $row['marker_icon_offset_x'] : null) : null,
@@ -66,7 +66,7 @@ function cns_story_suite_serialize_node(array $row, bool $public = false): array
 		// Unpublished substories are only surfaced to users allowed to read
 		// them; the admin editor ($public = false) always sees them.
 		$sub_visible = $sub
-			&& $sub->post_type === 'cns_substory'
+			&& $sub->post_type === 'clouansp_substory'
 			&& (! $public || $sub->post_status === 'publish' || current_user_can('read_post', $sub->ID));
 		if ($sub_visible) {
 			$node['substoryTitle']   = $sub->post_title;
@@ -88,7 +88,7 @@ function cns_story_suite_serialize_node(array $row, bool $public = false): array
 	return $node;
 }
 
-function cns_story_suite_serialize_path(array $row, bool $public = false): array {
+function clouansp_story_suite_serialize_path(array $row, bool $public = false): array {
 	$icon_url = !empty($row['marker_icon_id'])
 		? (wp_get_attachment_url((int) $row['marker_icon_id']) ?: '')
 		: '';
@@ -125,7 +125,7 @@ function cns_story_suite_serialize_path(array $row, bool $public = false): array
  * Warms the post caches for every post a set of node rows references
  * (substories, icons, marker icons) so serialization doesn't query per row.
  */
-function cns_story_suite_prime_node_caches(array $rows): void {
+function clouansp_story_suite_prime_node_caches(array $rows): void {
 	$ids = [];
 	foreach ($rows as $row) {
 		foreach (['substory_id', 'icon_id', 'marker_icon_id'] as $key) {

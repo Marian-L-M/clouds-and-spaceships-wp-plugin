@@ -115,7 +115,7 @@ export default function Edit({ attributes, setAttributes }) {
 			  : __("Add Item", 'clouds-and-spaceships')
 		  }
 		  onRequestClose={closeModal}
-		  className="infobox-row__modal"
+		  className="clouansp-infobox-row__modal"
 		>
 		  <TextControl
 			label={__("Title", 'clouds-and-spaceships')}
@@ -146,7 +146,7 @@ export default function Edit({ attributes, setAttributes }) {
 			  }));
 			}}
 		  />
-		  <div className="infobox-row__url-field">
+		  <div className="clouansp-infobox-row__url-field">
 			<label className="components-base-control__label">
 			  {__("Search post or add url", 'clouds-and-spaceships')}
 			</label>
@@ -177,7 +177,7 @@ export default function Edit({ attributes, setAttributes }) {
 			  />
 			</>
 		  )}
-		  <div className="infobox-row__modal-actions">
+		  <div className="clouansp-infobox-row__modal-actions">
 			<Button variant="primary" onClick={saveItem}>
 			  {__("Save", 'clouds-and-spaceships')}
 			</Button>
@@ -188,9 +188,9 @@ export default function Edit({ attributes, setAttributes }) {
 		</Modal>
 	  )}
 
-	  <dl className="infobox-row__list">
+	  <dl className="clouansp-infobox-row__list">
 		{items.length === 0 && (
-		  <p className="infobox-row__empty">
+		  <p className="clouansp-infobox-row__empty">
 			{__("Add info item below", 'clouds-and-spaceships')}
 		  </p>
 		)}
@@ -198,7 +198,7 @@ export default function Edit({ attributes, setAttributes }) {
 		  .map((item, index) => ({ item, index }))
 		  .sort((a, b) => (a.item.order ?? 0) - (b.item.order ?? 0))
 		  .map(({ item, index }) => (
-		  <div key={item.id} className="infobox-row__item">
+		  <div key={item.id} className="clouansp-infobox-row__item">
 			<dt>{item.dt || <em>{__("(empty term)", 'clouds-and-spaceships')}</em>}</dt>
 			<dd>
 			  <span>
@@ -210,7 +210,7 @@ export default function Edit({ attributes, setAttributes }) {
 				  </>
 				)}
 			  </span>
-			  <span className="infobox-row__item-actions">
+			  <span className="clouansp-infobox-row__item-actions">
 				  <Button
 					size="small"
 					icon={pencil}
@@ -233,9 +233,9 @@ export default function Edit({ attributes, setAttributes }) {
 	  <Button
 		variant="primary"
 		onClick={openAddModal}
-		className="infobox-row__add-btn"
+		className="clouansp-infobox-row__add-btn"
 	  >
-		+ Add row
+		{__("+ Add row", 'clouds-and-spaceships')}
 	  </Button>
 	</div>
   );

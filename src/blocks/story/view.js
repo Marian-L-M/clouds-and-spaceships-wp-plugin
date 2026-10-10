@@ -1,8 +1,8 @@
 /**
- * Frontend view script for the cns-story-suite/story block.
+ * Frontend view script for the clouansp-story-suite/story block.
  */
 
-// The base map is drawn with the map suite's own geometry and marker code, so
+// The base map is drawn with the map block's own geometry and marker code, so
 // a map looks and behaves the same under a story as it does on its own page.
 import {
 	buildAreaPathFromNodes,
@@ -15,6 +15,7 @@ import {
 } from '../../shared/map-geometry';
 import { escHtml, showDrawer, closeDrawer, isDrawerOpen } from '../../shared/frontend/drawer';
 import { setupLayerToggles } from '../../shared/frontend/layer-toggles';
+import { __ } from '@wordpress/i18n';
 
 // ── Image loading ─────────────────────────────────────────────────────────────
 
@@ -49,10 +50,10 @@ function showInfobox( item ) {
 	const imgUrl   = resolved.imageUrl || '';
 	const postUrl  = resolved.postUrl  || '';
 	let html = '';
-	if ( imgUrl  ) html += '<img class="cns-map-drawer__image" src="' + encodeURI( imgUrl ) + '" alt="" />';
-	if ( title   ) html += '<h2 class="cns-map-drawer__title">' + escHtml( title ) + '</h2>';
-	if ( content ) html += '<div class="cns-map-drawer__content">' + content + '</div>';
-	if ( postUrl ) html += '<a class="cns-map-drawer__link" href="' + encodeURI( postUrl ) + '">View full post &rarr;</a>';
+	if ( imgUrl  ) html += '<img class="clouansp-map-drawer__image" src="' + encodeURI( imgUrl ) + '" alt="" />';
+	if ( title   ) html += '<h2 class="clouansp-map-drawer__title">' + escHtml( title ) + '</h2>';
+	if ( content ) html += '<div class="clouansp-map-drawer__content">' + content + '</div>';
+	if ( postUrl ) html += '<a class="clouansp-map-drawer__link" href="' + encodeURI( postUrl ) + '">' + escHtml( __( 'View full post', 'clouds-and-spaceships' ) ) + ' &rarr;</a>';
 	showDrawer( html );
 }
 
@@ -62,34 +63,34 @@ function showInfobox( item ) {
 // info, with prev/next controls that walk the story's connections.
 
 function closeStoryDialog() {
-	const dialog = document.getElementById( 'cns-story-dialog' );
+	const dialog = document.getElementById( 'clouansp-story-dialog' );
 	if ( ! dialog ) return;
 	dialog.classList.remove( 'is-open' );
-	document.body.classList.remove( 'cns-story-dialog-open' );
+	document.body.classList.remove( 'clouansp-story-dialog-open' );
 }
 
 function getOrCreateStoryDialog() {
-	let dialog = document.getElementById( 'cns-story-dialog' );
+	let dialog = document.getElementById( 'clouansp-story-dialog' );
 	if ( ! dialog ) {
 		dialog = document.createElement( 'div' );
-		dialog.id        = 'cns-story-dialog';
-		dialog.className = 'cns-story-dialog';
+		dialog.id        = 'clouansp-story-dialog';
+		dialog.className = 'clouansp-story-dialog';
 		dialog.setAttribute( 'role', 'dialog' );
 		dialog.setAttribute( 'aria-modal', 'true' );
 		dialog.innerHTML =
-			'<div class="cns-story-dialog__backdrop"></div>' +
-			'<div class="cns-story-dialog__panel">' +
-				'<button class="cns-story-dialog__close" type="button" aria-label="Close">&times;</button>' +
-				'<div class="cns-story-dialog__body"></div>' +
-				'<div class="cns-story-dialog__nav"></div>' +
+			'<div class="clouansp-story-dialog__backdrop"></div>' +
+			'<div class="clouansp-story-dialog__panel">' +
+				'<button class="clouansp-story-dialog__close" type="button" aria-label="' + esc( __( 'Close', 'clouds-and-spaceships' ) ) + '">&times;</button>' +
+				'<div class="clouansp-story-dialog__body"></div>' +
+				'<div class="clouansp-story-dialog__nav"></div>' +
 			'</div>';
 		document.body.appendChild( dialog );
 
-		dialog.querySelector( '.cns-story-dialog__backdrop' ).addEventListener( 'click', closeStoryDialog );
-		dialog.querySelector( '.cns-story-dialog__close' ).addEventListener( 'click', closeStoryDialog );
+		dialog.querySelector( '.clouansp-story-dialog__backdrop' ).addEventListener( 'click', closeStoryDialog );
+		dialog.querySelector( '.clouansp-story-dialog__close' ).addEventListener( 'click', closeStoryDialog );
 		document.addEventListener( 'keydown', ( e ) => {
 			if ( ! dialog.classList.contains( 'is-open' ) ) return;
-			const nav = dialog._cnsNav;
+			const nav = dialog._clouanspNav;
 			if ( e.key === 'Escape' ) {
 				closeStoryDialog();
 			} else if ( e.key === 'ArrowLeft' && nav && nav.prevId !== null ) {
@@ -107,8 +108,8 @@ function renderStoryDialog( data, nodeId, openFn ) {
 	if ( ! node ) return;
 
 	const dialog = getOrCreateStoryDialog();
-	const body   = dialog.querySelector( '.cns-story-dialog__body' );
-	const nav    = dialog.querySelector( '.cns-story-dialog__nav' );
+	const body   = dialog.querySelector( '.clouansp-story-dialog__body' );
+	const nav    = dialog.querySelector( '.clouansp-story-dialog__nav' );
 
 	const title   = node.titleOverride || node.substoryTitle || '';
 	const excerpt = node.excerptOverride || node.substoryExcerpt || '';
@@ -117,7 +118,7 @@ function renderStoryDialog( data, nodeId, openFn ) {
 	// Step label: same numbering as the sidebar list; the start node is unnumbered.
 	let stepLabel = '';
 	if ( node.id === data.story.startNodeId ) {
-		stepLabel = 'Start';
+		stepLabel = __( 'Start', 'clouds-and-spaceships' );
 	} else {
 		const items = buildOrderedNodes( data.nodes, data.edges, data.story.startNodeId );
 		const item  = items.find( ( i ) => i.node.id === nodeId );
@@ -125,14 +126,14 @@ function renderStoryDialog( data, nodeId, openFn ) {
 	}
 
 	let html = '';
-	if ( imgUrl )    html += '<img class="cns-story-dialog__image" src="' + encodeURI( imgUrl ) + '" alt="" />';
-	if ( stepLabel ) html += '<span class="cns-story-dialog__step">' + esc( stepLabel ) + '</span>';
-	if ( title )     html += '<h2 class="cns-story-dialog__title">' + esc( title ) + '</h2>';
-	if ( excerpt )   html += '<p class="cns-story-dialog__excerpt">' + esc( excerpt ) + '</p>';
+	if ( imgUrl )    html += '<img class="clouansp-story-dialog__image" src="' + encodeURI( imgUrl ) + '" alt="" />';
+	if ( stepLabel ) html += '<span class="clouansp-story-dialog__step">' + esc( stepLabel ) + '</span>';
+	if ( title )     html += '<h2 class="clouansp-story-dialog__title">' + esc( title ) + '</h2>';
+	if ( excerpt )   html += '<p class="clouansp-story-dialog__excerpt">' + esc( excerpt ) + '</p>';
 	if ( node.substoryUrl ) {
-		html += '<a class="cns-story-dialog__read-more" href="' + esc( node.substoryUrl ) + '">Read more &rarr;</a>';
+		html += '<a class="clouansp-story-dialog__read-more" href="' + esc( node.substoryUrl ) + '">' + esc( __( 'Read more', 'clouds-and-spaceships' ) ) + ' &rarr;</a>';
 	}
-	body.innerHTML = html || '<p class="cns-story-dialog__excerpt">' + esc( 'No details for this node.' ) + '</p>';
+	body.innerHTML = html || '<p class="clouansp-story-dialog__excerpt">' + esc( __( 'No details for this node.', 'clouds-and-spaceships' ) ) + '</p>';
 
 	// Prev = first incoming connection, next = outgoing connections in branch order.
 	const byOrder   = ( a, b ) => a.sortOrder - b.sortOrder || a.id - b.id;
@@ -143,25 +144,25 @@ function renderStoryDialog( data, nodeId, openFn ) {
 		return n ? ( n.titleOverride || n.substoryTitle || 'Untitled' ) : '';
 	};
 
-	let navHtml = '<div class="cns-story-dialog__nav-side">';
+	let navHtml = '<div class="clouansp-story-dialog__nav-side">';
 	if ( prevEdge ) {
-		navHtml += '<button type="button" class="cns-story-dialog__navbtn" data-node="' + prevEdge.fromNodeId + '">' +
-			'<span aria-hidden="true">&larr;</span><span class="cns-story-dialog__navbtn-label">' + esc( nodeTitle( prevEdge.fromNodeId ) ) + '</span></button>';
+		navHtml += '<button type="button" class="clouansp-story-dialog__navbtn" data-node="' + prevEdge.fromNodeId + '">' +
+			'<span aria-hidden="true">&larr;</span><span class="clouansp-story-dialog__navbtn-label">' + esc( nodeTitle( prevEdge.fromNodeId ) ) + '</span></button>';
 	}
-	navHtml += '</div><div class="cns-story-dialog__nav-side cns-story-dialog__nav-side--next">';
+	navHtml += '</div><div class="clouansp-story-dialog__nav-side clouansp-story-dialog__nav-side--next">';
 	for ( const e of nextEdges ) {
-		navHtml += '<button type="button" class="cns-story-dialog__navbtn" data-node="' + e.toNodeId + '">' +
-			'<span class="cns-story-dialog__navbtn-label">' + esc( nodeTitle( e.toNodeId ) ) + '</span><span aria-hidden="true">&rarr;</span></button>';
+		navHtml += '<button type="button" class="clouansp-story-dialog__navbtn" data-node="' + e.toNodeId + '">' +
+			'<span class="clouansp-story-dialog__navbtn-label">' + esc( nodeTitle( e.toNodeId ) ) + '</span><span aria-hidden="true">&rarr;</span></button>';
 	}
 	navHtml += '</div>';
 	nav.innerHTML = navHtml;
 	nav.hidden = ! prevEdge && ! nextEdges.length;
 
-	nav.querySelectorAll( '.cns-story-dialog__navbtn' ).forEach( ( btn ) => {
+	nav.querySelectorAll( '.clouansp-story-dialog__navbtn' ).forEach( ( btn ) => {
 		btn.addEventListener( 'click', () => openFn( parseInt( btn.dataset.node, 10 ) ) );
 	} );
 
-	dialog._cnsNav = {
+	dialog._clouanspNav = {
 		prevId:  prevEdge ? prevEdge.fromNodeId : null,
 		nextIds: nextEdges.map( ( e ) => e.toNodeId ),
 		open:    openFn,
@@ -169,8 +170,8 @@ function renderStoryDialog( data, nodeId, openFn ) {
 
 	const wasOpen = dialog.classList.contains( 'is-open' );
 	dialog.classList.add( 'is-open' );
-	document.body.classList.add( 'cns-story-dialog-open' );
-	if ( ! wasOpen ) dialog.querySelector( '.cns-story-dialog__close' ).focus();
+	document.body.classList.add( 'clouansp-story-dialog-open' );
+	if ( ! wasOpen ) dialog.querySelector( '.clouansp-story-dialog__close' ).focus();
 }
 
 // ── Path numbering (mirrors CanvasNodeList algorithm) ─────────────────────────
@@ -334,7 +335,7 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 	if ( m?.bgType === 'image' && m.bgImageUrl ) {
 		const bg = loadImg( m.bgImageUrl, onImgLoad );
 		if ( bg.complete && bg.naturalWidth ) {
-			// Cover-fit, centered — matches cns-map-suite's background rendering.
+			// Cover-fit, centered — matches the map block's background rendering.
 			const scale = Math.max( W / bg.naturalWidth, H / bg.naturalHeight );
 			const drawW = bg.naturalWidth  * scale;
 			const drawH = bg.naturalHeight * scale;
@@ -353,7 +354,7 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 		}
 	}
 
-	// MasterMap child regions — same rendering as the cns-map-suite frontend so
+	// MasterMap child regions — same rendering as the map block's frontend so
 	// a master map used as a story base looks like it does on its own page.
 	for ( const region of ( m?.hierarchyRegions ?? [] ) ) {
 		const pts = region.nodes || [];
@@ -668,34 +669,34 @@ function renderWindow( windowEl, data, activeNodeId, expandedIds ) {
 		if ( node.pathId !== lastPathId ) {
 			lastPathId = node.pathId;
 			if ( path && path.label ) {
-				heading = `<h3 class="cns-sw-path" style="border-left-color:${ esc( path.markerColor ) }">${ esc( path.label ) }</h3>`;
+				heading = `<h3 class="clouansp-sw-path" style="border-left-color:${ esc( path.markerColor ) }">${ esc( path.label ) }</h3>`;
 			}
 		}
 
-		// return `<div class="cns-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }" style="padding-left:${ indent }px">
-		return heading + `<div class="cns-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }">
-			<button class="cns-sw-item__head" type="button" aria-expanded="${ isOpen ? 'true' : 'false' }">
-				<span class="cns-sw-item__num">${ esc( numStr ) }</span>
-				<span class="cns-sw-item__dot" style="background:${ esc( node.iconColor ) };border-radius:${ dotBorderR };transform:${ dotTransform }"></span>
-				<span class="cns-sw-item__title">${ esc( title ) }</span>
+		// return `<div class="clouansp-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }" style="padding-left:${ indent }px">
+		return heading + `<div class="clouansp-sw-item${ isActive ? ' is-active' : '' }${ isOpen ? ' is-open' : '' }" data-node="${ node.id }">
+			<button class="clouansp-sw-item__head" type="button" aria-expanded="${ isOpen ? 'true' : 'false' }">
+				<span class="clouansp-sw-item__num">${ esc( numStr ) }</span>
+				<span class="clouansp-sw-item__dot" style="background:${ esc( node.iconColor ) };border-radius:${ dotBorderR };transform:${ dotTransform }"></span>
+				<span class="clouansp-sw-item__title">${ esc( title ) }</span>
 			</button>
-			${ hasDetail ? `<div class="cns-sw-item__detail">
-				${ excerpt ? `<p class="cns-sw-item__excerpt">${ esc( excerpt ) }</p>` : '' }
-				${ node.substoryUrl ? `<a href="${ esc( node.substoryUrl ) }" class="cns-sw-item__read-more">Read more →</a>` : '' }
+			${ hasDetail ? `<div class="clouansp-sw-item__detail">
+				${ excerpt ? `<p class="clouansp-sw-item__excerpt">${ esc( excerpt ) }</p>` : '' }
+				${ node.substoryUrl ? `<a href="${ esc( node.substoryUrl ) }" class="clouansp-sw-item__read-more">Read more →</a>` : '' }
 			</div>` : '' }
 		</div>`;
 	} );
 
-	windowEl.innerHTML = `<div class="cns-sw-list">${ rows.join( '' ) }</div>`;
+	windowEl.innerHTML = `<div class="clouansp-sw-list">${ rows.join( '' ) }</div>`;
 
 	// Scroll active item into view.
-	const activeEl = windowEl.querySelector( '.cns-sw-item.is-active' );
+	const activeEl = windowEl.querySelector( '.clouansp-sw-item.is-active' );
 	if ( activeEl ) activeEl.scrollIntoView( { block: 'nearest', behavior: 'smooth' } );
 
 	// Toggle expand + navigate.
-	windowEl.querySelectorAll( '.cns-sw-item__head' ).forEach( ( btn ) => {
+	windowEl.querySelectorAll( '.clouansp-sw-item__head' ).forEach( ( btn ) => {
 		btn.addEventListener( 'click', () => {
-			const item   = btn.closest( '.cns-sw-item' );
+			const item   = btn.closest( '.clouansp-sw-item' );
 			const nodeId = parseInt( item.dataset.node, 10 );
 
 			// Accordion: opening one closes whatever else was open, and
@@ -704,7 +705,7 @@ function renderWindow( windowEl, data, activeNodeId, expandedIds ) {
 			expandedIds.clear();
 			if ( ! wasOpen ) expandedIds.add( nodeId );
 
-			item.dispatchEvent( new CustomEvent( 'cns-navigate', { bubbles: true, detail: { nodeId } } ) );
+			item.dispatchEvent( new CustomEvent( 'clouansp-navigate', { bubbles: true, detail: { nodeId } } ) );
 		} );
 	} );
 }
@@ -718,7 +719,7 @@ function esc( str ) {
 // ── Block init ────────────────────────────────────────────────────────────────
 
 // ── Zoom controls ─────────────────────────────────────────────────────────────
-// Same pattern as the cns-map-suite map block: zoom scales the canvas's
+// Same pattern as the map block: zoom scales the canvas's
 // *display* width inside a scroll container; the canvas pixel coordinate
 // system is untouched, so the click hit-testing above (normalized by
 // getBoundingClientRect) keeps working. The canvas is moved into a dedicated
@@ -726,11 +727,11 @@ function esc( str ) {
 // stay put while the zoomed canvas pans.
 
 function setupZoomControls( canvas ) {
-	const wrap = canvas.parentElement; // .cns-story-block__canvas-wrap
+	const wrap = canvas.parentElement; // .clouansp-story-block__canvas-wrap
 	if ( ! wrap ) return;
 
 	const scroller = document.createElement( 'div' );
-	scroller.className = 'cns-story-canvas-scroll';
+	scroller.className = 'clouansp-story-canvas-scroll';
 	wrap.insertBefore( scroller, canvas );
 	scroller.appendChild( canvas );
 
@@ -738,7 +739,7 @@ function setupZoomControls( canvas ) {
 	let zoom = 1;
 
 	const controls = document.createElement( 'div' );
-	controls.className = 'cns-story-zoom';
+	controls.className = 'clouansp-story-zoom';
 	const fsBtn   = document.createElement( 'button' );
 	const zoomIn  = document.createElement( 'button' );
 	const zoomOut = document.createElement( 'button' );
@@ -746,33 +747,33 @@ function setupZoomControls( canvas ) {
 	fsBtn.type   = 'button';
 	zoomIn.type  = 'button';
 	zoomOut.type = 'button';
-	fsBtn.className   = 'cns-story-zoom__btn cns-story-zoom__btn--fs';
-	zoomIn.className  = 'cns-story-zoom__btn';
-	zoomOut.className = 'cns-story-zoom__btn';
+	fsBtn.className   = 'clouansp-story-zoom__btn clouansp-story-zoom__btn--fs';
+	zoomIn.className  = 'clouansp-story-zoom__btn';
+	zoomOut.className = 'clouansp-story-zoom__btn';
 	zoomIn.textContent  = '+';
 	zoomOut.textContent = '−';
-	zoomIn.setAttribute( 'aria-label', 'Zoom map in' );
-	zoomOut.setAttribute( 'aria-label', 'Zoom map out' );
-	value.className = 'cns-story-zoom__value';
+	zoomIn.setAttribute( 'aria-label', __( 'Zoom map in', 'clouds-and-spaceships' ) );
+	zoomOut.setAttribute( 'aria-label', __( 'Zoom map out', 'clouds-and-spaceships' ) );
+	value.className = 'clouansp-story-zoom__value';
 	controls.appendChild( fsBtn );
 	controls.appendChild( zoomIn );
 	controls.appendChild( value );
 	controls.appendChild( zoomOut );
 	wrap.appendChild( controls );
 
-	// ── Lightbox-style fullscreen (same pattern as the cns-map-suite block) ──
-	const blockEl = canvas.closest( '.cns-story-block' );
+	// ── Lightbox-style fullscreen (same pattern as the map block) ──
+	const blockEl = canvas.closest( '.clouansp-story-block' );
 	let fullscreen = false;
 
 	function renderFsBtn() {
 		fsBtn.textContent = fullscreen ? '✕' : '⛶';
-		fsBtn.setAttribute( 'aria-label', fullscreen ? 'Exit fullscreen' : 'View story fullscreen' );
+		fsBtn.setAttribute( 'aria-label', fullscreen ? __( 'Exit fullscreen', 'clouds-and-spaceships' ) : __( 'View story fullscreen', 'clouds-and-spaceships' ) );
 	}
 
 	function setFullscreen( on ) {
 		fullscreen = on;
 		if ( blockEl ) blockEl.classList.toggle( 'is-fullscreen', on );
-		document.body.classList.toggle( 'cns-story-fullscreen-open', on );
+		document.body.classList.toggle( 'clouansp-story-fullscreen-open', on );
 		renderFsBtn();
 		// Fullscreen fits the canvas to the viewport, normal mode fits it to the
 		// wrap, so the zoom-1 size differs and the base has to be taken again.
@@ -783,7 +784,7 @@ function setupZoomControls( canvas ) {
 	document.addEventListener( 'keydown', ( e ) => {
 		if ( e.key !== 'Escape' || ! fullscreen ) return;
 		// Let Esc close an open dialog/drawer first; the next Esc exits.
-		const dialog = document.getElementById( 'cns-story-dialog' );
+		const dialog = document.getElementById( 'clouansp-story-dialog' );
 		if ( dialog && dialog.classList.contains( 'is-open' ) ) return;
 		if ( isDrawerOpen() ) return;
 		setFullscreen( false );
@@ -853,11 +854,11 @@ function initBlock( blockEl ) {
 	let data;
 	try { data = JSON.parse( rawData ); } catch { return; }
 
-	const canvas = blockEl.querySelector( '.cns-story-canvas' );
+	const canvas = blockEl.querySelector( '.clouansp-story-canvas' );
 	if ( ! canvas ) return;
 	// Absent when the author hid the story window: the node dialog is then the
 	// only way to read a node, and everything else here still has to work.
-	const windowEl = blockEl.querySelector( '.cns-story-window' );
+	const windowEl = blockEl.querySelector( '.clouansp-story-window' );
 
 	const m    = data.mapData;
 	const canW = m?.width ?? 900;
@@ -886,8 +887,8 @@ function initBlock( blockEl ) {
 	// On the canvas wrap, which the zoom controls also sit on — outside the
 	// scroller the canvas is moved into, so the buttons stay put when panning.
 	setupLayerToggles( {
-		container: canvas.closest( '.cns-story-block__canvas-wrap' ),
-		className: 'cns-story-layers',
+		container: canvas.closest( '.clouansp-story-block__canvas-wrap' ),
+		className: 'clouansp-story-layers',
 		present: {
 			areas:   ( m?.areas   ?? [] ).length > 0,
 			objects: ( m?.objects ?? [] ).length > 0,
@@ -1027,7 +1028,7 @@ function initBlock( blockEl ) {
 	} );
 
 	// List navigation.
-	blockEl.addEventListener( 'cns-navigate', ( e ) => {
+	blockEl.addEventListener( 'clouansp-navigate', ( e ) => {
 		activeNodeId = e.detail.nodeId;
 		rerender();
 	} );
@@ -1035,4 +1036,4 @@ function initBlock( blockEl ) {
 	rerender();
 }
 
-document.querySelectorAll( '.cns-story-block' ).forEach( initBlock );
+document.querySelectorAll( '.clouansp-story-block' ).forEach( initBlock );

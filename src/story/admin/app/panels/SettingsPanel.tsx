@@ -36,12 +36,12 @@ export default function SettingsPanel( {
 	}
 
 	return (
-		<div className="cns-panel cns-settings-panel">
+		<div className="clouansp-panel clouansp-settings-panel">
 			<h2>{ __( 'Story Settings', 'clouds-and-spaceships' ) }</h2>
 
-			<div className="cns-grid cns-grid__24">
+			<div className="clouansp-grid clouansp-grid__24">
 				<Flex
-					className={ 'cns-grid__span-2' }
+					className={ 'clouansp-grid__span-2' }
 					direction={ 'column' }
 					gap={ 4 }
 				>
@@ -70,7 +70,7 @@ export default function SettingsPanel( {
 					</FlexItem>
 					<FlexItem>
 						<BaseControl
-							id="cns-story-map"
+							id="clouansp-story-map"
 							label={ __( 'Map', 'clouds-and-spaceships' ) }
 							help={ __(
 								'The story canvas overlays this map. Its objects, areas and labels stay read-only here, and keep their infoboxes on the frontend.',
@@ -87,7 +87,7 @@ export default function SettingsPanel( {
 					{ settings.mapId && (
 						<FlexItem>
 							<BaseControl
-								id="cns-story-layers"
+								id="clouansp-story-layers"
 								label={ __(
 									'Map layers',
 									'clouds-and-spaceships'
@@ -135,7 +135,7 @@ export default function SettingsPanel( {
 
 					<FlexItem>
 						<BaseControl
-							id="cns-story-frontend"
+							id="clouansp-story-frontend"
 							label={ __(
 								'Reader Settings',
 								'clouds-and-spaceships'
@@ -177,9 +177,9 @@ export default function SettingsPanel( {
 					</FlexItem>
 				</Flex>
 
-				<div className="cns-grid__group cns-grid__span-1">
+				<div className="clouansp-grid__group clouansp-grid__span-1">
 					<BaseControl
-						id="cns-story-thumbnail"
+						id="clouansp-story-thumbnail"
 						label={ __( 'Thumbnail', 'clouds-and-spaceships' ) }
 						help={ __(
 							'Used as the story’s featured image.',
@@ -249,9 +249,9 @@ export default function SettingsPanel( {
 						</Flex>
 					</BaseControl>
 				</div>
-				<div className="cns-grid__group cns-grid__span-2">
+				<div className="clouansp-grid__group clouansp-grid__span-2">
 					<BaseControl
-						id="cns-story-marker"
+						id="clouansp-story-marker"
 						label={ __(
 							'Active node marker',
 							'clouds-and-spaceships'

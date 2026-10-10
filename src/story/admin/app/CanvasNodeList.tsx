@@ -229,9 +229,9 @@ export default function CanvasNodeList( {
 }: Props ) {
 	if ( ! nodes.length ) {
 		return (
-			<div className="cns-canvas-node-list cns-canvas-node-list--empty">
+			<div className="clouansp-canvas-node-list clouansp-canvas-node-list--empty">
 				<p className="description">
-					Click on the canvas to add your first node.
+					{ __( 'Click on the canvas to add your first node.', 'clouds-and-spaceships' ) }
 				</p>
 			</div>
 		);
@@ -292,8 +292,8 @@ export default function CanvasNodeList( {
 	}
 
 	return (
-		<div className="cns-canvas-node-list">
-			<div className="cns-canvas-node-list__header">Nodes</div>
+		<div className="clouansp-canvas-node-list">
+			<div className="clouansp-canvas-node-list__header">{ __( 'Nodes', 'clouds-and-spaceships' ) }</div>
 			{ tree.map( ( item ) => {
 				const { node, incomingEdge, siblings, depth, stepNumber } =
 					item;
@@ -321,7 +321,7 @@ export default function CanvasNodeList( {
 					<div
 						key={ node.id }
 						className={ [
-							'cns-canvas-node-list__item',
+							'clouansp-canvas-node-list__item',
 							isSelected ? 'is-selected' : '',
 							isOrphan ? 'is-orphan' : '',
 						]
@@ -330,11 +330,11 @@ export default function CanvasNodeList( {
 						style={ { paddingLeft: 8 + Math.min( depth, 4 ) * 14 } }
 					>
 						{ incomingEdge && (
-							<span className="cns-canvas-node-list__connector">
+							<span className="clouansp-canvas-node-list__connector">
 								└
 							</span>
 						) }
-						<span className="cns-canvas-node-list__step">
+						<span className="clouansp-canvas-node-list__step">
 							{ isStart ? '★' : formatStep( stepNumber ) }
 						</span>
 						{ node.iconType === 'thumbnail' &&
@@ -342,7 +342,7 @@ export default function CanvasNodeList( {
 							<img
 								src={ node.substoryThumbnailUrl }
 								alt=""
-								className="cns-node-swatch"
+								className="clouansp-node-swatch"
 								style={ {
 									borderRadius: '50%',
 									objectFit: 'cover',
@@ -350,7 +350,7 @@ export default function CanvasNodeList( {
 							/>
 						) : (
 							<span
-								className="cns-node-swatch"
+								className="clouansp-node-swatch"
 								style={ {
 									background: node.iconColor,
 									borderRadius:
@@ -367,14 +367,14 @@ export default function CanvasNodeList( {
 							/>
 						) }
 						<button
-							className="cns-canvas-node-list__title"
+							className="clouansp-canvas-node-list__title"
 							onClick={ () => onSelect( node.id ) }
-							title="Select on canvas"
+							title={ __( 'Select on canvas', 'clouds-and-spaceships' ) }
 						>
 							{ getDisplayTitle( node ) }
 						</button>
 
-						<div className="cns-canvas-node-list__actions">
+						<div className="clouansp-canvas-node-list__actions">
 							{ incomingEdge && (
 								<Flex
 									direction="row"
@@ -427,7 +427,7 @@ export default function CanvasNodeList( {
 										onClick={ () => {
 											if (
 												window.confirm(
-													'Remove the connection to this node?'
+													__( 'Remove the connection to this node?', 'clouds-and-spaceships' )
 												)
 											) {
 												onEdgeDelete( incomingEdge.id );
@@ -488,7 +488,7 @@ export default function CanvasNodeList( {
 								onClick={ () => {
 									if (
 										window.confirm(
-											'Delete this node and all its connections?'
+											__( 'Delete this node and all its connections?', 'clouds-and-spaceships' )
 										)
 									) {
 										onDelete( node.id );

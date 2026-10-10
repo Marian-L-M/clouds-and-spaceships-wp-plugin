@@ -212,14 +212,14 @@ export default function ContextPanel( {
 	if ( ! maybeSelection ) {
 		return (
 			<aside
-				className="cns-map-editor__context"
-				aria-label="Context panel"
+				className="clouansp-map-editor__context"
+				aria-label={ __( 'Context panel', 'clouds-and-spaceships' ) }
 			>
 				<Flex
 					direction={ 'column' }
 					align={ 'center' }
 					justify={ 'center' }
-					className="cns-map-editor__context-empty"
+					className="clouansp-map-editor__context-empty"
 				>
 					<p>
 						{ __(
@@ -238,12 +238,12 @@ export default function ContextPanel( {
 
 	const title =
 		selection.kind === 'object'
-			? selection.item.title || '(no title)'
+			? selection.item.title || __( '(no title)', 'clouds-and-spaceships' )
 			: selection.kind === 'label'
-			? selection.item.text || '(empty label)'
+			? selection.item.text || __( '(empty label)', 'clouds-and-spaceships' )
 			: selection.kind === 'region'
-			? selection.item.child_map_title || 'New Region'
-			: selection.item.title || '(no title)';
+			? selection.item.child_map_title || __( 'New Region', 'clouds-and-spaceships' )
+			: selection.item.title || __( '(no title)', 'clouds-and-spaceships' );
 
 	// Region has no duplicate action; the others share one button.
 	const onDuplicate =
@@ -311,19 +311,19 @@ export default function ContextPanel( {
 	async function handleDelete() {
 		switch ( selection.kind ) {
 			case 'object':
-				if ( ! confirm( 'Delete this object?' ) ) return;
+				if ( ! confirm( __( 'Delete this object?', 'clouds-and-spaceships' ) ) ) return;
 				await onObjectDelete();
 				break;
 			case 'label':
-				if ( ! confirm( 'Delete this label?' ) ) return;
+				if ( ! confirm( __( 'Delete this label?', 'clouds-and-spaceships' ) ) ) return;
 				await onLabelDelete();
 				break;
 			case 'region':
-				if ( ! confirm( 'Delete this hierarchy region?' ) ) return;
+				if ( ! confirm( __( 'Delete this hierarchy region?', 'clouds-and-spaceships' ) ) ) return;
 				await onRegionDelete();
 				break;
 			case 'area':
-				if ( ! confirm( 'Delete this area?' ) ) return;
+				if ( ! confirm( __( 'Delete this area?', 'clouds-and-spaceships' ) ) ) return;
 				await onAreaDelete();
 				break;
 		}
@@ -348,20 +348,20 @@ export default function ContextPanel( {
 
 	return (
 		<aside
-			className="cns-map-editor__context"
-			aria-label="Context panel"
-			id="cns-context-form"
+			className="clouansp-map-editor__context"
+			aria-label={ __( 'Context panel', 'clouds-and-spaceships' ) }
+			id="clouansp-context-form"
 		>
-			<div className="cns-map-editor__context-header">
+			<div className="clouansp-map-editor__context-header">
 				<Flex align="center" justify="space-between">
-					<FlexBlock className="cns-map-editor__context-title">
+					<FlexBlock className="clouansp-map-editor__context-title">
 						<h3>{ title }</h3>
 					</FlexBlock>
 					<FlexItem>
 						<Flex
 							gap={ 2 }
 							align="center"
-							className="cns-map-editor__context-title-actions"
+							className="clouansp-map-editor__context-title-actions"
 						>
 							{ onDuplicate && (
 								<Button
@@ -382,7 +382,7 @@ export default function ContextPanel( {
 				</Flex>
 			</div>
 
-			<div className="cns-map-editor__context-body">
+			<div className="clouansp-map-editor__context-body">
 				{ selection.kind === 'object' && objFormData && (
 					<ObjectForm
 						formData={ objFormData }
@@ -585,7 +585,7 @@ export default function ContextPanel( {
 				) }
 			</div>
 			<Flex
-				className="cns-map-editor__context-footer"
+				className="clouansp-map-editor__context-footer"
 				justify="end"
 				align="center"
 				gap={ 2 }

@@ -19,19 +19,19 @@ export default function HierarchyRegionList( { regions, onSelect, onDelete }: Pr
 	}
 
 	return (
-		<ul className="cns-items-list">
+		<ul className="clouansp-items-list">
 			{ regions.map( ( r ) => (
-				<li key={ r.id } className="cns-items-list__item">
+				<li key={ r.id } className="clouansp-items-list__item">
 					{ r.child_map_thumbnail && (
-						<img src={ r.child_map_thumbnail } alt="" className="cns-items-list__thumb" />
+						<img src={ r.child_map_thumbnail } alt="" className="clouansp-items-list__thumb" />
 					) }
-					<span className="cns-items-list__label">
+					<span className="clouansp-items-list__label">
 						{ r.child_map_title || `Map #${ r.child_map_id }` }
 						{ r.child_map_status && r.child_map_status !== 'publish' && (
-							<em className="cns-items-list__status"> — { r.child_map_status }</em>
+							<em className="clouansp-items-list__status"> — { r.child_map_status }</em>
 						) }
 					</span>
-					<span className="cns-items-list__actions">
+					<span className="clouansp-items-list__actions">
 						<Button
 							size="small"
 							icon={ pencil }

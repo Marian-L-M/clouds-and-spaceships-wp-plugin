@@ -1,5 +1,5 @@
 // The story canvas renders a map as its backdrop, so map objects arrive in the
-// same style shape the map suite stores them in.
+// same style shape the map code stores them in.
 import type { AreaCanvasStyles, LabelCanvasStyles, ObjectCanvasStyles } from '../map/types';
 
 // ── Primitive unions ──────────────────────────────────────────────────────────
@@ -15,7 +15,7 @@ export type StoryTab     = 'settings' | 'canvas' | 'nodes' | 'paths';
 
 // ── Window globals ────────────────────────────────────────────────────────────
 
-export interface CnsStoryEditorGlobal {
+export interface ClouanspStoryEditorGlobal {
 	storyId:         number;
 	isNew:           boolean;
 	status:          PostStatus;
@@ -25,7 +25,7 @@ export interface CnsStoryEditorGlobal {
 	substoryBaseUrl: string;
 }
 
-export interface CnsStorySuiteGlobal {
+export interface ClouanspStorySuiteGlobal {
 	nonce:       string;
 	restUrl:     string;
 	mapRestUrl:  string;
@@ -36,8 +36,8 @@ export interface CnsStorySuiteGlobal {
 
 declare global {
 	interface Window {
-		cnsStoryEditor: CnsStoryEditorGlobal;
-		cnsStorySuite:  CnsStorySuiteGlobal;
+		clouanspStoryEditor: ClouanspStoryEditorGlobal;
+		clouanspStorySuite:  ClouanspStorySuiteGlobal;
 	}
 }
 

@@ -35,7 +35,7 @@ export default function ColorField( {
 	enableAlpha = true,
 }: Props ) {
 	const id = useRef(
-		`cns-color-${ Math.random().toString( 36 ).slice( 2 ) }`
+		`clouansp-color-${ Math.random().toString( 36 ).slice( 2 ) }`
 	);
 
 	// Show `#2271b1 · 30%` rather than the raw `#2271b14d` — the alpha byte is
@@ -50,24 +50,24 @@ export default function ColorField( {
 		<BaseControl
 			id={ id.current }
 			label={ label }
-			className="cns-color-field"
+			className="clouansp-color-field"
 		>
 			<Dropdown
 				popoverProps={ { placement: 'bottom-start' } }
 				renderToggle={ ( { isOpen, onToggle } ) => (
 					<Button
 						id={ id.current }
-						className="cns-color-field__toggle"
+						className="clouansp-color-field__toggle"
 						onClick={ onToggle }
 						aria-expanded={ isOpen }
 					>
-						<span className="cns-color-field__swatch">
+						<span className="clouansp-color-field__swatch">
 							<ColorIndicator colorValue={ value } />
 						</span>
-						<span className="cns-color-field__value">
+						<span className="clouansp-color-field__value">
 							{ rgbText }
 							{ alphaPct !== null && (
-								<span className="cns-color-field__alpha">
+								<span className="clouansp-color-field__alpha">
 									{ ` · ${ alphaPct }%` }
 								</span>
 							) }

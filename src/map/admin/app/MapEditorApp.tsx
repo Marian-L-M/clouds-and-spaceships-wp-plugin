@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import Notices from '../../../shared/admin/Notices';
 import EditorHeader from '../../../shared/admin/EditorHeader';
 import TabBar from './TabBar';
@@ -13,6 +13,7 @@ import AreasPanel from './panels/AreasPanel';
 import LabelsPanel from './panels/LabelsPanel';
 import HierarchyPanel from './panels/HierarchyPanel';
 import PreviewPanel from './panels/PreviewPanel';
+import { useMapResource } from './useMapResource';
 import { apiFetch } from '../utils';
 import { normalizeNodesForShapeType } from '../areas';
 import { defaultLabelFormData, collectLabelPayload } from './forms/LabelForm';
@@ -39,7 +40,7 @@ import type {
 } from '../../types';
 
 function buildInitialSettings(): MapSettings {
-	const d = window.cnsMapEditor || ( {} as typeof window.cnsMapEditor );
+	const d = window.clouanspMapEditor || ( {} as typeof window.clouanspMapEditor );
 	return {
 		status: d.status ?? 'draft',
 		title: d.title ?? '',
@@ -68,7 +69,7 @@ function buildInitialSettings(): MapSettings {
 }
 
 export default function MapEditorApp() {
-	const d = window.cnsMapEditor || ( {} as typeof window.cnsMapEditor );
+	const d = window.clouanspMapEditor || ( {} as typeof window.clouanspMapEditor );
 	const mapId = d.mapId || 0;
 	const isNew = d.isNew || false;
 	const overviewUrl = d.overviewUrl || '#';
@@ -102,6 +103,12 @@ export default function MapEditorApp() {
 		null
 	);
 	const [ regionsList, setRegionsList ] = useState< HierarchyRegion[] >( [] );
+
+	// Objects, areas and labels load once, up front: the Preview tab draws all
+	// three, so they cannot wait for their own tab to be opened.
+	useMapResource< MapObject >( mapId, 'objects', setObjectsList );
+	useMapResource< MapArea >( mapId, 'areas', setAreasList );
+	useMapResource< MapLabel >( mapId, 'labels', setLabelsList );
 	const [ isSaving, setIsSaving ] = useState( false );
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
@@ -552,7 +559,7 @@ export default function MapEditorApp() {
 		formData: HierarchyFormData
 	): Promise< HierarchyRegion | undefined > {
 		if ( ! selectedRegionId || ! formData.child_map_id ) {
-			throw new Error( 'Select a child map before saving.' );
+			throw new Error( __( 'Select a child map before saving.', 'clouds-and-spaceships' ) );
 		}
 
 		const region = regionsList.find( ( r ) => r.id === selectedRegionId );
@@ -606,8 +613,12 @@ export default function MapEditorApp() {
 	// ── Render ────────────────────────────────────────────────────────────────
 
 	const pageTitle = isNew
-		? 'New Map'
-		: `Edit: ${ settings.title || '(no title)' }`;
+		? __( 'New Map', 'clouds-and-spaceships' )
+		: sprintf(
+				/* translators: %s: map title. */
+				__( 'Edit: %s', 'clouds-and-spaceships' ),
+				settings.title || __( '(no title)', 'clouds-and-spaceships' )
+		  );
 
 	// Zoom control colors, resolved the same way the front end resolves them:
 	// this map's override, else the global default, else unset so the
@@ -616,11 +627,11 @@ export default function MapEditorApp() {
 	const zoomVars: Record< string, string > = {};
 	const zoomMain = settings.zoomMainColor || d.zoomMainDefault || '';
 	const zoomAccent = settings.zoomAccentColor || d.zoomAccentDefault || '';
-	if ( zoomMain ) zoomVars[ '--cns-map-zoom-main' ] = zoomMain;
-	if ( zoomAccent ) zoomVars[ '--cns-map-zoom-accent' ] = zoomAccent;
+	if ( zoomMain ) zoomVars[ '--clouansp-map-zoom-main' ] = zoomMain;
+	if ( zoomAccent ) zoomVars[ '--clouansp-map-zoom-accent' ] = zoomAccent;
 
 	return (
-		<div className="cns-map-editor" style={ zoomVars }>
+		<div className="clouansp-map-editor" style={ zoomVars }>
 			<EditorHeader
 				pageTitle={ pageTitle }
 				overviewUrl={ overviewUrl }
@@ -635,15 +646,15 @@ export default function MapEditorApp() {
 				viewLabel={ __( 'View Map', 'clouds-and-spaceships' ) }
 				saveLabel={ __( 'Save Map', 'clouds-and-spaceships' ) }
 			/>
-			<div className="cns-map-editor__main">
-				<div className="cns-map-editor__body">
+			<div className="clouansp-map-editor__main">
+				<div className="clouansp-map-editor__body">
 					<TabBar
 						activeTab={ activeTab }
 						isMaster={ settings.isMaster }
 						onChange={ handleTabChange }
 					/>
 
-					<div className="cns-map-editor__content">
+					<div className="clouansp-map-editor__content">
 						{ activeTab === 'settings' && (
 							<SettingsPanel
 								settings={ settings }
@@ -666,11 +677,9 @@ export default function MapEditorApp() {
 						) }
 						{ activeTab === 'objects' && ! settings.isMaster && (
 							<ObjectsPanel
-								mapId={ mapId }
 								settings={ settings }
 								objects={ objectsList }
 								selectedObjectId={ selectedObjectId }
-								onObjectsLoaded={ setObjectsList }
 								onSelect={ setSelectedObjectId }
 								onDeselect={ () => setSelectedObjectId( null ) }
 								onAdd={ handleObjectAdd }
@@ -698,11 +707,9 @@ export default function MapEditorApp() {
 						) }
 						{ activeTab === 'labels' && ! settings.isMaster && (
 							<LabelsPanel
-								mapId={ mapId }
 								settings={ settings }
 								labels={ labelsList }
 								selectedLabelId={ selectedLabelId }
-								onLabelsLoaded={ setLabelsList }
 								onSelect={ setSelectedLabelId }
 								onDeselect={ () => setSelectedLabelId( null ) }
 								onAdd={ handleLabelAdd }
@@ -737,10 +744,10 @@ export default function MapEditorApp() {
 						) }
 						{ activeTab === 'stories' && (
 							<div
-								id="cns-map-stories-panel"
+								id="clouansp-map-stories-panel"
 								data-map-id={ mapId }
 								data-overview-url={
-									window.cnsMapEditor
+									window.clouanspMapEditor
 										.storiesOverviewUrl || ''
 								}
 							/>

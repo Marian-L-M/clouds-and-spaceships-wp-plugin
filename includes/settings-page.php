@@ -2,9 +2,9 @@
 /**
  * CNS settings page — the tabbed "Clouds And Spaceships" admin screen.
  *
- * Providers add their tabs via the `cns_admin_tabs` filter:
+ * Providers add their tabs via the `clouansp_admin_tabs` filter:
  *
- *   add_filter( 'cns_admin_tabs', function ( array $tabs ): array {
+ *   add_filter( 'clouansp_admin_tabs', function ( array $tabs ): array {
  *       $tabs['my-slug'] = [
  *           'menu_title' => 'My Suite',       // sidebar label
  *           'title'      => 'My Suite Title', // horizontal tab label
@@ -15,8 +15,8 @@
  *       return $tabs;
  *   } );
  *
- * Each tab becomes an admin page with the slug cns-settings-{slug}. The bare
- * parent slug cns-settings also resolves to the lowest-priority tab, so old
+ * Each tab becomes an admin page with the slug clouansp-settings-{slug}. The bare
+ * parent slug clouansp-settings also resolves to the lowest-priority tab, so old
  * bookmarks keep working.
  */
 
@@ -26,13 +26,13 @@ defined( 'ABSPATH' ) || exit;
  * Returns the ordered tab definitions from every active provider.
  * Result is cached so apply_filters only runs once per request.
  */
-function cns_admin_get_tabs(): array {
+function clouansp_admin_get_tabs(): array {
     static $tabs = null;
     if ( null !== $tabs ) {
         return $tabs;
     }
 
-    $tabs = (array) apply_filters( 'cns_admin_tabs', [] );
+    $tabs = (array) apply_filters( 'clouansp_admin_tabs', [] );
 
     uasort( $tabs, static function ( array $a, array $b ): int {
         return ( (int) ( $a['priority'] ?? 50 ) ) <=> ( (int) ( $b['priority'] ?? 50 ) );
@@ -44,25 +44,25 @@ function cns_admin_get_tabs(): array {
 /**
  * Returns the WP admin page slug for a given tab slug.
  */
-function cns_admin_page_slug( string $tab_slug ): string {
-    return 'cns-settings-' . $tab_slug;
+function clouansp_admin_page_slug( string $tab_slug ): string {
+    return 'clouansp-settings-' . $tab_slug;
 }
 
 /**
  * Resolves the tab slug of the settings page being requested, or null when the
  * current request is not a CNS settings page. The bare parent slug
- * (cns-settings) maps to the default (lowest-priority) tab.
+ * (clouansp-settings) maps to the default (lowest-priority) tab.
  */
-function cns_admin_active_tab(): ?string {
-    $tabs = cns_admin_get_tabs();
+function clouansp_admin_active_tab(): ?string {
+    $tabs = clouansp_admin_get_tabs();
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- routing only; reads which admin page is being rendered.
     $page = sanitize_key( wp_unslash( $_GET['page'] ?? '' ) );
 
-    if ( 'cns-settings' === $page ) {
+    if ( 'clouansp-settings' === $page ) {
         return array_key_first( $tabs );
     }
     foreach ( $tabs as $slug => $tab ) {
-        if ( $page === cns_admin_page_slug( $slug ) ) {
+        if ( $page === clouansp_admin_page_slug( $slug ) ) {
             return $slug;
         }
     }
@@ -71,10 +71,10 @@ function cns_admin_active_tab(): ?string {
 
 // ── Menu registration ─────────────────────────────────────────────────────────
 
-add_action( 'admin_menu', 'cns_admin_register_menus', 99 );
+add_action( 'admin_menu', 'clouansp_admin_register_menus', 99 );
 
-function cns_admin_register_menus(): void {
-    $tabs = cns_admin_get_tabs();
+function clouansp_admin_register_menus(): void {
+    $tabs = clouansp_admin_get_tabs();
     if ( ! $tabs ) {
         return;
     }
@@ -86,8 +86,8 @@ function cns_admin_register_menus(): void {
         __( 'Clouds And Spaceships', 'clouds-and-spaceships' ),
         __( 'CNS', 'clouds-and-spaceships' ),
         $default['capability'] ?? 'manage_options',
-        'cns-settings',
-        'cns_admin_render_page',
+        'clouansp-settings',
+        'clouansp_admin_render_page',
         'dashicons-cloud',
         99
     );
@@ -95,25 +95,25 @@ function cns_admin_register_menus(): void {
     // One named submenu per tab.
     foreach ( $tabs as $slug => $tab ) {
         add_submenu_page(
-            'cns-settings',
+            'clouansp-settings',
             __( 'Clouds And Spaceships', 'clouds-and-spaceships' ),
             esc_html( $tab['menu_title'] ),
             $tab['capability'] ?? 'manage_options',
-            cns_admin_page_slug( $slug ),
-            'cns_admin_render_page'
+            clouansp_admin_page_slug( $slug ),
+            'clouansp_admin_render_page'
         );
     }
 
     // Remove the auto-generated duplicate of the parent entry; the top-level
     // link then points at the first tab's submenu page.
-    remove_submenu_page( 'cns-settings', 'cns-settings' );
+    remove_submenu_page( 'clouansp-settings', 'clouansp-settings' );
 }
 
 // ── Page renderer ─────────────────────────────────────────────────────────────
 
-function cns_admin_render_page(): void {
-    $tabs       = cns_admin_get_tabs();
-    $active_tab = cns_admin_active_tab() ?? array_key_first( $tabs );
+function clouansp_admin_render_page(): void {
+    $tabs       = clouansp_admin_get_tabs();
+    $active_tab = clouansp_admin_active_tab() ?? array_key_first( $tabs );
     $active     = $tabs[ $active_tab ] ?? null;
 
     if ( ! $active || ! current_user_can( $active['capability'] ?? 'manage_options' ) ) {
@@ -127,7 +127,7 @@ function cns_admin_render_page(): void {
       <nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'CNS settings sections', 'clouds-and-spaceships' ); ?>">
         <?php foreach ( $tabs as $slug => $tab ) :
             if ( ! current_user_can( $tab['capability'] ?? 'manage_options' ) ) continue;
-            $url          = admin_url( 'admin.php?page=' . cns_admin_page_slug( $slug ) );
+            $url          = admin_url( 'admin.php?page=' . clouansp_admin_page_slug( $slug ) );
             $active_class = $slug === $active_tab ? ' nav-tab-active' : '';
         ?>
           <a href="<?php echo esc_url( $url ); ?>" class="nav-tab<?php echo esc_attr( $active_class ); ?>">
@@ -136,7 +136,7 @@ function cns_admin_render_page(): void {
         <?php endforeach; ?>
       </nav>
 
-      <div class="cns-admin-tab-content">
+      <div class="clouansp-admin-tab-content">
         <?php
         if ( is_callable( $active['callback'] ?? null ) ) {
             call_user_func( $active['callback'] );
@@ -152,9 +152,8 @@ function cns_admin_render_page(): void {
 
 // ── Shared assets ─────────────────────────────────────────────────────────────
 //
-// The media picker is used by tabs from several providers (theme login images,
-// wiki placeholder thumbnail), so it lives in the framework and loads on every
-// CNS settings page. So does the admin-settings bundle, which carries the
+// The media picker is used by more than one tab (the wiki and story placeholder
+// thumbnails), so it lives here and loads on every CNS settings page. So does the admin-settings bundle, which carries the
 // layout language every tab is built from and the confirm prompt for
 // destructive links.
 //
@@ -162,32 +161,33 @@ function cns_admin_render_page(): void {
 // Tabs that need an editor's React app — Icons — add that bundle on top;
 // nothing else does.
 
-add_action( 'admin_enqueue_scripts', 'cns_admin_enqueue_shared_assets' );
+add_action( 'admin_enqueue_scripts', 'clouansp_admin_enqueue_shared_assets' );
 
-function cns_admin_enqueue_shared_assets( string $hook ): void {
-    if ( ! str_contains( $hook, 'cns-settings' ) ) {
+function clouansp_admin_enqueue_shared_assets( string $hook ): void {
+    if ( ! str_contains( $hook, 'clouansp-settings' ) ) {
         return;
     }
 
-    $asset = cns_asset( 'admin-settings/index' );
+    $asset = clouansp_asset( 'admin-settings/index' );
 
     wp_enqueue_style(
-        'cns-admin-settings',
-        CNS_URL . 'build/admin-settings/index.css',
+        'clouansp-admin-settings',
+        CLOUANSP_URL . 'build/admin-settings/index.css',
         [],
         $asset['version']
     );
     wp_enqueue_script(
-        'cns-admin-settings',
-        CNS_URL . 'build/admin-settings/index.js',
-        $asset['dependencies'],
+        'clouansp-admin-settings',
+        CLOUANSP_URL . 'build/admin-settings/index.js',
+        // jQuery for the inline helpers below, which ride on this handle.
+        array_merge( [ 'jquery' ], $asset['dependencies'] ),
         $asset['version'],
         true
     );
 
     wp_enqueue_media();
-    wp_add_inline_script( 'jquery', cns_admin_media_picker_js() );
-    wp_add_inline_script( 'jquery', cns_admin_color_clear_js() );
+    wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_media_picker_js() );
+    wp_add_inline_script( 'clouansp-admin-settings', clouansp_admin_color_clear_js() );
 }
 
 /**
@@ -197,13 +197,13 @@ function cns_admin_enqueue_shared_assets( string $hook ): void {
  * so the browser leaves it out of the submitted form — the sanitizer then
  * stores an empty string and the theme default applies. Markup:
  *
- *   <input type="checkbox" class="cns-color-clear" data-color="the-input-id">
+ *   <input type="checkbox" class="clouansp-color-clear" data-color="the-input-id">
  */
-function cns_admin_color_clear_js(): string {
+function clouansp_admin_color_clear_js(): string {
     return <<<'JS'
 (function ($) {
     $(function () {
-        $('.cns-color-clear').on('change', function () {
+        $('.clouansp-color-clear').on('change', function () {
             var input = $('#' + $(this).data('color'));
             if (! input.length) return;
             input.prop('disabled', this.checked);
@@ -214,19 +214,30 @@ function cns_admin_color_clear_js(): string {
 JS;
 }
 
-function cns_admin_media_picker_js(): string {
-    return <<<'JS'
-(function ($) {
+/**
+ * Media picker buttons. Each button passes its own translated labels as data
+ * attributes; the strings handed in as l10n are the fallbacks.
+ */
+function clouansp_admin_media_picker_js(): string {
+    $l10n = [
+        'title'  => __( 'Select image', 'clouds-and-spaceships' ),
+        'button' => __( 'Use this image', 'clouds-and-spaceships' ),
+        'change' => __( 'Change image', 'clouds-and-spaceships' ),
+        'select' => __( 'Select image', 'clouds-and-spaceships' ),
+    ];
+
+    return sprintf( <<<'JS'
+(function ($, l10n) {
     $(function () {
-        $('.cns-media-btn').on('click', function (e) {
+        $('.clouansp-media-btn').on('click', function (e) {
             e.preventDefault();
             var btn      = $(this);
             var inputId  = btn.data('input');
             var imgId    = btn.data('preview');
             var removeId = btn.data('remove');
             var frame    = wp.media({
-                title:    btn.data('title') || 'Select Image',
-                button:   { text: 'Use this image' },
+                title:    btn.data('title') || l10n.title,
+                button:   { text: l10n.button },
                 multiple: false,
                 library:  { type: 'image' },
             });
@@ -235,12 +246,12 @@ function cns_admin_media_picker_js(): string {
                 $('#' + inputId).val(att.id);
                 $('#' + imgId).attr('src', att.url).show();
                 $('#' + removeId).show();
-                btn.text(btn.data('change-label') || 'Change image');
+                btn.text(btn.data('change-label') || l10n.change);
             });
             frame.open();
         });
 
-        $('.cns-media-remove-btn').on('click', function (e) {
+        $('.clouansp-media-remove-btn').on('click', function (e) {
             e.preventDefault();
             var btn      = $(this);
             var inputId  = btn.data('input');
@@ -249,9 +260,11 @@ function cns_admin_media_picker_js(): string {
             $('#' + inputId).val('');
             $('#' + imgId).attr('src', '').hide();
             btn.hide();
-            $('#' + pickerId).text($('#' + pickerId).data('select-label') || 'Select image');
+            $('#' + pickerId).text($('#' + pickerId).data('select-label') || l10n.select);
         });
     });
-})(jQuery);
-JS;
+})(jQuery, %s);
+JS,
+        wp_json_encode( $l10n )
+    );
 }

@@ -6,25 +6,25 @@
  * The glossary is opt-in: nothing here registers unless the
  * `glossary_enabled` setting is on (CNS → Wiki tab).
  *
- * @package CNS Wiki Suite
+ * @package Clouds and Spaceships
  */
 
 defined('ABSPATH') || exit;
 
-function cns_wiki_glossary_enabled(): bool
+function clouansp_wiki_glossary_enabled(): bool
 {
-    return (bool) cns_get_wiki_setting('glossary_enabled', false);
+    return (bool) clouansp_get_wiki_setting('glossary_enabled', false);
 }
 
 // ── Post type & taxonomy ──────────────────────────────────────────────────────
 
-function cns_wiki_register_glossary_post_type(): void
+function clouansp_wiki_register_glossary_post_type(): void
 {
-    if (! cns_wiki_glossary_enabled()) {
+    if (! clouansp_wiki_glossary_enabled()) {
         return;
     }
 
-    register_taxonomy('cns_glossary_category', ['cns_glossary'], [
+    register_taxonomy('clouansp_glossary_category', ['clouansp_glossary'], [
         'labels' => [
             'name'          => _x('Glossary Categories', 'taxonomy general name', 'clouds-and-spaceships'),
             'singular_name' => _x('Glossary Category', 'taxonomy singular name', 'clouds-and-spaceships'),
@@ -41,7 +41,7 @@ function cns_wiki_register_glossary_post_type(): void
         'show_ui'           => true,
         'show_admin_column' => true,
         'show_in_rest'      => true,
-        'rewrite'           => ['slug' => cns_get_wiki_setting('glossary_slug', 'glossary') . '-category'],
+        'rewrite'           => ['slug' => clouansp_get_wiki_setting('glossary_slug', 'glossary') . '-category'],
     ]);
 
     $labels = [
@@ -61,28 +61,28 @@ function cns_wiki_register_glossary_post_type(): void
         'archives'              => _x('Glossary', 'The post type archive label used in nav menus.', 'clouds-and-spaceships'),
     ];
 
-    register_post_type('cns_glossary', [
+    register_post_type('clouansp_glossary', [
         'labels'             => $labels,
-        'description'        => 'Glossary entry custom post type.',
+        'description'        => __('Glossary entry custom post type.', 'clouds-and-spaceships'),
         'public'             => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
         'query_var'          => true,
         // Sidebar entry is opt-out on the Glossary tab.
-        'show_in_menu'       => (bool) cns_get_wiki_setting('glossary_show_menu', true),
-        'rewrite'            => ['slug' => cns_get_wiki_setting('glossary_slug', 'glossary'), 'with_front' => false],
+        'show_in_menu'       => (bool) clouansp_get_wiki_setting('glossary_show_menu', true),
+        'rewrite'            => ['slug' => clouansp_get_wiki_setting('glossary_slug', 'glossary'), 'with_front' => false],
         'capability_type'    => 'post',
         'has_archive'        => true,
         'hierarchical'       => false,
         'menu_position'      => 21,
         'menu_icon'          => 'dashicons-book-alt',
         'supports'           => ['title', 'editor', 'author', 'thumbnail', 'excerpt'],
-        'taxonomies'         => ['cns_glossary_category'],
+        'taxonomies'         => ['clouansp_glossary_category'],
         'show_in_rest'       => true,
         'template_lock'      => false,
     ]);
 }
-add_action('init', 'cns_wiki_register_glossary_post_type');
+add_action('init', 'clouansp_wiki_register_glossary_post_type');
 
 /**
  * Glossary definitions use the classic (TinyMCE) editor — plain rich text,
@@ -90,7 +90,7 @@ add_action('init', 'cns_wiki_register_glossary_post_type');
  * entries via the REST API.
  */
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
-    return 'cns_glossary' === $post_type ? false : $use_block_editor;
+    return 'clouansp_glossary' === $post_type ? false : $use_block_editor;
 }, 10, 2);
 
 
@@ -100,7 +100,7 @@ add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_
  * Returns the short definition used as tooltip text for a glossary entry:
  * the manual excerpt if set, otherwise a trimmed plain-text definition.
  */
-function cns_wiki_glossary_tooltip_text(WP_Post $entry): string
+function clouansp_wiki_glossary_tooltip_text(WP_Post $entry): string
 {
     if (has_excerpt($entry)) {
         return wp_strip_all_tags($entry->post_excerpt);
@@ -113,35 +113,35 @@ function cns_wiki_glossary_tooltip_text(WP_Post $entry): string
  *
  * The editor format stores only `data-glossary-id` (plus a snapshot href).
  * Here we refresh the href against the entry's current permalink and inject
- * the current definition as `data-cns-tooltip`, so tooltips never go stale.
+ * the current definition as `data-clouansp-tooltip`, so tooltips never go stale.
  * Terms pointing at missing/unpublished entries are downgraded to plain text
  * styling (no dead link).
  */
-function cns_wiki_glossary_render_terms(string $content): string
+function clouansp_wiki_glossary_render_terms(string $content): string
 {
-    if (! cns_wiki_glossary_enabled() || false === strpos($content, 'data-glossary-id')) {
+    if (! clouansp_wiki_glossary_enabled() || false === strpos($content, 'data-glossary-id')) {
         return $content;
     }
 
     $processor = new WP_HTML_Tag_Processor($content);
 
-    while ($processor->next_tag(['tag_name' => 'a', 'class_name' => 'cns-glossary-term'])) {
+    while ($processor->next_tag(['tag_name' => 'a', 'class_name' => 'clouansp-glossary-term'])) {
         $entry_id = (int) $processor->get_attribute('data-glossary-id');
         $entry    = $entry_id ? get_post($entry_id) : null;
 
-        if (! $entry || 'cns_glossary' !== $entry->post_type || 'publish' !== $entry->post_status) {
+        if (! $entry || 'clouansp_glossary' !== $entry->post_type || 'publish' !== $entry->post_status) {
             $processor->remove_attribute('href');
-            $processor->add_class('cns-glossary-term--missing');
+            $processor->add_class('clouansp-glossary-term--missing');
             continue;
         }
 
         $processor->set_attribute('href', get_permalink($entry));
-        $processor->set_attribute('data-cns-tooltip', cns_wiki_glossary_tooltip_text($entry));
+        $processor->set_attribute('data-clouansp-tooltip', clouansp_wiki_glossary_tooltip_text($entry));
     }
 
     return $processor->get_updated_html();
 }
-add_filter('the_content', 'cns_wiki_glossary_render_terms', 20);
+add_filter('the_content', 'clouansp_wiki_glossary_render_terms', 20);
 
 // ── Assets ────────────────────────────────────────────────────────────────────
 
@@ -149,50 +149,51 @@ add_filter('the_content', 'cns_wiki_glossary_render_terms', 20);
  * Glossary term styling (dotted underline + CSS tooltip) for frontend and
  * editor canvas, plus the optional text-colour override from settings.
  */
-function cns_wiki_glossary_enqueue_styles(): void
+function clouansp_wiki_glossary_enqueue_styles(): void
 {
-    if (! cns_wiki_glossary_enabled()) {
+    if (! clouansp_wiki_glossary_enabled()) {
         return;
     }
 
     wp_enqueue_style(
-        'cns-wiki-glossary-term',
-        CNS_URL . 'assets/css/glossary-term.css',
+        'clouansp-wiki-glossary-term',
+        CLOUANSP_URL . 'assets/css/glossary-term.css',
         [],
-        CNS_VERSION
+        CLOUANSP_VERSION
     );
 
-    $color = sanitize_hex_color((string) cns_get_wiki_setting('glossary_text_color', ''));
+    $color = sanitize_hex_color((string) clouansp_get_wiki_setting('glossary_text_color', ''));
     if ($color) {
         wp_add_inline_style(
-            'cns-wiki-glossary-term',
-            ':root{--cns-glossary-color:' . $color . ';}'
+            'clouansp-wiki-glossary-term',
+            ':root{--clouansp-glossary-color:' . $color . ';}'
         );
     }
 }
-add_action('enqueue_block_assets', 'cns_wiki_glossary_enqueue_styles');
+add_action('enqueue_block_assets', 'clouansp_wiki_glossary_enqueue_styles');
 
 /**
  * Editor-only script registering the glossary inline format (toolbar button).
  */
-function cns_wiki_glossary_enqueue_format(): void
+function clouansp_wiki_glossary_enqueue_format(): void
 {
-    if (! cns_wiki_glossary_enabled()) {
+    if (! clouansp_wiki_glossary_enabled()) {
         return;
     }
 
-    $asset_file = CNS_DIR . 'build/formats/glossary.asset.php';
+    $asset_file = CLOUANSP_DIR . 'build/formats/glossary.asset.php';
     if (! file_exists($asset_file)) {
         return;
     }
 
     $asset = include $asset_file;
     wp_enqueue_script(
-        'cns-wiki-glossary-format',
-        CNS_URL . 'build/formats/glossary.js',
+        'clouansp-wiki-glossary-format',
+        CLOUANSP_URL . 'build/formats/glossary.js',
         $asset['dependencies'],
         $asset['version'],
         true
     );
+    wp_set_script_translations('clouansp-wiki-glossary-format', 'clouds-and-spaceships');
 }
-add_action('enqueue_block_editor_assets', 'cns_wiki_glossary_enqueue_format');
+add_action('enqueue_block_editor_assets', 'clouansp_wiki_glossary_enqueue_format');

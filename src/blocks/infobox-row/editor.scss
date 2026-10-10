@@ -1,5 +1,5 @@
 @charset "UTF-8";
-.infobox-row {
+.clouansp-infobox-row {
 	&__empty {
 		color: #757575;
 		font-style: italic;
@@ -20,10 +20,10 @@
 		}
 	}
 }
-.infobox-row__modal {
+.clouansp-infobox-row__modal {
 	min-width: 480px;
 
-	.infobox-row__url-field {
+	.clouansp-infobox-row__url-field {
 		margin-bottom: 16px;
 
 		.components-base-control__label {
@@ -37,7 +37,7 @@
 		}
 	}
 
-	.infobox-row__modal-actions {
+	.clouansp-infobox-row__modal-actions {
 		display: flex;
 		gap: 8px;
 		margin-top: 16px;

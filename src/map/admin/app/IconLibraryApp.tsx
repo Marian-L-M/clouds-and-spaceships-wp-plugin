@@ -55,25 +55,25 @@ export default function IconLibraryApp() {
 					{ error }
 				</Notice>
 			) }
-			<div className="cns-icon-library-toolbar">
+			<div className="clouansp-icon-library-toolbar">
 				<Button variant="primary" icon={ plus } onClick={ handleAdd }>
 					{ __( 'Add Icon', 'clouds-and-spaceships' ) }
 				</Button>
 			</div>
-			<div id="cns-icon-library-grid" className="cns-icon-library-grid">
+			<div id="clouansp-icon-library-grid" className="clouansp-icon-library-grid">
 				{ icons.length === 0 ? (
-					<p className="cns-icon-library-grid__empty">
+					<p className="clouansp-icon-library-grid__empty">
 						{ __( 'No icons yet. Click “Add Icon” to upload an SVG.', 'clouds-and-spaceships' ) }
 					</p>
 				) : (
 					icons.map( ( icon ) => (
-						<div key={ icon.id } className="cns-icon-library-item">
-							<div className="cns-icon-library-item__preview">
+						<div key={ icon.id } className="clouansp-icon-library-item">
+							<div className="clouansp-icon-library-item__preview">
 								<img src={ icon.url } alt={ icon.title } />
 							</div>
-							<span className="cns-icon-library-item__name">{ icon.title }</span>
+							<span className="clouansp-icon-library-item__name">{ icon.title }</span>
 							<Button
-								className="cns-icon-library-item__remove"
+								className="clouansp-icon-library-item__remove"
 								size="small"
 								icon={ closeSmall }
 								isDestructive

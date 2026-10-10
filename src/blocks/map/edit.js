@@ -21,7 +21,7 @@ function mapLabel(record) {
 
 export default function Edit({ attributes, setAttributes }) {
 	const { mapId } = attributes;
-	const blockProps = useBlockProps({ className: "cns-map-block-editor" });
+	const blockProps = useBlockProps({ className: "clouansp-map-block-editor" });
 	const [search, setSearch] = useState("");
 
 	const { map, searchResults, isSearching } = useSelect(
@@ -35,11 +35,11 @@ export default function Edit({ attributes, setAttributes }) {
 				...(search ? { search } : {}),
 			};
 			return {
-				map: mapId ? getEntityRecord("postType", "cns_map", mapId) : null,
-				searchResults: getEntityRecords("postType", "cns_map", query),
+				map: mapId ? getEntityRecord("postType", "clouansp_map", mapId) : null,
+				searchResults: getEntityRecords("postType", "clouansp_map", query),
 				isSearching: isResolving("getEntityRecords", [
 					"postType",
-					"cns_map",
+					"clouansp_map",
 					query,
 				]),
 			};
@@ -91,7 +91,7 @@ export default function Edit({ attributes, setAttributes }) {
 						)}
 					/>
 				) : (
-					<div className="cns-map-block-editor__preview">
+					<div className="clouansp-map-block-editor__preview">
 						<span className="dashicons dashicons-location-alt" />
 						<p>
 							{map

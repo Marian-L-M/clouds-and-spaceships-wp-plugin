@@ -3,13 +3,13 @@
 // Rules the two editors style differently (panel padding, badge variants, the
 // settings grid) stay in each editor's own sheet.
 
-.cns-actions-row {
+.clouansp-actions-row {
 	display: flex;
 	align-items: center;
 	gap: 2px;
 }
 
-.cns-color-field {
+.clouansp-color-field {
 	&__toggle.components-button {
 		display: inline-flex;
 		align-items: center;
@@ -53,12 +53,12 @@
 	}
 }
 
-.cns-row-actions {
+.clouansp-row-actions {
 	a {
 		text-decoration: none;
 	}
 
-	.cns-delete-link {
+	.clouansp-delete-link {
 		color: #b32d2e;
 
 		&:hover {
@@ -67,7 +67,7 @@
 	}
 }
 
-.cns-snackbar-list {
+.clouansp-snackbar-list {
 	position: fixed;
 	bottom: 24px;
 	left: 200px;
@@ -79,7 +79,7 @@
 	}
 }
 
-.cns-tab {
+.clouansp-tab {
 	padding: 10px 18px;
 	font-size: 13px;
 	font-weight: 500;

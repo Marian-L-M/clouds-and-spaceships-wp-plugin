@@ -5,9 +5,9 @@ import { __ } from '@wordpress/i18n';
 export type PostStatus = 'draft' | 'publish' | 'private';
 
 const STATUS_OPTIONS: { value: PostStatus; label: string }[] = [
-	{ value: 'draft', label: 'Draft' },
-	{ value: 'publish', label: 'Published' },
-	{ value: 'private', label: 'Private' },
+	{ value: 'draft', label: __( 'Draft', 'clouds-and-spaceships' ) },
+	{ value: 'publish', label: __( 'Published', 'clouds-and-spaceships' ) },
+	{ value: 'private', label: __( 'Private', 'clouds-and-spaceships' ) },
 ];
 
 interface Props {
@@ -44,12 +44,12 @@ export default function EditorHeader( {
 	saveLabel,
 }: Props ) {
 	return (
-		<div className="cns-map-editor__header">
+		<div className="clouansp-map-editor__header">
 			<Button href={ overviewUrl } variant="tertiary" icon={ arrowLeft }>
 				{ backLabel }
 			</Button>
 			<h1>{ pageTitle }</h1>
-			<div className="cns-map-editor__header-actions">
+			<div className="clouansp-map-editor__header-actions">
 				{ viewUrl && (
 					<Button
 						href={ viewUrl }

@@ -1,5 +1,12 @@
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
 
+// display_mode is a stored attribute, so its values stay as they are; each one
+// maps to a modifier class. Anything unknown falls back to the block default.
+const MODE_CLASSES = {
+  "collapse__groups-mobile": "clouansp-infobox--collapse-groups-mobile",
+  expanded__all: "clouansp-infobox--expanded",
+};
+
 export default function save({ attributes }) {
   const {
     bg_color,
@@ -10,48 +17,42 @@ export default function save({ attributes }) {
     maxWidth,
   } = attributes;
 
-  const is_infobox_open = () => {
-    switch (display_mode) {
-      case "expanded__all":
-        return true;
-      default:
-        return false;
-    }
-  };
+  const isExpanded = display_mode === "expanded__all";
+  const modeClass =
+    MODE_CLASSES[display_mode] ?? MODE_CLASSES["collapse__groups-mobile"];
 
   return (
     <div
       {...useBlockProps.save({
         style: { backgroundColor: bg_color, color: text_color, maxWidth },
       })}
-      data-wp-interactive="cns-wiki-suite/infobox"
-      data-wp-context={JSON.stringify({ isActive: is_infobox_open() })}
+      data-wp-interactive="clouansp-wiki-suite/infobox"
+      data-wp-context={JSON.stringify({ isActive: isExpanded })}
     >
       <div
-        className={`infobox ${display_mode}`}
+        className={`clouansp-infobox ${modeClass}`}
         data-wp-bind--aria-expanded="context.isActive"
         data-wp-class--is-active="context.isActive"
       >
         {infobox_title && (
           <h2
-            className="infobox__title"
+            className="clouansp-infobox__title"
             style={{ backgroundColor: contrast_color, color: text_color }}
           >
-            {!(display_mode == "expanded__all") ? (
+            {isExpanded ? (
+              infobox_title
+            ) : (
               <button
-                className="toggle-btn"
+                className="clouansp-infobox__toggle"
                 data-wp-on--click="actions.toggle"
                 data-wp-bind--aria-expanded="context.isActive"
-                data-wp-class--toggle-is-active="context.isActive"
               >
                 {infobox_title}
               </button>
-            ) : (
-              infobox_title
             )}
           </h2>
         )}
-        <div className="infobox__inner">
+        <div className="clouansp-infobox__inner">
           <InnerBlocks.Content />
         </div>
       </div>

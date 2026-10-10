@@ -195,7 +195,7 @@ export default function HierarchyCanvas( {
 
 	useEffect( () => {
 		function onKeyDown( e: KeyboardEvent ) {
-			const hierarchyActive = document.querySelector( '[data-panel="hierarchy"].cns-tab-panel--active' );
+			const hierarchyActive = document.querySelector( '[data-panel="hierarchy"].clouansp-tab-panel--active' );
 			if ( ! hierarchyActive ) return;
 			const { regions: regionList, selectedRegionId: selId, onNodesChange: onChange,
 				repoNodeIdx: nodeIdx, repoCursor: cursor } = stateRef.current;
@@ -237,7 +237,7 @@ export default function HierarchyCanvas( {
 
 	const isRepositioning = repoNodeIdx !== null;
 	return (
-		<div className={ `cns-objects-canvas-wrap${ isRepositioning ? ' cns-canvas--repositioning' : '' }` }>
+		<div className={ `clouansp-objects-canvas-wrap${ isRepositioning ? ' clouansp-canvas--repositioning' : '' }` }>
 			<CanvasZoomWrap>
 				<canvas
 					ref={ canvasRef }

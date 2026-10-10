@@ -16,10 +16,10 @@ const COLUMNS: EntityColumn< MapLabel >[] = [
 	{
 		header: '',
 		width: 36,
-		className: 'col-icon',
+		className: 'clouansp-objects-table__icon',
 		render: ( label ) => (
 			<span
-				className="cns-obj-dot"
+				className="clouansp-obj-dot"
 				style={ {
 					background: label.canvas_styles?.bgColor || '#ffffff',
 					border: `2px solid ${
@@ -30,17 +30,23 @@ const COLUMNS: EntityColumn< MapLabel >[] = [
 			/>
 		),
 	},
-	{ header: 'Text', render: ( label ) => label.text || '(empty label)' },
 	{
-		header: 'Placement',
+		header: __( 'Text', 'clouds-and-spaceships' ),
+		render: ( label ) =>
+			label.text || __( '(empty label)', 'clouds-and-spaceships' ),
+	},
+	{
+		header: __( 'Placement', 'clouds-and-spaceships' ),
 		render: ( label ) => (
-			<span className="cns-badge cns-badge--type">
-				{ label.placement === 'indicator' ? 'Indicator' : 'Centered' }
+			<span className="clouansp-badge clouansp-badge--type">
+				{ label.placement === 'indicator'
+					? __( 'Indicator', 'clouds-and-spaceships' )
+					: __( 'Centered', 'clouds-and-spaceships' ) }
 			</span>
 		),
 	},
 	{
-		header: 'Position',
+		header: __( 'Position', 'clouds-and-spaceships' ),
 		render: ( label ) => (
 			<>
 				{ label.x }, { label.y }

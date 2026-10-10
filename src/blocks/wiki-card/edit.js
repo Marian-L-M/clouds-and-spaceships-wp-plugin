@@ -68,7 +68,7 @@ function PostSelectorModal( { currentPostType, onSelect, onClose } ) {
 		<Modal
 			title={ __( 'Select a post', 'clouds-and-spaceships' ) }
 			onRequestClose={ onClose }
-			className="wiki-card-modal"
+			className="clouansp-wiki-card-modal"
 		>
 			<SelectControl
 				label={ __( 'Post type', 'clouds-and-spaceships' ) }
@@ -84,17 +84,17 @@ function PostSelectorModal( { currentPostType, onSelect, onClose } ) {
 				placeholder={ __( 'Search…', 'clouds-and-spaceships' ) }
 				__next40pxDefaultSize
 			/>
-			<div className="wiki-card-modal__results">
+			<div className="clouansp-wiki-card-modal__results">
 				{ isResolving && <Spinner /> }
 				{ ! isResolving && records?.length === 0 && (
-					<p className="wiki-card-modal__empty">
+					<p className="clouansp-wiki-card-modal__empty">
 						{ __( 'No posts found.', 'clouds-and-spaceships' ) }
 					</p>
 				) }
 				{ records?.map( ( post ) => (
 					<button
 						key={ post.id }
-						className="wiki-card-modal__result"
+						className="clouansp-wiki-card-modal__result"
 						onClick={ () => onSelect( post.id, postType ) }
 						type="button"
 					>
@@ -148,7 +148,7 @@ function CardPreview( { postId, postType, attributes } ) {
 
 	if ( ! post ) {
 		return (
-			<div className="wiki-card wiki-card--loading" style={ { backgroundColor } }>
+			<div className="clouansp-wiki-card clouansp-wiki-card--loading" style={ { backgroundColor } }>
 				<Spinner />
 			</div>
 		);
@@ -161,17 +161,17 @@ function CardPreview( { postId, postType, attributes } ) {
 	if ( textColor ) cardStyle.color = textColor;
 
 	return (
-		<div className="wiki-card" style={ cardStyle }>
+		<div className="clouansp-wiki-card" style={ cardStyle }>
 			{ showThumbnail && mediaUrl && (
-				<div className="wiki-card__thumbnail">
+				<div className="clouansp-wiki-card__thumbnail">
 					<img src={ mediaUrl } alt={ title } />
 				</div>
 			) }
-			{ showTitle && <h3 className="wiki-card__title">{ title }</h3> }
+			{ showTitle && <h3 className="clouansp-wiki-card__title">{ title }</h3> }
 			{ showCategories && catTerms.length > 0 && (
-				<div className="wiki-card__categories">
+				<div className="clouansp-wiki-card__categories">
 					{ catTerms.map( ( term ) => (
-						<span key={ term.id } className="wiki-card__term wiki-card__term--category">
+						<span key={ term.id } className="clouansp-wiki-card__term clouansp-wiki-card__term--category">
 							{ term.name }
 						</span>
 					) ) }
@@ -179,21 +179,21 @@ function CardPreview( { postId, postType, attributes } ) {
 			) }
 			{ showExcerpt && excerpt && (
 				<div
-					className="wiki-card__excerpt"
+					className="clouansp-wiki-card__excerpt"
 					dangerouslySetInnerHTML={ { __html: excerpt } }
 				/>
 			) }
 			{ showTags && tagTerms.length > 0 && (
-				<div className="wiki-card__tags">
+				<div className="clouansp-wiki-card__tags">
 					{ tagTerms.map( ( term ) => (
-						<span key={ term.id } className="wiki-card__term wiki-card__term--tag">
+						<span key={ term.id } className="clouansp-wiki-card__term clouansp-wiki-card__term--tag">
 							{ term.name }
 						</span>
 					) ) }
 				</div>
 			) }
 			{ showLink && (
-				<span className="wiki-card__link">
+				<span className="clouansp-wiki-card__link">
 					{ __( 'Read more', 'clouds-and-spaceships' ) }
 				</span>
 			) }

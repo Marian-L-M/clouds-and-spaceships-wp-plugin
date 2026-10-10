@@ -4,7 +4,7 @@ return array(
 	'glossary-index' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-wiki-suite/glossary-index',
+		'name' => 'clouansp-wiki-suite/glossary-index',
 		'version' => '0.1.0',
 		'title' => 'Glossary Index',
 		'category' => 'widgets',
@@ -62,7 +62,7 @@ return array(
 	'infobox' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-wiki-suite/infobox',
+		'name' => 'clouansp-wiki-suite/infobox',
 		'version' => '0.1.0',
 		'title' => 'Infobox',
 		'category' => 'widgets',
@@ -106,8 +106,8 @@ return array(
 			)
 		),
 		'allowedBlocks' => array(
-			'cns-wiki-suite/infobox-group',
-			'cns-wiki-suite/infobox-row',
+			'clouansp-wiki-suite/infobox-group',
+			'clouansp-wiki-suite/infobox-row',
 			'core/paragraph',
 			'core/heading',
 			'core/list',
@@ -122,9 +122,9 @@ return array(
 	'infobox-group' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-wiki-suite/infobox-group',
+		'name' => 'clouansp-wiki-suite/infobox-group',
 		'parent' => array(
-			'cns-wiki-suite/infobox'
+			'clouansp-wiki-suite/infobox'
 		),
 		'version' => '0.1.0',
 		'title' => 'Infobox Group',
@@ -164,9 +164,9 @@ return array(
 	'infobox-row' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-wiki-suite/infobox-row',
+		'name' => 'clouansp-wiki-suite/infobox-row',
 		'ancestor' => array(
-			'cns-wiki-suite/infobox'
+			'clouansp-wiki-suite/infobox'
 		),
 		'version' => '0.1.0',
 		'title' => 'Infobox Row',
@@ -199,7 +199,7 @@ return array(
 	'map' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-map-suite/map',
+		'name' => 'clouansp-map-suite/map',
 		'version' => '0.1.0',
 		'title' => 'CNS Map',
 		'category' => 'widgets',
@@ -231,7 +231,7 @@ return array(
 	'story' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-story-suite/story',
+		'name' => 'clouansp-story-suite/story',
 		'version' => '0.1.0',
 		'title' => 'CNS Story',
 		'category' => 'embed',
@@ -268,7 +268,7 @@ return array(
 	'wiki-card' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-wiki-suite/wiki-card',
+		'name' => 'clouansp-wiki-suite/wiki-card',
 		'version' => '0.1.0',
 		'title' => 'Wiki Card',
 		'category' => 'widgets',
@@ -287,7 +287,7 @@ return array(
 			),
 			'postType' => array(
 				'type' => 'string',
-				'default' => 'cns_wiki'
+				'default' => 'clouansp_wiki'
 			),
 			'backgroundColor' => array(
 				'type' => 'string',
@@ -331,7 +331,7 @@ return array(
 	'wiki-contents' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'cns-wiki-suite/wiki-contents',
+		'name' => 'clouansp-wiki-suite/wiki-contents',
 		'version' => '0.1.0',
 		'title' => 'Wiki Contents',
 		'category' => 'widgets',
@@ -344,7 +344,7 @@ return array(
 			'html' => false
 		),
 		'allowedBlocks' => array(
-			'cns-wiki-suite/wiki-card'
+			'clouansp-wiki-suite/wiki-card'
 		),
 		'attributes' => array(
 			'mode' => array(

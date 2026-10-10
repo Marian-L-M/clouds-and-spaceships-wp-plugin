@@ -3,31 +3,31 @@
  * Wiki settings — the CNS → Wiki tab, its option, and the styles it drives.
  *
  * Registers the Wiki tab on the shared CNS settings page (includes/settings-page.php).
- * Archive slug / per page / sort order are read back through the shared archive
- * helpers in includes/archive.php, which also own the rewrite-flush flag.
+ * The archive slug is read back through the shared archive helpers in
+ * includes/archive.php, which also own the rewrite-flush flag.
  */
 
 defined( 'ABSPATH' ) || exit;
 
 // ── Settings helper ───────────────────────────────────────────────────────────
 
-function cns_get_wiki_setting( string $key, $default = null ) {
+function clouansp_get_wiki_setting( string $key, $default = null ) {
     static $settings = null;
     if ( null === $settings ) {
-        $settings = (array) get_option( 'cns_wiki_settings', [] );
+        $settings = (array) get_option( 'clouansp_wiki_settings', [] );
     }
     return array_key_exists( $key, $settings ) ? $settings[ $key ] : $default;
 }
 
 // ── Settings API registration ─────────────────────────────────────────────────
 
-add_action( 'admin_init', 'cns_wiki_register_settings' );
+add_action( 'admin_init', 'clouansp_wiki_register_settings' );
 
-function cns_wiki_register_settings(): void {
+function clouansp_wiki_register_settings(): void {
     register_setting(
-        'cns_wiki_settings_group',
-        'cns_wiki_settings',
-        [ 'sanitize_callback' => 'cns_sanitize_wiki_settings' ]
+        'clouansp_wiki_settings_group',
+        'clouansp_wiki_settings',
+        [ 'sanitize_callback' => 'clouansp_sanitize_wiki_settings' ]
     );
 }
 
@@ -37,20 +37,20 @@ function cns_wiki_register_settings(): void {
  * is with a hidden _section field; only that section's keys are rebuilt and
  * merged over what is already stored.
  */
-function cns_sanitize_wiki_settings( $input ): array {
+function clouansp_sanitize_wiki_settings( $input ): array {
     $input   = is_array( $input ) ? $input : [];
     $section = sanitize_key( $input['_section'] ?? 'wiki' );
-    $stored  = (array) get_option( 'cns_wiki_settings', [] );
+    $stored  = (array) get_option( 'clouansp_wiki_settings', [] );
 
     $output = 'glossary' === $section
-        ? cns_sanitize_wiki_glossary_section( $input )
-        : cns_sanitize_wiki_section( $input );
+        ? clouansp_sanitize_wiki_glossary_section( $input )
+        : clouansp_sanitize_wiki_section( $input );
 
     return array_merge( $stored, $output );
 }
 
 /** Keys owned by the Wiki tab. */
-function cns_sanitize_wiki_section( array $input ): array {
+function clouansp_sanitize_wiki_section( array $input ): array {
     $output = [];
 
     // Post type. Defaults to on, so an install that has never saved this form
@@ -63,7 +63,7 @@ function cns_sanitize_wiki_section( array $input ): array {
     $output['wiki_delete_on_uninstall'] = ! empty( $input['wiki_delete_on_uninstall'] );
 
     // Layout — infobox column width in px. Empty means no
-    // --cns-wiki-infobox-width is emitted, so the infobox block's stylesheet
+    // --clouansp-wiki-infobox-width is emitted, so the infobox block's stylesheet
     // falls back to its built-in 360px.
     // 200-1280px is the old 12-80rem range; stored as whole pixels.
     $width = trim( (string) ( $input['infobox_width'] ?? '' ) );
@@ -104,7 +104,7 @@ function cns_sanitize_wiki_section( array $input ): array {
 }
 
 /** Keys owned by the Glossary tab. */
-function cns_sanitize_wiki_glossary_section( array $input ): array {
+function clouansp_sanitize_wiki_glossary_section( array $input ): array {
     $output = [];
 
     $output['glossary_enabled'] = ! empty( $input['glossary_enabled'] );
@@ -128,9 +128,9 @@ function cns_sanitize_wiki_glossary_section( array $input ): array {
 // shared with the map and story archives. Only the "did a watched key change?"
 // test is wiki-specific, because these settings sit inside one option array.
 
-add_action( 'update_option_cns_wiki_settings', 'cns_wiki_maybe_schedule_rewrite_flush', 10, 2 );
+add_action( 'update_option_clouansp_wiki_settings', 'clouansp_wiki_maybe_schedule_rewrite_flush', 10, 2 );
 
-function cns_wiki_maybe_schedule_rewrite_flush( $old_value, $new_value ): void {
+function clouansp_wiki_maybe_schedule_rewrite_flush( $old_value, $new_value ): void {
     $watched = [
         [ 'wiki_enabled',     true ],
         [ 'archive_slug',     'wiki' ],
@@ -139,14 +139,14 @@ function cns_wiki_maybe_schedule_rewrite_flush( $old_value, $new_value ): void {
     ];
     foreach ( $watched as [ $key, $default ] ) {
         if ( ( $old_value[ $key ] ?? $default ) !== ( $new_value[ $key ] ?? $default ) ) {
-            cns_schedule_rewrite_flush();
+            clouansp_schedule_rewrite_flush();
             return;
         }
     }
 }
 
 // Flag on first-ever save too.
-add_action( 'add_option_cns_wiki_settings', 'cns_schedule_rewrite_flush' );
+add_action( 'add_option_clouansp_wiki_settings', 'clouansp_schedule_rewrite_flush' );
 
 // ── Infobox colour overrides ──────────────────────────────────────────────────
 //
@@ -161,67 +161,31 @@ add_action( 'add_option_cns_wiki_settings', 'cns_schedule_rewrite_flush' );
 // Each default falls back to a preset, so an unset setting follows the theme.
 
 // enqueue_block_assets fires on both the frontend and in the editor.
-add_action( 'enqueue_block_assets', 'cns_wiki_enqueue_infobox_styles' );
+add_action( 'enqueue_block_assets', 'clouansp_wiki_enqueue_infobox_styles' );
 
-function cns_wiki_enqueue_infobox_styles(): void {
-    $bg       = (string) cns_get_wiki_setting( 'infobox_bg_color',       '' );
-    $contrast = (string) cns_get_wiki_setting( 'infobox_contrast_color', '' );
-    $accent   = (string) cns_get_wiki_setting( 'infobox_accent_color',   '' );
-    $text     = (string) cns_get_wiki_setting( 'infobox_text_color',     '' );
-    $title    = (string) cns_get_wiki_setting( 'infobox_title_color',    '' );
+function clouansp_wiki_enqueue_infobox_styles(): void {
+    $bg       = (string) clouansp_get_wiki_setting( 'infobox_bg_color',       '' );
+    $contrast = (string) clouansp_get_wiki_setting( 'infobox_contrast_color', '' );
+    $accent   = (string) clouansp_get_wiki_setting( 'infobox_accent_color',   '' );
+    $text     = (string) clouansp_get_wiki_setting( 'infobox_text_color',     '' );
+    $title    = (string) clouansp_get_wiki_setting( 'infobox_title_color',    '' );
 
     if ( ! $bg && ! $contrast && ! $accent && ! $text && ! $title ) {
         return;
     }
 
     $rules = '';
-    if ( $bg )       $rules .= '--cns-wiki-infobox-bg:' . sanitize_hex_color( $bg ) . ';';
-    if ( $contrast ) $rules .= '--cns-wiki-infobox-title-bg:' . sanitize_hex_color( $contrast ) . ';';
-    if ( $accent )   $rules .= '--cns-wiki-infobox-accent:' . sanitize_hex_color( $accent ) . ';';
-    if ( $text )     $rules .= '--cns-wiki-infobox-text:' . sanitize_hex_color( $text ) . ';';
-    if ( $title )    $rules .= '--cns-wiki-infobox-title-text:' . sanitize_hex_color( $title ) . ';';
+    if ( $bg )       $rules .= '--clouansp-wiki-infobox-bg:' . sanitize_hex_color( $bg ) . ';';
+    if ( $contrast ) $rules .= '--clouansp-wiki-infobox-title-bg:' . sanitize_hex_color( $contrast ) . ';';
+    if ( $accent )   $rules .= '--clouansp-wiki-infobox-accent:' . sanitize_hex_color( $accent ) . ';';
+    if ( $text )     $rules .= '--clouansp-wiki-infobox-text:' . sanitize_hex_color( $text ) . ';';
+    if ( $title )    $rules .= '--clouansp-wiki-infobox-title-text:' . sanitize_hex_color( $title ) . ';';
 
-    $css = '.wp-block-cns-wiki-suite-infobox{' . $rules . '}';
+    $css = '.wp-block-clouansp-wiki-suite-infobox{' . $rules . '}';
 
-    wp_register_style( 'cns-wiki-infobox-overrides', false, [], CNS_VERSION );
-    wp_enqueue_style( 'cns-wiki-infobox-overrides' );
-    wp_add_inline_style( 'cns-wiki-infobox-overrides', $css );
-}
-
-// ── Archive grid styles ───────────────────────────────────────────────────────
-//
-// The archive template renders wikis through a core query loop, not the
-// wiki-contents block, so the grid defaults are applied here as generated CSS.
-// Breakpoints mirror the wiki-contents block's style.scss (1024px / 768px).
-
-add_action( 'wp_enqueue_scripts', 'cns_wiki_enqueue_archive_grid_styles' );
-
-function cns_wiki_enqueue_archive_grid_styles(): void {
-    if ( ! is_post_type_archive( 'cns_wiki' ) ) {
-        return;
-    }
-
-    $desktop = (int) cns_get_wiki_setting( 'grid_columns_desktop', 3 );
-    $tablet  = (int) cns_get_wiki_setting( 'grid_columns_tablet',  2 );
-    $mobile  = (int) cns_get_wiki_setting( 'grid_columns_mobile',  1 );
-    $col_gap = (int) cns_get_wiki_setting( 'grid_column_gap', 16 );
-    $row_gap = (int) cns_get_wiki_setting( 'grid_row_gap',    16 );
-
-    $css = sprintf(
-        '.wp-block-post-template.wiki-archive__grid{display:grid;grid-template-columns:repeat(%1$d,minmax(0,1fr));column-gap:%4$dpx;row-gap:%5$dpx;}' .
-        '.wp-block-post-template.wiki-archive__grid > li{margin:0;width:auto;}' .
-        '@media (max-width:1024px){.wp-block-post-template.wiki-archive__grid{grid-template-columns:repeat(%2$d,minmax(0,1fr));}}' .
-        '@media (max-width:768px){.wp-block-post-template.wiki-archive__grid{grid-template-columns:repeat(%3$d,minmax(0,1fr));}}',
-        $desktop,
-        $tablet,
-        $mobile,
-        $col_gap,
-        $row_gap
-    );
-
-    wp_register_style( 'cns-wiki-archive-grid', false, [], CNS_VERSION );
-    wp_enqueue_style( 'cns-wiki-archive-grid' );
-    wp_add_inline_style( 'cns-wiki-archive-grid', $css );
+    wp_register_style( 'clouansp-wiki-infobox-overrides', false, [], CLOUANSP_VERSION );
+    wp_enqueue_style( 'clouansp-wiki-infobox-overrides' );
+    wp_add_inline_style( 'clouansp-wiki-infobox-overrides', $css );
 }
 
 // ── Editor grid defaults ──────────────────────────────────────────────────────
@@ -230,20 +194,20 @@ function cns_wiki_enqueue_archive_grid_styles(): void {
 // touches them, so the render callback can fall back to these settings. The
 // same values are handed to the editor script so its preview matches.
 
-add_action( 'enqueue_block_editor_assets', 'cns_wiki_expose_grid_defaults' );
+add_action( 'enqueue_block_editor_assets', 'clouansp_wiki_expose_grid_defaults' );
 
-function cns_wiki_expose_grid_defaults(): void {
+function clouansp_wiki_expose_grid_defaults(): void {
     $defaults = [
-        'columnsDesktop' => (int) cns_get_wiki_setting( 'grid_columns_desktop', 3 ),
-        'columnsTablet'  => (int) cns_get_wiki_setting( 'grid_columns_tablet',  2 ),
-        'columnsMobile'  => (int) cns_get_wiki_setting( 'grid_columns_mobile',  1 ),
-        'columnGap'      => (int) cns_get_wiki_setting( 'grid_column_gap', 16 ),
-        'rowGap'         => (int) cns_get_wiki_setting( 'grid_row_gap',    16 ),
+        'columnsDesktop' => (int) clouansp_get_wiki_setting( 'grid_columns_desktop', 3 ),
+        'columnsTablet'  => (int) clouansp_get_wiki_setting( 'grid_columns_tablet',  2 ),
+        'columnsMobile'  => (int) clouansp_get_wiki_setting( 'grid_columns_mobile',  1 ),
+        'columnGap'      => (int) clouansp_get_wiki_setting( 'grid_column_gap', 16 ),
+        'rowGap'         => (int) clouansp_get_wiki_setting( 'grid_row_gap',    16 ),
     ];
 
     wp_add_inline_script(
-        'cns-wiki-suite-wiki-contents-editor-script',
-        'window.cnsWikiGridDefaults = ' . wp_json_encode( $defaults ) . ';',
+        'clouansp-wiki-suite-wiki-contents-editor-script',
+        'window.clouanspWikiGridDefaults = ' . wp_json_encode( $defaults ) . ';',
         'before'
     );
 }
@@ -252,26 +216,26 @@ function cns_wiki_expose_grid_defaults(): void {
 //
 // The block's Max width control leaves its value empty until someone sets one,
 // and the effective default then comes from CSS — the Layout setting's
-// --cns-wiki-infobox-width, or 360px. The editor cannot read that off a
+// --clouansp-wiki-infobox-width, or 360px. The editor cannot read that off a
 // stylesheet, so hand it the resolved number to show as the field's
 // placeholder; otherwise the control advertises 360px on a site set to
 // something else.
 
-const CNS_WIKI_INFOBOX_WIDTH_DEFAULT = 360;
+const CLOUANSP_WIKI_INFOBOX_WIDTH_DEFAULT = 360;
 
 /** The effective default infobox max width in px, setting or built-in. */
-function cns_wiki_infobox_default_width(): int {
-    $width = cns_get_wiki_setting( 'infobox_width', '' );
-    return is_numeric( $width ) ? (int) $width : CNS_WIKI_INFOBOX_WIDTH_DEFAULT;
+function clouansp_wiki_infobox_default_width(): int {
+    $width = clouansp_get_wiki_setting( 'infobox_width', '' );
+    return is_numeric( $width ) ? (int) $width : CLOUANSP_WIKI_INFOBOX_WIDTH_DEFAULT;
 }
 
-add_action( 'enqueue_block_editor_assets', 'cns_wiki_expose_infobox_defaults' );
+add_action( 'enqueue_block_editor_assets', 'clouansp_wiki_expose_infobox_defaults' );
 
-function cns_wiki_expose_infobox_defaults(): void {
+function clouansp_wiki_expose_infobox_defaults(): void {
     wp_add_inline_script(
-        'cns-wiki-suite-infobox-editor-script',
-        'window.cnsWikiInfoboxDefaults = ' . wp_json_encode(
-            [ 'maxWidth' => cns_wiki_infobox_default_width() ]
+        'clouansp-wiki-suite-infobox-editor-script',
+        'window.clouanspWikiInfoboxDefaults = ' . wp_json_encode(
+            [ 'maxWidth' => clouansp_wiki_infobox_default_width() ]
         ) . ';',
         'before'
     );
@@ -279,28 +243,28 @@ function cns_wiki_expose_infobox_defaults(): void {
 
 // ── Admin tab registration ────────────────────────────────────────────────────
 
-add_filter( 'cns_admin_tabs', function ( array $tabs ): array {
+add_filter( 'clouansp_admin_tabs', function ( array $tabs ): array {
     $tabs['wiki'] = [
         'menu_title' => __( 'Wiki', 'clouds-and-spaceships' ),
         'title'      => __( 'Wiki', 'clouds-and-spaceships' ),
         'capability' => 'manage_options',
-        'callback'   => 'cns_wiki_admin_render_tab',
+        'callback'   => 'clouansp_wiki_admin_render_tab',
         'priority'   => 20,
     ];
     $tabs['glossary'] = [
         'menu_title' => __( 'Glossary', 'clouds-and-spaceships' ),
         'title'      => __( 'Glossary', 'clouds-and-spaceships' ),
         'capability' => 'manage_options',
-        'callback'   => 'cns_wiki_admin_render_glossary_tab',
+        'callback'   => 'clouansp_wiki_admin_render_glossary_tab',
         'priority'   => 21,
     ];
     return $tabs;
 } );
 
-function cns_wiki_admin_render_tab(): void {
-    include CNS_DIR . 'includes/wiki/views/tab-wiki.php';
+function clouansp_wiki_admin_render_tab(): void {
+    include CLOUANSP_DIR . 'includes/wiki/views/tab-wiki.php';
 }
 
-function cns_wiki_admin_render_glossary_tab(): void {
-    include CNS_DIR . 'includes/wiki/views/tab-glossary.php';
+function clouansp_wiki_admin_render_glossary_tab(): void {
+    include CLOUANSP_DIR . 'includes/wiki/views/tab-glossary.php';
 }

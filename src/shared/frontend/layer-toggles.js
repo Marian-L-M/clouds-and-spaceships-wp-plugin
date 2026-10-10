@@ -9,10 +9,12 @@
  * state without any wiring beyond the `onChange` repaint.
  */
 
+import { __ } from '@wordpress/i18n';
+
 const LAYERS = [
-	[ 'areas', 'Areas' ],
-	[ 'objects', 'Objects' ],
-	[ 'labels', 'Labels' ],
+	[ 'areas', __( 'Areas', 'clouds-and-spaceships' ) ],
+	[ 'objects', __( 'Objects', 'clouds-and-spaceships' ) ],
+	[ 'labels', __( 'Labels', 'clouds-and-spaceships' ) ],
 ];
 
 /**
@@ -22,7 +24,7 @@ const LAYERS = [
  *                                  the buttons stay put while a zoomed canvas
  *                                  pans.
  * @param {string}   opts.className Block class for the group, e.g.
- *                                  'cns-map-layers'. Buttons get `__btn`.
+ *                                  'clouansp-map-layers'. Buttons get `__btn`.
  * @param {Object}   opts.present   Which layers the map actually has content
  *                                  in; a layer that is empty gets no button.
  * @param {Object}   opts.layers    Live visibility state, mutated on click.
@@ -35,7 +37,7 @@ export function setupLayerToggles( { container, className, present, layers, onCh
 	const box = document.createElement( 'div' );
 	box.className = className;
 	box.setAttribute( 'role', 'group' );
-	box.setAttribute( 'aria-label', 'Map layers' );
+	box.setAttribute( 'aria-label', __( 'Map layers', 'clouds-and-spaceships' ) );
 
 	LAYERS.forEach( function ( [ key, label ] ) {
 		if ( ! present[ key ] ) return;

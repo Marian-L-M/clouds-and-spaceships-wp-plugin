@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Server-side render for the cns-map-suite/map block.
+ * Server-side render for the clouansp-map-suite/map block.
  *
  * @var array    $attributes Block attributes.
  * @var string   $content    Block content (unused; dynamic block).
@@ -15,7 +15,7 @@ $map_id = (int) ($attributes['mapId'] ?? 0);
 // No ID means the block is standing in for "whichever map is being viewed" —
 // how the single-maps template uses it. Core seeds postId/postType from the
 // global post, so this only resolves on a map's own page.
-if (! $map_id && ($block->context['postType'] ?? '') === 'cns_map') {
+if (! $map_id && ($block->context['postType'] ?? '') === 'clouansp_map') {
 	$map_id = (int) ($block->context['postId'] ?? 0);
 }
 
@@ -25,7 +25,7 @@ if (! $map_id) {
 
 $map = get_post($map_id);
 
-if (! $map || $map->post_type !== 'cns_map') {
+if (! $map || $map->post_type !== 'clouansp_map') {
 	return;
 }
 
@@ -33,13 +33,13 @@ if (! $map || $map->post_type !== 'cns_map') {
 if ($map->post_status === 'private' && ! current_user_can('read_private_posts')) {
 	return;
 }
-if (! in_array($map->post_status, ['publish', 'private'], true) && ! current_user_can('manage_maps')) {
+if (! in_array($map->post_status, ['publish', 'private'], true) && ! current_user_can('clouansp_manage_maps')) {
 	return;
 }
 
-// ── Map data (shared API — single source of truth, also used by story-suite) ──
+// ── Map data (shared API — single source of truth, also used by the story block) ──
 
-$data = cns_map_suite_get_map_data($map_id, [
+$data = clouansp_map_suite_get_map_data($map_id, [
 	'hierarchy'         => true,
 	'parents'           => true,
 	'resolve_infoboxes' => true,
@@ -62,7 +62,7 @@ $visible_regions = array_values(array_filter(
 		if ($status === 'private') {
 			return current_user_can('read_private_posts');
 		}
-		return $status !== '' && current_user_can('manage_maps');
+		return $status !== '' && current_user_can('clouansp_manage_maps');
 	}
 ));
 
@@ -87,29 +87,15 @@ $map_data = [
 	'parentMaps'       => $data['parent_maps'],
 	// Which layers the author left on. The frontend starts from these and
 	// lets the visitor toggle from there.
-	'showAreas'        => cns_map_suite_layer_visible($map_id, '_cns_map_show_areas'),
-	'showObjects'      => cns_map_suite_layer_visible($map_id, '_cns_map_show_objects'),
-	'showLabels'       => cns_map_suite_layer_visible($map_id, '_cns_map_show_labels'),
+	'showAreas'        => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_areas'),
+	'showObjects'      => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_objects'),
+	'showLabels'       => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_labels'),
 ];
 
-// If any item resolves to wiki infoboxes, load the infobox block styles so the
-// injected markup renders correctly inside the drawer. (The infobox collapse
-// Interactivity runtime is intentionally not needed — view.js drives the
-// drawer's expand/collapse itself.)
-$has_infoboxes = false;
-foreach (['objects', 'areas', 'labels'] as $group) {
-	foreach ($data[$group] as $row) {
-		if (! empty($row['infobox_resolved']['infoboxes'])) {
-			$has_infoboxes = true;
-			break 2;
-		}
-	}
-}
-if ($has_infoboxes) {
-	foreach (['wp-block-cns-wiki-suite-infobox', 'wp-block-cns-wiki-suite-infobox-group', 'wp-block-cns-wiki-suite-infobox-row'] as $handle) {
-		wp_enqueue_style($handle);
-	}
-}
+// Wiki infoboxes shown in the drawer need no extra enqueue here:
+// clouansp_map_suite_get_map_data() above renders them with render_block(),
+// which enqueues each infobox block's own stylesheet. (Their Interactivity runtime is not needed either — view.js
+// drives the drawer's expand/collapse itself.)
 
 // The block renders the map itself and nothing else. Everything around it —
 // title, author, last-updated date, the description held in post_content — is
@@ -117,25 +103,25 @@ if ($has_infoboxes) {
 // in another post brings only its canvas along.
 // Zoom control colors: the map's own override, else the global default, else
 // nothing — in which case no style attribute is emitted and style.scss keeps
-// the built-in look. See cns_map_suite_zoom_colors().
-$zoom_style = cns_map_suite_zoom_color_style($map_id);
+// the built-in look. See clouansp_map_suite_zoom_colors().
+$zoom_style = clouansp_map_suite_zoom_color_style($map_id);
 
 $wrapper_attrs = get_block_wrapper_attributes(array_filter([
-	'class'       => 'cns-map',
+	'class'       => 'clouansp-map',
 	'data-map-id' => (string) $map_id,
 	'style'       => $zoom_style,
 ]));
 ?>
 <div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
-	<div class="cns-map-canvas-wrap">
+	<div class="clouansp-map-canvas-wrap">
 		<canvas
-			class="cns-map-canvas"
+			class="clouansp-map-canvas"
 			width="<?php echo esc_attr($width); ?>"
 			height="<?php echo esc_attr($height); ?>"
 			aria-label="<?php echo esc_attr($map->post_title); ?>"
 		></canvas>
 	</div>
-	<script type="application/json" data-cns-map><?php echo wp_json_encode($map_data, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+	<script type="application/json" data-clouansp-map><?php echo wp_json_encode($map_data, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
 	<noscript>
 		<p><?php
 			printf(

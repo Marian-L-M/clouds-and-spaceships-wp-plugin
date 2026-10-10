@@ -1,6 +1,6 @@
 import { Button } from '@wordpress/components';
 import { copy, pencil, trash } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import EntityTable from './EntityTable';
 import type { EntityColumn } from './EntityTable';
 import type { MapArea } from '../../../types';
@@ -13,16 +13,27 @@ interface Props {
 }
 
 const COLUMNS: EntityColumn< MapArea >[] = [
-	{ header: 'Title', render: ( area ) => area.title || '(no title)' },
 	{
-		header: 'Type',
+		header: __( 'Title', 'clouds-and-spaceships' ),
+		render: ( area ) =>
+			area.title || __( '(no title)', 'clouds-and-spaceships' ),
+	},
+	{
+		header: __( 'Type', 'clouds-and-spaceships' ),
 		render: ( area ) => (
-			<span className="cns-badge cns-badge--type">{ area.type }</span>
+			<span className="clouansp-badge clouansp-badge--type">{ area.type }</span>
 		),
 	},
 	{
-		header: 'Nodes',
-		render: ( area ) => `${ ( area.nodes || [] ).length } nodes`,
+		header: __( 'Nodes', 'clouds-and-spaceships' ),
+		render: ( area ) => {
+			const count = ( area.nodes || [] ).length;
+			return sprintf(
+				/* translators: %d: number of nodes. */
+				_n( '%d node', '%d nodes', count, 'clouds-and-spaceships' ),
+				count
+			);
+		},
 	},
 ];
 

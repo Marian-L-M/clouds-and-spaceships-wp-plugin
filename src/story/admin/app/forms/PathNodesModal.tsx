@@ -134,7 +134,7 @@ export default function PathNodesModal( {
 				) }
 			</p>
 
-			<div className="cns-path-nodes-list">
+			<div className="clouansp-path-nodes-list">
 				{ orderedIds.length === 0 && (
 					<p className="description">
 						{ __(
@@ -147,12 +147,12 @@ export default function PathNodesModal( {
 					const node = nodeMap.get( id );
 					if ( ! node ) return null;
 					return (
-						<div key={ id } className="cns-path-nodes-list__item">
-							<span className="cns-path-nodes-list__index">
+						<div key={ id } className="clouansp-path-nodes-list__item">
+							<span className="clouansp-path-nodes-list__index">
 								{ index + 1 }.
 							</span>
 							<span
-								className="cns-node-swatch"
+								className="clouansp-node-swatch"
 								style={ {
 									background:
 										node.iconType === 'thumbnail' ||
@@ -171,7 +171,7 @@ export default function PathNodesModal( {
 									border: '1px solid rgba(0,0,0,0.3)',
 								} }
 							/>
-							<span className="cns-path-nodes-list__title">
+							<span className="clouansp-path-nodes-list__title">
 								{ getDisplayTitle( node ) }
 							</span>
 							<Button
@@ -213,7 +213,7 @@ export default function PathNodesModal( {
 				} ) }
 			</div>
 
-			<div className="cns-modal-section">
+			<div className="clouansp-modal-section">
 				<h3>{ __( 'Add existing node', 'clouds-and-spaceships' ) }</h3>
 				<ComboboxControl
 					label={ __( 'Add existing node', 'clouds-and-spaceships' ) }
@@ -239,7 +239,7 @@ export default function PathNodesModal( {
 				/>
 			</div>
 
-			<div className="cns-modal-section">
+			<div className="clouansp-modal-section">
 				<h3>
 					{ __(
 						'Add substory as new node',

@@ -9,9 +9,9 @@ $space-10: 1rem;
 
 $bp-spc: 1200px;
 
-// ── Shared form grid (mirrors cns-map-suite's .cns-grid) ──────────────────────
+// ── Shared form grid (mirrors the map editor's .clouansp-grid) ──────────────────────
 
-.cns-grid {
+.clouansp-grid {
 	width: 100%;
 	display: grid;
 	gap: $space-10;
@@ -76,19 +76,19 @@ $bp-spc: 1200px;
 
 // ── Editor layout ─────────────────────────────────────────────────────────────
 
-.cns-map-editor {
+.clouansp-map-editor {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
 }
 
-.cns-map-editor__main {
+.clouansp-map-editor__main {
 	display: flex;
 	gap: 0;
 	width: 100%;
 	align-items: stretch;
 
-	.cns-map-editor__body {
+	.clouansp-map-editor__body {
 		flex: 1;
 		min-width: 0;
 	}
@@ -96,7 +96,7 @@ $bp-spc: 1200px;
 
 // ── Map editor header ─────────────────────────────────────────────────────────
 
-.cns-map-editor {
+.clouansp-map-editor {
 	&__header {
 		display: flex;
 		align-items: center;
@@ -139,7 +139,7 @@ $bp-spc: 1200px;
 
 // ── Tab panels ────────────────────────────────────────────────────────────────
 
-.cns-tab-panel {
+.clouansp-tab-panel {
 	display: none;
 	padding: 24px;
 
@@ -150,7 +150,7 @@ $bp-spc: 1200px;
 
 // ── Settings / form ───────────────────────────────────────────────────────────
 
-.cns-settings-layout {
+.clouansp-settings-layout {
 	display: grid;
 	grid-template-columns: minmax(380px, 1fr) minmax(260px, 1fr);
 	gap: 32px;
@@ -161,7 +161,7 @@ $bp-spc: 1200px;
 // The modal chrome itself comes from @wordpress/components' <Modal>; only the
 // section layout inside modal bodies is custom.
 
-.cns-modal-section {
+.clouansp-modal-section {
 	padding: 20px;
 	border-bottom: 1px solid #f0f0f1;
 
@@ -187,7 +187,7 @@ $bp-spc: 1200px;
 // modal that misbehaves. padding-bottom is the single override, so the bar sits
 // flush on the bottom edge instead of floating above the box's own padding.
 
-.cns-node-modal {
+.clouansp-node-modal {
 	.components-modal__content {
 		padding-bottom: 0;
 	}
@@ -213,7 +213,7 @@ $bp-spc: 1200px;
 
 // ── Nodes table (NodesPanel) ──────────────────────────────────────────────────
 
-.cns-nodes-table {
+.clouansp-nodes-table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 12px;
@@ -240,11 +240,11 @@ $bp-spc: 1200px;
 
 // ── Story panel wrapper ───────────────────────────────────────────────────────
 
-.cns-panel {
+.clouansp-panel {
 	padding: 24px;
 }
 
-.cns-settings-panel {
+.clouansp-settings-panel {
 	h2 {
 		margin-top: 0;
 	}
@@ -252,26 +252,26 @@ $bp-spc: 1200px;
 
 // ── Canvas view (canvas tab) ──────────────────────────────────────────────────
 
-.cns-story-canvas-view {
+.clouansp-story-canvas-view {
 	display: flex;
 	flex-direction: column;
 }
 
-.cns-story-canvas-layout {
+.clouansp-story-canvas-layout {
 	display: grid;
 	grid-template-columns: 3fr minmax(220px, 1fr);
 	align-items: start;
 	min-height: calc(100vh - 180px);
 }
 
-.cns-story-canvas-main {
+.clouansp-story-canvas-main {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
 	border-right: 1px solid #e0e0e0;
 }
 
-.cns-story-canvas-toolbar {
+.clouansp-story-canvas-toolbar {
 	display: flex;
 	align-items: center;
 	gap: 12px;
@@ -281,7 +281,7 @@ $bp-spc: 1200px;
 	flex-wrap: wrap;
 }
 
-.cns-story-canvas-wrap {
+.clouansp-story-canvas-wrap {
 	position: relative; // anchors the fullscreen toggle
 	display: flex;
 	justify-content: center;
@@ -296,7 +296,7 @@ $bp-spc: 1200px;
 		cursor: crosshair;
 	}
 
-	.cns-story-canvas-fs {
+	.clouansp-story-canvas-fs {
 		position: absolute;
 		top: 26px;
 		right: 26px;
@@ -304,7 +304,7 @@ $bp-spc: 1200px;
 		background: #fff;
 	}
 
-	// ── Fullscreen (lightbox) mode — mirrors cns-map-suite's Preview canvas ──
+	// ── Fullscreen (lightbox) mode — mirrors the map editor's Preview canvas ──
 	&.is-fullscreen {
 		position: fixed;
 		inset: 0;
@@ -321,7 +321,7 @@ $bp-spc: 1200px;
 			max-height: calc(100vh - 48px);
 		}
 
-		.cns-story-canvas-fs {
+		.clouansp-story-canvas-fs {
 			position: fixed;
 			top: 34px;
 			right: 34px;
@@ -329,13 +329,13 @@ $bp-spc: 1200px;
 	}
 }
 
-body.cns-story-canvas-fullscreen-open {
+body.clouansp-story-canvas-fullscreen-open {
 	overflow: hidden;
 }
 
 // ── Story window — side panel (admin) ─────────────────────────────────────────
 
-.cns-story-window-panel {
+.clouansp-story-window-panel {
 	background: #fff;
 	display: flex;
 	flex-direction: column;
@@ -348,7 +348,7 @@ body.cns-story-canvas-fullscreen-open {
 
 // ── Loading ───────────────────────────────────────────────────────────────────
 
-.cns-loading {
+.clouansp-loading {
 	padding: 40px 24px;
 	color: #646970;
 	text-align: center;
@@ -356,7 +356,7 @@ body.cns-story-canvas-fullscreen-open {
 
 // ── Canvas toolbar rows ───────────────────────────────────────────────────────
 
-.cns-story-canvas-toolbar {
+.clouansp-story-canvas-toolbar {
 	flex-direction: column;
 	align-items: stretch;
 	gap: 0;
@@ -395,7 +395,7 @@ body.cns-story-canvas-fullscreen-open {
 			margin-bottom: 0;
 		}
 
-		.cns-color-field .cns-color-field__toggle.components-button {
+		.clouansp-color-field .clouansp-color-field__toggle.components-button {
 			height: 32px;
 			width: auto;
 		}
@@ -404,7 +404,7 @@ body.cns-story-canvas-fullscreen-open {
 
 // ── Canvas node list (right panel) ────────────────────────────────────────────
 
-.cns-canvas-node-list {
+.clouansp-canvas-node-list {
 	overflow-y: auto;
 	height: 100%;
 
@@ -499,7 +499,7 @@ body.cns-story-canvas-fullscreen-open {
 
 // ── Node swatch dot ───────────────────────────────────────────────────────────
 
-.cns-node-swatch {
+.clouansp-node-swatch {
 	display: inline-block;
 	width: 12px;
 	height: 12px;
@@ -511,7 +511,7 @@ body.cns-story-canvas-fullscreen-open {
 // (Icon action buttons now use @wordpress/components' <Button size="small" icon>.)
 // ── Path node manager modal (Paths tab) ───────────────────────────────────────
 
-.cns-path-nodes-list {
+.clouansp-path-nodes-list {
 	margin-bottom: 16px;
 	border: 1px solid #dcdcde;
 	border-radius: 4px;

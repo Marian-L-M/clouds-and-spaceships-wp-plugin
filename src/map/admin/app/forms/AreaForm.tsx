@@ -47,10 +47,10 @@ export default function AreaForm( {
 
 	return (
 		<>
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Details', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<TextControl
 							__next40pxDefaultSize
 							label={ __( 'Title', 'clouds-and-spaceships' ) }
@@ -58,7 +58,7 @@ export default function AreaForm( {
 							onChange={ ( v ) => set( 'title', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<SelectControl
 							label={ __( 'Type', 'clouds-and-spaceships' ) }
 							value={ formData.type }
@@ -66,7 +66,7 @@ export default function AreaForm( {
 							onChange={ ( v ) => set( 'type', v as AreaType ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<SelectControl
 							label={ __( 'Shape', 'clouds-and-spaceships' ) }
 							value={ formData.shape_type }
@@ -75,7 +75,7 @@ export default function AreaForm( {
 						/>
 					</div>
 					{ /* Oops you found a placeholder for a future functionality. Please keep it commented out. */ }
-					{ /* <div className="cns-grid__group">
+					{ /* <div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Object Time',
@@ -96,10 +96,10 @@ export default function AreaForm( {
 
 			<InfoboxSection formData={ formData } onChange={ onChange } />
 
-			<section className="cns-modal-section">
+			<section className="clouansp-modal-section">
 				<h3>{ __( 'Design', 'clouds-and-spaceships' ) }</h3>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Fill Color',
@@ -109,7 +109,7 @@ export default function AreaForm( {
 							onChange={ ( v ) => set( 'style_fill', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Stroke Color',
@@ -119,7 +119,7 @@ export default function AreaForm( {
 							onChange={ ( v ) => set( 'style_stroke', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Stroke Width',
@@ -146,8 +146,8 @@ export default function AreaForm( {
 						'clouds-and-spaceships'
 					) }
 				</p>
-				<div className="cns-grid cns-grid__12">
-					<div className="cns-grid__group cns-grid__span-full">
+				<div className="clouansp-grid clouansp-grid__12">
+					<div className="clouansp-grid__group clouansp-grid__span-full">
 						<ToggleControl
 							label={ __(
 								'Hide label on canvas',
@@ -157,7 +157,7 @@ export default function AreaForm( {
 							onChange={ ( v ) => set( 'style_label_hidden', v ) }
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<SelectControl
 							label={ __(
 								'Font Family',
@@ -170,7 +170,7 @@ export default function AreaForm( {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<NumberControl
 							label={ __(
 								'Font Size (px)',
@@ -188,7 +188,7 @@ export default function AreaForm( {
 							}
 						/>
 					</div>
-					<div className="cns-grid__group">
+					<div className="clouansp-grid__group">
 						<ColorField
 							label={ __(
 								'Font Color',

@@ -13,7 +13,7 @@ export default function IconPicker( { icons, selectedIconId, onSelect }: Props )
 		return (
 			<p className="description">
 				{ __( 'No icons yet.', 'clouds-and-spaceships' ) }{ ' ' }
-				<ExternalLink href={ window.cnsMapSuite.iconsUrl }>
+				<ExternalLink href={ window.clouanspMapSuite.iconsUrl }>
 					{ __( 'Add icons', 'clouds-and-spaceships' ) }
 				</ExternalLink>
 			</p>
@@ -22,15 +22,15 @@ export default function IconPicker( { icons, selectedIconId, onSelect }: Props )
 
 	return (
 		<div
-			className="cns-icon-picker-grid"
+			className="clouansp-icon-picker-grid"
 			aria-label={ __( 'Icon library', 'clouds-and-spaceships' ) }
 		>
 			{ icons.map( ( icon ) => (
 				<Button
 					key={ icon.id }
-					className={ `cns-icon-item${
+					className={ `clouansp-icon-item${
 						icon.id === selectedIconId
-							? ' cns-icon-item--active'
+							? ' clouansp-icon-item--active'
 							: ''
 					}` }
 					label={ icon.title }

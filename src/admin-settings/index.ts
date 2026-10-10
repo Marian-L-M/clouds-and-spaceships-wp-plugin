@@ -15,3 +15,15 @@ document.addEventListener( 'click', ( event ) => {
 		event.preventDefault();
 	}
 } );
+
+/**
+ * Selects that apply as soon as they change, such as the "Items per page"
+ * pickers on the list tabs: they submit their form instead of waiting for a
+ * button press.
+ */
+document.addEventListener( 'change', ( event ) => {
+	const select = ( event.target as Element | null )?.closest?.< HTMLSelectElement >(
+		'select[data-autosubmit]'
+	);
+	select?.form?.submit();
+} );

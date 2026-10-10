@@ -103,7 +103,7 @@ function drawMapImage( ctx: CanvasRenderingContext2D, W: number, H: number, stat
 }
 
 // ── Layer: MasterMap child regions (read-only) ────────────────────────────────
-// Mirrors cns-map-suite's frontend region rendering so a master map used as a
+// Mirrors the map block's frontend region rendering so a master map used as a
 // story base looks the same as it does on its own page.
 
 function drawHierarchyRegions( ctx: CanvasRenderingContext2D, W: number, H: number, state: DrawState ): void {

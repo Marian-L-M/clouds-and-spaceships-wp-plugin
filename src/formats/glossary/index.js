@@ -5,10 +5,10 @@
  * highlight text, pick a glossary entry from a searchable list, and the text
  * becomes a link to the entry's definition page:
  *
- *   <a class="cns-glossary-term" href="…" data-glossary-id="123">term</a>
+ *   <a class="clouansp-glossary-term" href="…" data-glossary-id="123">term</a>
  *
  * Only the entry ID is authoritative — the href and the hover tooltip are
- * refreshed server-side on render (see glossary/setup.php), so definitions
+ * refreshed server-side on render (see includes/wiki/glossary.php), so definitions
  * never go stale.
  */
 import { __ } from '@wordpress/i18n';
@@ -34,7 +34,7 @@ import {
 import { termDescription } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
 
-const FORMAT_NAME = 'cns-wiki-suite/glossary';
+const FORMAT_NAME = 'clouansp-wiki-suite/glossary';
 
 function GlossaryPicker( { value, onChange, onClose, contentRef, settings } ) {
 	const activeFormat = getActiveFormat( value, FORMAT_NAME );
@@ -61,12 +61,12 @@ function GlossaryPicker( { value, onChange, onClose, contentRef, settings } ) {
 				entries:
 					select( coreStore ).getEntityRecords(
 						'postType',
-						'cns_glossary',
+						'clouansp_glossary',
 						query
 					) ?? [],
 				isResolving: select( coreStore ).isResolving(
 					'getEntityRecords',
-					[ 'postType', 'cns_glossary', query ]
+					[ 'postType', 'clouansp_glossary', query ]
 				),
 			};
 		},
@@ -102,7 +102,7 @@ function GlossaryPicker( { value, onChange, onClose, contentRef, settings } ) {
 			placement="bottom"
 			shift
 			focusOnMount="firstElement"
-			className="cns-glossary-popover"
+			className="clouansp-glossary-popover"
 		>
 			<div style={ { padding: '16px', minWidth: '260px' } }>
 				<ComboboxControl
@@ -174,7 +174,7 @@ function GlossaryEdit( { isActive, value, onChange, contentRef } ) {
 const glossaryFormat = {
 	title: __( 'Glossary term', 'clouds-and-spaceships' ),
 	tagName: 'a',
-	className: 'cns-glossary-term',
+	className: 'clouansp-glossary-term',
 	attributes: {
 		url: 'href',
 		glossaryId: 'data-glossary-id',

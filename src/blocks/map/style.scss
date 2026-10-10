@@ -1,6 +1,6 @@
 @use "../../shared/scss/drawer";
 
-// CNS Map Suite — Global styles
+// Map block — frontend styles
 $background-color: #fff;
 $border-color: #e0e0e0;
 $space-05: 0.5rem;
@@ -14,7 +14,7 @@ $bp-md: 992px;
 $bp-spc: 1200px;
 $bp-lpc: 1400px;
 
-.wp-block-cns-map-suite-map {
+.wp-block-clouansp-map-suite-map {
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
@@ -22,7 +22,7 @@ $bp-lpc: 1400px;
 	position: relative;
 	width: 100%;
 
-	.cns-map-canvas-wrap {
+	.clouansp-map-canvas-wrap {
 		position: relative;
 		width: 100%;
 		overflow: hidden;
@@ -46,7 +46,7 @@ $bp-lpc: 1400px;
 // ── Base layer toggles ────────────────────────────────────────────────────────
 // Sits opposite the zoom controls and shares their inherited colors
 
-.cns-map-layers {
+.clouansp-map-layers {
 	position: absolute;
 	top: 10px;
 	left: 10px;
@@ -60,8 +60,8 @@ $bp-lpc: 1400px;
 		padding: 4px 8px;
 		border: 1px solid rgba(0, 0, 0, 0.25);
 		border-radius: 4px;
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
-		color: var(--cns-map-zoom-accent, #1e1e1e);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--clouansp-map-zoom-accent, #1e1e1e);
 		font-size: 11px;
 		line-height: 1.4;
 		cursor: pointer;
@@ -74,7 +74,7 @@ $bp-lpc: 1400px;
 	}
 }
 
-.cns-map-zoom {
+.clouansp-map-zoom {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -84,8 +84,8 @@ $bp-lpc: 1400px;
 	align-items: stretch;
 	gap: 4px;
 
-	// --cns-map-zoom-main / --cns-map-zoom-accent come from the map's own
-	// setting or the global default (see cns_map_suite_zoom_colors). When
+	// --clouansp-map-zoom-main / --clouansp-map-zoom-accent come from the map's own
+	// setting or the global default (see clouansp_map_suite_zoom_colors). When
 	// neither is set the fallbacks below keep the original light chrome, so
 	// nothing changes for a site that never touches the setting.
 	&__btn {
@@ -94,8 +94,8 @@ $bp-lpc: 1400px;
 		padding: 0;
 		border: 1px solid rgba(0, 0, 0, 0.25);
 		border-radius: 4px;
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.9));
-		color: var(--cns-map-zoom-accent, #1e1e1e);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.9));
+		color: var(--clouansp-map-zoom-accent, #1e1e1e);
 		font-size: 18px;
 		line-height: 1;
 		cursor: pointer;
@@ -104,7 +104,7 @@ $bp-lpc: 1400px;
 			// Derived rather than configurable: one more color to set for every
 			// map, to express "the same, a shade darker".
 			filter: brightness(0.92);
-			background: var(--cns-map-zoom-main, #fff);
+			background: var(--clouansp-map-zoom-main, #fff);
 		}
 
 		&:disabled {
@@ -117,8 +117,8 @@ $bp-lpc: 1400px;
 		font-size: 11px;
 		line-height: normal;
 		text-align: center;
-		color: var(--cns-map-zoom-accent, #1e1e1e);
-		background: var(--cns-map-zoom-main, rgba(255, 255, 255, 0.85));
+		color: var(--clouansp-map-zoom-accent, #1e1e1e);
+		background: var(--clouansp-map-zoom-main, rgba(255, 255, 255, 0.85));
 		border-radius: 3px;
 		padding: 2px 0;
 	}
@@ -128,7 +128,7 @@ $bp-lpc: 1400px;
 // Toggled by the ⛶ button; the whole block becomes a fixed dark overlay.
 // The zoom controls keep working — the scroll viewport just fills the screen.
 
-.wp-block-cns-map-suite-map {
+.wp-block-clouansp-map-suite-map {
 	&.is-fullscreen {
 		position: fixed;
 		inset: 0;
@@ -139,17 +139,17 @@ $bp-lpc: 1400px;
 		padding: 24px;
 		background: rgba(0, 0, 0, 0.92);
 
-		.cns-map-zoom {
+		.clouansp-map-zoom {
 			top: 34px;
 			right: 34px;
 		}
 
-		.cns-map-layers {
+		.clouansp-map-layers {
 			top: 34px;
 			left: 34px;
 		}
 
-		.cns-map-canvas-wrap {
+		.clouansp-map-canvas-wrap {
 			display: flex;
 			width: 100%;
 			height: 100%;
@@ -179,13 +179,13 @@ $bp-lpc: 1400px;
 	}
 }
 
-body.cns-map-fullscreen-open {
+body.clouansp-map-fullscreen-open {
 	overflow: hidden;
 }
 
 // ── Hierarchy tooltip ─────────────────────────────────────────────────────────
 
-.cns-map-hierarchy-tip {
+.clouansp-map-hierarchy-tip {
 	position: absolute;
 	z-index: 99995; // above the fullscreen overlay (99990)
 	// Fixed width: the card should not resize itself around the title, so the
@@ -194,12 +194,12 @@ body.cns-map-fullscreen-open {
 	box-sizing: border-box;
 	// Per-region overrides arrive as custom properties set by view.js; the
 	// values here are the fallback when a region sets no colors of its own.
-	--cns-tip-bg: #{rgba(0, 0, 0, 0.82)};
-	--cns-tip-border: #{rgba(255, 255, 255, 0.15)};
-	--cns-tip-text: #fff;
-	background: var(--cns-tip-bg);
-	border: 1px solid var(--cns-tip-border);
-	color: var(--cns-tip-text);
+	--clouansp-tip-bg: #{rgba(0, 0, 0, 0.82)};
+	--clouansp-tip-border: #{rgba(255, 255, 255, 0.15)};
+	--clouansp-tip-text: #fff;
+	background: var(--clouansp-tip-bg);
+	border: 1px solid var(--clouansp-tip-border);
+	color: var(--clouansp-tip-text);
 	border-radius: 6px;
 	padding: 10px 12px;
 	pointer-events: none;

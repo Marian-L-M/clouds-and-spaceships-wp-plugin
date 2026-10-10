@@ -17,7 +17,6 @@ import {
 	collectObjectPayload,
 } from '../forms/ObjectForm';
 import { useCanvasKeyboard, createDebouncedNudge } from '../useCanvasKeyboard';
-import { useMapResource } from '../useMapResource';
 import type { MapSettings, MapObject, ObjectSavePayload } from '../../../types';
 
 // Internal clipboard for ⌘/Ctrl+C/V. Module scope so it survives tab
@@ -25,11 +24,9 @@ import type { MapSettings, MapObject, ObjectSavePayload } from '../../../types';
 let objectClipboard: ObjectSavePayload | null = null;
 
 interface Props {
-	mapId: number;
 	settings: MapSettings;
 	objects: MapObject[];
 	selectedObjectId: number | null;
-	onObjectsLoaded: ( objects: MapObject[] ) => void;
 	onSelect: ( id: number ) => void;
 	onDeselect: () => void;
 	onAdd: ( payload: ObjectSavePayload ) => Promise< MapObject >;
@@ -40,11 +37,9 @@ interface Props {
 }
 
 export default function ObjectsPanel( {
-	mapId,
 	settings,
 	objects,
 	selectedObjectId,
-	onObjectsLoaded,
 	onSelect,
 	onDeselect,
 	onAdd,
@@ -53,7 +48,6 @@ export default function ObjectsPanel( {
 	onDuplicate,
 	onDelete,
 }: Props ) {
-	useMapResource< MapObject >( mapId, 'objects', onObjectsLoaded );
 
 	// The nudge factory is created once; these refs feed it live values.
 	const stateRef = useRef( { objects, selectedObjectId } );
@@ -158,7 +152,7 @@ export default function ObjectsPanel( {
 
 	return (
 		<div
-			className="cns-tab-panel cns-tab-panel--active"
+			className="clouansp-tab-panel clouansp-tab-panel--active"
 			data-panel="objects"
 			role="tabpanel"
 		>
@@ -170,10 +164,10 @@ export default function ObjectsPanel( {
 								variant="tertiary"
 								onClick={ toggleVisibleHelpInformation }
 							>
-								Help Information
+								{ __( 'Help Information', 'clouds-and-spaceships' ) }
 								{ isVisibleHelpInformation && (
 									<Popover
-										headerTitle="Help Information"
+										headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 										expandOnMobile
 									>
 										<p
@@ -183,8 +177,7 @@ export default function ObjectsPanel( {
 												maxWidth: '100%',
 											} }
 										>
-											Objects are clickable icons on the
-											map that are linked to an infobox.
+											{ __( 'Objects are clickable icons on the map that are linked to an infobox.', 'clouds-and-spaceships' ) }
 										</p>
 										<ol
 											style={ {

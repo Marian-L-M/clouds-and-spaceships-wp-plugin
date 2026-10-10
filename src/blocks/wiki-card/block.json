@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "cns-wiki-suite/wiki-card",
+	"name": "clouansp-wiki-suite/wiki-card",
 	"version": "0.1.0",
 	"title": "Wiki Card",
 	"category": "widgets",
@@ -13,7 +13,7 @@
 	},
 	"attributes": {
 		"postId": { "type": "number", "default": 0 },
-		"postType": { "type": "string", "default": "cns_wiki" },
+		"postType": { "type": "string", "default": "clouansp_wiki" },
 		"backgroundColor": { "type": "string", "default": "#f0f0f0" },
 		"textColor": { "type": "string", "default": "" },
 		"showThumbnail": { "type": "boolean", "default": true },

@@ -11,12 +11,12 @@
  * @var string   $content    Block default content (unused).
  * @var WP_Block $block      Block instance.
  *
- * @package CNS Wiki Suite
+ * @package Clouds and Spaceships
  */
 
 defined('ABSPATH') || exit;
 
-if (! function_exists('cns_wiki_glossary_enabled') || ! cns_wiki_glossary_enabled()) {
+if (! clouansp_wiki_glossary_enabled()) {
     return;
 }
 
@@ -31,20 +31,20 @@ $style_vars = '';
 
 $title_size = isset($attributes['titleFontSize']) ? (float) $attributes['titleFontSize'] : 0;
 if ($title_size > 0) {
-    $style_vars .= sprintf('--cns-glossary-title-size:%spx;', $title_size);
+    $style_vars .= sprintf('--clouansp-glossary-title-size:%spx;', $title_size);
 }
 $title_color = sanitize_hex_color((string) ($attributes['titleColor'] ?? '')) ?: '';
 if ('' !== $title_color) {
-    $style_vars .= sprintf('--cns-glossary-title-color:%s;', $title_color);
+    $style_vars .= sprintf('--clouansp-glossary-title-color:%s;', $title_color);
 }
 
 $item_size = isset($attributes['itemFontSize']) ? (float) $attributes['itemFontSize'] : 0;
 if ($item_size > 0) {
-    $style_vars .= sprintf('--cns-glossary-item-size:%spx;', $item_size);
+    $style_vars .= sprintf('--clouansp-glossary-item-size:%spx;', $item_size);
 }
 $item_color = sanitize_hex_color((string) ($attributes['itemColor'] ?? '')) ?: '';
 if ('' !== $item_color) {
-    $style_vars .= sprintf('--cns-glossary-item-color:%s;', $item_color);
+    $style_vars .= sprintf('--clouansp-glossary-item-color:%s;', $item_color);
 }
 
 // The property holds the whole grid-template-columns value, so leaving it unset
@@ -54,13 +54,13 @@ $columns = isset($attributes['columns']) ? (int) $attributes['columns'] : 0;
 if ($columns > 0) {
     $columns = min(12, $columns);
     $style_vars .= sprintf(
-        '--cns-glossary-columns:repeat(%d,minmax(0,1fr));--cns-glossary-columns-mobile:1fr;',
+        '--clouansp-glossary-columns:repeat(%d,minmax(0,1fr));--clouansp-glossary-columns-mobile:1fr;',
         $columns
     );
 }
 
 $entries = get_posts([
-    'post_type'              => 'cns_glossary',
+    'post_type'              => 'clouansp_glossary',
     'post_status'            => 'publish',
     'posts_per_page'         => -1,
     'orderby'                => 'title',
@@ -74,7 +74,7 @@ $entries = get_posts([
 if (empty($entries)) {
     if (! empty($attributes['showEmptyNotice'])) {
         $wrapper = get_block_wrapper_attributes([
-            'class' => 'cns-glossary-index',
+            'class' => 'clouansp-glossary-index',
             'style' => $style_vars,
         ]);
         $notice  = esc_html__('No glossary entries yet.', 'clouds-and-spaceships');
@@ -92,7 +92,7 @@ $sections = [];
 
 if ('category' === $group_by) {
     $terms = get_terms([
-        'taxonomy'   => 'cns_glossary_category',
+        'taxonomy'   => 'clouansp_glossary_category',
         'hide_empty' => true,
         'orderby'    => 'name',
         'order'      => 'ASC',
@@ -104,7 +104,7 @@ if ('category' === $group_by) {
     $entry_terms = [];
     $object_terms = wp_get_object_terms(
         wp_list_pluck($entries, 'ID'),
-        'cns_glossary_category',
+        'clouansp_glossary_category',
         ['fields' => 'all_with_object_id']
     );
     if (! is_wp_error($object_terms)) {
@@ -153,14 +153,14 @@ foreach ($sections as $label => $section_entries) {
     $items = '';
     foreach ($section_entries as $entry) {
         $items .= sprintf(
-            '<li class="cns-glossary-index__item"><a href="%s">%s</a></li>',
+            '<li class="clouansp-glossary-index__item"><a href="%s">%s</a></li>',
             esc_url(get_permalink($entry)),
             esc_html(get_the_title($entry))
         );
     }
 
     $html .= sprintf(
-        '<section class="cns-glossary-index__section" id="%s"><h2 class="cns-glossary-index__title">%s</h2><ul class="cns-glossary-index__list">%s</ul></section>',
+        '<section class="clouansp-glossary-index__section" id="%s"><h2 class="clouansp-glossary-index__title">%s</h2><ul class="clouansp-glossary-index__list">%s</ul></section>',
         esc_attr($section_id),
         esc_html('#' === $label ? __('0–9 & symbols', 'clouds-and-spaceships') : $label),
         $items
@@ -168,7 +168,7 @@ foreach ($sections as $label => $section_entries) {
 }
 
 $wrapper = get_block_wrapper_attributes([
-    'class' => 'cns-glossary-index cns-glossary-index--' . $group_by,
+    'class' => 'clouansp-glossary-index clouansp-glossary-index--' . $group_by,
     'style' => $style_vars,
 ]);
 

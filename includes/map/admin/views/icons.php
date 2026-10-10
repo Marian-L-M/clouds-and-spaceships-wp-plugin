@@ -9,19 +9,19 @@ defined('ABSPATH') || exit;
 // or goes through the REST API's permission callbacks.
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 
-$delete_icons_on_uninstall = (bool) get_option('cns_map_suite_delete_icons_on_uninstall', false);
+$delete_icons_on_uninstall = (bool) get_option('clouansp_map_suite_delete_icons_on_uninstall', false);
 ?>
-<div class="cns-settings-page cns-icon-library">
+<div class="clouansp-settings-page clouansp-icon-library">
 
-	<div class="cns-settings-page__header">
+	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e('Icon Library', 'clouds-and-spaceships'); ?></h1>
 	</div>
 
-	<p class="cns-settings-page__intro">
+	<p class="clouansp-settings-page__intro">
 		<?php esc_html_e('SVG icons only (sanitized on upload). Icons uploaded here will be tracked for maps and stories, but will also appear in the global Media Library.', 'clouds-and-spaceships'); ?>
 	</p>
 
-	<div id="cns-icons-root"></div>
+	<div id="clouansp-icons-root"></div>
 
 	<?php if (isset($_GET['settings-saved'])) : ?>
 		<div class="notice notice-success is-dismissible">
@@ -30,17 +30,17 @@ $delete_icons_on_uninstall = (bool) get_option('cns_map_suite_delete_icons_on_un
 	<?php endif; ?>
 
 	<!-- ── Danger Zone ──────────────────────────────────────────────────────── -->
-	<div class="cns-danger-zone">
+	<div class="clouansp-danger-zone">
 		<h2><?php esc_html_e('Danger Zone', 'clouds-and-spaceships'); ?></h2>
 		<form method="post">
-			<?php wp_nonce_field('cns_map_save_icon_settings'); ?>
-			<input type="hidden" name="cns_map_action" value="save_icon_settings" />
+			<?php wp_nonce_field('clouansp_map_save_icon_settings'); ?>
+			<input type="hidden" name="clouansp_map_action" value="save_icon_settings" />
 
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><?php esc_html_e('Uninstall behaviour', 'clouds-and-spaceships'); ?></th>
 					<td>
-						<label class="text-danger">
+						<label class="clouansp-text-danger">
 							<input
 								type="checkbox"
 								name="delete_icons_on_uninstall"

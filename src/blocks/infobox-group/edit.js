@@ -19,7 +19,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	function updateGroupTitle( value ) {
 		setAttributes( { group_title: value } );
 	}
-	const TEMPLATE = [ [ 'cns-wiki-suite/infobox-row', {} ] ];
+	const TEMPLATE = [ [ 'clouansp-wiki-suite/infobox-row', {} ] ];
 
 	return (
 		<div
@@ -27,23 +27,29 @@ export default function Edit( { attributes, setAttributes } ) {
 			style={ { backgroundColor: bg_color, color: text_color } }
 		>
 			<InspectorControls>
-				<PanelBody title="Infobox Group Settings" initialOpen={ true }>
+				<PanelBody
+					title={ __( 'Infobox Group Settings', 'clouds-and-spaceships' ) }
+					initialOpen={ true }
+				>
 					<PanelRow>
 						<SelectControl
 							label={ __( 'Display Mode', 'clouds-and-spaceships' ) }
 							value={ attributes.display_mode }
 							options={ [
-								{ label: 'Inherit', value: 'inherit' },
 								{
-									label: 'Collapse Default',
+									label: __( 'Inherit', 'clouds-and-spaceships' ),
+									value: 'inherit',
+								},
+								{
+									label: __( 'Collapse Default', 'clouds-and-spaceships' ),
 									value: 'collapse-ibg__default',
 								},
 								{
-									label: 'Collapse Mobile',
+									label: __( 'Collapse Mobile', 'clouds-and-spaceships' ),
 									value: 'collapse-ibg__mobile',
 								},
 								{
-									label: 'Never Collapse',
+									label: __( 'Never Collapse', 'clouds-and-spaceships' ),
 									value: 'collapse-ibg__never',
 								},
 							] }
@@ -79,19 +85,19 @@ export default function Edit( { attributes, setAttributes } ) {
 					] }
 				/>
 			</InspectorControls>
-			<div className="infobox-group__outer">
+			<div className="clouansp-infobox-group__outer">
 				<h3
-					className="infobox-group__title"
+					className="clouansp-infobox-group__title"
 					style={ { backgroundColor: contrast_color } }
 				>
 					<TextControl
-						placeholder="Group title"
+						placeholder={ __( 'Group title', 'clouds-and-spaceships' ) }
 						value={ attributes.group_title }
 						onChange={ updateGroupTitle }
 						style={ { fontSize: '20px' } }
 					/>
 				</h3>
-				<div className="infobox-group__inner">
+				<div className="clouansp-infobox-group__inner">
 					<InnerBlocks template={ TEMPLATE } />
 				</div>
 			</div>
