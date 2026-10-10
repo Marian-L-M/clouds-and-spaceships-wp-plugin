@@ -4,17 +4,17 @@
 	width: 100%;
 }
 
-.wiki-contents__grid {
+.clouansp-wiki-contents__grid {
 	display: grid;
-	grid-template-columns: repeat( var( --wiki-columns-desktop, 3 ), 1fr );
-	column-gap: var( --wiki-column-gap, 1rem );
-	row-gap: var( --wiki-row-gap, 1rem );
+	grid-template-columns: repeat( var( --clouansp-wiki-columns-desktop, 3 ), 1fr );
+	column-gap: var( --clouansp-wiki-column-gap, 1rem );
+	row-gap: var( --clouansp-wiki-row-gap, 1rem );
 
 	@media ( max-width: 1024px ) {
-		grid-template-columns: repeat( var( --wiki-columns-tablet, 2 ), 1fr );
+		grid-template-columns: repeat( var( --clouansp-wiki-columns-tablet, 2 ), 1fr );
 	}
 
 	@media ( max-width: 768px ) {
-		grid-template-columns: repeat( var( --wiki-columns-mobile, 1 ), 1fr );
+		grid-template-columns: repeat( var( --clouansp-wiki-columns-mobile, 1 ), 1fr );
 	}
 }

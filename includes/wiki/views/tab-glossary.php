@@ -53,7 +53,7 @@ if ( $glossary_enabled ) {
 	</div>
 
 	<p class="clouansp-settings-page__intro">
-		<?php esc_html_e( 'Glossary for terms. Glossary terms allows for maringk text as a glossary term to display a tooltip with definition on hover.', 'clouds-and-spaceships' ); ?>
+		<?php esc_html_e( 'A glossary of terms. Text in a post can be marked as a glossary term, which shows the term\'s definition in a tooltip on hover.', 'clouds-and-spaceships' ); ?>
 	</p>
 
 	<?php if ( $glossary_enabled ) : ?>
@@ -166,7 +166,7 @@ if ( $glossary_enabled ) {
 					<p class="description">
 						<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes glossary archive URL and all single glossary term URLs.', 'clouds-and-spaceships' ); ?>
 					</p>
-					<p class="text-danger">
+					<p class="clouansp-text-danger">
 						<?php esc_html_e( 'CAUTION! On change existing links will break.', 'clouds-and-spaceships' ); ?>
 					</p>
 				</td>
@@ -182,7 +182,7 @@ if ( $glossary_enabled ) {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Uninstall behavior', 'clouds-and-spaceships' ); ?></th>
 					<td>
-						<label class="text-danger">
+						<label class="clouansp-text-danger">
 							<input
 								type="checkbox"
 								name="clouansp_wiki_settings[glossary_delete_on_uninstall]"

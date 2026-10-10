@@ -3,8 +3,8 @@
  * Wiki settings — the CNS → Wiki tab, its option, and the styles it drives.
  *
  * Registers the Wiki tab on the shared CNS settings page (includes/settings-page.php).
- * Archive slug / per page / sort order are read back through the shared archive
- * helpers in includes/archive.php, which also own the rewrite-flush flag.
+ * The archive slug is read back through the shared archive helpers in
+ * includes/archive.php, which also own the rewrite-flush flag.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -186,42 +186,6 @@ function clouansp_wiki_enqueue_infobox_styles(): void {
     wp_register_style( 'clouansp-wiki-infobox-overrides', false, [], CLOUANSP_VERSION );
     wp_enqueue_style( 'clouansp-wiki-infobox-overrides' );
     wp_add_inline_style( 'clouansp-wiki-infobox-overrides', $css );
-}
-
-// ── Archive grid styles ───────────────────────────────────────────────────────
-//
-// The archive template renders wikis through a core query loop, not the
-// wiki-contents block, so the grid defaults are applied here as generated CSS.
-// Breakpoints mirror the wiki-contents block's style.scss (1024px / 768px).
-
-add_action( 'wp_enqueue_scripts', 'clouansp_wiki_enqueue_archive_grid_styles' );
-
-function clouansp_wiki_enqueue_archive_grid_styles(): void {
-    if ( ! is_post_type_archive( 'clouansp_wiki' ) ) {
-        return;
-    }
-
-    $desktop = (int) clouansp_get_wiki_setting( 'grid_columns_desktop', 3 );
-    $tablet  = (int) clouansp_get_wiki_setting( 'grid_columns_tablet',  2 );
-    $mobile  = (int) clouansp_get_wiki_setting( 'grid_columns_mobile',  1 );
-    $col_gap = (int) clouansp_get_wiki_setting( 'grid_column_gap', 16 );
-    $row_gap = (int) clouansp_get_wiki_setting( 'grid_row_gap',    16 );
-
-    $css = sprintf(
-        '.wp-block-post-template.wiki-archive__grid{display:grid;grid-template-columns:repeat(%1$d,minmax(0,1fr));column-gap:%4$dpx;row-gap:%5$dpx;}' .
-        '.wp-block-post-template.wiki-archive__grid > li{margin:0;width:auto;}' .
-        '@media (max-width:1024px){.wp-block-post-template.wiki-archive__grid{grid-template-columns:repeat(%2$d,minmax(0,1fr));}}' .
-        '@media (max-width:768px){.wp-block-post-template.wiki-archive__grid{grid-template-columns:repeat(%3$d,minmax(0,1fr));}}',
-        $desktop,
-        $tablet,
-        $mobile,
-        $col_gap,
-        $row_gap
-    );
-
-    wp_register_style( 'clouansp-wiki-archive-grid', false, [], CLOUANSP_VERSION );
-    wp_enqueue_style( 'clouansp-wiki-archive-grid' );
-    wp_add_inline_style( 'clouansp-wiki-archive-grid', $css );
 }
 
 // ── Editor grid defaults ──────────────────────────────────────────────────────

@@ -127,7 +127,7 @@
 // Sits on top of core's .wp-list-table. Replaces .clouansp-maps-table.
 
 .clouansp-settings-table {
-	.col-thumb {
+	.clouansp-settings-table__thumb {
 		padding: 0;
 		width: $thumb-size;
 
@@ -210,7 +210,7 @@
 // Destructive settings. One definition; the map and story sheets each carried a
 // slightly different copy of this before.
 .clouansp-danger-zone h2,
-.text-danger {
+.clouansp-text-danger {
 	font-weight: 600;
 	color: $color-danger;
 }

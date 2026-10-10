@@ -3,12 +3,9 @@
 defined('ABSPATH') || exit;
 
 /**
- * Primitive capabilities the suite adds, and the roles that get them on
+ * Primitive capabilities the plugin adds, and the roles that get them on
  * activation. Other roles can be granted them with a role management plugin
  * (e.g. Members).
- *
- * Was one file per suite before the merge; the two lists differed only in the
- * capability name.
  */
 const CLOUANSP_CAPABILITIES = ['clouansp_manage_maps', 'clouansp_manage_stories'];
 

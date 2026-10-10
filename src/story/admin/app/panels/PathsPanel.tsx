@@ -1,7 +1,7 @@
 import { useState } from '@wordpress/element';
 import { Button, Flex } from '@wordpress/components';
 import { listView, pencil, plus, trash } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import PathModal from '../forms/PathModal';
 import PathNodesModal from '../forms/PathNodesModal';
 import type {
@@ -197,7 +197,14 @@ export default function PathsPanel( {
 												onClick={ () => {
 													if (
 														window.confirm(
-															`Delete path "${ path.label }"? Nodes will become unassigned.`
+															sprintf(
+																/* translators: %s: path label. */
+																__(
+																	'Delete path "%s"? Nodes will become unassigned.',
+																	'clouds-and-spaceships'
+																),
+																path.label
+															)
 														)
 													) {
 														onDeletePath( path.id );

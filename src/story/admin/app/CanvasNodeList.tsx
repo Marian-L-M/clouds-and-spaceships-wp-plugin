@@ -231,7 +231,7 @@ export default function CanvasNodeList( {
 		return (
 			<div className="clouansp-canvas-node-list clouansp-canvas-node-list--empty">
 				<p className="description">
-					Click on the canvas to add your first node.
+					{ __( 'Click on the canvas to add your first node.', 'clouds-and-spaceships' ) }
 				</p>
 			</div>
 		);
@@ -293,7 +293,7 @@ export default function CanvasNodeList( {
 
 	return (
 		<div className="clouansp-canvas-node-list">
-			<div className="clouansp-canvas-node-list__header">Nodes</div>
+			<div className="clouansp-canvas-node-list__header">{ __( 'Nodes', 'clouds-and-spaceships' ) }</div>
 			{ tree.map( ( item ) => {
 				const { node, incomingEdge, siblings, depth, stepNumber } =
 					item;
@@ -369,7 +369,7 @@ export default function CanvasNodeList( {
 						<button
 							className="clouansp-canvas-node-list__title"
 							onClick={ () => onSelect( node.id ) }
-							title="Select on canvas"
+							title={ __( 'Select on canvas', 'clouds-and-spaceships' ) }
 						>
 							{ getDisplayTitle( node ) }
 						</button>
@@ -427,7 +427,7 @@ export default function CanvasNodeList( {
 										onClick={ () => {
 											if (
 												window.confirm(
-													'Remove the connection to this node?'
+													__( 'Remove the connection to this node?', 'clouds-and-spaceships' )
 												)
 											) {
 												onEdgeDelete( incomingEdge.id );
@@ -488,7 +488,7 @@ export default function CanvasNodeList( {
 								onClick={ () => {
 									if (
 										window.confirm(
-											'Delete this node and all its connections?'
+											__( 'Delete this node and all its connections?', 'clouds-and-spaceships' )
 										)
 									) {
 										onDelete( node.id );

@@ -248,7 +248,8 @@ function clouansp_map_suite_enqueue_admin_assets(): void {
 		);
 		// Classic TinyMCE editor for the Description tab (wp.editor / wp.oldEditor).
 		wp_enqueue_editor();
-		// The editor's Stories tab is rendered by the story suite's panel bundle.
+		// The editor's Stories tab is rendered by the map-panel bundle
+		// (src/map-panel/), enqueued from the story code.
 		clouansp_story_suite_enqueue_map_panel();
 	}
 }

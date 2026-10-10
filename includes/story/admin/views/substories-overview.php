@@ -100,7 +100,7 @@ $new_url     = admin_url('post-new.php?post_type=clouansp_substory');
 
 			<span class="clouansp-settings-toolbar__group">
 				<label for="clouansp-sub-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
-				<select name="per_page" id="clouansp-sub-per-page" onchange="this.form.submit()">
+				<select name="per_page" id="clouansp-sub-per-page" data-autosubmit>
 					<?php foreach ($per_page_options as $option) : ?>
 						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
 							<?php echo esc_html($option); ?>
@@ -130,7 +130,7 @@ $new_url     = admin_url('post-new.php?post_type=clouansp_substory');
 	<table class="wp-list-table widefat fixed striped clouansp-settings-table">
 		<thead>
 			<tr>
-				<th class="col-thumb"></th>
+				<th class="clouansp-settings-table__thumb"></th>
 				<th><?php esc_html_e('Title', 'clouds-and-spaceships'); ?></th>
 				<th><?php esc_html_e('Status', 'clouds-and-spaceships'); ?></th>
 				<th><?php esc_html_e('Date', 'clouds-and-spaceships'); ?></th>
@@ -164,7 +164,7 @@ $new_url     = admin_url('post-new.php?post_type=clouansp_substory');
 				];
 			?>
 				<tr>
-					<td class="col-thumb">
+					<td class="clouansp-settings-table__thumb">
 						<a href="<?php echo esc_url($edit_url); ?>">
 							<?php if ($thumb_url) : ?>
 								<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($sub->post_title ?: ''); ?>" />
@@ -200,7 +200,7 @@ $new_url     = admin_url('post-new.php?post_type=clouansp_substory');
 						<a
 							href="<?php echo esc_url(get_delete_post_link($sub->ID)); ?>"
 							class="clouansp-delete-link"
-							onclick="return confirm('<?php esc_attr_e('Move this substory to trash?', 'clouds-and-spaceships'); ?>')"
+							data-confirm="<?php esc_attr_e('Move this substory to trash?', 'clouds-and-spaceships'); ?>"
 						><?php esc_html_e('Trash', 'clouds-and-spaceships'); ?></a>
 					</td>
 				</tr>

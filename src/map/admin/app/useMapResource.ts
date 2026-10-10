@@ -3,9 +3,10 @@ import { apiFetch } from '../utils';
 
 /**
  * Loads a map-scoped REST collection (objects / areas / labels / hierarchy)
- * once per panel mount and hands the rows to the parent-owned list state.
- * Errors are swallowed — the panel simply starts empty, matching the
- * previous inline behavior in every panel.
+ * once per mount of the calling component and hands the rows to the
+ * parent-owned list state. MapEditorApp loads objects, areas and labels this
+ * way when the editor opens; the Hierarchy panel loads its regions when its
+ * tab is opened. Errors are swallowed — the list simply starts empty.
  */
 export function useMapResource<T>(
 	mapId: number,

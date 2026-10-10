@@ -49,18 +49,18 @@ function GridTabs( { breakpoint, attributes, setAttributes } ) {
 function NewestPreviewGrid( { columns, numberOfPosts, columnGap, rowGap } ) {
 	return (
 		<div
-			className="wiki-contents__grid wiki-contents__grid--preview"
+			className="clouansp-wiki-contents__grid clouansp-wiki-contents__grid--preview"
 			style={ {
-				'--wiki-columns-desktop': columns,
-				'--wiki-column-gap': `${ columnGap }px`,
-				'--wiki-row-gap': `${ rowGap }px`,
+				'--clouansp-wiki-columns-desktop': columns,
+				'--clouansp-wiki-column-gap': `${ columnGap }px`,
+				'--clouansp-wiki-row-gap': `${ rowGap }px`,
 			} }
 		>
 			{ Array( numberOfPosts )
 				.fill( null )
 				.map( ( _, i ) => (
-					<div key={ i } className="wiki-contents__placeholder-cell">
-						<span className="wiki-contents__placeholder-label">
+					<div key={ i } className="clouansp-wiki-contents__placeholder-cell">
+						<span className="clouansp-wiki-contents__placeholder-label">
 							{ __( 'Wiki', 'clouds-and-spaceships' ) } { i + 1 }
 						</span>
 					</div>
@@ -101,18 +101,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}, [ numberOfPosts, mode ] );
 
 	const gridStyle = {
-		'--wiki-columns-desktop': columnsDesktop,
-		'--wiki-columns-tablet':  columnsTablet,
-		'--wiki-columns-mobile':  columnsMobile,
-		'--wiki-column-gap':      `${ columnGap }px`,
-		'--wiki-row-gap':         `${ rowGap }px`,
+		'--clouansp-wiki-columns-desktop': columnsDesktop,
+		'--clouansp-wiki-columns-tablet':  columnsTablet,
+		'--clouansp-wiki-columns-mobile':  columnsMobile,
+		'--clouansp-wiki-column-gap':      `${ columnGap }px`,
+		'--clouansp-wiki-row-gap':         `${ rowGap }px`,
 	};
 
 	// Always mount InnerBlocks so WordPress state is preserved when toggling modes.
 	// In newest mode the inner blocks container is hidden via CSS.
 	const innerBlocksProps = useInnerBlocksProps(
 		{
-			className: 'wiki-contents__grid',
+			className: 'clouansp-wiki-contents__grid',
 			style: {
 				...gridStyle,
 				...( mode === 'newest' ? { display: 'none' } : {} ),
@@ -124,7 +124,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 	);
 
-	const blockProps = useBlockProps( { className: 'wiki-contents' } );
+	const blockProps = useBlockProps( { className: 'clouansp-wiki-contents' } );
 
 	return (
 		<div { ...blockProps }>

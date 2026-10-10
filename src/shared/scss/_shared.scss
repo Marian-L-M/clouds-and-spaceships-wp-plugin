@@ -25,8 +25,9 @@
 	}
 }
 
+// Hamburger icon on an infobox group's collapse toggle.
 @mixin toggleBtn() {
-	button.toggle-btn {
+	button.clouansp-infobox-group__toggle {
 		cursor: pointer;
 		&:after {
 			content: "";

@@ -11,12 +11,12 @@
  * @var string   $content    Block default content (unused).
  * @var WP_Block $block      Block instance.
  *
- * @package CNS Wiki Suite
+ * @package Clouds and Spaceships
  */
 
 defined('ABSPATH') || exit;
 
-if (! function_exists('clouansp_wiki_glossary_enabled') || ! clouansp_wiki_glossary_enabled()) {
+if (! clouansp_wiki_glossary_enabled()) {
     return;
 }
 

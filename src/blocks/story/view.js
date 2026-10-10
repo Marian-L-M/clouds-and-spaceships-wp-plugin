@@ -2,7 +2,7 @@
  * Frontend view script for the clouansp-story-suite/story block.
  */
 
-// The base map is drawn with the map suite's own geometry and marker code, so
+// The base map is drawn with the map block's own geometry and marker code, so
 // a map looks and behaves the same under a story as it does on its own page.
 import {
 	buildAreaPathFromNodes,
@@ -335,7 +335,7 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 	if ( m?.bgType === 'image' && m.bgImageUrl ) {
 		const bg = loadImg( m.bgImageUrl, onImgLoad );
 		if ( bg.complete && bg.naturalWidth ) {
-			// Cover-fit, centered — matches clouansp-map-suite's background rendering.
+			// Cover-fit, centered — matches the map block's background rendering.
 			const scale = Math.max( W / bg.naturalWidth, H / bg.naturalHeight );
 			const drawW = bg.naturalWidth  * scale;
 			const drawH = bg.naturalHeight * scale;
@@ -354,7 +354,7 @@ function drawStory( canvas, data, activeNodeId, onImgLoad, layers ) {
 		}
 	}
 
-	// MasterMap child regions — same rendering as the clouansp-map-suite frontend so
+	// MasterMap child regions — same rendering as the map block's frontend so
 	// a master map used as a story base looks like it does on its own page.
 	for ( const region of ( m?.hierarchyRegions ?? [] ) ) {
 		const pts = region.nodes || [];
@@ -719,7 +719,7 @@ function esc( str ) {
 // ── Block init ────────────────────────────────────────────────────────────────
 
 // ── Zoom controls ─────────────────────────────────────────────────────────────
-// Same pattern as the clouansp-map-suite map block: zoom scales the canvas's
+// Same pattern as the map block: zoom scales the canvas's
 // *display* width inside a scroll container; the canvas pixel coordinate
 // system is untouched, so the click hit-testing above (normalized by
 // getBoundingClientRect) keeps working. The canvas is moved into a dedicated
@@ -761,7 +761,7 @@ function setupZoomControls( canvas ) {
 	controls.appendChild( zoomOut );
 	wrap.appendChild( controls );
 
-	// ── Lightbox-style fullscreen (same pattern as the clouansp-map-suite block) ──
+	// ── Lightbox-style fullscreen (same pattern as the map block) ──
 	const blockEl = canvas.closest( '.clouansp-story-block' );
 	let fullscreen = false;
 

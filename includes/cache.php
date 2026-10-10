@@ -17,9 +17,6 @@ defined('ABSPATH') || exit;
  * starts a fresh generation, and superseded entries simply expire via TTL.
  * This avoids per-key tracking and covers cross-map effects (hierarchy rows
  * are cached under both parent and child maps) for free.
- *
- * The map and story suites each shipped an identical copy of this before the
- * merge; the two differed only in the names below.
  */
 
 const CLOUANSP_CACHE_TTL = 12 * HOUR_IN_SECONDS;

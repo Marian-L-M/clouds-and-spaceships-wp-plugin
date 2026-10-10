@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 
 function clouansp_story_suite_resolve_icon_url(int $icon_id): string {
 	if (! $icon_id) return '';
-	// Map-suite icons are regular WP attachments (tagged with _clouansp_map_icon meta),
+	// Map icons are regular WP attachments (tagged with _clouansp_map_icon meta),
 	// so the attachment URL is the canonical source.
 	return (string) (wp_get_attachment_url($icon_id) ?: '');
 }

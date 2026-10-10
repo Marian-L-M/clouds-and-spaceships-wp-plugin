@@ -163,10 +163,10 @@ export default function StoryCanvasPanel( {
 						variant="secondary"
 						onClick={ toggleVisibleHelpInformation }
 					>
-						Help Information
+						{ __( 'Help Information', 'clouds-and-spaceships' ) }
 						{ isVisibleHelpInformation && (
 							<Popover
-								headerTitle="Help Information"
+								headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 								expandOnMobile
 							>
 								<ol
@@ -176,7 +176,7 @@ export default function StoryCanvasPanel( {
 									} }
 								>
 									<li>
-										<h4>Connect Mode</h4>
+										<h4>{ __( 'Connect Mode', 'clouds-and-spaceships' ) }</h4>
 										<ul>
 											<li>
 												{ ' ' }
@@ -195,7 +195,7 @@ export default function StoryCanvasPanel( {
 										</ul>
 									</li>
 									<li>
-										<h4>Select Mode</h4>
+										<h4>{ __( 'Select Mode', 'clouds-and-spaceships' ) }</h4>
 										<ul>
 											<li>
 												{ ' ' }
@@ -207,7 +207,7 @@ export default function StoryCanvasPanel( {
 										</ul>
 									</li>
 									<li>
-										<h4>Add Mode</h4>
+										<h4>{ __( 'Add Mode', 'clouds-and-spaceships' ) }</h4>
 										<ul>
 											<li>
 												{ ' ' }

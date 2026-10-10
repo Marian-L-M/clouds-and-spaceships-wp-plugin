@@ -3,10 +3,10 @@ import SharedTabBar from '../../../shared/admin/TabBar';
 import type { StoryTab } from '../../types';
 
 const TABS: { id: StoryTab; label: string }[] = [
-	{ id: 'settings', label: 'Settings' },
-	{ id: 'canvas',   label: 'Canvas'   },
-	{ id: 'nodes',    label: 'Nodes'    },
-	{ id: 'paths',    label: 'Paths'    },
+	{ id: 'settings', label: __( 'Settings', 'clouds-and-spaceships' ) },
+	{ id: 'canvas',   label: __( 'Canvas', 'clouds-and-spaceships' ) },
+	{ id: 'nodes',    label: __( 'Nodes', 'clouds-and-spaceships' ) },
+	{ id: 'paths',    label: __( 'Paths', 'clouds-and-spaceships' ) },
 ];
 
 interface Props {

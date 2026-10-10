@@ -1,4 +1,5 @@
 import { useRef, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { drawMapCanvas } from '../../canvas';
 import type { MapSettings } from '../../../types';
 
@@ -38,7 +39,7 @@ export default function SettingsCanvas( { settings }: Props ) {
 	return (
 		<div className="clouansp-settings-canvas">
 			<canvas ref={ canvasRef } />
-			<p className="description">Canvas base live preview.</p>
+			<p className="description">{ __( 'Canvas base live preview.', 'clouds-and-spaceships' ) }</p>
 		</div>
 	);
 }

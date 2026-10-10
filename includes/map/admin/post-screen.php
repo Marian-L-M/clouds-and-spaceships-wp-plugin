@@ -3,7 +3,7 @@
 defined('ABSPATH') || exit;
 
 /**
- * Bridges the stock WordPress screens for the `maps` post type back to the CNS
+ * Bridges the stock WordPress screens for the `clouansp_map` post type back to the CNS
  * map editor. Those screens only appear when "Show Maps in the WordPress admin
  * sidebar" is enabled, but they stay reachable by URL either way — so both
  * entry points are registered unconditionally and gated on capability instead.

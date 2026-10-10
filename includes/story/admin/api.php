@@ -144,7 +144,7 @@ function clouansp_story_suite_api_can_manage(): bool {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-// Row → JSON shaping lives in includes/serializers.php (shared with the
+// Row → JSON shaping lives in includes/story/serializers.php (shared with the
 // frontend block render). These wrappers keep the admin-shape callbacks
 // usable as array_map callables.
 

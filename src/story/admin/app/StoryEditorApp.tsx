@@ -1,7 +1,7 @@
 import { useState, useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 import EditorHeader from '../../../shared/admin/EditorHeader';
 import TabBar from './TabBar';
@@ -600,11 +600,17 @@ export default function StoryEditorApp() {
 
 	// ── Render ────────────────────────────────────────────────────────────────
 
-	const pageTitle = isNew ? 'New Story' : `Edit: ${ settings.title || '(no title)' }`;
+	const pageTitle = isNew
+		? __( 'New Story', 'clouds-and-spaceships' )
+		: sprintf(
+				/* translators: %s: story title. */
+				__( 'Edit: %s', 'clouds-and-spaceships' ),
+				settings.title || __( '(no title)', 'clouds-and-spaceships' )
+		  );
 	const selectedNode = nodes.find( ( n ) => n.id === selectedNodeId ) ?? null;
 
 	if ( loading ) {
-		return <div className="clouansp-story-editor"><div className="clouansp-loading">Loading…</div></div>;
+		return <div className="clouansp-story-editor"><div className="clouansp-loading">{ __( 'Loading…', 'clouds-and-spaceships' ) }</div></div>;
 	}
 
 	return (

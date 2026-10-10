@@ -78,11 +78,11 @@ function buildInitialForm(
 }
 
 const SHAPE_OPTIONS: { value: IconType; label: string }[] = [
-	{ value: 'round', label: 'Round' },
-	{ value: 'square', label: 'Square' },
-	{ value: 'diamond', label: 'Diamond' },
-	{ value: 'icon', label: 'Icon' },
-	{ value: 'thumbnail', label: 'Thumbnail' },
+	{ value: 'round', label: __( 'Round', 'clouds-and-spaceships' ) },
+	{ value: 'square', label: __( 'Square', 'clouds-and-spaceships' ) },
+	{ value: 'diamond', label: __( 'Diamond', 'clouds-and-spaceships' ) },
+	{ value: 'icon', label: __( 'Icon', 'clouds-and-spaceships' ) },
+	{ value: 'thumbnail', label: __( 'Thumbnail', 'clouds-and-spaceships' ) },
 ];
 
 export default function NodeModal( {

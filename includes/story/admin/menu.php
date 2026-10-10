@@ -114,6 +114,10 @@ function clouansp_story_suite_enqueue_admin_assets(): void {
 		true
 	);
 
+	// No path: wp.org language packs land in WP_LANG_DIR, where core looks by
+	// default.
+	wp_set_script_translations('clouansp-story-admin', 'clouds-and-spaceships');
+
 	wp_localize_script('clouansp-story-admin', 'clouanspStorySuite', [
 		'restUrl'       => rest_url('clouansp-story-suite/v1'),
 		'mapRestUrl'    => rest_url('clouansp-map-suite/v1'),
@@ -153,6 +157,8 @@ function clouansp_story_suite_enqueue_map_panel(): void {
 		$asset['version'],
 		true
 	);
+
+	wp_set_script_translations('clouansp-story-map-panel', 'clouds-and-spaceships');
 
 	wp_localize_script('clouansp-story-map-panel', 'clouanspStorySuite', [
 		'restUrl'   => rest_url('clouansp-story-suite/v1'),
@@ -215,7 +221,7 @@ add_action('admin_init', function (): void {
 
 // Trash / restore / permanent delete. "Delete" moves the story to trash and
 // keeps its node/path/edge rows, so restoring is lossless; rows are purged by
-// the before_delete_post hook (includes/database.php) only when the post is
+// the before_delete_post hook (includes/story/database.php) only when the post is
 // permanently deleted — from here, from the trash being emptied, or from any
 // other deletion path.
 add_action('admin_init', function (): void {

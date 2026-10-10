@@ -19,7 +19,7 @@ $row_gap         = intval( $attributes['rowGap']    ?? clouansp_get_wiki_setting
 
 // CSS custom properties drive the responsive grid via style.scss media queries.
 $grid_vars = sprintf(
-	'--wiki-columns-mobile:%d;--wiki-columns-tablet:%d;--wiki-columns-desktop:%d;--wiki-column-gap:%dpx;--wiki-row-gap:%dpx;',
+	'--clouansp-wiki-columns-mobile:%d;--clouansp-wiki-columns-tablet:%d;--clouansp-wiki-columns-desktop:%d;--clouansp-wiki-column-gap:%dpx;--clouansp-wiki-row-gap:%dpx;',
 	$columns_mobile,
 	$columns_tablet,
 	$columns_desktop,
@@ -28,7 +28,7 @@ $grid_vars = sprintf(
 );
 
 $wrapper_attrs = get_block_wrapper_attributes( [
-	'class' => 'wiki-contents',
+	'class' => 'clouansp-wiki-contents',
 	'style' => $grid_vars,
 ] );
 
@@ -57,7 +57,7 @@ if ( 'newest' === $mode ) {
 }
 ?>
 <div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
-	<div class="wiki-contents__grid">
+	<div class="clouansp-wiki-contents__grid">
 		<?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_block() output, or block inner content. ?>
 	</div>
 </div>

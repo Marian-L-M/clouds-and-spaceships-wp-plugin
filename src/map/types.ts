@@ -194,7 +194,7 @@ export interface InfoboxData {
 	description?: string;
 	image_id?: number;
 	// Per-item display flags (default on when absent). display_infobox pulls the
-	// connected post's wiki-suite infoboxes into the drawer, independent of the
+	// connected post's wiki Infobox blocks into the drawer, independent of the
 	// content source; show_* gate the connected post's own fields.
 	display_infobox?: boolean;
 	show_title?: boolean;

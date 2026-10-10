@@ -152,9 +152,8 @@ function clouansp_admin_render_page(): void {
 
 // ── Shared assets ─────────────────────────────────────────────────────────────
 //
-// The media picker is used by tabs from several providers (theme login images,
-// wiki placeholder thumbnail), so it lives in the framework and loads on every
-// CNS settings page. So does the admin-settings bundle, which carries the
+// The media picker is used by more than one tab (the wiki and story placeholder
+// thumbnails), so it lives here and loads on every CNS settings page. So does the admin-settings bundle, which carries the
 // layout language every tab is built from and the confirm prompt for
 // destructive links.
 //

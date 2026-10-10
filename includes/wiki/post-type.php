@@ -3,7 +3,7 @@
 /**
  * Sets up the wiki post type and its block templates.
  *
- * @package CNS Wiki Suite
+ * @package Clouds and Spaceships
  */
 
 defined('ABSPATH') || exit;
@@ -13,9 +13,9 @@ defined('ABSPATH') || exit;
  *
  * This is the *editable* portion of a wiki article only: the center content
  * column and the per-post infobox column. The surrounding page chrome — the
- * left navigation sidebar and the outer layout wrapper — lives in the
- * single-wiki.html block template, so it renders on the front end without
- * appearing in the post editor (matching how normal posts behave).
+ * title and the outer layout wrapper — lives in the single-wiki.html block
+ * template, so it renders on the front end without appearing in the post
+ * editor (matching how normal posts behave).
  *
  * The centre column starts as a single empty paragraph; an author inserts
  * whatever else the article needs, core/tabs included, like any other block.
@@ -109,7 +109,7 @@ function clouansp_wiki_register_post_type()
     ];
     $args = [
         'labels'             => $labels,
-        'description'        => 'Wiki custom post type.',
+        'description'        => __('Wiki custom post type.', 'clouds-and-spaceships'),
         'public'             => true,
         'publicly_queryable' => true,
         'show_ui'            => true,

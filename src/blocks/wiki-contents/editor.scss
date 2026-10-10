@@ -1,15 +1,15 @@
 @charset "UTF-8";
 
-.wiki-contents {
+.clouansp-wiki-contents {
 	width: 100%;
 
 	// Mirror the frontend grid in the editor so manual cards
 	// lay out correctly while editing.
-	.wiki-contents__grid {
+	.clouansp-wiki-contents__grid {
 		display: grid;
-		grid-template-columns: repeat( var( --wiki-columns-desktop, 3 ), 1fr );
-		column-gap: var( --wiki-column-gap, 1rem );
-		row-gap: var( --wiki-row-gap, 1rem );
+		grid-template-columns: repeat( var( --clouansp-wiki-columns-desktop, 3 ), 1fr );
+		column-gap: var( --clouansp-wiki-column-gap, 1rem );
+		row-gap: var( --clouansp-wiki-row-gap, 1rem );
 	}
 
 	// Newest-mode preview: placeholder cells, not interactive.

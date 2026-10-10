@@ -17,7 +17,7 @@ const COLUMNS: EntityColumn< MapObject >[] = [
 	{
 		header: '',
 		width: 36,
-		className: 'col-icon',
+		className: 'clouansp-objects-table__icon',
 		render: ( obj ) =>
 			obj.icon_url && objectUsesIcon( obj.canvas_styles ) ? (
 				<img
@@ -36,15 +36,19 @@ const COLUMNS: EntityColumn< MapObject >[] = [
 				/>
 			),
 	},
-	{ header: 'Title', render: ( obj ) => obj.title || '(no title)' },
 	{
-		header: 'Type',
+		header: __( 'Title', 'clouds-and-spaceships' ),
+		render: ( obj ) =>
+			obj.title || __( '(no title)', 'clouds-and-spaceships' ),
+	},
+	{
+		header: __( 'Type', 'clouds-and-spaceships' ),
 		render: ( obj ) => (
 			<span className="clouansp-badge clouansp-badge--type">{ obj.type }</span>
 		),
 	},
 	{
-		header: 'Position',
+		header: __( 'Position', 'clouds-and-spaceships' ),
 		render: ( obj ) => (
 			<>
 				{ obj.x }, { obj.y }

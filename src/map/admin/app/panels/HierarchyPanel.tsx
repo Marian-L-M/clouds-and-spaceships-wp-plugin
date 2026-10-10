@@ -142,10 +142,10 @@ export default function HierarchyPanel( {
 									variant="tertiary"
 									onClick={ toggleVisibleHelpInformation }
 								>
-									Help Information
+									{ __( 'Help Information', 'clouds-and-spaceships' ) }
 									{ isVisibleHelpInformation && (
 										<Popover
-											headerTitle="Help Information"
+											headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 											expandOnMobile
 										>
 											<ol

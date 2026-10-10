@@ -182,7 +182,7 @@ if ( $wiki_enabled ) {
 						<p class="description">
 							<?php esc_html_e( 'Lowercase letters, numbers, and hyphens only. Changes wiki archive URL and all single wiki URLs.', 'clouds-and-spaceships' ); ?>
 						</p>
-						<p class="text-danger">
+						<p class="clouansp-text-danger">
 							<?php esc_html_e( 'CAUTION! On change existing links will break.', 'clouds-and-spaceships' ); ?>
 						</p>
 					</td>
@@ -436,7 +436,7 @@ if ( $wiki_enabled ) {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Uninstall behavior', 'clouds-and-spaceships' ); ?></th>
 					<td>
-						<label class="text-danger">
+						<label class="clouansp-text-danger">
 							<input
 								type="checkbox"
 								name="clouansp_wiki_settings[wiki_delete_on_uninstall]"

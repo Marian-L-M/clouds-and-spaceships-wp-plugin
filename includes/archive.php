@@ -1,10 +1,8 @@
 <?php
 /**
- * Post type archives — settings and rewrite maintenance.
- *
- * The map, story and wiki suites each shipped their own copy of this: the same
- * archive settings and the same "flag now, flush on the next init" rewrite
- * dance. This is the single implementation.
+ * Post type archives — settings and rewrite maintenance: the archive settings
+ * and the "flag now, flush on the next init" rewrite handling for every post
+ * type that has an archive.
  *
  * Only the on/off switch and the slug are owned here. The plugin registers no
  * archive template for any post type, so every listing is rendered by the

@@ -191,7 +191,7 @@ import { __ } from '@wordpress/i18n';
 		} else if (content) {
 			html += `<div class="clouansp-map-drawer__content">${content}</div>`;
 		}
-		// Wiki-suite infoboxes: server-rendered block markup (render_block of
+		// Wiki infoboxes: server-rendered block markup (render_block of
 		// trusted admin content), one wrapper per top-level infobox.
 		infoboxes.forEach(function (ib) {
 			html += `<div class="clouansp-map-drawer__infobox">${ib}</div>`;
@@ -202,29 +202,29 @@ import { __ } from '@wordpress/i18n';
 		expandInfoboxes(document.querySelector('.clouansp-map-drawer__body'));
 	}
 
-	// The wiki-suite infobox collapse is normally driven by the WP Interactivity
+	// The wiki infobox collapse is normally driven by the WP Interactivity
 	// API at page load, which never hydrates markup injected into the drawer at
 	// click time. So we own it: start every infobox/group expanded (the CSS keys
 	// visibility off these classes), and a delegated handler on the drawer body
 	// (wired once by the shared drawer) toggles them when a title button is hit.
 	function expandInfoboxes(container) {
-		container.querySelectorAll('.infobox').forEach(function (el) {
+		container.querySelectorAll('.clouansp-infobox').forEach(function (el) {
 			el.classList.add('is-active');
 		});
-		container.querySelectorAll('.infobox-group__outer').forEach(function (el) {
+		container.querySelectorAll('.clouansp-infobox-group__outer').forEach(function (el) {
 			el.classList.add('is-active-group');
 		});
 	}
 
 	function handleInfoboxToggle(e) {
-		const btn = e.target.closest('.toggle-btn');
+		const btn = e.target.closest('.clouansp-infobox__toggle, .clouansp-infobox-group__toggle');
 		if (!btn) return;
-		const groupTitle = btn.closest('.infobox-group__title');
+		const groupTitle = btn.closest('.clouansp-infobox-group__title');
 		if (groupTitle && groupTitle.parentElement) {
 			groupTitle.parentElement.classList.toggle('is-active-group');
 			return;
 		}
-		const boxTitle = btn.closest('.infobox__title');
+		const boxTitle = btn.closest('.clouansp-infobox__title');
 		if (boxTitle && boxTitle.parentElement) {
 			boxTitle.parentElement.classList.toggle('is-active');
 		}

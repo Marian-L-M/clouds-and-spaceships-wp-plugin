@@ -29,11 +29,11 @@ interface Props< T extends MarkerType | NodeMarkerType >
 }
 
 const PRESETS = [
-	{ label: 'Top', x: 0, y: -30 },
-	{ label: 'Bottom', x: 0, y: 30 },
-	{ label: 'Left', x: -30, y: 0 },
-	{ label: 'Right', x: 30, y: 0 },
-	{ label: 'Center', x: 0, y: 0 },
+	{ label: __( 'Top', 'clouds-and-spaceships' ), x: 0, y: -30 },
+	{ label: __( 'Bottom', 'clouds-and-spaceships' ), x: 0, y: 30 },
+	{ label: __( 'Left', 'clouds-and-spaceships' ), x: -30, y: 0 },
+	{ label: __( 'Right', 'clouds-and-spaceships' ), x: 30, y: 0 },
+	{ label: __( 'Center', 'clouds-and-spaceships' ), x: 0, y: 0 },
 ] as const;
 
 export default function MarkerControls<

@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 /**
  * Enumerated choices that back both a TypeScript union and a form dropdown.
  *
@@ -7,19 +9,19 @@
  * so the form and the REST layer cannot disagree about it.
  *
  * Keep in sync with the matching helpers under "Enumerated choices" in
- * includes/admin/api.php — the REST layer rejects any value not on its list.
+ * includes/map/admin/api.php — the REST layer rejects any value not on its list.
  */
 
 // ── Area types ────────────────────────────────────────────────────────────────
-// Keep in sync with clouansp_map_suite_area_types() in includes/admin/api.php.
+// Keep in sync with clouansp_map_suite_area_types() in includes/map/admin/api.php.
 
 const AREA_TYPE_CHOICES = [
-	{ value: 'POLITICAL', label: 'Political' },
-	{ value: 'GEOGRAPHY', label: 'Geography' },
-	{ value: 'HISTORY', label: 'History' },
-	{ value: 'NATURAL', label: 'Natural' },
-	{ value: 'EVENT', label: 'Event' },
-	{ value: 'OTHER', label: 'Other' },
+	{ value: 'POLITICAL', label: __( 'Political', 'clouds-and-spaceships' ) },
+	{ value: 'GEOGRAPHY', label: __( 'Geography', 'clouds-and-spaceships' ) },
+	{ value: 'HISTORY', label: __( 'History', 'clouds-and-spaceships' ) },
+	{ value: 'NATURAL', label: __( 'Natural', 'clouds-and-spaceships' ) },
+	{ value: 'EVENT', label: __( 'Event', 'clouds-and-spaceships' ) },
+	{ value: 'OTHER', label: __( 'Other', 'clouds-and-spaceships' ) },
 ] as const;
 
 export type AreaType = ( typeof AREA_TYPE_CHOICES )[ number ][ 'value' ];
@@ -32,14 +34,14 @@ export const AREA_TYPES: { value: AreaType; label: string }[] = [
 export const AREA_TYPE_DEFAULT: AreaType = 'POLITICAL';
 
 // ── Object types ──────────────────────────────────────────────────────────────
-// Keep in sync with clouansp_map_suite_object_types() in includes/admin/api.php.
+// Keep in sync with clouansp_map_suite_object_types() in includes/map/admin/api.php.
 
 const OBJECT_TYPE_CHOICES = [
-	{ value: 'LOCATION', label: 'Location' },
-	{ value: 'HISTORY', label: 'History' },
-	{ value: 'NATURAL', label: 'Natural' },
-	{ value: 'EVENT', label: 'Event' },
-	{ value: 'OTHER', label: 'Other' },
+	{ value: 'LOCATION', label: __( 'Location', 'clouds-and-spaceships' ) },
+	{ value: 'HISTORY', label: __( 'History', 'clouds-and-spaceships' ) },
+	{ value: 'NATURAL', label: __( 'Natural', 'clouds-and-spaceships' ) },
+	{ value: 'EVENT', label: __( 'Event', 'clouds-and-spaceships' ) },
+	{ value: 'OTHER', label: __( 'Other', 'clouds-and-spaceships' ) },
 ] as const;
 
 export type ObjectType = ( typeof OBJECT_TYPE_CHOICES )[ number ][ 'value' ];
@@ -56,11 +58,11 @@ export const OBJECT_TYPE_DEFAULT: ObjectType = 'LOCATION';
 // includes/map/admin/api.php.
 
 const OBJECT_DISPLAY_MODE_CHOICES = [
-	{ value: 'round', label: 'Round' },
-	{ value: 'square', label: 'Square' },
-	{ value: 'diamond', label: 'Diamond' },
-	{ value: 'icon', label: 'Icon' },
-	{ value: 'text', label: 'Text' },
+	{ value: 'round', label: __( 'Round', 'clouds-and-spaceships' ) },
+	{ value: 'square', label: __( 'Square', 'clouds-and-spaceships' ) },
+	{ value: 'diamond', label: __( 'Diamond', 'clouds-and-spaceships' ) },
+	{ value: 'icon', label: __( 'Icon', 'clouds-and-spaceships' ) },
+	{ value: 'text', label: __( 'Text', 'clouds-and-spaceships' ) },
 ] as const;
 
 export type ObjectDisplayMode =
@@ -75,13 +77,13 @@ export const OBJECT_DISPLAY_MODE_DEFAULT: ObjectDisplayMode = 'icon';
 
 // ── Shape types ───────────────────────────────────────────────────────────────
 // Shared by areas and hierarchy regions. Keep in sync with
-// clouansp_map_suite_shape_types() in includes/admin/api.php.
+// clouansp_map_suite_shape_types() in includes/map/admin/api.php.
 
 const SHAPE_TYPE_CHOICES = [
-	{ value: 'POLYGON', label: 'Polygon (Nodes)' },
-	{ value: 'RECTANGLE', label: 'Rectangle' },
-	{ value: 'BEZIER', label: 'Bezier Curve' },
-	{ value: 'CIRCLE', label: 'Circle / Oval' },
+	{ value: 'POLYGON', label: __( 'Polygon (Nodes)', 'clouds-and-spaceships' ) },
+	{ value: 'RECTANGLE', label: __( 'Rectangle', 'clouds-and-spaceships' ) },
+	{ value: 'BEZIER', label: __( 'Bezier Curve', 'clouds-and-spaceships' ) },
+	{ value: 'CIRCLE', label: __( 'Circle / Oval', 'clouds-and-spaceships' ) },
 ] as const;
 
 export type ShapeType = ( typeof SHAPE_TYPE_CHOICES )[ number ][ 'value' ];

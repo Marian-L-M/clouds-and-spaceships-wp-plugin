@@ -77,7 +77,7 @@ function clouansp_register_blocks(): void {
 }
 add_action('init', 'clouansp_register_blocks');
 
-// Admin settings
+// Built assets
 /**
  * Dependencies and version for a built bundle, from its wp-scripts manifest.
  *
@@ -96,8 +96,8 @@ function clouansp_asset(string $handle_path): array {
 }
 
 // Database schema
-// Runs dbDelta() on every plugin update so schema changes are applied
-// automatically without requiring a manual deactivate/reactivate cycle.
+// Runs dbDelta() whenever CLOUANSP_DB_VERSION changes, so schema changes are
+// applied on update without a manual deactivate/reactivate cycle.
 
 function clouansp_maybe_upgrade_db(): void {
 	if (get_option('clouansp_db_version') !== CLOUANSP_DB_VERSION) {
@@ -109,7 +109,7 @@ function clouansp_maybe_upgrade_db(): void {
 add_action('plugins_loaded', 'clouansp_maybe_upgrade_db');
 
 
-// Lifecycle hools
+// Lifecycle hooks
 function clouansp_activate(): void {
 	clouansp_add_capabilities();
 	clouansp_wiki_register_post_type();

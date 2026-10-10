@@ -17,7 +17,7 @@ defined('ABSPATH') || exit;
 /**
  * Public map-data API.
  *
- * Other plugins (e.g. CNS Story Suite) and themes should read map data through
+ * The story block, other plugins and themes should read map data through
  * these functions instead of querying the clouansp_map_* tables or _clouansp_map_* meta
  * directly — the table/meta layout is considered private and may change.
  *
@@ -61,7 +61,7 @@ function clouansp_map_suite_extract_infoboxes(WP_Post $post): array {
  *
  * The connected post (linked_post_id) is independent of the content source:
  * whenever one is set, post_url carries its permalink so the frontend can show
- * a "Read more" link, and its clouansp-wiki-suite infoboxes are pulled in when the
+ * a "Read more" link, and its wiki Infobox blocks are pulled in when the
  * display_infobox flag is on. infobox_source picks where title/excerpt/image
  * come from — 'post' from the connected post (each gated by a show_* flag),
  * 'manual' from the stored infobox_data. `infobox_data` may be a raw JSON string

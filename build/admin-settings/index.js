@@ -1,1 +1,1 @@
-(()=>{"use strict";document.addEventListener("click",t=>{const e=t.target?.closest?.("a[data-confirm]");e&&!window.confirm(e.dataset.confirm)&&t.preventDefault()})})();
+(()=>{"use strict";document.addEventListener("click",t=>{const e=t.target?.closest?.("a[data-confirm]");e&&!window.confirm(e.dataset.confirm)&&t.preventDefault()}),document.addEventListener("change",t=>{const e=t.target?.closest?.("select[data-autosubmit]");e?.form?.submit()})})();

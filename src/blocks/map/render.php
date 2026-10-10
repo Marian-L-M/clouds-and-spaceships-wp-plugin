@@ -37,7 +37,7 @@ if (! in_array($map->post_status, ['publish', 'private'], true) && ! current_use
 	return;
 }
 
-// ── Map data (shared API — single source of truth, also used by story-suite) ──
+// ── Map data (shared API — single source of truth, also used by the story block) ──
 
 $data = clouansp_map_suite_get_map_data($map_id, [
 	'hierarchy'         => true,
@@ -92,24 +92,10 @@ $map_data = [
 	'showLabels'       => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_labels'),
 ];
 
-// If any item resolves to wiki infoboxes, load the infobox block styles so the
-// injected markup renders correctly inside the drawer. (The infobox collapse
-// Interactivity runtime is intentionally not needed — view.js drives the
-// drawer's expand/collapse itself.)
-$has_infoboxes = false;
-foreach (['objects', 'areas', 'labels'] as $group) {
-	foreach ($data[$group] as $row) {
-		if (! empty($row['infobox_resolved']['infoboxes'])) {
-			$has_infoboxes = true;
-			break 2;
-		}
-	}
-}
-if ($has_infoboxes) {
-	foreach (['wp-block-clouansp-wiki-suite-infobox', 'wp-block-clouansp-wiki-suite-infobox-group', 'wp-block-clouansp-wiki-suite-infobox-row'] as $handle) {
-		wp_enqueue_style($handle);
-	}
-}
+// Wiki infoboxes shown in the drawer need no extra enqueue here:
+// clouansp_map_suite_get_map_data() above renders them with render_block(),
+// which enqueues each infobox block's own stylesheet. (Their Interactivity runtime is not needed either — view.js
+// drives the drawer's expand/collapse itself.)
 
 // The block renders the map itself and nothing else. Everything around it —
 // title, author, last-updated date, the description held in post_content — is

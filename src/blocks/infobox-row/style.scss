@@ -6,7 +6,7 @@
 	min-height: 1.8em;
 	padding: 0.2em 0.1em;
 }
-.infobox-row {
+.clouansp-infobox-row {
 	&__list {
 		@include fx($direction: column, $gap: 0.4rem);
 		width: 100%;

@@ -8,7 +8,7 @@
  *   <a class="clouansp-glossary-term" href="…" data-glossary-id="123">term</a>
  *
  * Only the entry ID is authoritative — the href and the hover tooltip are
- * refreshed server-side on render (see glossary/setup.php), so definitions
+ * refreshed server-side on render (see includes/wiki/glossary.php), so definitions
  * never go stale.
  */
 import { __ } from '@wordpress/i18n';

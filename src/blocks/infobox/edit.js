@@ -41,10 +41,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		[
 			'clouansp-wiki-suite/infobox-group',
 			{
-				group_title: 'Infobox group title',
+				group_title: __( 'Infobox group title', 'clouds-and-spaceships' ),
 			},
 		],
-		[ 'core/paragraph', { placeholder: 'Enter a short description...' } ],
+		[
+			'core/paragraph',
+			{
+				placeholder: __(
+					'Enter a short description…',
+					'clouds-and-spaceships'
+				),
+			},
+		],
 	];
 
 	return (
@@ -78,8 +86,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						min={ 0 }
 						placeholder={ String( DEFAULT_MAX_WIDTH ) }
 						help={ sprintf(
+							/* translators: %s: default max width, e.g. "360px". */
 							__(
-								'Set individual maximum width of the infobox container. Change default max width in CNS settings tab.',
+								'Maximum width of this infobox. Leave empty to use the default (%s), set on the Wiki settings tab.',
 								'clouds-and-spaceships'
 							),
 							`${ DEFAULT_MAX_WIDTH }px`
@@ -89,7 +98,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</ToolsPanelItem>
 			</InspectorControls>
 			<InspectorControls>
-				<PanelBody title="Display Settings" initialOpen={ true }>
+				<PanelBody
+					title={ __( 'Display Settings', 'clouds-and-spaceships' ) }
+					initialOpen={ true }
+				>
 					<PanelRow>
 						<SelectControl
 							label={ __(
@@ -99,11 +111,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							value={ attributes.display_mode }
 							options={ [
 								{
-									label: 'Collapse Groups on Mobile',
+									label: __(
+										'Collapse Groups on Mobile',
+										'clouds-and-spaceships'
+									),
 									value: 'collapse__groups-mobile',
 								},
 								{
-									label: 'Always Expanded',
+									label: __(
+										'Always Expanded',
+										'clouds-and-spaceships'
+									),
 									value: 'expanded__all',
 								},
 							] }
@@ -145,19 +163,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					] }
 				/>
 			</InspectorControls>
-			<div className="infobox">
+			<div className="clouansp-infobox">
 				<h2
-					className="infobox__title"
+					className="clouansp-infobox__title"
 					style={ { backgroundColor: contrast_color } }
 				>
 					<TextControl
-						placeholder="Infobox title"
+						placeholder={ __( 'Infobox title', 'clouds-and-spaceships' ) }
 						value={ attributes.infobox_title }
 						onChange={ updateInfoboxTitle }
 						style={ { fontSize: '20px', color: text_color } }
 					/>
 				</h2>
-				<div className="infobox__content">
+				<div className="clouansp-infobox__content">
 					<InnerBlocks template={ TEMPLATE } />
 				</div>
 			</div>

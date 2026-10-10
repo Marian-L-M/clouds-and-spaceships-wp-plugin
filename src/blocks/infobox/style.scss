@@ -26,17 +26,17 @@
 	color: var(--clouansp-wiki-infobox-text, var(--wp--preset--color--text));
 }
 
-.infobox,
-.infobox .block-editor-inner-blocks,
-.infobox .block-editor-block-list__layout,
-.infobox__content {
+.clouansp-infobox,
+.clouansp-infobox .block-editor-inner-blocks,
+.clouansp-infobox .block-editor-block-list__layout,
+.clouansp-infobox__content {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 	width: 100%;
 }
 
-.infobox {
+.clouansp-infobox {
 	border: 1px solid #dedede;
 	padding: 1em;
 	margin-bottom: 2rem;
@@ -108,7 +108,9 @@
 		padding-left: 1.2em;
 	}
 
-	button.toggle-btn {
+	// Both toggles: the infobox's own title button and its groups'.
+	button.clouansp-infobox__toggle,
+	button.clouansp-infobox-group__toggle {
 		position: relative;
 		padding: 0.2rem 2rem;
 	}
@@ -117,13 +119,13 @@
 // infobox's mode becomes a toggle, and group contents start hidden. Desktop
 // gets no collapse rules at all, so everything is open there.
 @media screen and (max-width: 768px) {
-	.infobox {
-		&.collapse__groups-mobile {
-			.inherit {
+	.clouansp-infobox {
+		&.clouansp-infobox--collapse-groups-mobile {
+			.clouansp-infobox-group__outer--inherit {
 				@include toggleBtn();
 			}
 			&:not(&.is-active) {
-				.infobox-group__inner {
+				.clouansp-infobox-group__inner {
 					display: none;
 				}
 			}

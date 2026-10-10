@@ -213,7 +213,7 @@ export default function ContextPanel( {
 		return (
 			<aside
 				className="clouansp-map-editor__context"
-				aria-label="Context panel"
+				aria-label={ __( 'Context panel', 'clouds-and-spaceships' ) }
 			>
 				<Flex
 					direction={ 'column' }
@@ -238,12 +238,12 @@ export default function ContextPanel( {
 
 	const title =
 		selection.kind === 'object'
-			? selection.item.title || '(no title)'
+			? selection.item.title || __( '(no title)', 'clouds-and-spaceships' )
 			: selection.kind === 'label'
-			? selection.item.text || '(empty label)'
+			? selection.item.text || __( '(empty label)', 'clouds-and-spaceships' )
 			: selection.kind === 'region'
-			? selection.item.child_map_title || 'New Region'
-			: selection.item.title || '(no title)';
+			? selection.item.child_map_title || __( 'New Region', 'clouds-and-spaceships' )
+			: selection.item.title || __( '(no title)', 'clouds-and-spaceships' );
 
 	// Region has no duplicate action; the others share one button.
 	const onDuplicate =
@@ -311,19 +311,19 @@ export default function ContextPanel( {
 	async function handleDelete() {
 		switch ( selection.kind ) {
 			case 'object':
-				if ( ! confirm( 'Delete this object?' ) ) return;
+				if ( ! confirm( __( 'Delete this object?', 'clouds-and-spaceships' ) ) ) return;
 				await onObjectDelete();
 				break;
 			case 'label':
-				if ( ! confirm( 'Delete this label?' ) ) return;
+				if ( ! confirm( __( 'Delete this label?', 'clouds-and-spaceships' ) ) ) return;
 				await onLabelDelete();
 				break;
 			case 'region':
-				if ( ! confirm( 'Delete this hierarchy region?' ) ) return;
+				if ( ! confirm( __( 'Delete this hierarchy region?', 'clouds-and-spaceships' ) ) ) return;
 				await onRegionDelete();
 				break;
 			case 'area':
-				if ( ! confirm( 'Delete this area?' ) ) return;
+				if ( ! confirm( __( 'Delete this area?', 'clouds-and-spaceships' ) ) ) return;
 				await onAreaDelete();
 				break;
 		}
@@ -349,7 +349,7 @@ export default function ContextPanel( {
 	return (
 		<aside
 			className="clouansp-map-editor__context"
-			aria-label="Context panel"
+			aria-label={ __( 'Context panel', 'clouds-and-spaceships' ) }
 			id="clouansp-context-form"
 		>
 			<div className="clouansp-map-editor__context-header">

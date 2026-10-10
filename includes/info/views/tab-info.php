@@ -4,7 +4,7 @@
  */
 defined('ABSPATH') || exit;
 
-$glossary_enabled = function_exists('clouansp_wiki_glossary_enabled') && clouansp_wiki_glossary_enabled();
+$glossary_enabled = clouansp_wiki_glossary_enabled();
 
 $counts = [
     [
@@ -36,7 +36,7 @@ if ($glossary_enabled) {
 	</div>
 
 	<p class="clouansp-settings-page__intro">
-		<?php esc_html_e('Clouds and Spaceships (CNS) is a suite for Worldbuilders and Mapmakers: Connect your map to your posts using an interactive canvas maps, wiki articles, glossaries, and story paths.', 'clouds-and-spaceships'); ?>
+		<?php esc_html_e('Clouds and Spaceships (CNS) is a suite for Worldbuilders, Storytellers, and Mapmakers: connect your posts through interactive canvas maps, wiki articles, glossaries, and story paths.', 'clouds-and-spaceships'); ?>
 	</p>
 
 	<ul class="clouansp-settings-stats">

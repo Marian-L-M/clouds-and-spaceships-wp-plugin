@@ -143,7 +143,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 
 			<span class="clouansp-settings-toolbar__group">
 				<label for="clouansp-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
-				<select name="per_page" id="clouansp-per-page" onchange="this.form.submit()">
+				<select name="per_page" id="clouansp-per-page" data-autosubmit>
 					<?php foreach ($per_page_options as $option) : ?>
 						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
 							<?php echo esc_html($option); ?>
@@ -173,7 +173,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 	<table class="wp-list-table widefat fixed striped clouansp-settings-table">
 		<thead>
 			<tr>
-				<th class="col-thumb"></th>
+				<th class="clouansp-settings-table__thumb"></th>
 				<th><?php esc_html_e('Title', 'clouds-and-spaceships'); ?></th>
 				<th><?php esc_html_e('Map', 'clouds-and-spaceships'); ?></th>
 				<th><?php esc_html_e('Nodes', 'clouds-and-spaceships'); ?></th>
@@ -222,7 +222,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 				};
 			?>
 				<tr>
-					<td class="col-thumb">
+					<td class="clouansp-settings-table__thumb">
 						<a href="<?php echo esc_url($edit_url); ?>">
 							<?php if ($thumb_url) : ?>
 								<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_attr($story->post_title ?: ''); ?>" />
@@ -299,7 +299,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 		<div class="clouansp-settings-card">
 			<h2><?php esc_html_e('Story', 'clouds-and-spaceships'); ?></h2>
 			<p class="description">
-				<?php esc_html_e('Stories are collections of story paths laid over a map element, managed via the CNS story editor tab. Each note in a story path being a substory that can be made an indipendent post/article.', 'clouds-and-spaceships'); ?>
+				<?php esc_html_e('Stories are collections of story paths laid over a map, edited in the CNS story editor. Each node in a story path can show a substory, which is an independent post/article.', 'clouds-and-spaceships'); ?>
 			</p>
 			<table class="form-table" role="presentation">
 				<tr>
@@ -351,7 +351,7 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 						<p class="description">
 							<?php esc_html_e('Lowercase letters, numbers, and hyphens only. Changes the archive URL and every single story URL.', 'clouds-and-spaceships'); ?>
 						</p>
-						<p class="text-danger">
+						<p class="clouansp-text-danger">
 							<?php esc_html_e('CAUTION! On change existing links will break.', 'clouds-and-spaceships'); ?>
 						</p>
 					</td>
@@ -420,18 +420,18 @@ $placeholder_url      = $placeholder_id ? wp_get_attachment_image_url($placehold
 				<tr>
 					<th scope="row"><?php esc_html_e('Uninstall behaviour', 'clouds-and-spaceships'); ?></th>
 					<td>
-						<p class="text-danger">
+						<p class="clouansp-text-danger">
 							<?php esc_html_e('Deleting this plugin deletes every story, permanently.', 'clouds-and-spaceships'); ?>
 						</p>
 						<p class="description">
 							<?php esc_html_e('This plugin uses custom database tables to store story nodes, which are always removed on uninstall. Therefore stories cannot be preserved on uninstall. Simple plugin deactivation will however not delete stories.', 'clouds-and-spaceships'); ?>
 						</p>
-						<label class="text-danger">
+						<label class="clouansp-text-danger">
 							<input type="checkbox" name="delete_substories_on_uninstall" value="1" <?php checked($delete_substories); ?> />
 							<?php esc_html_e('Delete substory articles as well', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
-							<?php esc_html_e('Substories are articles/posts in their own right, and can be preserved for after deletion. Note that as substories do not have a native archive screen, you will need to do a migration or setup of an archive youself. Check here to delete all substories on plugin unistall.', 'clouds-and-spaceships'); ?>
+							<?php esc_html_e('Substories are articles/posts in their own right, and are kept when the plugin is deleted unless you check this box. They have no archive page of their own, so to list them elsewhere you will need to migrate them or set up an archive yourself. Check to delete all substories when the plugin is uninstalled.', 'clouds-and-spaceships'); ?>
 						</p>
 					</td>
 				</tr>

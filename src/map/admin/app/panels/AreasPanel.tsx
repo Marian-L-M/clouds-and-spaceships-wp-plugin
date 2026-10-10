@@ -18,7 +18,6 @@ import { settingsToDrawState } from '../../canvas';
 import { getDefaultNodes, moveAreaNode, canRemoveAreaNode } from '../../areas';
 import { defaultAreaFormData } from '../forms/AreaForm';
 import { useCanvasKeyboard } from '../useCanvasKeyboard';
-import { useMapResource } from '../useMapResource';
 import { SHAPE_TYPE_DEFAULT } from '../../../choices';
 import type { MapSettings, MapArea, AreaFormData, Node } from '../../../types';
 
@@ -57,7 +56,6 @@ export default function AreasPanel( {
 	focusedNodeIdx,
 	onNodeFocusChange,
 }: Props ) {
-	useMapResource< MapArea >( mapId, 'areas', onAreasLoaded );
 	const { createErrorNotice } = useDispatch( noticesStore );
 
 	// ── Keyboard shortcuts (active while the Areas tab is mounted) ─────────────
@@ -225,7 +223,7 @@ export default function AreasPanel( {
 	}
 
 	async function handleDelete( id: number ) {
-		if ( ! confirm( 'Delete this area?' ) ) return;
+		if ( ! confirm( __( 'Delete this area?', 'clouds-and-spaceships' ) ) ) return;
 		await onDelete( id );
 	}
 
@@ -252,10 +250,10 @@ export default function AreasPanel( {
 								variant="tertiary"
 								onClick={ toggleVisibleHelpInformation }
 							>
-								Help Information
+								{ __( 'Help Information', 'clouds-and-spaceships' ) }
 								{ isVisibleHelpInformation && (
 									<Popover
-										headerTitle="Help Information"
+										headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 										expandOnMobile
 									>
 										<p
@@ -265,10 +263,7 @@ export default function AreasPanel( {
 												maxWidth: '100%',
 											} }
 										>
-											Areas are clickable sections on the
-											canvas that are linked to an
-											infobox. Adjust the area size by
-											adding and moving nodes.
+											{ __( 'Areas are clickable sections on the canvas that are linked to an infobox. Adjust the area size by adding and moving nodes.', 'clouds-and-spaceships' ) }
 										</p>
 										<ol
 											style={ {

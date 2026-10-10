@@ -15,7 +15,6 @@ import LabelsList from '../lists/LabelsList';
 import { settingsToDrawState } from '../../canvas';
 import { defaultLabelFormData, collectLabelPayload } from '../forms/LabelForm';
 import { useCanvasKeyboard, createDebouncedNudge } from '../useCanvasKeyboard';
-import { useMapResource } from '../useMapResource';
 import type { MapSettings, MapLabel, LabelSavePayload } from '../../../types';
 
 // Internal clipboard for ⌘/Ctrl+C/V. Module scope so it survives tab
@@ -23,11 +22,9 @@ import type { MapSettings, MapLabel, LabelSavePayload } from '../../../types';
 let labelClipboard: LabelSavePayload | null = null;
 
 interface Props {
-	mapId: number;
 	settings: MapSettings;
 	labels: MapLabel[];
 	selectedLabelId: number | null;
-	onLabelsLoaded: ( labels: MapLabel[] ) => void;
 	onSelect: ( id: number ) => void;
 	onDeselect: () => void;
 	onAdd: ( payload: LabelSavePayload ) => Promise< MapLabel >;
@@ -41,11 +38,9 @@ interface Props {
 }
 
 export default function LabelsPanel( {
-	mapId,
 	settings,
 	labels,
 	selectedLabelId,
-	onLabelsLoaded,
 	onSelect,
 	onDeselect,
 	onAdd,
@@ -54,7 +49,6 @@ export default function LabelsPanel( {
 	onDuplicate,
 	onDelete,
 }: Props ) {
-	useMapResource< MapLabel >( mapId, 'labels', onLabelsLoaded );
 
 	// The nudge factory is created once; these refs feed it live values.
 	const stateRef = useRef( { labels, selectedLabelId } );
@@ -165,10 +159,10 @@ export default function LabelsPanel( {
 								variant="tertiary"
 								onClick={ toggleVisibleHelpInformation }
 							>
-								Help Information
+								{ __( 'Help Information', 'clouds-and-spaceships' ) }
 								{ isVisibleHelpInformation && (
 									<Popover
-										headerTitle="Help Information"
+										headerTitle={ __( 'Help Information', 'clouds-and-spaceships' ) }
 										expandOnMobile
 									>
 										<p
@@ -178,9 +172,7 @@ export default function LabelsPanel( {
 												maxWidth: '100%',
 											} }
 										>
-											Create a clickable label linked to
-											an infobox. The label can be
-											extended with an indicator line.
+											{ __( 'Create a clickable label linked to an infobox. The label can be extended with an indicator line.', 'clouds-and-spaceships' ) }
 										</p>
 										<ol
 											style={ {

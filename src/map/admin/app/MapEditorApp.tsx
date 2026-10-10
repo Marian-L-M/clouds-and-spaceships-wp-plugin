@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import Notices from '../../../shared/admin/Notices';
 import EditorHeader from '../../../shared/admin/EditorHeader';
 import TabBar from './TabBar';
@@ -13,6 +13,7 @@ import AreasPanel from './panels/AreasPanel';
 import LabelsPanel from './panels/LabelsPanel';
 import HierarchyPanel from './panels/HierarchyPanel';
 import PreviewPanel from './panels/PreviewPanel';
+import { useMapResource } from './useMapResource';
 import { apiFetch } from '../utils';
 import { normalizeNodesForShapeType } from '../areas';
 import { defaultLabelFormData, collectLabelPayload } from './forms/LabelForm';
@@ -102,6 +103,12 @@ export default function MapEditorApp() {
 		null
 	);
 	const [ regionsList, setRegionsList ] = useState< HierarchyRegion[] >( [] );
+
+	// Objects, areas and labels load once, up front: the Preview tab draws all
+	// three, so they cannot wait for their own tab to be opened.
+	useMapResource< MapObject >( mapId, 'objects', setObjectsList );
+	useMapResource< MapArea >( mapId, 'areas', setAreasList );
+	useMapResource< MapLabel >( mapId, 'labels', setLabelsList );
 	const [ isSaving, setIsSaving ] = useState( false );
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
@@ -552,7 +559,7 @@ export default function MapEditorApp() {
 		formData: HierarchyFormData
 	): Promise< HierarchyRegion | undefined > {
 		if ( ! selectedRegionId || ! formData.child_map_id ) {
-			throw new Error( 'Select a child map before saving.' );
+			throw new Error( __( 'Select a child map before saving.', 'clouds-and-spaceships' ) );
 		}
 
 		const region = regionsList.find( ( r ) => r.id === selectedRegionId );
@@ -606,8 +613,12 @@ export default function MapEditorApp() {
 	// ── Render ────────────────────────────────────────────────────────────────
 
 	const pageTitle = isNew
-		? 'New Map'
-		: `Edit: ${ settings.title || '(no title)' }`;
+		? __( 'New Map', 'clouds-and-spaceships' )
+		: sprintf(
+				/* translators: %s: map title. */
+				__( 'Edit: %s', 'clouds-and-spaceships' ),
+				settings.title || __( '(no title)', 'clouds-and-spaceships' )
+		  );
 
 	// Zoom control colors, resolved the same way the front end resolves them:
 	// this map's override, else the global default, else unset so the
@@ -666,11 +677,9 @@ export default function MapEditorApp() {
 						) }
 						{ activeTab === 'objects' && ! settings.isMaster && (
 							<ObjectsPanel
-								mapId={ mapId }
 								settings={ settings }
 								objects={ objectsList }
 								selectedObjectId={ selectedObjectId }
-								onObjectsLoaded={ setObjectsList }
 								onSelect={ setSelectedObjectId }
 								onDeselect={ () => setSelectedObjectId( null ) }
 								onAdd={ handleObjectAdd }
@@ -698,11 +707,9 @@ export default function MapEditorApp() {
 						) }
 						{ activeTab === 'labels' && ! settings.isMaster && (
 							<LabelsPanel
-								mapId={ mapId }
 								settings={ settings }
 								labels={ labelsList }
 								selectedLabelId={ selectedLabelId }
-								onLabelsLoaded={ setLabelsList }
 								onSelect={ setSelectedLabelId }
 								onDeselect={ () => setSelectedLabelId( null ) }
 								onAdd={ handleLabelAdd }

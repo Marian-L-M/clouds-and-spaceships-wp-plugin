@@ -125,12 +125,6 @@ function clouansp_register_single_map_template(): void {
 	$layout = file_get_contents($layout_file);
 
 	foreach (clouansp_single_map_template_variants() as $post_type => $variant) {
-		// The map and story post types can each be switched off; registering a
-		// template for a post type that does not exist would orphan it.
-		if (! post_type_exists($post_type)) {
-			continue;
-		}
-
 		register_block_template('clouds-and-spaceships//' . $variant['slug'], [
 			'title'       => $variant['title'],
 			'description' => $variant['description'],

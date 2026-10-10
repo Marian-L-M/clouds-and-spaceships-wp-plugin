@@ -511,7 +511,7 @@ function clouansp_map_suite_sanitize_color(string $value, string $default): stri
  */
 // ── Enumerated choices ────────────────────────────────────────────────────────
 // The allowed values for the enum-backed columns. Each list is mirrored by a
-// choice list in src/choices.ts, which derives the matching TypeScript union
+// choice list in src/map/choices.ts, which derives the matching TypeScript union
 // and the form dropdown from it — keep the two sides in sync.
 
 function clouansp_map_suite_area_types(): array {

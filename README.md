@@ -15,11 +15,16 @@ shared directories look the way they do.
 Repository: https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin
 
 Every global identifier uses the `clouansp` prefix: `clouansp_` for functions,
-options, meta keys, tables, post types and nonces, `CLOUANSP_` for constants,
-`clouansp-` for handles, slugs, block namespaces and CSS classes, and
-`clouansp` + CamelCase for JS globals. The old three plugins used `cns`, which
-wp.org rejects as shorter than four characters. The "CNS" menu label is
-display text, not a prefix.
+options, meta keys, tables, post types, capabilities and nonces, `CLOUANSP_`
+for constants, `clouansp-` for handles, slugs, block namespaces and CSS
+classes, `--clouansp-` for CSS custom properties, and `clouansp` + CamelCase for
+JS globals. The old three plugins used `cns`, which wp.org rejects as shorter
+than four characters. The "CNS" menu label is display text, not a prefix.
+
+CSS classes are BEM under the prefix (`clouansp-infobox__title`,
+`clouansp-infobox-group__outer--collapse-mobile`). State classes toggled at
+runtime keep core's unprefixed `is-*` convention (`is-active`, `is-open`,
+`is-fullscreen`) and are only ever styled in combination with a prefixed class.
 
 ---
 
@@ -30,7 +35,7 @@ clouds-and-spaceships.php      bootstrap: constants, requires, blocks, lifecycle
 uninstall.php                  drops tables + options always, posts only on opt-in
 includes/
   settings-page.php            the tabbed CNS settings screen (clouansp_admin_tabs filter)
-  archive.php                  archive on/off + slug + rewrite flush, all suites
+  archive.php                  story + wiki archives: on/off, slug, rewrite flush
   cache.php                    render-row cache for the map and story tables
   capabilities.php             clouansp_manage_maps / clouansp_manage_stories
   map-template.php             single-clouansp_map + single-clouansp_story block templates
@@ -45,12 +50,14 @@ src/
   map/  story/                 the two admin React apps
   shared/                      code both editors use (see below)
   map-panel/                   the Stories tab inside the map editor
-  admin-settings/              the CNS settings screen bundle
+  admin-settings/              the CNS settings screen bundle (layout, data-confirm
+                               prompts, data-autosubmit selects)
   formats/glossary/            glossary inline rich-text format
 ```
 
-Settings tabs register through the `clouansp_admin_tabs` filter and currently are:
-Wiki, Glossary, Maps, Icons, Stories, Substories, Info.
+Settings tabs register through the `clouansp_admin_tabs` filter and currently are,
+in order: Info, Wiki, Glossary, Maps, Icons, Stories, Substories. Info comes first,
+so the top-level CNS menu entry opens it.
 
 ### `src/shared/`
 
@@ -109,6 +116,19 @@ branches are unreachable, so they are gone:
 
 ---
 
+### Block deprecations
+
+Infobox, Infobox Group and Infobox Row are static blocks: their markup, class
+names included, is saved into post content. 0.2.0 prefixed those classes, so
+each block carries a `deprecated.js` with a verbatim copy of its pre-0.2.0
+`save()`. The editor upgrades old blocks silently and they are saved with the
+new markup on the next post save; until then the front end still serves the
+old, now unstyled, classes. Never edit a deprecated `save()` — add a new
+deprecation instead. `display_mode` values are stored attributes and keep
+their old spellings; `save.js` maps each one to a modifier class.
+
+---
+
 ## Theme independence
 
 The plugin is self-contained and makes no assumptions about the active theme.
@@ -157,8 +177,10 @@ listing free of an external-services disclosure.
 
 ## Development
 
+Needs Node.js 20.19 or later (`sass` and `chokidar` require it).
+
 ```sh
-npm install --legacy-peer-deps   # @wordpress/icons needs the flag
+npm ci                           # exact dependency tree from package-lock.json
 npm run build                    # production: minified, no source maps
 npm start                        # watch mode: unminified + source maps
 npm run lint:ts                  # tsc --noEmit
@@ -177,6 +199,10 @@ the watcher first — both write to `build/`. `npm start` leaves an unminified
 bundle plus ~1.4 MB of source maps there, and a production build does not
 delete them: remove leftover `build/**/*.map` files by hand, or `plugin-zip`
 and git will happily ship them.
+
+`npm ci` needs no flags. Adding or upgrading a dependency with `npm install`
+does: without the lockfile pinning versions, `@wordpress/icons`' React peer
+range conflicts, so use `npm install --legacy-peer-deps <package>`.
 
 The codebase is not prettier-clean; `npm run format` would rewrite large
 amounts of unrelated code. Match the surrounding style instead, and check that

@@ -78,7 +78,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 
 			<span class="clouansp-settings-toolbar__group">
 				<label for="clouansp-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
-				<select name="per_page" id="clouansp-per-page" onchange="this.form.submit()">
+				<select name="per_page" id="clouansp-per-page" data-autosubmit>
 					<?php foreach ($per_page_options as $option) : ?>
 						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
 							<?php echo esc_html($option); ?>
@@ -109,7 +109,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 	<table class="wp-list-table widefat fixed striped clouansp-settings-table">
 		<thead>
 			<tr>
-				<th class="col-thumb"></th>
+				<th class="clouansp-settings-table__thumb"></th>
 				<th><?php esc_html_e('Title', 'clouds-and-spaceships'); ?></th>
 				<th><?php esc_html_e('Mode', 'clouds-and-spaceships'); ?></th>
 				<th><?php esc_html_e('Status', 'clouds-and-spaceships'); ?></th>
@@ -147,7 +147,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 				));
 			?>
 				<tr>
-					<td class="col-thumb">
+					<td class="clouansp-settings-table__thumb">
 						<a href="<?php echo esc_url($edit_url); ?>">
 						<?php if ($thumb_url) : ?>
 							<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_html($map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>" />
@@ -294,7 +294,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 				<tr>
 					<th scope="row"><?php esc_html_e('Caution', 'clouds-and-spaceships'); ?></th>
 					<td>
-						<p class="text-danger">
+						<p class="clouansp-text-danger">
 							<?php esc_html_e('Deleting this plugin will delete every map permanently.', 'clouds-and-spaceships'); ?>
 						</p>
 						<p class="description">

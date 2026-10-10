@@ -39,7 +39,7 @@ if (! $story || $story->post_type !== 'clouansp_story') {
 }
 
 // Respect post status: private requires read_private_posts; draft/pending only
-// visible to story managers. Mirrors the gate in clouansp-map-suite's map render.php.
+// visible to story managers. Mirrors the gate in the map block's render.php.
 if ($story->post_status === 'private' && ! current_user_can('read_private_posts')) {
 	return '';
 }
@@ -98,7 +98,7 @@ $raw_nodes = $story_rows['nodes'];
 $raw_paths = $story_rows['paths'];
 $raw_edges = $story_rows['edges'];
 
-// Row shaping is shared with the REST API (includes/serializers.php);
+// Row shaping is shared with the REST API (includes/story/serializers.php);
 // $public = true gates unpublished substories and omits edit URLs.
 $paths = array_map(
 	fn(array $r): array => clouansp_story_suite_serialize_path($r, true),
@@ -123,13 +123,14 @@ $edges = array_map(fn(array $e): array => [
 ], $raw_edges);
 
 // Map render data, with infoboxes resolved for the frontend click handlers.
-// All map access goes through map-suite's public API (via the adapter in api.php).
+// All map access goes through the public map-data API (includes/map/map-data.php),
+// via clouansp_story_suite_get_map_render_data() in includes/story/admin/api.php.
 $map_data = null;
-if ($map_id && function_exists('clouansp_story_suite_get_map_render_data')) {
+if ($map_id) {
 	$map_data = clouansp_story_suite_get_map_render_data($map_id, true);
 
 	// MasterMap regions: hide child maps the visitor may not see (mirrors the
-	// visibility rules in clouansp-map-suite's map render.php) so draft/private
+	// visibility rules in the map block's render.php) so draft/private
 	// child titles/thumbnails don't leak to the frontend.
 	if ($map_data && ! empty($map_data['hierarchyRegions'])) {
 		$map_data['hierarchyRegions'] = array_values(array_filter(
@@ -183,9 +184,7 @@ $block_data = [
 // Zoom/fullscreen control colors come from the linked map, so a story's chrome
 // matches the map it is built on. Empty when the map sets neither and there is
 // no global default, which leaves the stylesheet fallback in charge.
-$zoom_style = ($map_id && function_exists('clouansp_map_suite_zoom_color_style'))
-	? clouansp_map_suite_zoom_color_style($map_id)
-	: '';
+$zoom_style = $map_id ? clouansp_map_suite_zoom_color_style($map_id) : '';
 
 $wrapper_attributes = get_block_wrapper_attributes(array_filter([
 	'class' => 'clouansp-story-block' . ($hide_window ? ' clouansp-story-block--no-window' : ''),

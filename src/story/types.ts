@@ -1,5 +1,5 @@
 // The story canvas renders a map as its backdrop, so map objects arrive in the
-// same style shape the map suite stores them in.
+// same style shape the map code stores them in.
 import type { AreaCanvasStyles, LabelCanvasStyles, ObjectCanvasStyles } from '../map/types';
 
 // ── Primitive unions ──────────────────────────────────────────────────────────

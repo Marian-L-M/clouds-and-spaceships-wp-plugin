@@ -16,7 +16,7 @@ interface Props {
 
 /**
  * Async map picker: ComboboxControl over core-data's useEntityRecords for
- * the `maps` post type — resolution state, caching, and request plumbing
+ * the `clouansp_map` post type — resolution state, caching, and request plumbing
  * all come from the wp/core-data store.
  */
 export default function MapPicker( { mapId, mapTitle, onChange }: Props ) {

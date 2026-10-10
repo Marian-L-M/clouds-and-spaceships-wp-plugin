@@ -103,7 +103,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 									onChange={ ( v ) => set( 'isMaster', v ) }
 								/>
 								<Tooltip
-									text="Relational map that links to other child maps."
+									text={ __( 'Relational map that links to other child maps.', 'clouds-and-spaceships' ) }
 									placement="top-end"
 								>
 									<div>
@@ -191,7 +191,7 @@ export default function SettingsPanel( { settings, onChange }: Props ) {
 
 						{ /* Image placement */ }
 						<div className="clouansp-grid__group clouansp-grid__span-2">
-							<Card className="image-scale-positioning">
+							<Card className="clouansp-image-scale-positioning">
 								<CardBody>
 									<RangeControl
 										label={ __(

@@ -9,7 +9,7 @@ $space-10: 1rem;
 
 $bp-spc: 1200px;
 
-// ── Shared form grid (mirrors clouansp-map-suite's .clouansp-grid) ──────────────────────
+// ── Shared form grid (mirrors the map editor's .clouansp-grid) ──────────────────────
 
 .clouansp-grid {
 	width: 100%;
@@ -304,7 +304,7 @@ $bp-spc: 1200px;
 		background: #fff;
 	}
 
-	// ── Fullscreen (lightbox) mode — mirrors clouansp-map-suite's Preview canvas ──
+	// ── Fullscreen (lightbox) mode — mirrors the map editor's Preview canvas ──
 	&.is-fullscreen {
 		position: fixed;
 		inset: 0;

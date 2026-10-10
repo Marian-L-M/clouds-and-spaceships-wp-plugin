@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Generic list table for the entity tabs (objects / areas / labels): the
@@ -33,7 +34,7 @@ export default function EntityTable<T extends { id: number }>( {
 					{ columns.map( ( col, i ) => (
 						<th key={ i } style={ col.width ? { width: col.width } : undefined }>{ col.header }</th>
 					) ) }
-					<th>Actions</th>
+					<th>{ __( 'Actions', 'clouds-and-spaceships' ) }</th>
 				</tr>
 			</thead>
 			<tbody>

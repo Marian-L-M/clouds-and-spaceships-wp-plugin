@@ -2,7 +2,7 @@
 	margin: auto;
 }
 
-body.single-wiki #clouansp-layout-wrapper > * {
+body.single-clouansp_wiki #clouansp-layout-wrapper > * {
 	max-width: var(--clouansp-wiki-content-width, none);
 	margin-inline: auto;
 }

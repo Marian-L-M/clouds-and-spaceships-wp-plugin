@@ -40,7 +40,7 @@ $delete_icons_on_uninstall = (bool) get_option('clouansp_map_suite_delete_icons_
 				<tr>
 					<th scope="row"><?php esc_html_e('Uninstall behaviour', 'clouds-and-spaceships'); ?></th>
 					<td>
-						<label class="text-danger">
+						<label class="clouansp-text-danger">
 							<input
 								type="checkbox"
 								name="delete_icons_on_uninstall"

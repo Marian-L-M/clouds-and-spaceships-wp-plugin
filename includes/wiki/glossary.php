@@ -6,7 +6,7 @@
  * The glossary is opt-in: nothing here registers unless the
  * `glossary_enabled` setting is on (CNS → Wiki tab).
  *
- * @package CNS Wiki Suite
+ * @package Clouds and Spaceships
  */
 
 defined('ABSPATH') || exit;
@@ -63,7 +63,7 @@ function clouansp_wiki_register_glossary_post_type(): void
 
     register_post_type('clouansp_glossary', [
         'labels'             => $labels,
-        'description'        => 'Glossary entry custom post type.',
+        'description'        => __('Glossary entry custom post type.', 'clouds-and-spaceships'),
         'public'             => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
@@ -194,5 +194,6 @@ function clouansp_wiki_glossary_enqueue_format(): void
         $asset['version'],
         true
     );
+    wp_set_script_translations('clouansp-wiki-glossary-format', 'clouds-and-spaceships');
 }
 add_action('enqueue_block_editor_assets', 'clouansp_wiki_glossary_enqueue_format');

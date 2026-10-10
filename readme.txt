@@ -51,7 +51,7 @@ Clouds and Spaceships never sends anything anywhere. There is no account to crea
 
 The JavaScript and CSS in the `build/` folder are compiled. The uncompiled source code and build tools are publicly available on GitHub: https://github.com/Marian-L-M/clouds-and-spaceships-wp-plugin
 
-To build it yourself, install Node.js and run `npm install` followed by `npm run build` in the plugin folder. This uses `@wordpress/scripts` and writes the compiled files to `build/`.
+To build it yourself, install Node.js (20.19 or later) and run `npm ci` followed by `npm run build` in the plugin folder. `npm ci` installs the exact dependency versions recorded in `package-lock.json`; the build uses `@wordpress/scripts` and writes the compiled files from `src/` to `build/`.
 
 == Installation ==
 
