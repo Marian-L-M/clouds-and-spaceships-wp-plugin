@@ -9,35 +9,35 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$mode            = $attributes['mode']           ?? 'manual';
-$columns_mobile  = intval( $attributes['columnsMobile']  ?? clouansp_get_wiki_setting( 'grid_columns_mobile',  1 ) );
-$columns_tablet  = intval( $attributes['columnsTablet']  ?? clouansp_get_wiki_setting( 'grid_columns_tablet',  2 ) );
-$columns_desktop = intval( $attributes['columnsDesktop'] ?? clouansp_get_wiki_setting( 'grid_columns_desktop', 3 ) );
-$number_of_posts = intval( $attributes['numberOfPosts']  ?? $columns_desktop );
-$column_gap      = intval( $attributes['columnGap'] ?? clouansp_get_wiki_setting( 'grid_column_gap', 16 ) );
-$row_gap         = intval( $attributes['rowGap']    ?? clouansp_get_wiki_setting( 'grid_row_gap',    16 ) );
+$clouansp_mode            = $attributes['mode']           ?? 'manual';
+$clouansp_columns_mobile  = intval( $attributes['columnsMobile']  ?? clouansp_get_wiki_setting( 'grid_columns_mobile',  1 ) );
+$clouansp_columns_tablet  = intval( $attributes['columnsTablet']  ?? clouansp_get_wiki_setting( 'grid_columns_tablet',  2 ) );
+$clouansp_columns_desktop = intval( $attributes['columnsDesktop'] ?? clouansp_get_wiki_setting( 'grid_columns_desktop', 3 ) );
+$clouansp_number_of_posts = intval( $attributes['numberOfPosts']  ?? $clouansp_columns_desktop );
+$clouansp_column_gap      = intval( $attributes['columnGap'] ?? clouansp_get_wiki_setting( 'grid_column_gap', 16 ) );
+$clouansp_row_gap         = intval( $attributes['rowGap']    ?? clouansp_get_wiki_setting( 'grid_row_gap',    16 ) );
 
 // CSS custom properties drive the responsive grid via style.scss media queries.
-$grid_vars = sprintf(
+$clouansp_grid_vars = sprintf(
 	'--clouansp-wiki-columns-mobile:%d;--clouansp-wiki-columns-tablet:%d;--clouansp-wiki-columns-desktop:%d;--clouansp-wiki-column-gap:%dpx;--clouansp-wiki-row-gap:%dpx;',
-	$columns_mobile,
-	$columns_tablet,
-	$columns_desktop,
-	$column_gap,
-	$row_gap
+	$clouansp_columns_mobile,
+	$clouansp_columns_tablet,
+	$clouansp_columns_desktop,
+	$clouansp_column_gap,
+	$clouansp_row_gap
 );
 
-$wrapper_attrs = get_block_wrapper_attributes( [
+$clouansp_wrapper_attrs = get_block_wrapper_attributes( [
 	'class' => 'clouansp-wiki-contents',
-	'style' => $grid_vars,
+	'style' => $clouansp_grid_vars,
 ] );
 
-if ( 'newest' === $mode ) {
-	$total = $number_of_posts;
+if ( 'newest' === $clouansp_mode ) {
+	$clouansp_total = $clouansp_number_of_posts;
 
-	$query = new WP_Query( [
+	$clouansp_query = new WP_Query( [
 		'post_type'      => 'clouansp_wiki',
-		'posts_per_page' => $total,
+		'posts_per_page' => $clouansp_total,
 		'post_status'    => 'publish',
 		'orderby'        => 'date',
 		'order'          => 'DESC',
@@ -45,19 +45,19 @@ if ( 'newest' === $mode ) {
 	] );
 
 	// Render actual wiki-card blocks so the card markup has a single source.
-	$inner = '';
-	foreach ( $query->posts as $wiki_post ) {
-		$inner .= render_block( [
+	$clouansp_inner = '';
+	foreach ( $clouansp_query->posts as $clouansp_wiki_post ) {
+		$clouansp_inner .= render_block( [
 			'blockName' => 'clouansp-wiki-suite/wiki-card',
-			'attrs'     => [ 'postId' => $wiki_post->ID ],
+			'attrs'     => [ 'postId' => $clouansp_wiki_post->ID ],
 		] );
 	}
 } else {
-	$inner = $content;
+	$clouansp_inner = $content;
 }
 ?>
-<div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
+<div <?php echo $clouansp_wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
 	<div class="clouansp-wiki-contents__grid">
-		<?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_block() output, or block inner content. ?>
+		<?php echo $clouansp_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_block() output, or block inner content. ?>
 	</div>
 </div>

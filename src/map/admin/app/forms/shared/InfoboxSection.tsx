@@ -207,9 +207,9 @@ export function infoboxFormDefaults(
 		infobox_image_id: item?.infobox_data?.image_id || 0,
 		infobox_image_url: '',
 		linked_post_id: item?.linked_post_id || 0,
-		linked_post_label: item?.linked_post_id
-			? `Post ID: ${ item.linked_post_id }`
-			: '',
+		// Looked up by PostSearch from the ID, so the field shows the post's
+		// current title.
+		linked_post_label: '',
 		// Display flags default on when absent (matches the server-side default).
 		display_infobox: item?.infobox_data?.display_infobox ?? true,
 		show_title: item?.infobox_data?.show_title ?? true,

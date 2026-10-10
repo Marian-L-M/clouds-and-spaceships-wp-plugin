@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { ComboboxControl } from '@wordpress/components';
 import { useEntityRecords } from '@wordpress/core-data';
-import { __ } from '@wordpress/i18n';
+import { decodeEntities } from '@wordpress/html-entities';
+import { __, sprintf } from '@wordpress/i18n';
 
 interface MapRecord {
 	id: number;
@@ -46,7 +47,13 @@ export default function MapPicker( { mapId, mapTitle, onChange }: Props ) {
 			? [
 					{
 						value: String( mapId ),
-						label: mapTitle || `Map #${ mapId }`,
+						label:
+							mapTitle ||
+							sprintf(
+								/* translators: %d: map post ID. */
+								__( 'Map #%d', 'clouds-and-spaceships' ),
+								mapId
+							),
 					},
 			  ]
 			: [] ),
@@ -54,7 +61,9 @@ export default function MapPicker( { mapId, mapTitle, onChange }: Props ) {
 			.filter( ( r ) => r.id !== mapId )
 			.map( ( r ) => ( {
 				value: String( r.id ),
-				label: r.title.rendered,
+				label:
+					decodeEntities( r.title.rendered ) ||
+					__( '(no title)', 'clouds-and-spaceships' ),
 			} ) ),
 	];
 

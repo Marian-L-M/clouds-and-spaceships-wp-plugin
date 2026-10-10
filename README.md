@@ -21,6 +21,21 @@ classes, `--clouansp-` for CSS custom properties, and `clouansp` + CamelCase for
 JS globals. The old three plugins used `cns`, which wp.org rejects as shorter
 than four characters. The "CNS" menu label is display text, not a prefix.
 
+That includes variables assigned at the top level of an included file — the
+admin views, the blocks' `render.php`, `uninstall.php`: `$clouansp_map_id`, not
+`$map_id`. They run inside a function, but PHPCS cannot see that, so Plugin
+Check's `PrefixAllGlobals` (which only fires once it is given the prefix, as
+Plugin Check does) and `GlobalVariablesOverride` (for names like `$post`,
+`$paged`, `$search`) flag them like real globals. To reproduce Plugin Check's
+prefix check from the command line:
+
+```sh
+php ../plugin-check/vendor/bin/phpcs --standard=WordPress \
+  --sniffs=WordPress.NamingConventions.PrefixAllGlobals,WordPress.WP.GlobalVariablesOverride \
+  --runtime-set prefixes clouansp,CLOUANSP \
+  --extensions=php --ignore="*/node_modules/*,*/vendor/*,*/tools/*" -s .
+```
+
 CSS classes are BEM under the prefix (`clouansp-infobox__title`,
 `clouansp-infobox-group__outer--collapse-mobile`). State classes toggled at
 runtime keep core's unprefixed `is-*` convention (`is-active`, `is-open`,

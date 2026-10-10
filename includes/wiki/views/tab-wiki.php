@@ -9,56 +9,56 @@
 defined( 'ABSPATH' ) || exit;
 
 // ── Settings values ───────────────────────────────────────────────────────────
-$wiki_enabled      = (bool) clouansp_get_wiki_setting( 'wiki_enabled', true );
-$wiki_show_menu    = (bool) clouansp_get_wiki_setting( 'wiki_show_menu', true );
-$wiki_delete_on_uninstall = (bool) clouansp_get_wiki_setting( 'wiki_delete_on_uninstall', false );
-$infobox_width     = clouansp_get_wiki_setting( 'infobox_width', '' );
+$clouansp_wiki_enabled      = (bool) clouansp_get_wiki_setting( 'wiki_enabled', true );
+$clouansp_wiki_show_menu    = (bool) clouansp_get_wiki_setting( 'wiki_show_menu', true );
+$clouansp_wiki_delete_on_uninstall = (bool) clouansp_get_wiki_setting( 'wiki_delete_on_uninstall', false );
+$clouansp_infobox_width     = clouansp_get_wiki_setting( 'infobox_width', '' );
 $content_width     = clouansp_get_wiki_setting( 'content_width', '' );
 
-$archive_slug  = clouansp_get_wiki_setting( 'archive_slug',  'wiki' );
-$archive_url   = $wiki_enabled ? get_post_type_archive_link( 'clouansp_wiki' ) : false;
+$clouansp_archive_slug  = clouansp_get_wiki_setting( 'archive_slug',  'wiki' );
+$clouansp_archive_url   = $clouansp_wiki_enabled ? get_post_type_archive_link( 'clouansp_wiki' ) : false;
 
-$grid_desktop  = (int) clouansp_get_wiki_setting( 'grid_columns_desktop', 3 );
-$grid_tablet   = (int) clouansp_get_wiki_setting( 'grid_columns_tablet',  2 );
-$grid_mobile   = (int) clouansp_get_wiki_setting( 'grid_columns_mobile',  1 );
-$grid_col_gap  = (int) clouansp_get_wiki_setting( 'grid_column_gap', 16 );
-$grid_row_gap  = (int) clouansp_get_wiki_setting( 'grid_row_gap',    16 );
+$clouansp_grid_desktop  = (int) clouansp_get_wiki_setting( 'grid_columns_desktop', 3 );
+$clouansp_grid_tablet   = (int) clouansp_get_wiki_setting( 'grid_columns_tablet',  2 );
+$clouansp_grid_mobile   = (int) clouansp_get_wiki_setting( 'grid_columns_mobile',  1 );
+$clouansp_grid_col_gap  = (int) clouansp_get_wiki_setting( 'grid_column_gap', 16 );
+$clouansp_grid_row_gap  = (int) clouansp_get_wiki_setting( 'grid_row_gap',    16 );
 
-$infobox_bg       = clouansp_get_wiki_setting( 'infobox_bg_color',       '' );
-$infobox_contrast = clouansp_get_wiki_setting( 'infobox_contrast_color', '' );
-$infobox_accent   = clouansp_get_wiki_setting( 'infobox_accent_color',   '' );
-$infobox_text     = clouansp_get_wiki_setting( 'infobox_text_color',     '' );
-$infobox_title    = clouansp_get_wiki_setting( 'infobox_title_color',    '' );
+$clouansp_infobox_bg       = clouansp_get_wiki_setting( 'infobox_bg_color',       '' );
+$clouansp_infobox_contrast = clouansp_get_wiki_setting( 'infobox_contrast_color', '' );
+$clouansp_infobox_accent   = clouansp_get_wiki_setting( 'infobox_accent_color',   '' );
+$clouansp_infobox_text     = clouansp_get_wiki_setting( 'infobox_text_color',     '' );
+$clouansp_infobox_title    = clouansp_get_wiki_setting( 'infobox_title_color',    '' );
 
-$placeholder_id  = absint( clouansp_get_wiki_setting( 'placeholder_thumb_id', 0 ) );
-$placeholder_url = $placeholder_id ? wp_get_attachment_image_url( $placeholder_id, 'medium' ) : '';
+$clouansp_placeholder_id  = absint( clouansp_get_wiki_setting( 'placeholder_thumb_id', 0 ) );
+$clouansp_placeholder_url = $clouansp_placeholder_id ? wp_get_attachment_image_url( $clouansp_placeholder_id, 'medium' ) : '';
 
 // ── Stats ─────────────────────────────────────────────────────────────────────
 // Only meaningful while the post type is registered.
-$published = 0;
-$draft     = 0;
-$cat_count = 0;
-$tag_count = 0;
+$clouansp_published = 0;
+$clouansp_draft     = 0;
+// Categories and tags in use by published wikis, keyed by taxonomy.
+$clouansp_term_counts = [ 'category' => 0, 'post_tag' => 0 ];
 
-if ( $wiki_enabled ) {
-    $counts    = wp_count_posts( 'clouansp_wiki' );
-    $published = (int) ( $counts->publish ?? 0 );
-    $draft     = (int) ( $counts->draft   ?? 0 );
-    $wiki_ids  = $published > 0
+if ( $clouansp_wiki_enabled ) {
+    $clouansp_counts    = wp_count_posts( 'clouansp_wiki' );
+    $clouansp_published = (int) ( $clouansp_counts->publish ?? 0 );
+    $clouansp_draft     = (int) ( $clouansp_counts->draft   ?? 0 );
+    $clouansp_wiki_ids  = $clouansp_published > 0
         ? get_posts( [ 'post_type' => 'clouansp_wiki', 'posts_per_page' => -1, 'fields' => 'ids', 'post_status' => 'publish' ] )
         : [];
 
-    foreach ( [ 'category' => 'cat_count', 'post_tag' => 'tag_count' ] as $taxonomy => $var ) {
-        if ( empty( $wiki_ids ) ) {
+    foreach ( array_keys( $clouansp_term_counts ) as $clouansp_taxonomy ) {
+        if ( empty( $clouansp_wiki_ids ) ) {
             continue;
         }
-        $terms  = get_terms( [
-            'taxonomy'   => $taxonomy,
-            'object_ids' => $wiki_ids,
+        $clouansp_terms  = get_terms( [
+            'taxonomy'   => $clouansp_taxonomy,
+            'object_ids' => $clouansp_wiki_ids,
             'hide_empty' => true,
             'fields'     => 'ids',
         ] );
-        $$var = is_wp_error( $terms ) ? 0 : count( $terms );
+        $clouansp_term_counts[ $clouansp_taxonomy ] = is_wp_error( $clouansp_terms ) ? 0 : count( $clouansp_terms );
     }
 }
 ?>
@@ -66,10 +66,10 @@ if ( $wiki_enabled ) {
 
 	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e( 'Wiki', 'clouds-and-spaceships' ); ?></h1>
-		<?php if ( $wiki_enabled ) : ?>
+		<?php if ( $clouansp_wiki_enabled ) : ?>
 			<div class="clouansp-settings-page__actions">
-				<?php if ( $archive_url ) : ?>
-					<a href="<?php echo esc_url( $archive_url ); ?>" target="_blank" rel="noopener" class="button">
+				<?php if ( $clouansp_archive_url ) : ?>
+					<a href="<?php echo esc_url( $clouansp_archive_url ); ?>" target="_blank" rel="noopener" class="button">
 						<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 					</a>
 				<?php endif; ?>
@@ -87,22 +87,22 @@ if ( $wiki_enabled ) {
 		<?php esc_html_e( 'A hierarchical custom post type to create wiki like post with default info boxes.', 'clouds-and-spaceships' ); ?>
 	</p>
 
-	<?php if ( $wiki_enabled ) : ?>
+	<?php if ( $clouansp_wiki_enabled ) : ?>
 	<ul class="clouansp-settings-stats">
 		<li>
-			<span class="clouansp-settings-stats__value"><?php echo esc_html( $published ); ?></span>
+			<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_published ); ?></span>
 			<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Published wikis', 'clouds-and-spaceships' ); ?></span>
 		</li>
 		<li>
-			<span class="clouansp-settings-stats__value"><?php echo esc_html( $draft ); ?></span>
+			<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_draft ); ?></span>
 			<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Drafts', 'clouds-and-spaceships' ); ?></span>
 		</li>
 		<li>
-			<span class="clouansp-settings-stats__value"><?php echo esc_html( $cat_count ); ?></span>
+			<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_term_counts['category'] ); ?></span>
 			<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Categories in use', 'clouds-and-spaceships' ); ?></span>
 		</li>
 		<li>
-			<span class="clouansp-settings-stats__value"><?php echo esc_html( $tag_count ); ?></span>
+			<span class="clouansp-settings-stats__value"><?php echo esc_html( $clouansp_term_counts['post_tag'] ); ?></span>
 			<span class="clouansp-settings-stats__label"><?php esc_html_e( 'Tags in use', 'clouds-and-spaceships' ); ?></span>
 		</li>
 	</ul>
@@ -128,7 +128,7 @@ if ( $wiki_enabled ) {
 								id="clouansp_wiki_enabled"
 								name="clouansp_wiki_settings[wiki_enabled]"
 								value="1"
-								<?php checked( $wiki_enabled ); ?>
+								<?php checked( $clouansp_wiki_enabled ); ?>
 							/>
 							<?php esc_html_e( 'Enable wiki post type, archive, and page templates', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -145,7 +145,7 @@ if ( $wiki_enabled ) {
 								type="checkbox"
 								name="clouansp_wiki_settings[wiki_show_menu]"
 								value="1"
-								<?php checked( $wiki_show_menu ); ?>
+								<?php checked( $clouansp_wiki_show_menu ); ?>
 							/>
 							<?php esc_html_e( 'Show Wiki admin sidebar', 'clouds-and-spaceships' ); ?>
 						</label>
@@ -163,8 +163,8 @@ if ( $wiki_enabled ) {
 				<tr>
 					<th scope="row">
 						<label for="clouansp_wiki_slug"><?php esc_html_e( 'URL slug', 'clouds-and-spaceships' ); ?></label>
-						<?php if ( $archive_url ) : ?>
-							<a href="<?php echo esc_url( $archive_url ); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
+						<?php if ( $clouansp_archive_url ) : ?>
+							<a href="<?php echo esc_url( $clouansp_archive_url ); ?>" target="_blank" rel="noopener" class="clouansp-settings-link">
 								<?php esc_html_e( 'View archive ↗', 'clouds-and-spaceships' ); ?>
 							</a>
 						<?php endif; ?>
@@ -174,7 +174,7 @@ if ( $wiki_enabled ) {
 							type="text"
 							id="clouansp_wiki_slug"
 							name="clouansp_wiki_settings[archive_slug]"
-							value="<?php echo esc_attr( $archive_slug ); ?>"
+							value="<?php echo esc_attr( $clouansp_archive_slug ); ?>"
 							class="regular-text"
 							pattern="[a-z0-9\-]+"
 							placeholder="wiki"
@@ -196,12 +196,12 @@ if ( $wiki_enabled ) {
 							type="hidden"
 							id="clouansp_wiki_placeholder_id"
 							name="clouansp_wiki_settings[placeholder_thumb_id]"
-							value="<?php echo esc_attr( $placeholder_id ?: '' ); ?>"
+							value="<?php echo esc_attr( $clouansp_placeholder_id ?: '' ); ?>"
 						/>
 						<img
 							id="clouansp_wiki_placeholder_preview"
-							src="<?php echo $placeholder_url ? esc_url( $placeholder_url ) : ''; ?>"
-							style="max-height:80px;display:<?php echo $placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
+							src="<?php echo $clouansp_placeholder_url ? esc_url( $clouansp_placeholder_url ) : ''; ?>"
+							style="max-height:80px;display:<?php echo $clouansp_placeholder_url ? 'block' : 'none'; ?>;margin-bottom:8px;"
 							alt=""
 						/>
 						<button
@@ -214,7 +214,7 @@ if ( $wiki_enabled ) {
 							data-title="<?php esc_attr_e( 'Select placeholder thumbnail', 'clouds-and-spaceships' ); ?>"
 							data-select-label="<?php esc_attr_e( 'Select image', 'clouds-and-spaceships' ); ?>"
 							data-change-label="<?php esc_attr_e( 'Change image', 'clouds-and-spaceships' ); ?>"
-						><?php echo $placeholder_id ? esc_html__( 'Change image', 'clouds-and-spaceships' ) : esc_html__( 'Select image', 'clouds-and-spaceships' ); ?></button>
+						><?php echo $clouansp_placeholder_id ? esc_html__( 'Change image', 'clouds-and-spaceships' ) : esc_html__( 'Select image', 'clouds-and-spaceships' ); ?></button>
 						<button
 							type="button"
 							id="clouansp_wiki_placeholder_remove"
@@ -222,7 +222,7 @@ if ( $wiki_enabled ) {
 							data-input="clouansp_wiki_placeholder_id"
 							data-preview="clouansp_wiki_placeholder_preview"
 							data-picker="clouansp_wiki_placeholder_btn"
-							style="display:<?php echo $placeholder_id ? 'inline-block' : 'none'; ?>;"
+							style="display:<?php echo $clouansp_placeholder_id ? 'inline-block' : 'none'; ?>;"
 						><?php esc_html_e( 'Remove', 'clouds-and-spaceships' ); ?></button>
 						<p class="description">
 							<?php esc_html_e( 'Placeholder for wiki card images. Leave empty to show no image as placeholder.', 'clouds-and-spaceships' ); ?>
@@ -247,7 +247,7 @@ if ( $wiki_enabled ) {
 							type="number"
 							id="clouansp_wiki_infobox_width"
 							name="clouansp_wiki_settings[infobox_width]"
-							value="<?php echo esc_attr( $infobox_width ); ?>"
+							value="<?php echo esc_attr( $clouansp_infobox_width ); ?>"
 							min="200" max="1280" step="1"
 							class="small-text"
 							placeholder="360"
@@ -301,17 +301,17 @@ if ( $wiki_enabled ) {
 							<label style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;">
 								<span><?php esc_html_e( 'Desktop', 'clouds-and-spaceships' ); ?></span>
 								<input type="number" name="clouansp_wiki_settings[grid_columns_desktop]"
-									value="<?php echo esc_attr( $grid_desktop ); ?>" min="1" max="6" step="1" class="small-text" />
+									value="<?php echo esc_attr( $clouansp_grid_desktop ); ?>" min="1" max="6" step="1" class="small-text" />
 							</label>
 							<label style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;">
 								<span><?php esc_html_e( 'Tablet', 'clouds-and-spaceships' ); ?></span>
 								<input type="number" name="clouansp_wiki_settings[grid_columns_tablet]"
-									value="<?php echo esc_attr( $grid_tablet ); ?>" min="1" max="4" step="1" class="small-text" />
+									value="<?php echo esc_attr( $clouansp_grid_tablet ); ?>" min="1" max="4" step="1" class="small-text" />
 							</label>
 							<label style="display:inline-flex;align-items:center;gap:6px;">
 								<span><?php esc_html_e( 'Mobile', 'clouds-and-spaceships' ); ?></span>
 								<input type="number" name="clouansp_wiki_settings[grid_columns_mobile]"
-									value="<?php echo esc_attr( $grid_mobile ); ?>" min="1" max="2" step="1" class="small-text" />
+									value="<?php echo esc_attr( $clouansp_grid_mobile ); ?>" min="1" max="2" step="1" class="small-text" />
 							</label>
 						</fieldset>
 					</td>
@@ -323,12 +323,12 @@ if ( $wiki_enabled ) {
 							<label style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;">
 								<span><?php esc_html_e( 'Column', 'clouds-and-spaceships' ); ?></span>
 								<input type="number" name="clouansp_wiki_settings[grid_column_gap]"
-									value="<?php echo esc_attr( $grid_col_gap ); ?>" min="0" max="64" step="1" class="small-text" />
+									value="<?php echo esc_attr( $clouansp_grid_col_gap ); ?>" min="0" max="64" step="1" class="small-text" />
 							</label>
 							<label style="display:inline-flex;align-items:center;gap:6px;">
 								<span><?php esc_html_e( 'Row', 'clouds-and-spaceships' ); ?></span>
 								<input type="number" name="clouansp_wiki_settings[grid_row_gap]"
-									value="<?php echo esc_attr( $grid_row_gap ); ?>" min="0" max="64" step="1" class="small-text" />
+									value="<?php echo esc_attr( $clouansp_grid_row_gap ); ?>" min="0" max="64" step="1" class="small-text" />
 							</label>
 						</fieldset>
 					</td>
@@ -350,11 +350,11 @@ if ( $wiki_enabled ) {
 					<td>
 						<input type="color" id="clouansp_infobox_bg"
 							name="clouansp_wiki_settings[infobox_bg_color]"
-							value="<?php echo esc_attr( $infobox_bg ?: '#ffffff' ); ?>"
-							<?php disabled( '', $infobox_bg ); ?> />
+							value="<?php echo esc_attr( $clouansp_infobox_bg ?: '#ffffff' ); ?>"
+							<?php disabled( '', $clouansp_infobox_bg ); ?> />
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_bg"
-								<?php checked( '', $infobox_bg ); ?> />
+								<?php checked( '', $clouansp_infobox_bg ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Background color for the infobox wrapper. Defaults to #ffffff.', 'clouds-and-spaceships' ); ?></p>
@@ -367,11 +367,11 @@ if ( $wiki_enabled ) {
 					<td>
 						<input type="color" id="clouansp_infobox_text"
 							name="clouansp_wiki_settings[infobox_text_color]"
-							value="<?php echo esc_attr( $infobox_text ?: '#000000' ); ?>"
-							<?php disabled( '', $infobox_text ); ?> />
+							value="<?php echo esc_attr( $clouansp_infobox_text ?: '#000000' ); ?>"
+							<?php disabled( '', $clouansp_infobox_text ); ?> />
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_text"
-								<?php checked( '', $infobox_text ); ?> />
+								<?php checked( '', $clouansp_infobox_text ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Text color for infoboxes, groups and their title bars. Defaults to the theme text color.', 'clouds-and-spaceships' ); ?></p>
@@ -384,11 +384,11 @@ if ( $wiki_enabled ) {
 					<td>
 						<input type="color" id="clouansp_infobox_title"
 							name="clouansp_wiki_settings[infobox_title_color]"
-							value="<?php echo esc_attr( $infobox_title ?: '#000000' ); ?>"
-							<?php disabled( '', $infobox_title ); ?> />
+							value="<?php echo esc_attr( $clouansp_infobox_title ?: '#000000' ); ?>"
+							<?php disabled( '', $clouansp_infobox_title ); ?> />
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_title"
-								<?php checked( '', $infobox_title ); ?> />
+								<?php checked( '', $clouansp_infobox_title ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Text color for the infobox and group title bars. Defaults to the infobox text color.', 'clouds-and-spaceships' ); ?></p>
@@ -401,11 +401,11 @@ if ( $wiki_enabled ) {
 					<td>
 						<input type="color" id="clouansp_infobox_contrast"
 							name="clouansp_wiki_settings[infobox_contrast_color]"
-							value="<?php echo esc_attr( $infobox_contrast ?: '#e0e0e0' ); ?>"
-							<?php disabled( '', $infobox_contrast ); ?> />
+							value="<?php echo esc_attr( $clouansp_infobox_contrast ?: '#e0e0e0' ); ?>"
+							<?php disabled( '', $clouansp_infobox_contrast ); ?> />
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_contrast"
-								<?php checked( '', $infobox_contrast ); ?> />
+								<?php checked( '', $clouansp_infobox_contrast ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Background color for the infobox title bars. Defaults to #e0e0e0.', 'clouds-and-spaceships' ); ?></p>
@@ -419,11 +419,11 @@ if ( $wiki_enabled ) {
 					<td>
 						<input type="color" id="clouansp_infobox_accent"
 							name="clouansp_wiki_settings[infobox_accent_color]"
-							value="<?php echo esc_attr( $infobox_accent ?: '#f2f2f2' ); ?>"
-							<?php disabled( '', $infobox_accent ); ?> />
+							value="<?php echo esc_attr( $clouansp_infobox_accent ?: '#f2f2f2' ); ?>"
+							<?php disabled( '', $clouansp_infobox_accent ); ?> />
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_infobox_accent"
-								<?php checked( '', $infobox_accent ); ?> />
+								<?php checked( '', $clouansp_infobox_accent ); ?> />
 							<?php esc_html_e( 'Use theme default', 'clouds-and-spaceships' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Infobox inner group background color. Defaults to #f2f2f2.', 'clouds-and-spaceships' ); ?></p>
@@ -446,7 +446,7 @@ if ( $wiki_enabled ) {
 								type="checkbox"
 								name="clouansp_wiki_settings[wiki_delete_on_uninstall]"
 								value="1"
-								<?php checked( $wiki_delete_on_uninstall ); ?>
+								<?php checked( $clouansp_wiki_delete_on_uninstall ); ?>
 							/>
 							<?php esc_html_e( 'Delete all wiki posts when the plugin is uninstalled', 'clouds-and-spaceships' ); ?>
 						</label>

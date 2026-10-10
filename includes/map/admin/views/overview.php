@@ -8,25 +8,25 @@ defined('ABSPATH') || exit;
 // or goes through the REST API's permission callbacks.
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 
-$per_page_options = [10, 20, 50, 100];
-$requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
-$per_page           = in_array($requested_per_page, $per_page_options, true) ? $requested_per_page : 20;
-$paged            = max(1, absint(wp_unslash($_GET['paged'] ?? 1)));
-$search           = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
-$total_maps  = clouansp_map_suite_count_maps($search);
-$total_pages = (int) ceil($total_maps / $per_page);
+$clouansp_per_page_options = [10, 20, 50, 100];
+$clouansp_requested_per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page'] ?? 20));
+$clouansp_per_page           = in_array($clouansp_requested_per_page, $clouansp_per_page_options, true) ? $clouansp_requested_per_page : 20;
+$clouansp_paged            = max(1, absint(wp_unslash($_GET['paged'] ?? 1)));
+$clouansp_search           = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+$clouansp_total_maps  = clouansp_map_suite_count_maps($clouansp_search);
+$clouansp_total_pages = (int) ceil($clouansp_total_maps / $clouansp_per_page);
 
-if ($total_pages > 0 && $paged > $total_pages) {
-	$paged = $total_pages;
+if ($clouansp_total_pages > 0 && $clouansp_paged > $clouansp_total_pages) {
+	$clouansp_paged = $clouansp_total_pages;
 }
 
-$maps        = clouansp_map_suite_get_all_maps($per_page, ($paged - 1) * $per_page, $search);
+$clouansp_maps        = clouansp_map_suite_get_all_maps($clouansp_per_page, ($clouansp_paged - 1) * $clouansp_per_page, $clouansp_search);
 
-$return_page         = sanitize_key($_GET['page'] ?? CLOUANSP_MAP_PAGE_SETTINGS_MAPS);
-$editor_url          = clouansp_map_suite_editor_url();
-$show_maps_menu      = (bool) get_option('clouansp_map_suite_show_maps_menu', false);
-$zoom_main_color     = (string) get_option('clouansp_map_suite_zoom_main_color', '');
-$zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color', '');
+$clouansp_return_page         = sanitize_key($_GET['page'] ?? CLOUANSP_MAP_PAGE_SETTINGS_MAPS);
+$clouansp_editor_url          = clouansp_map_suite_editor_url();
+$clouansp_show_maps_menu      = (bool) get_option('clouansp_map_suite_show_maps_menu', false);
+$clouansp_zoom_main_color     = (string) get_option('clouansp_map_suite_zoom_main_color', '');
+$clouansp_zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color', '');
 ?>
 <div class="clouansp-settings-page">
 	<!-- System notices start -->
@@ -47,7 +47,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 	<div class="clouansp-settings-page__header">
 		<h1><?php esc_html_e('Maps', 'clouds-and-spaceships'); ?></h1>
 		<div class="clouansp-settings-page__actions">
-			<a href="<?php echo esc_url($editor_url); ?>" class="button button-primary">
+			<a href="<?php echo esc_url($clouansp_editor_url); ?>" class="button button-primary">
 				<?php esc_html_e('+ New Map', 'clouds-and-spaceships'); ?>
 			</a>
 		</div>
@@ -55,7 +55,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 	<!-- Search and Pagination -->
 	<div class="clouansp-settings-toolbar">
 		<form method="get">
-			<input type="hidden" name="page" value="<?php echo esc_attr($return_page); ?>" />
+			<input type="hidden" name="page" value="<?php echo esc_attr($clouansp_return_page); ?>" />
 			<span class="clouansp-settings-toolbar__group">
 				<label class="screen-reader-text" for="clouansp-map-search">
 					<?php esc_html_e('Search maps', 'clouds-and-spaceships'); ?>
@@ -64,13 +64,13 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 					type="search"
 					id="clouansp-map-search"
 					name="s"
-					value="<?php echo esc_attr($search); ?>"
+					value="<?php echo esc_attr($clouansp_search); ?>"
 					placeholder="<?php esc_attr_e('Search maps…', 'clouds-and-spaceships'); ?>"
 				/>
 				<button type="submit" class="button"><?php esc_html_e('Search', 'clouds-and-spaceships'); ?></button>
-				<?php if ($search !== '') : ?>
+				<?php if ($clouansp_search !== '') : ?>
 					<a class="clouansp-settings-toolbar__clear" href="<?php echo esc_url(add_query_arg(
-						['page' => $return_page, 'per_page' => $per_page],
+						['page' => $clouansp_return_page, 'per_page' => $clouansp_per_page],
 						admin_url('admin.php')
 					)); ?>"><?php esc_html_e('Clear', 'clouds-and-spaceships'); ?></a>
 				<?php endif; ?>
@@ -79,9 +79,9 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 			<span class="clouansp-settings-toolbar__group">
 				<label for="clouansp-per-page"><?php esc_html_e('Items per page:', 'clouds-and-spaceships'); ?></label>
 				<select name="per_page" id="clouansp-per-page" data-autosubmit>
-					<?php foreach ($per_page_options as $option) : ?>
-						<option value="<?php echo esc_attr($option); ?>" <?php selected($per_page, $option); ?>>
-							<?php echo esc_html($option); ?>
+					<?php foreach ($clouansp_per_page_options as $clouansp_option) : ?>
+						<option value="<?php echo esc_attr($clouansp_option); ?>" <?php selected($clouansp_per_page, $clouansp_option); ?>>
+							<?php echo esc_html($clouansp_option); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -89,18 +89,18 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 		</form>
 	</div>
 
-	<?php if ($search !== '') : ?>
+	<?php if ($clouansp_search !== '') : ?>
 		<p class="clouansp-settings-toolbar__count">
 			<?php printf(
 				/* translators: %1$s: number of maps, %2$s: search term */
 				esc_html(_n(
 					'%1$s map found for “%2$s”.',
 					'%1$s maps found for “%2$s”.',
-					$total_maps,
+					$clouansp_total_maps,
 					'clouds-and-spaceships'
 				)),
-				esc_html(number_format_i18n($total_maps)),
-				esc_html($search)
+				esc_html(number_format_i18n($clouansp_total_maps)),
+				esc_html($clouansp_search)
 			); ?>
 		</p>
 	<?php endif; ?>
@@ -118,39 +118,39 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 			</tr>
 		</thead>
 		<tbody>
-			<?php if (! $maps) : ?>
+			<?php if (! $clouansp_maps) : ?>
 				<tr>
 					<td colspan="6" class="clouansp-settings-table__empty">
-						<?php if ($search !== '') : ?>
+						<?php if ($clouansp_search !== '') : ?>
 							<?php esc_html_e('No maps match that name.', 'clouds-and-spaceships'); ?>
 						<?php else : ?>
 							<?php esc_html_e('No maps yet.', 'clouds-and-spaceships'); ?>
-							<a href="<?php echo esc_url($editor_url); ?>">
+							<a href="<?php echo esc_url($clouansp_editor_url); ?>">
 								<?php esc_html_e('Create your first map', 'clouds-and-spaceships'); ?>
 							</a>
 						<?php endif; ?>
 					</td>
 				</tr>
 			<?php endif; ?>
-			<?php foreach ($maps as $map) :
-				$is_master   = (bool) get_post_meta($map->ID, '_clouansp_map_is_master', true);
-				$thumb_id    = (int) get_post_meta($map->ID, '_clouansp_map_image_id', true);
-				$thumb_url   = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'thumbnail') : '';
+			<?php foreach ($clouansp_maps as $clouansp_map) :
+				$clouansp_is_master   = (bool) get_post_meta($clouansp_map->ID, '_clouansp_map_is_master', true);
+				$clouansp_thumb_id    = (int) get_post_meta($clouansp_map->ID, '_clouansp_map_image_id', true);
+				$clouansp_thumb_url   = $clouansp_thumb_id ? wp_get_attachment_image_url($clouansp_thumb_id, 'thumbnail') : '';
 
-				$edit_url   = esc_url(clouansp_map_suite_editor_url($map->ID));
-				$delete_url = esc_url(wp_nonce_url(
+				$clouansp_edit_url   = esc_url(clouansp_map_suite_editor_url($clouansp_map->ID));
+				$clouansp_delete_url = esc_url(wp_nonce_url(
 					add_query_arg(
-						['page' => $return_page, 'action' => 'delete', 'map_id' => $map->ID],
+						['page' => $clouansp_return_page, 'action' => 'delete', 'map_id' => $clouansp_map->ID],
 						admin_url('admin.php')
 					),
-					'clouansp_delete_map_' . $map->ID
+					'clouansp_delete_map_' . $clouansp_map->ID
 				));
 			?>
 				<tr>
 					<td class="clouansp-settings-table__thumb">
-						<a href="<?php echo esc_url($edit_url); ?>">
-						<?php if ($thumb_url) : ?>
-							<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php echo esc_html($map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>" />
+						<a href="<?php echo esc_url($clouansp_edit_url); ?>">
+						<?php if ($clouansp_thumb_url) : ?>
+							<img src="<?php echo esc_url($clouansp_thumb_url); ?>" alt="<?php echo esc_html($clouansp_map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>" />
 						<?php else : ?>
 							<div class="clouansp-thumb-placeholder"></div>
 						<?php endif; ?>
@@ -158,30 +158,30 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 					</td>
 					<td>
 						<strong>
-							<a href="<?php echo esc_url($edit_url); ?>">
-								<?php echo esc_html($map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
+							<a href="<?php echo esc_url($clouansp_edit_url); ?>">
+								<?php echo esc_html($clouansp_map->post_title ?: __('(no title)', 'clouds-and-spaceships')); ?>
 							</a>
 						</strong>
 					</td>
 					<td>
-						<span class="clouansp-badge <?php echo $is_master ? 'clouansp-badge--master' : 'clouansp-badge--map'; ?>">
-							<?php echo $is_master ? esc_html__('MasterMap', 'clouds-and-spaceships') : esc_html__('Map', 'clouds-and-spaceships'); ?>
+						<span class="clouansp-badge <?php echo $clouansp_is_master ? 'clouansp-badge--master' : 'clouansp-badge--map'; ?>">
+							<?php echo $clouansp_is_master ? esc_html__('MasterMap', 'clouds-and-spaceships') : esc_html__('Map', 'clouds-and-spaceships'); ?>
 						</span>
 					</td>
 					<td><?php
-						$status_labels = ['publish' => __('Published', 'clouds-and-spaceships'), 'draft' => __('Draft', 'clouds-and-spaceships'), 'private' => __('Private', 'clouds-and-spaceships')];
-						echo esc_html($status_labels[$map->post_status] ?? ucfirst($map->post_status));
+						$clouansp_status_labels = ['publish' => __('Published', 'clouds-and-spaceships'), 'draft' => __('Draft', 'clouds-and-spaceships'), 'private' => __('Private', 'clouds-and-spaceships')];
+						echo esc_html($clouansp_status_labels[$clouansp_map->post_status] ?? ucfirst($clouansp_map->post_status));
 					?></td>
-					<td><?php echo esc_html(get_the_date('Y-m-d', $map)); ?></td>
+					<td><?php echo esc_html(get_the_date('Y-m-d', $clouansp_map)); ?></td>
 					<td class="clouansp-row-actions">
-						<a href="<?php echo esc_url($edit_url); ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
-						<?php if (in_array($map->post_status, ['publish', 'private'], true)) : ?>
+						<a href="<?php echo esc_url($clouansp_edit_url); ?>"><?php esc_html_e('Edit', 'clouds-and-spaceships'); ?></a>
+						<?php if (in_array($clouansp_map->post_status, ['publish', 'private'], true)) : ?>
 							&nbsp;&middot;&nbsp;
-							<a href="<?php echo esc_url(get_permalink($map->ID)); ?>" target="_blank" rel="noopener"><?php esc_html_e('View', 'clouds-and-spaceships'); ?></a>
+							<a href="<?php echo esc_url(get_permalink($clouansp_map->ID)); ?>" target="_blank" rel="noopener"><?php esc_html_e('View', 'clouds-and-spaceships'); ?></a>
 						<?php endif; ?>
 						&nbsp;&middot;&nbsp;
 						<a
-							href="<?php echo esc_url($delete_url); ?>"
+							href="<?php echo esc_url($clouansp_delete_url); ?>"
 							class="clouansp-delete-link"
 							data-confirm="<?php esc_attr_e('Permanently delete this map?', 'clouds-and-spaceships'); ?>"
 						><?php esc_html_e('Delete', 'clouds-and-spaceships'); ?></a>
@@ -191,14 +191,14 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 		</tbody>
 	</table>
 
-	<?php if ($total_pages > 1) : ?>
+	<?php if ($clouansp_total_pages > 1) : ?>
 		<div class="tablenav bottom">
 			<div class="tablenav-pages">
 				<?php echo wp_kses_post(paginate_links([
 					'base'      => add_query_arg('paged', '%#%'),
 					'format'    => '',
-					'current'   => $paged,
-					'total'     => $total_pages,
+					'current'   => $clouansp_paged,
+					'total'     => $clouansp_total_pages,
 					'prev_text' => '&laquo;',
 					'next_text' => '&raquo;',
 				])); ?>
@@ -222,7 +222,7 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 					<th scope="row"><?php esc_html_e('Admin menu visibility', 'clouds-and-spaceships'); ?></th>
 					<td>
 						<label>
-							<input type="checkbox" name="show_maps_menu" value="1" <?php checked($show_maps_menu); ?> />
+							<input type="checkbox" name="show_maps_menu" value="1" <?php checked($clouansp_show_maps_menu); ?> />
 							<?php esc_html_e('Show Maps in the WordPress admin sidebar', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
@@ -249,12 +249,12 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 							type="color"
 							id="clouansp_map_zoom_main"
 							name="zoom_main_color"
-							value="<?php echo esc_attr($zoom_main_color ?: '#2271b1'); ?>"
-							<?php disabled('', $zoom_main_color); ?>
+							value="<?php echo esc_attr($clouansp_zoom_main_color ?: '#2271b1'); ?>"
+							<?php disabled('', $clouansp_zoom_main_color); ?>
 						/>
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_map_zoom_main"
-								<?php checked('', $zoom_main_color); ?> />
+								<?php checked('', $clouansp_zoom_main_color); ?> />
 							<?php esc_html_e('Use default', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">
@@ -271,12 +271,12 @@ $zoom_accent_color   = (string) get_option('clouansp_map_suite_zoom_accent_color
 							type="color"
 							id="clouansp_map_zoom_accent"
 							name="zoom_accent_color"
-							value="<?php echo esc_attr($zoom_accent_color ?: '#ffffff'); ?>"
-							<?php disabled('', $zoom_accent_color); ?>
+							value="<?php echo esc_attr($clouansp_zoom_accent_color ?: '#ffffff'); ?>"
+							<?php disabled('', $clouansp_zoom_accent_color); ?>
 						/>
 						<label style="margin-left:8px;">
 							<input type="checkbox" class="clouansp-field-clear" data-field="clouansp_map_zoom_accent"
-								<?php checked('', $zoom_accent_color); ?> />
+								<?php checked('', $clouansp_zoom_accent_color); ?> />
 							<?php esc_html_e('Use default', 'clouds-and-spaceships'); ?>
 						</label>
 						<p class="description">

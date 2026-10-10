@@ -10,50 +10,50 @@
 
 defined('ABSPATH') || exit;
 
-$map_id = (int) ($attributes['mapId'] ?? 0);
+$clouansp_map_id = (int) ($attributes['mapId'] ?? 0);
 
 // No ID means the block is standing in for "whichever map is being viewed" —
 // how the single-maps template uses it. Core seeds postId/postType from the
 // global post, so this only resolves on a map's own page.
-if (! $map_id && ($block->context['postType'] ?? '') === 'clouansp_map') {
-	$map_id = (int) ($block->context['postId'] ?? 0);
+if (! $clouansp_map_id && ($block->context['postType'] ?? '') === 'clouansp_map') {
+	$clouansp_map_id = (int) ($block->context['postId'] ?? 0);
 }
 
-if (! $map_id) {
+if (! $clouansp_map_id) {
 	return;
 }
 
-$map = get_post($map_id);
+$clouansp_map = get_post($clouansp_map_id);
 
-if (! $map || $map->post_type !== 'clouansp_map') {
+if (! $clouansp_map || $clouansp_map->post_type !== 'clouansp_map') {
 	return;
 }
 
 // Respect post status: draft/pending only visible to map managers; private requires read_private_posts.
-if ($map->post_status === 'private' && ! current_user_can('read_private_posts')) {
+if ($clouansp_map->post_status === 'private' && ! current_user_can('read_private_posts')) {
 	return;
 }
-if (! in_array($map->post_status, ['publish', 'private'], true) && ! current_user_can('clouansp_manage_maps')) {
+if (! in_array($clouansp_map->post_status, ['publish', 'private'], true) && ! current_user_can('clouansp_manage_maps')) {
 	return;
 }
 
 // ── Map data (shared API — single source of truth, also used by the story block) ──
 
-$data = clouansp_map_suite_get_map_data($map_id, [
+$clouansp_data = clouansp_map_suite_get_map_data($clouansp_map_id, [
 	'hierarchy'         => true,
 	'parents'           => true,
 	'resolve_infoboxes' => true,
 ]);
 
-if (! $data) {
+if (! $clouansp_data) {
 	return;
 }
 
 // MasterMap regions: apply the same visibility rules to each child map that
 // gate the map itself above — otherwise draft/private child maps would leak
 // their title/excerpt/thumbnail/URL to visitors and navigate to a 404.
-$visible_regions = array_values(array_filter(
-	$data['hierarchy_regions'],
+$clouansp_visible_regions = array_values(array_filter(
+	$clouansp_data['hierarchy_regions'],
 	static function (array $region): bool {
 		$status = $region['child_map_status'] ?? '';
 		if ($status === 'publish') {
@@ -66,30 +66,30 @@ $visible_regions = array_values(array_filter(
 	}
 ));
 
-$width  = $data['width'];
-$height = $data['height'];
+$clouansp_width  = $clouansp_data['width'];
+$clouansp_height = $clouansp_data['height'];
 
-$map_data = [
-	'mapId'            => $map_id,
-	'width'            => $width,
-	'height'           => $height,
-	'bgType'           => $data['bg_type'],
-	'bgColor'          => $data['bg_color'],
-	'bgImageUrl'       => $data['bg_image_url'],
-	'imgUrl'           => $data['image_url'],
-	'imageX'           => $data['image_x'],
-	'imageY'           => $data['image_y'],
-	'imageW'           => $data['image_w'],
-	'objects'          => $data['objects'],
-	'areas'            => $data['areas'],
-	'labels'           => $data['labels'],
-	'hierarchyRegions' => $visible_regions,
-	'parentMaps'       => $data['parent_maps'],
+$clouansp_map_data = [
+	'mapId'            => $clouansp_map_id,
+	'width'            => $clouansp_width,
+	'height'           => $clouansp_height,
+	'bgType'           => $clouansp_data['bg_type'],
+	'bgColor'          => $clouansp_data['bg_color'],
+	'bgImageUrl'       => $clouansp_data['bg_image_url'],
+	'imgUrl'           => $clouansp_data['image_url'],
+	'imageX'           => $clouansp_data['image_x'],
+	'imageY'           => $clouansp_data['image_y'],
+	'imageW'           => $clouansp_data['image_w'],
+	'objects'          => $clouansp_data['objects'],
+	'areas'            => $clouansp_data['areas'],
+	'labels'           => $clouansp_data['labels'],
+	'hierarchyRegions' => $clouansp_visible_regions,
+	'parentMaps'       => $clouansp_data['parent_maps'],
 	// Which layers the author left on. The frontend starts from these and
 	// lets the visitor toggle from there.
-	'showAreas'        => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_areas'),
-	'showObjects'      => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_objects'),
-	'showLabels'       => clouansp_map_suite_layer_visible($map_id, '_clouansp_map_show_labels'),
+	'showAreas'        => clouansp_map_suite_layer_visible($clouansp_map_id, '_clouansp_map_show_areas'),
+	'showObjects'      => clouansp_map_suite_layer_visible($clouansp_map_id, '_clouansp_map_show_objects'),
+	'showLabels'       => clouansp_map_suite_layer_visible($clouansp_map_id, '_clouansp_map_show_labels'),
 ];
 
 // Wiki infoboxes shown in the drawer need no extra enqueue here:
@@ -104,30 +104,30 @@ $map_data = [
 // Zoom control colors: the map's own override, else the global default, else
 // nothing — in which case no style attribute is emitted and style.scss keeps
 // the built-in look. See clouansp_map_suite_zoom_colors().
-$zoom_style = clouansp_map_suite_zoom_color_style($map_id);
+$clouansp_zoom_style = clouansp_map_suite_zoom_color_style($clouansp_map_id);
 
-$wrapper_attrs = get_block_wrapper_attributes(array_filter([
+$clouansp_wrapper_attrs = get_block_wrapper_attributes(array_filter([
 	'class'       => 'clouansp-map',
-	'data-map-id' => (string) $map_id,
-	'style'       => $zoom_style,
+	'data-map-id' => (string) $clouansp_map_id,
+	'style'       => $clouansp_zoom_style,
 ]));
 ?>
-<div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
+<div <?php echo $clouansp_wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes its own output. ?>>
 	<div class="clouansp-map-canvas-wrap">
 		<canvas
 			class="clouansp-map-canvas"
-			width="<?php echo esc_attr($width); ?>"
-			height="<?php echo esc_attr($height); ?>"
-			aria-label="<?php echo esc_attr($map->post_title); ?>"
+			width="<?php echo esc_attr($clouansp_width); ?>"
+			height="<?php echo esc_attr($clouansp_height); ?>"
+			aria-label="<?php echo esc_attr($clouansp_map->post_title); ?>"
 		></canvas>
 	</div>
-	<script type="application/json" data-clouansp-map><?php echo wp_json_encode($map_data, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
+	<script type="application/json" data-clouansp-map><?php echo wp_json_encode($clouansp_map_data, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
 	<noscript>
 		<p><?php
 			printf(
 				/* translators: %s: map title */
 				esc_html__('Map: %s — JavaScript is required to view this interactive map.', 'clouds-and-spaceships'),
-				esc_html($map->post_title)
+				esc_html($clouansp_map->post_title)
 			);
 		?></p>
 	</noscript>

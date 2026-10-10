@@ -4,9 +4,9 @@
  */
 defined('ABSPATH') || exit;
 
-$glossary_enabled = clouansp_wiki_glossary_enabled();
+$clouansp_glossary_enabled = clouansp_wiki_glossary_enabled();
 
-$counts = [
+$clouansp_counts = [
     [
         'label' => __('Wikis', 'clouds-and-spaceships'),
         'value' => (int) (wp_count_posts('clouansp_wiki')->publish ?? 0),
@@ -21,8 +21,8 @@ $counts = [
     ],
 ];
 
-if ($glossary_enabled) {
-    $counts[] = [
+if ($clouansp_glossary_enabled) {
+    $clouansp_counts[] = [
         'label' => __('Glossary entries', 'clouds-and-spaceships'),
         'value' => (int) (wp_count_posts('clouansp_glossary')->publish ?? 0),
     ];
@@ -40,10 +40,10 @@ if ($glossary_enabled) {
 	</p>
 
 	<ul class="clouansp-settings-stats">
-		<?php foreach ($counts as $count) : ?>
+		<?php foreach ($clouansp_counts as $clouansp_count) : ?>
 			<li>
-				<span class="clouansp-settings-stats__value"><?php echo esc_html($count['value']); ?></span>
-				<span class="clouansp-settings-stats__label"><?php echo esc_html($count['label']); ?></span>
+				<span class="clouansp-settings-stats__value"><?php echo esc_html($clouansp_count['value']); ?></span>
+				<span class="clouansp-settings-stats__label"><?php echo esc_html($clouansp_count['label']); ?></span>
 			</li>
 		<?php endforeach; ?>
 	</ul>
@@ -81,7 +81,7 @@ if ($glossary_enabled) {
 			<tr>
 				<th scope="row"><?php esc_html_e('Glossary', 'clouds-and-spaceships'); ?></th>
 				<td>
-					<?php echo $glossary_enabled
+					<?php echo $clouansp_glossary_enabled
 						? esc_html__('Enabled', 'clouds-and-spaceships')
 						: esc_html__('Disabled', 'clouds-and-spaceships'); ?>
 					<p class="description">

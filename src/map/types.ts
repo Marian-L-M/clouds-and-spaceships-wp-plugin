@@ -336,8 +336,10 @@ export interface MediaAttachment {
 
 export interface PostSearchResult {
 	id: number;
+	/** Plain text, HTML entities already decoded. */
 	title: string;
 	subtype: string;
+	status: string;
 }
 
 // ── Editor state ──────────────────────────────────────────────────────────────
